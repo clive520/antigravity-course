@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 2 章：利用 Antigravity 製作產品介紹網頁 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge">Chapter 02</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">回首頁</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">☀️ 淺色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節目錄</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載及安裝 Antigravity</a></li>
+        <li><a href="chapter2.html" class="active">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與功能介紹</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 自動發布</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-2-1">2-1 產品頁面構想與結構規劃</a></li>
+        <li><a href="#sec-2-2">2-2 提示詞架構法（Prompt）</a></li>
+        <li><a href="#sec-2-3">2-3 讓 Antigravity 產出網頁</a></li>
+        <li><a href="#sec-2-4">2-4 迭代與微調技巧</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill">第 2 章 · 實戰打造</span>
+        <h1>利用 Antigravity 製作一個產品介紹網頁</h1>
+        <p class="desc">不用寫程式也能當網頁設計師！本章將學習如何透過「提示詞工程」向 Antigravity 提出明確結構，快速生成符合現代美感、響應式（RWD）的商業產品展示頁面。</p>
+      </div>
+
+      <!-- 2-1 -->
+      <section id="sec-2-1" class="content-section">
+        <h2>2-1 產品頁面構想與結構規劃</h2>
+        <p>一個標準且吸引人的現代產品介紹頁（Landing Page）通常具備以下區塊：</p>
+        <div class="step-box">
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>頂部導覽列（Header / Nav）：</strong> 品牌 Logo、功能連結、購買/行動按鈕。</li>
+            <li><strong>英雄看板區（Hero Section）：</strong> 搶眼的標語、產品副標題、吸睛大圖與主要 CTA（Call to Action）按鈕。</li>
+            <li><strong>產品核心亮點（Features）：</strong> 3~4 個特色卡片，圖文並茂解說賣點。</li>
+            <li><strong>方案售價表（Pricing）：</strong> 清楚列出不同版本方案價格與權益比較。</li>
+            <li><strong>聯絡表單與頁尾（Footer）：</strong> 留下信箱訂閱或社群連結。</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2-2 -->
+      <section id="sec-2-2" class="content-section">
+        <h2>2-2 提示詞架構法：如何向 AI 精準表達需求？</h2>
+        <p>向 Antigravity 提問時，如果只說「<em>幫我做一個網站</em>」，AI 只能自由發揮。好的提示詞包含：<strong>角色設定 + 任務內容 + 風格規範 + 必備區塊</strong>。</p>
+        
+        <div class="callout callout-tip">
+          <span>🎯</span>
+          <div>
+            <strong>提示詞公式：</strong>
+            [你是一位資深前端設計師] + [請為名為 X 的產品製作單頁 HTML 官網] + [採用現代簡潔科技風格、支援手機版 RWD] + [必須包含導覽、Hero、三項特點、價格表、頁尾]。
+          </div>
+        </div>
+      </section>
+
+        <!-- 2-3 -->
+        <section id="sec-2-3" class="content-section">
+          <h2>2-3 讓 Antigravity 同步「生成圖片」與「打造網頁」</h2>
+          <p>現代商品頁面最不可或缺的就是質感商品圖！Antigravity 不僅能寫程式，還能依據你現有的單張照片，利用多模態影像生成技術，為你延伸製作<strong>「多視角（正面、側面、情境擺設）」</strong>的商業宣傳圖片！</p>
+
+          <div class="step-box">
+            <h4>📸 本單元現有多維度商品素材展示（已自動為你生成）</h4>
+            <p>我們以原始耳機照片 <code>PIC/ATHM20XBT_m01.jpg</code> 為基礎，讓 AI 拓展出了不同視角的展示圖：</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1rem;">
+              <div style="background: var(--code-bg); padding: 0.75rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color);">
+                <img src="../PIC/ATHM20XBT_m01.jpg" alt="原始45度角" style="width: 100%; height: 140px; object-fit: contain; border-radius: 4px;">
+                <div style="font-size: 0.8rem; margin-top: 0.5rem; color: #818cf8; font-weight: 600;">原圖：立體45度視角</div>
+              </div>
+              <div style="background: var(--code-bg); padding: 0.75rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color);">
+                <img src="../PIC/headphone_front.jpg" alt="正面對稱視角" style="width: 100%; height: 140px; object-fit: contain; border-radius: 4px;">
+                <div style="font-size: 0.8rem; margin-top: 0.5rem; color: #38bdf8; font-weight: 600;">AI 生成：正視雙耳對稱</div>
+              </div>
+              <div style="background: var(--code-bg); padding: 0.75rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color);">
+                <img src="../PIC/headphone_side.jpg" alt="單耳側面細節" style="width: 100%; height: 140px; object-fit: contain; border-radius: 4px;">
+                <div style="font-size: 0.8rem; margin-top: 0.5rem; color: #38bdf8; font-weight: 600;">AI 生成：側面特寫耳罩</div>
+              </div>
+              <div style="background: var(--code-bg); padding: 0.75rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color);">
+                <img src="../PIC/headphone_lifestyle.jpg" alt="辦公桌情境視角" style="width: 100%; height: 140px; object-fit: cover; border-radius: 4px;">
+                <div style="font-size: 0.8rem; margin-top: 0.5rem; color: #f59e0b; font-weight: 600;">AI 生成：情境美學桌拍</div>
+              </div>
+            </div>
+          </div>
+
+          <p>現在，讓我們在向 Antigravity 提問的提示詞中，將<strong>「照片導入與多視角圖片搭配」</strong>一併寫入：</p>
+
+          <div class="prompt-card">
+            <div class="prompt-tag">💬 整合「網頁 + 多維度圖片」的高效提示詞（複製並貼上）</div>
+            <div class="prompt-body">
+              "請幫我設計一個名為『SmartSound Pro - 頂級降噪無線耳機』的現代產品介紹網頁。<br><br>
+              <strong>【素材與圖片配置要求】：</strong><br>
+              請使用專案 PIC 資料夾中的多維度商品照片：<br>
+              - 英雄區（Hero）主圖：請放置 <code>PIC/ATHM20XBT_m01.jpg</code> 或 <code>PIC/headphone_lifestyle.jpg</code>。<br>
+              - 特色或外觀相簿區：請使用圖片卡片或輪播展示 <code>PIC/headphone_front.jpg</code>（人體工學對稱耳罩）與 <code>PIC/headphone_side.jpg</code>（金屬霧黑側蓋質感細節）。<br><br>
+              <strong>【網頁架構要求】：</strong><br>
+              1. 建立單一檔案 index.html，具備現代科技感深色風格與精緻微動態效果。<br>
+              2. 包含頂部導覽列、Hero 橫幅區、產品 3 大特點（主動降噪、40小時續航、人體工學）、多角度產品圖鑑展示、價格方案表（標準版 $3,990 / 旗艦版 $5,990）與預購按鈕。<br>
+              3. 確保所有圖片具備自適應縮放，在手機版與電腦螢幕皆能完美呈現（RWD 響應式）。"
+            </div>
+          </div>
+
+          <p>送出後，Antigravity 會自動將這四張圖片嵌入網頁的相應版位，並編排成專業電商等級的展示版面！</p>
+          <div style="margin-top: 1.25rem;">
+            <a href="../product-demo.html" target="_blank" class="btn-primary" style="font-size: 0.9rem; padding: 0.6rem 1.25rem;">
+              👀 點擊即時預覽：我們打造出的產品成果網頁 (product-demo.html) ➔
+            </a>
+          </div>
+        </section>
+
+      <!-- 2-4 -->
+      <section id="sec-2-4" class="content-section">
+        <h2>2-4 迭代與微調技巧</h2>
+        <p>生成之後如果想調整細節，完全不需要自己找行數改 code！只要繼續吩咐 Antigravity：</p>
+
+        <div class="step-box">
+          <h4>常見的對話微調示範：</h4>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><em>「請把 Hero 標題的字體放大一點，並把預購按鈕改成亮橘色。」</em></li>
+            <li><em>「請在特色卡片後面加上顧客好評推薦（Testimonials）區塊。」</em></li>
+            <li><em>「點擊預購按鈕時，請彈出一個感謝訂閱的提示視窗。」</em></li>
+          </ul>
+        </div>
+
+        <p>Antigravity 會自動進行增量修改，這就是與 AI 結伴開發（Pair Programming）的最佳流程！請確保這個網頁運作順暢，因為第 4 章我們就要把它發布到全世界！</p>
+      </section>
+
+      <!-- 分頁導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter1.html" class="btn-secondary">⬅ 上一章：下載及安裝</a>
+        <a href="chapter3.html" class="btn-primary">下一章：GitHub 註冊與功能 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 6 章：實戰串接 GAS — 打造預購資料庫與自動寄發確認信 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge">Chapter 06</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">回首頁</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">☀️ 淺色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節目錄</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載及安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與功能介紹</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 自動發布</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html" class="active">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-6-1">6-1 試算表資料庫欄位規劃</a></li>
+        <li><a href="#sec-6-2">6-2 建立 Google 試算表</a></li>
+        <li><a href="#sec-6-3">6-3 讓 AI 撰寫 GAS 後端腳本</a></li>
+        <li><a href="#sec-6-4">6-4 發布 Web App 取得 API</a></li>
+        <li><a href="#sec-6-5">6-5 讓 AI 升級前端預購表單</a></li>
+        <li><a href="#sec-6-6">6-6 全端串接實測驗收</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill">第 6 章 · 全端自動化實戰</span>
+        <h1>實戰串接 GAS：打造預購資料庫與自動寄發確認信</h1>
+        <p class="desc">不用寫一行程式碼！本章帶你掌握「資料庫欄位規劃」思維，並運用精準的提示詞（Prompt），引導 Antigravity 同時寫好後端 GAS 雲端腳本、自動化 Gmail 寄信模板，以及前端網頁表單串接！</p>
+      </div>
+
+      <!-- 6-1 資料庫規劃 -->
+      <section id="sec-6-1" class="content-section">
+        <h2>6-1 資料庫思維：Google 試算表（Excel）欄位該如何規劃？</h2>
+        <p>很多初學者在做表單時，往往直接抓起試算表隨便填。在軟體工程中，<strong>「資料庫結構規劃（Schema Design）」</strong>是最關鍵的第一步！</p>
+        <p>為我們的「SmartSound Pro 耳機早鳥預購」，我們需要規劃以下 6 個標準資料欄位：</p>
+
+        <div class="step-box">
+          <h4>📋 推薦的預購表單欄位架構（第一列標題）：</h4>
+          <div style="overflow-x: auto; margin-top: 1rem;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); color: #818cf8;">
+                  <th style="padding: 0.6rem;">欄位名稱</th>
+                  <th style="padding: 0.6rem;">欄位英名 (Key)</th>
+                  <th style="padding: 0.6rem;">資料類型</th>
+                  <th style="padding: 0.6rem;">欄位目的與說明</th>
+                </tr>
+              </thead>
+              <tbody style="color: var(--text-muted); line-height: 1.6;">
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: var(--text-main); font-weight: 600;">時間戳記</td>
+                  <td style="padding: 0.6rem; font-family: monospace;">timestamp</td>
+                  <td style="padding: 0.6rem;">日期時間</td>
+                  <td style="padding: 0.6rem;">記錄客戶下單的確切時間（由系統自動填入）。</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: var(--text-main); font-weight: 600;">客戶姓名</td>
+                  <td style="padding: 0.6rem; font-family: monospace;">name</td>
+                  <td style="padding: 0.6rem;">文字</td>
+                  <td style="padding: 0.6rem;">稱呼客戶，寄確認信時用作稱謂（如「王大明 您好」）。</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: var(--text-main); font-weight: 600;">電子信箱</td>
+                  <td style="padding: 0.6rem; font-family: monospace;">email</td>
+                  <td style="padding: 0.6rem;">Email 格式</td>
+                  <td style="padding: 0.6rem;">重要！寄發預購成功通知信的目標收件地址。</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: var(--text-main); font-weight: 600;">聯絡電話</td>
+                  <td style="padding: 0.6rem; font-family: monospace;">phone</td>
+                  <td style="padding: 0.6rem;">文字</td>
+                  <td style="padding: 0.6rem;">供後續物流出貨與簡訊通知使用。</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: var(--text-main); font-weight: 600;">預購方案</td>
+                  <td style="padding: 0.6rem; font-family: monospace;">plan</td>
+                  <td style="padding: 0.6rem;">選項</td>
+                  <td style="padding: 0.6rem;">標記客戶選擇的「標準版」或「旗艦降噪版 Pro」。</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.6rem; color: var(--text-main); font-weight: 600;">備註需求</td>
+                  <td style="padding: 0.6rem; font-family: monospace;">notes</td>
+                  <td style="padding: 0.6rem;">長文字</td>
+                  <td style="padding: 0.6rem;">客戶填寫的額外收件備註或需求。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6-2 AI 產生試算表範本與上傳 -->
+      <section id="sec-6-2" class="content-section">
+        <h2>6-2 動口不動手：讓 AI 生成 Excel 表格，一鍵上傳 Google 雲端轉為試算表</h2>
+        <p>千‧萬‧不‧要手動打開表格一個個去打字、排版！身為 AI 時代的開發者，所有的資料庫範本同樣<strong>直接讓 Antigravity 幫我們生成 Excel 檔</strong>！</p>
+
+        <div class="prompt-card">
+          <div class="prompt-tag">💬 提示詞：請 Antigravity 替我建立預購名單 Excel 表格範本</div>
+          <div class="prompt-body">
+            "Antigravity，請幫我建立一個名為『preorder_database_template.xlsx』的 Excel 表格檔案。<br>
+            第一列請幫我放好 6 個標準資料庫欄位標題：『登記時間』、『客戶姓名』、『電子信箱』、『聯絡電話』、『預購方案』、『備註留言』，並在第二列附上一筆標準範例資料供參考！"
+          </div>
+        </div>
+
+        <p>送出提示詞後，Antigravity 就會在你的專案目錄下生成 <code>preorder_database_template.xlsx</code>。接下來只要透過瀏覽器完成三步轉移：</p>
+
+        <div class="step-box">
+          <span class="step-number">三步搞定雲端資料庫</span>
+          <h4>上傳 Google 雲端硬碟並轉為 Google 試算表</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
+            <li><strong>拖曳上傳：</strong> 開啟你的 <a href="https://drive.google.com" target="_blank" style="color: #818cf8; text-decoration: underline;">Google 雲端硬碟 (Google Drive)</a>，將剛才生成的 <code>preorder_database_template.xlsx</code> 直接拖曳上傳。</li>
+            <li><strong>用試算表開啟：</strong> 在雲端硬碟點兩下打開該檔案，點選上方 <strong>「使用 Google 試算表開啟」</strong>。</li>
+            <li><strong>另存為 Google 試算表（關鍵一步！）：</strong> 點選左上角 <strong>檔案 ➔ 「另存為 Google 試算表」</strong>。
+              <div style="font-size: 0.85rem; color: #38bdf8; margin-top: 0.25rem;">
+                ✔ 此時你的 Excel 檔就正式轉換為具備完整雲端程式碼功能的 Google 試算表了！
+              </div>
+            </li>
+            <li><strong>開啟後端介面：</strong> 點選頂部選單 <strong>「擴充功能」 ➔ 「Apps Script」</strong>，直接進入雲端開發環境！</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 6-3 讓 AI 寫後端 -->
+      <section id="sec-6-3" class="content-section">
+        <h2>6-3 核心重點：向 Antigravity 下提示詞，生成 GAS 後端與自動寄信程式</h2>
+        <p>現在我們要讓 Antigravity 替我們寫出<strong>接收資料、寫入試算表、並透過 Gmail 發送確認信</strong>的完整 GAS 程式碼。</p>
+
+        <div class="prompt-card">
+          <div class="prompt-tag">💬 提示詞 1：向 Antigravity 索取 GAS 後端自動化腳本</div>
+          <div class="prompt-body">
+            "Antigravity，請幫我寫一段完整的 Google Apps Script (GAS) 程式碼。<br><br>
+            <strong>【功能需求】：</strong><br>
+            1. 建立 <code>doPost(e)</code> 函數接收前端傳送的 POST 請求（JSON 格式）。<br>
+            2. 需解析出 <code>name, email, phone, plan, notes</code> 五個欄位。<br>
+            3. 將當前時間與這 5 個欄位，自動寫入（appendRow）到當前試算表的第一個工作表中。<br>
+            4. <strong>【自動寄送確認信】：</strong> 使用 <code>GmailApp.sendEmail()</code>，自動寄一封排版美觀的 HTML 郵件給客戶的 <code>email</code>。<br>
+               - 信件主旨：『【SmartSound Pro】預購成功通知！感謝您的支持』<br>
+               - 信件內容：帶入客戶姓名、預購方案、感謝詞，並告知出貨前會再通知。<br>
+            5. 設定跨網域（CORS）保護，回傳 JSON 成功狀態給前端。<br>
+            請提供整段程式碼，並在關鍵地方加上新手能看懂的中文註解！"
+          </div>
+        </div>
+
+        <p>Antigravity 會立刻為你產出包含 <code>doPost</code> 與 <code>GmailApp.sendEmail</code> 的標準程式碼。你只需要全選複製，貼到 Google Apps Script 編輯器中，按下上方的 <strong>「儲存（磁碟片圖示）」</strong> 即可！</p>
+      </section>
+
+      <!-- 6-4 發布 Web App -->
+      <section id="sec-6-4" class="content-section">
+        <h2>6-4 發布為 Web App 並取得專屬 API 網址</h2>
+        <p>程式碼存檔後，必須將它發布為全世界可訪問的公開窗口：</p>
+
+        <div class="step-box">
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
+            <li>點選右上角的藍色按鈕 <strong>「部署（Deploy）」 ➔ 「新增部署作業（New deployment）」</strong>。</li>
+            <li>左側齒輪圖示選擇 <strong>「網路應用程式（Web App）」</strong>。</li>
+            <li><strong>關鍵權限設定（新手最常錯在這裡！）：</strong>
+              <ul style="padding-left: 1.25rem;">
+                <li><strong>執行身分（Execute as）：</strong> 選擇 <code>我（你的帳號）</code>。</li>
+                <li><strong>誰可以存取（Who has access）：</strong> 務必選擇 <strong><code>所有人（Anyone）</code></strong>（這樣訪客才能不用登入就提交表單）。</li>
+              </ul>
+            </li>
+            <li>點選「部署」，並在彈出的權限確認視窗中允許存取你的 Google 試算表與 Gmail。</li>
+            <li>複製畫面產生的 <strong>「網路應用程式網址（Web App URL）」</strong>（以 <code>https://script.google.com/macros/s/.../exec</code> 結尾）。這就是你的後端 API！</li>
+          </ol>
+        </div>
+
+        <!-- 重要：部署差異與觀念警告 -->
+        <div class="callout callout-warning">
+          <span>⚠️</span>
+          <div>
+            <strong>【觀念大解密：前端 GitHub vs 後端 GAS 部署差異】</strong><br>
+            很多學生改完程式後常常納悶：「<em>為什麼我的修改沒有生效？</em>」請務必牢記兩者的不同：
+            <ul style="padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+              <li><strong>前端網頁（HTML / CSS / JS）：</strong><br>
+                改完之後，只要對 Antigravity 說「幫我推送到 GitHub」，Git Push 完成後 GitHub 就會<strong>自動重新部署</strong>，1~2 分鐘後線上網頁自動更新！
+              </li>
+              <li><strong>後端 Google Apps Script (GAS)：</strong><br>
+                <strong>GAS 無法從本機自動上傳！</strong> 每次只要請 AI 改了 GAS 程式碼：<br>
+                ① 必須<strong>手動全選複製</strong>，貼進 Google 的 Apps Script 網頁編輯器。<br>
+                ② 按下「儲存（磁碟片圖示）」。<br>
+                ③ <strong>最重要的一步（漏掉絕對沒效！）：</strong> 點右上角 <strong>「部署」 ➔ 「管理部署作業」 ➔ 點鉛筆圖示編輯 ➔ 版本選「新版本 (New version)」 ➔ 按下「部署」！</strong><br>
+                <em>（原因：如果沒有建立「新版本」，你的 Web App 網址將永遠停留在舊版的程式碼！）</em>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6-5 讓 AI 升級前端網頁並替換真實 API -->
+      <section id="sec-6-5" class="content-section">
+        <h2>6-5 關鍵連線：將第 2 章網頁與 GAS 真正對接</h2>
+        <p>拿到 <code>https://script.google.com/macros/s/.../exec</code> 這串 API 網址後，這就是前端網頁把訂單送到試算表的「雲端橋樑」！</p>
+        <p>學員不需要去網頁程式碼裡搜尋是哪一行，只要直接把這句提示詞貼給 Antigravity：</p>
+
+        <div class="prompt-card">
+          <div class="prompt-tag">💬 提示詞 2：請 Antigravity 將真實 GAS 網址接入第二章網頁</div>
+          <div class="prompt-body">
+            "Antigravity，我已經拿到我的 Google Apps Script Web App 網址：<br>
+            <code>https://script.google.com/macros/s/【請替換為你的實際網址】/exec</code><br><br>
+            請幫我檢查並修改第二章的產品網頁 <code>product-demo.html</code>：<br>
+            1. 將預購表單送出的 JavaScript 邏輯，改為真實呼叫上述 GAS 網址（使用 <code>fetch(API_URL, { method: 'POST', body: JSON.stringify(...) })</code>）。<br>
+            2. 送出中將按鈕變更為『正在寫入雲端試算表並寄送確認信...』，防止連續重複點擊。<br>
+            3. 當 GAS 回傳成功後，彈出提示視窗：『🎉 預購成功！確認信已自動發送至您的 Email，請查收！』並清空所有輸入框。<br>
+            4. 幫我處理好 CORS 跨網域傳輸，確保在任何瀏覽器送出都不會被擋！"
+          </div>
+        </div>
+
+        <div class="callout callout-tip">
+          <span>💡</span>
+          <div>
+            <strong>Antigravity 會自動完成：</strong>
+            AI 會自動打開 <code>product-demo.html</code>，找到 <code>form.addEventListener('submit')</code> 區塊，把你的真實 GAS URL 填入，並加入完整的異步 <code>fetch()</code> 傳輸腳本！
+          </div>
+        </div>
+      </section>
+
+      <!-- 6-6 實測驗收與成果展示 -->
+      <section id="sec-6-6" class="content-section">
+        <h2>6-6 享受奇蹟時刻：全端串接實測驗收與自動寄信</h2>
+        <p>接好之後，用瀏覽器打開 <code>product-demo.html</code>，立刻親自下第一筆測試訂單：</p>
+        
+        <div class="step-box" style="border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
+          <h4 style="color: #10b981;">🎉 完整驗收三部曲：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>第 1 步 · 網頁填表送出：</strong> 在網頁底部輸入你的真實姓名、真實 Email、電話，選擇方案並按「送出預購登記」。</li>
+            <li><strong>第 2 步 · 試算表即時記帳：</strong> 切換到你的 Google 試算表，你會親眼目睹<strong>第一列下方瞬間自動多出一行新的訂單資料</strong>，包含確切時間戳記！</li>
+            <li><strong>第 3 步 · 手機叮咚！Gmail 自動寄達確認信：</strong><br>
+              打開你的手機或 Gmail 收件匣，一封主旨為<strong>『【SmartSound Pro】預購成功通知！感謝您的支持』</strong>的精美確認信已經安靜地躺在信箱中：
+              <div style="background: var(--code-bg); padding: 1rem; border-radius: 8px; margin-top: 0.5rem; border: 1px solid var(--border-color); font-size: 0.88rem; color: #cbd5e1;">
+                親愛的 <strong>王小明</strong> 您好：<br><br>
+                感謝您預購 <strong>SmartSound Pro 頂級降噪無線耳機（旗艦降噪版 Pro）</strong>！<br>
+                我們已收到您的早鳥登記資料。商品正式出貨前，我們將透過電話與信箱再次向您發送物流單號。<br><br>
+                SmartSound Pro 團隊 敬上
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="step-box">
+          <h4>🚀 最後一步：使用第 4 章的 CLI 一鍵更新到 GitHub Pages！</h4>
+          <p>測試成功後，只要對 Antigravity 說：</p>
+          <div class="prompt-card" style="margin-top: 0.5rem;">
+            <div class="prompt-body">
+              "Antigravity，請幫我執行 git add、commit（標題：feat: 串接 Google 試算表與自動寄信），並使用 gh 推送到 GitHub，更新我們的 GitHub Pages 線上網址！"
+            </div>
+          </div>
+          <p style="font-size: 0.9rem; color: #38bdf8;">
+            幾秒鐘之內，全世界上任何拿到你網址的朋友，點開你的網站填寫表單，都能真正自動寫入你的試算表並收到專屬確認信！
+          </p>
+        </div>
+      </section>
+
+      <!-- 分頁導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter5.html" class="btn-secondary">⬅ 上一章：認識 GAS</a>
+        <a href="chapter7.html" class="btn-primary">下一章：LINE 機器人即時推播 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

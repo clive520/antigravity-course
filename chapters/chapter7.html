@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 7 章：串接 LINE 機器人即時推播訂單通知 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge">Chapter 07</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">回首頁</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">☀️ 淺色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節目錄</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載及安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與功能介紹</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 自動發布</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html" class="active">第 7 章：LINE 機器人即時推播訂單通知</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-7-1">7-1 LINE 機器人作動原理剖析</a></li>
+        <li><a href="#sec-7-2">7-2 取得 LINE Bot 權杖與 User ID</a></li>
+        <li><a href="#sec-7-3">7-3 向 AI 索取 LINE 推播 GAS 升級碼</a></li>
+        <li><a href="#sec-7-4">7-4 實測體驗：手機 LINE 叮咚推播</a></li>
+        <li><a href="#sec-7-5">7-5 全端自動化終極生態系回顧</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill">第 7 章 · 行動端自動化推播</span>
+        <h1>串接 LINE 機器人：即時通知老闆有人預購耳機！</h1>
+        <p class="desc">在第 6 章中，客人填完單已經會自動寫入試算表並收到感謝信。但身為店長/老闆的你，總不能 24 小時盯著 Google 試算表格子看！本章將帶你串接 LINE 機器人，只要有新訂單進來，你的手機 LINE 立刻「叮咚！」收到老闆專屬推播！</p>
+      </div>
+
+      <!-- 7-1 原理剖析 -->
+      <section id="sec-7-1" class="content-section">
+        <h2>7-1 作動原理剖析：LINE 機器人是如何在背後運作的？</h2>
+        <p>很多學員會好奇：「<em>我只是在網頁上點一下送出，為什麼我的手機 LINE 能夠在 1 秒內收到訊息？這中間的訊號是怎麼傳遞的？</em>」</p>
+        <p>在寫程式前，我們先用一張白話架構圖搞懂<strong>「網頁 ➔ Google 雲端 ➔ LINE 伺服器 ➔ 老闆手機」</strong>的四步推播骨牌效應：</p>
+
+        <div class="step-box" style="border-left: 4px solid #06c755;">
+          <h4>🔄 系統作動四步全流程：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>觸發端（前端網頁）：</strong> 客人在產品網頁填完姓名與電話，按下「送出預購」。瀏覽器將這包資料透過 POST 請求送往 Google Apps Script。</li>
+            <li><strong>大腦中樞（Google 雲端 GAS）：</strong>
+              <ul style="padding-left: 1.25rem;">
+                <li>第一動：把資料寫進 Google 試算表存檔。</li>
+                <li>第二動：透過 Gmail 寄信給客人。</li>
+                <li>第三動（關鍵）：GAS 透過 <code>UrlFetchApp.fetch()</code>，向 LINE 官方發出一個秘密的 HTTP 網路請求（Webhook Push API）。</li>
+              </ul>
+            </li>
+            <li><strong>傳遞通道（LINE 官方伺服器）：</strong>
+              LINE 的全球伺服器接收到 Google 發來的請求，核對「權杖（Token）是否合法？」，確認無誤後，把這段訂單文字指派給你的官方帳號（耳機小秘書）。
+            </li>
+            <li><strong>接收端（老闆的手機 LINE）：</strong>
+              LINE 官方伺服器透過行動推播機制（APNs / FCM），直接把訊息推送進老闆的手機螢幕，發出「叮咚！」提醒聲！
+            </li>
+          </ol>
+        </div>
+
+        <h3>雙向通知分工：對客端 vs 對管理端</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✉️</div>
+            <div style="font-weight: 700; color: #ef4444; margin-bottom: 0.35rem;">對客端：Gmail 正式信件</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">發給顧客留存。具有正式憑證感、不打擾顧客隱私，方便日後查詢訂單編號。</p>
+          </div>
+
+          <div style="background: var(--bg-card); border: 1px solid rgba(6, 199, 85, 0.4); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📱</div>
+            <div style="font-weight: 700; color: #06c755; margin-bottom: 0.35rem;">對管理端：LINE 即時私訊</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">發給老闆本人。具有最高時效性，免開電腦看試算表，人在外面手機一響立刻知道有新訂單！</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7-2 取得憑證 -->
+      <section id="sec-7-2" class="content-section">
+        <h2>7-2 三分鐘快速取得 LINE 機器人憑證（Channel Access Token）</h2>
+        <p>要讓程式能夠代替機器人傳訊息給你，我們需要從 LINE 開發者後台取得兩樣鑰匙：<strong>權杖（Token）</strong> 與 <strong>你的個人 ID</strong>。</p>
+
+        <div class="step-box">
+          <span class="step-number">步驟 1</span>
+          <h4>建立 LINE Developers 官方帳號</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li>前往 <a href="https://developers.line.biz" target="_blank" style="color: #818cf8; text-decoration: underline;">LINE Developers Console</a>，用你平常的 LINE 帳號登入。</li>
+            <li>建立一個 Provider（服務提供者，例如命名為：<code>MyStore</code>）。</li>
+            <li>點選 <strong>Create a new channel</strong> ➔ 選擇 <strong>Messaging API</strong>。</li>
+            <li>填寫機器人基本資料（名稱如：<code>耳機小秘書</code>），完成建立。</li>
+          </ol>
+        </div>
+
+        <div class="step-box">
+          <span class="step-number">步驟 2</span>
+          <h4>複製 Channel Access Token（存取權杖）</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li>切換到 <strong>Messaging API</strong> 分頁，滑到最下方找到 <strong>Channel access token</strong>。</li>
+            <li>點擊 <strong>Issue（發行）</strong>，你會得到一長串亂碼英數組合，點擊複製它（妥善保管，不要外洩）。</li>
+            <li>用手機掃描同頁面上的 <strong>QR Code</strong>，將你的這個小秘書機器人加為好友！</li>
+          </ol>
+        </div>
+
+        <div class="step-box">
+          <span class="step-number">步驟 3</span>
+          <h4>取得老闆個人的 User ID</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            切換到 <strong>Basic settings</strong> 分頁，滑到底部會看到 <strong>Your user ID</strong>（以 <code>U</code> 開頭的 33 碼英數字串）。這串 ID 就代表你的個人身份，用來告訴機器人「這封通知信要私訊發給哪位老闆」。
+          </p>
+        </div>
+      </section>
+
+      <!-- 7-3 讓 AI 寫推播程式碼 -->
+      <section id="sec-7-3" class="content-section">
+        <h2>7-3 動口不動手：向 Antigravity 索取整合 LINE 推播的升級版 GAS</h2>
+        <p>拿到 <code>LINE_CHANNEL_ACCESS_TOKEN</code> 與 <code>LINE_USER_ID</code> 之後，我們不需要自己研究 LINE 官方複雜的 HTTP 格式。直接向 Antigravity 下提示詞：</p>
+
+        <div class="prompt-card">
+          <div class="prompt-tag">💬 提示詞：請 Antigravity 升級 GAS 加入 LINE 即時推播</div>
+          <div class="prompt-body">
+            "Antigravity，我已經取得我的 LINE Messaging API 資訊：<br>
+            - LINE_TOKEN: <code>【請貼上你的 Channel Access Token】</code><br>
+            - USER_ID: <code>【請貼上你的 User ID】</code><br><br>
+            請幫我把第 6 章的 Google Apps Script (GAS) 程式碼進行升級：<br>
+            1. 保留原本的 <code>doPost(e)</code> 接收表單並將 <code>timestamp, name, email, phone, plan, notes</code> 寫入試算表功能。<br>
+            2. 保留發送給顧客的 Gmail 預購確認信。<br>
+            3. <strong>【新增 LINE 推播小秘書功能】：</strong> 使用 <code>UrlFetchApp.fetch()</code> 呼叫 LINE 推播端點 <code>https://api.line.me/v2/bot/message/push</code>，發送推播訊息給上述的 USER_ID。<br>
+            4. LINE 訊息排版格式請設計為：<br>
+               『🎧【SmartSound Pro 新訂單快報！】<br>
+               👤 客戶姓名：{name}<br>
+               📦 預購方案：{plan}<br>
+               📞 聯絡電話：{phone}<br>
+               ✉️ 電子信箱：{email}<br>
+               📝 備註需求：{notes}<br>
+               ⏰ 下單時間：{timestamp}』<br>
+            請提供完整可以直接貼入 Google Apps Script 編輯器的程式碼與說明！"
+          </div>
+        </div>
+
+        <!-- 手動部署至 GAS 的精確動作教學 -->
+        <div class="step-box" style="border-left: 4px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
+          <h4 style="color: #f59e0b;">⚠️ 必做手動動作：將 AI 升級的程式碼更新並「重新部署」至 GAS</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            請特別注意：<strong>這段程式碼在 Google 雲端，Antigravity 無法直接替你隔空改雲端</strong>！學員必須執行以下手動四步：
+          </p>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9; font-size: 0.92rem; margin-top: 0.5rem;">
+            <li><strong>複製貼上：</strong> 將 Antigravity 產出的新程式碼全選複製，回到 Google 試算表 ➔ 「擴充功能」 ➔ 「Apps Script」，將編輯器裡的舊代碼全選刪除並貼上新代碼。</li>
+            <li><strong>儲存：</strong> 點擊編輯器上方的 <strong>💾 儲存</strong> 圖示。</li>
+            <li><strong>關鍵重新部署（非新增部署！）：</strong><br>
+              點右上角 <strong>「部署」 ➔ 「管理部署作業（Manage deployments）」</strong>。
+            </li>
+            <li><strong>建立新版本：</strong><br>
+              在彈出的視窗中，點擊右上角的 <strong>✏️ 鉛筆圖示（編輯）</strong> ➔ 在「版本」下拉選單中選擇 <strong>「新版本 (New version)」</strong> ➔ 按下右下角 <strong>「部署 (Deploy)」</strong>！<br>
+              <span style="color: #10b981; font-weight: 600;">✔ 這樣做網址才不會變，而且最新寫入的 LINE 推播功能才會正式生效！</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 7-4 實測體驗 -->
+      <section id="sec-7-4" class="content-section">
+        <h2>7-4 奇蹟時刻：手機 LINE 叮咚！即時推播實測</h2>
+        <p>現在回到你的產品展示網頁 <code>product-demo.html</code>，填入一筆新的測試資料並點擊送出：</p>
+
+        <div class="step-box" style="border-left: 4px solid #06c755; background: rgba(6, 199, 85, 0.05);">
+          <h4 style="color: #06c755;">📱 LINE 即時通知實機體驗：</h4>
+          <p>按下送出的 1 秒之內，你的手機會立刻收到 LINE 震動與鈴聲提示！打開 LINE 聊天室，你親手打造的「耳機小秘書」已經發來了精緻的訂單報表：</p>
+
+          <div style="background: #1c2a1e; border: 1px solid rgba(6, 199, 85, 0.3); padding: 1.25rem; border-radius: 12px; margin-top: 1rem; font-family: monospace; font-size: 0.9rem; color: #e2e8f0; line-height: 1.8;">
+            🎧【SmartSound Pro 新訂單快報！】<br>
+            ━━━━━━━━━━━━━━━━━━<br>
+            👤 客戶姓名：陳大明<br>
+            📦 預購方案：🔥 旗艦降噪版 Pro (NT$ 5,990)<br>
+            📞 聯絡電話：0988-123-456<br>
+            ✉️ 電子信箱：client@example.com<br>
+            📝 備註需求：希望能開立三聯式統編發票<br>
+            ⏰ 下單時間：2026/10/12 20:15:30<br>
+            ━━━━━━━━━━━━━━━━━━<br>
+            💡 資料已同步歸檔至 Google 試算表，感謝信已寄出。
+          </div>
+        </div>
+      </section>
+
+      <!-- 7-5 全端生態系總結 -->
+      <section id="sec-7-5" class="content-section">
+        <h2>7-5 榮耀總結：你親手打造的全端自動化商業生態系</h2>
+        <p>回顧從第 1 章一路走來，你已經掌握了現代 AI 開發者最強悍的武器庫：</p>
+
+        <div class="step-box">
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>AI 輔助開發工具（第 1 章）：</strong> 安裝 Antigravity，學會用自然語言指揮 AI。</li>
+            <li><strong>現代產品展示官網（第 2 章）：</strong> 提示詞工程打造 RWD 響應式網頁，AI 多維度圖片生成。</li>
+            <li><strong>版本控制與雲端託管（第 3、4 章）：</strong> GitHub 帳號註冊，使用 <strong>GitHub CLI</strong> 一鍵發布全球公開網址。</li>
+            <li><strong>免費雲端無伺服器後端（第 5 章）：</strong> 搞懂 Google Apps Script (GAS) 運作機制與每日配額。</li>
+            <li><strong>資料庫記帳與顧客通知（第 6 章）：</strong> Google 試算表即時登記 + Gmail 自動化感謝信。</li>
+            <li><strong>店長行動端即時推播（第 7 章）：</strong> LINE 機器人推播通知，任何訂單絕不漏接！</li>
+          </ol>
+        </div>
+
+        <div class="callout callout-tip">
+          <span>🏆</span>
+          <div>
+            <strong>恭喜全體學員結業！</strong>
+            你現在不僅具備獨立打造網頁的能力，更具備打造「商務金流、資料庫與即時推播」完整自動化閉環的高級全端技能！
+          </div>
+        </div>
+      </section>
+
+      <!-- 分頁導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter6.html" class="btn-secondary">⬅ 上一章：GAS 預購資料庫與自動回信</a>
+        <a href="chapter8.html" class="btn-primary">下一章：綠界 ECPay 金流測試實戰 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

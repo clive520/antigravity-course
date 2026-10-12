@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 4 章：GitHub CLI 自動化一鍵發布上線 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge">Chapter 04</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">回首頁</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">☀️ 淺色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節目錄</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載及安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與功能介紹</a></li>
+        <li><a href="chapter4.html" class="active">第 4 章：GitHub CLI 自動發布</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-4-1">4-1 為什麼需要 GitHub CLI？</a></li>
+        <li><a href="#sec-4-2">4-2 讓 AI 幫我們安裝 CLI（提示詞）</a></li>
+        <li><a href="#sec-4-3">4-3 關鍵環節：AI 如何取得帳號資格？</a></li>
+        <li><a href="#sec-4-4">4-4 Repo 名稱設定：AI 取名 vs 自己指定</a></li>
+        <li><a href="#sec-4-5">4-5 自然語言口語化一鍵推送與網址產出</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill">第 4 章 · CLI 自動化部署</span>
+        <h1>使用 GitHub CLI 幫學生自動發布作品並生成公開網址</h1>
+        <p class="desc">不用再開瀏覽器手動點選 New Repository、手動上傳拖曳檔案！本章將教你如何使用 GitHub 官方命令列工具（GitHub CLI, gh），或是直接吩咐 Antigravity，一鍵完成雲端部署並獲取專屬網址！</p>
+      </div>
+
+
+      <!-- 4-1 -->
+      <section id="sec-4-1" class="content-section">
+        <h2>4-1 為什麼需要 GitHub CLI (gh)？</h2>
+        <p>傳統手動做法需要：開啟 GitHub 網頁 ➔ 點擊 New Repo ➔ 打名字 ➔ 電腦下指令 ➔ 回網頁點 Settings ➔ 找 Pages 選單 ➔ 點 Save... 步驟繁瑣且容易出錯。</p>
+        <p><strong>GitHub CLI (<code>gh</code>)</strong> 是 GitHub 官方打造的命令列工具。更棒的是，因為 Antigravity 擁有終端機操作能力，你<strong>甚至不需要自己安裝或打複雜指令</strong>，只要用說的，AI 就能幫你從頭安裝到尾！</p>
+      </section>
+
+      <!-- 4-2 請 AI 幫我們安裝 CLI -->
+      <section id="sec-4-2" class="content-section">
+        <h2>4-2 動口不動手：下指令請 Antigravity 幫我們安裝 GitHub CLI</h2>
+        <p>學員不需要去官網翻找下載頁面，只要在 Antigravity 對話框送出以下提示詞：</p>
+
+        <div class="prompt-card">
+          <div class="prompt-tag">💬 提示詞 1：請 AI 自動檢查與安裝 GitHub CLI</div>
+          <div class="prompt-body">
+            "Antigravity，請先幫我檢查我的電腦目前有沒有安裝 GitHub CLI（gh 指令）。如果還沒有安裝，請幫我執行系統指令安裝它（例如 Windows 透過 winget，或 macOS 透過 brew），並確認是否能正常讀取版本號！"
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>💡 Antigravity 會在背景替你執行的動作：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li>執行 <code>gh --version</code> 檢查現有版本。</li>
+            <li>若未安裝，Windows 自動執行 <code>winget install --id GitHub.cli</code>；macOS 自動執行 <code>brew install gh</code>。</li>
+            <li>回報安裝成功訊息，提示已就緒。</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 4-3 如何取得帳號資格 -->
+      <section id="sec-4-3" class="content-section">
+        <h2>4-3 關鍵環節：Antigravity 是如何取得你的 GitHub 帳號資格的？</h2>
+        <p>很多學員會好奇：「<em>Antigravity 怎麼知道我是誰？它怎麼能把東西推到我的 GitHub？</em>」</p>
+        <p>這裡涉及到<strong>安全授權機制（OAuth 網頁驗證）</strong>，請注意：<strong>Antigravity 本身不會也不應該知道你的密碼</strong>，而是透過官方的網頁單次配對：</p>
+
+        <div class="step-box">
+          <span class="step-number">一次性授權流程</span>
+          <h4>只需執行一次的網頁授權（Device Flow）</h4>
+          <p>請對 Antigravity 說：<code>"請幫我啟動 GitHub CLI 的登入驗證"</code>，或者你在終端機執行 <code>gh auth login</code>：</p>
+          <div style="background: var(--code-bg); padding: 1.25rem; border-radius: 8px; margin: 1rem 0; border: 1px solid var(--border-color); font-size: 0.9rem; line-height: 1.7;">
+            <strong>① AI 會在背景觸發：</strong> <code>gh auth login</code><br>
+            <strong>② 終端機會顯示一組 8 碼配對代碼：</strong> 例如 <code>ABCD-1234</code><br>
+            <strong>③ 系統會彈出預設瀏覽器（或是點擊終端機連結）：</strong> 連到 GitHub 的 Device Activation 頁面<br>
+            <strong>④ 貼上代碼並按 Authorize：</strong> 因為學員在第 3 章已經用 Google 登入過 GitHub，瀏覽器會一鍵確認授權！
+          </div>
+          <p style="color: #38bdf8; font-size: 0.9rem; font-weight: 500;">
+            ✔ 授權成功後，GitHub CLI 會在學員電腦本機生成一個安全的憑證 Token（安全金鑰）。從此以後，Antigravity 在呼叫 <code>gh</code> 工具時，就能合法代表你的身份操作遠端倉庫！
+          </p>
+        </div>
+      </section>
+
+      <!-- 4-4 Repo 名稱設定：AI 取名 vs 自己指定 -->
+      <section id="sec-4-4" class="content-section">
+        <h2>4-4 推送時的 Repo 名稱：由 AI 決定還是我們自己設定？</h2>
+        <p>答案是：<strong>兩種都可以！而且完全取決於你在對話中怎麼說。</strong></p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-weight: 700; color: #818cf8; font-size: 1.05rem; margin-bottom: 0.5rem;">🏷️ 方式 A：由自己指定 Repo 名稱（強烈推薦）</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+              <strong>特點：</strong> 你能精確掌控網址外觀，不會出現預料之外的名稱。<br>
+              <strong>範例提示詞：</strong> <em>「請把專案推送到名為 <code>my-earphone-landing</code> 的 GitHub public repo...」</em><br>
+              <strong>產生的網址：</strong> <code>https://&lt;帳號&gt;.github.io/my-earphone-landing/</code>
+            </p>
+          </div>
+
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-weight: 700; color: #38bdf8; font-size: 1.05rem; margin-bottom: 0.5rem;">🤖 方式 B：讓 Antigravity 依專案自動命名</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+              <strong>特點：</strong> 適合不想花腦筋想英文名稱的學員。<br>
+              <strong>運作原理：</strong> AI 會預設使用「目前資料夾名稱」或分析網頁標題（如 <code>smartsound-pro</code>）。<br>
+              <strong>範例提示詞：</strong> <em>「請幫我取一個合適簡短的英文名稱建立 Repo 並推上去...」</em>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4-5 口語化提示詞一鍵推送 -->
+      <section id="sec-4-5" class="content-section">
+        <h2>4-5 自然語言口語化一鍵推送：自動產生公開可用網址</h2>
+        <p>當 GitHub CLI 安裝完成且一次性授權通過後，日常開發中學員<strong>只要用最輕鬆的口語</strong>對 Antigravity 說話即可：</p>
+
+        <div class="prompt-card">
+          <div class="prompt-tag">🚀 實戰示範（由我指定名稱）</div>
+          <div class="prompt-body">
+            "Antigravity，我已經做好第二章的耳機介紹網頁了！請幫我用 git 和 GitHub CLI (gh)，在我的 GitHub 上建立一個公開（Public）的 repository，名稱叫做『smartsound-page』，把目前的程式碼和照片都推上去，並幫我開啟 GitHub Pages。最後請將可以在瀏覽器觀看的網址列印給我！"
+          </div>
+        </div>
+
+        <div class="prompt-card" style="border-color: rgba(56, 189, 248, 0.3);">
+          <div class="prompt-tag" style="color: #38bdf8;">🚀 實戰示範（讓 AI 自由命名）</div>
+          <div class="prompt-body">
+            "Antigravity，幫我把這個專案推到我的 GitHub 上面，請幫我想個合適的英文 Repo 名字，設為公開，並啟用 Pages 發布成網址給我！"
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>🎉 成果回報：學員會收到的結果</h4>
+          <p>Antigravity 執行完指令後，會在對話框向你回報：</p>
+          <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 1rem; border-radius: 6px; font-size: 0.92rem; color: #a7f3d0;">
+            ✅ <strong>Repository 建立成功：</strong> <code>https://github.com/alex-tw/smartsound-page</code><br>
+            ✅ <strong>GitHub Pages 服務已啟動！</strong><br>
+            🌐 <strong>公開瀏覽網址：</strong> <a href="#" style="text-decoration: underline; color: #fff;">https://alex-tw.github.io/smartsound-page/</a><br>
+            <span style="font-size: 0.8rem; color: #cbd5e1;">（註：首次發布約需等待 1~2 分鐘供 GitHub 雲端完成快取建置，稍後刷新即可正常瀏覽）</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 分頁導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter3.html" class="btn-secondary">⬅ 上一章：GitHub 註冊與功能</a>
+        <a href="chapter5.html" class="btn-primary">下一章：認識 Google Apps Script (GAS) ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 1 章：下載及安裝 Antigravity - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge">Chapter 01</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">回首頁</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">☀️ 淺色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- 課程內容佈局 -->
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節目錄</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html" class="active">第 1 章：下載及安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與功能介紹</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 自動發布</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-1-1">1-1 什麼是 Antigravity？</a></li>
+        <li><a href="#sec-1-2">1-2 軟體下載與安裝</a></li>
+        <li><a href="#sec-1-3">1-3 工作環境：單/多資料夾</a></li>
+        <li><a href="#sec-1-4">1-4 權限管理與自動同意</a></li>
+        <li><a href="#sec-1-5">1-5 第一次與 AI 助手對話</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側主要教學內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill">第 1 章 · 環境建置</span>
+        <h1>下載及安裝 Antigravity</h1>
+        <p class="desc">歡迎來到第一課！本章將帶領完全沒有接觸過 Antigravity 的同學完成軟體下載、安裝、設定工作資料夾，並進行第一次對話。</p>
+      </div>
+
+      <!-- 1-1 -->
+      <section id="sec-1-1" class="content-section">
+        <h2>1-1 什麼是 Antigravity？</h2>
+        <p><strong>Antigravity</strong> 是一款以「Agentic AI（代理型人工智慧）」為核心的新一代智能開發助理與 IDE。傳統的程式碼編輯器需要你自己打每一行程式碼，而 Antigravity 就像配備了一個經驗豐富、24 小時在線的資深工程師伴侶（Pair Programmer）。</p>
+        <p>你不需要預先精通 HTML、CSS 或 JavaScript，只要透過「日常說話的自然語言（Prompt）」，Antigravity 就能替你直接撰寫程式碼、修改錯誤、建立檔案，甚至執行系統指令！</p>
+        
+        <div class="callout callout-tip">
+          <span>💡</span>
+          <div>
+            <strong>給初學者的信心喊話：</strong>
+            不用害怕看不懂程式碼，在接下來的課程中，我們會學會如何像「產品經理」一樣向 Antigravity 表達需求，由它替我們實作出來。
+          </div>
+        </div>
+      </section>
+
+      <!-- 1-2 -->
+      <section id="sec-1-2" class="content-section">
+        <h2>1-2 軟體下載與安裝流程</h2>
+        <p>請依照你目前使用的作業系統，依照以下步驟安裝：</p>
+
+        <div class="step-box">
+          <span class="step-number">步驟 1</span>
+          <h4>取得官方安裝程式</h4>
+          <p>前往官方發布網站或下載連結，依據你的作業系統下載安裝檔：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            <li><strong>Windows 用戶：</strong> 下載 <code>.exe</code> 安裝檔案（或透過指令快速安裝）。</li>
+            <li><strong>macOS 用戶：</strong> 下載 <code>.dmg</code> 檔案（支援 Apple Silicon 與 Intel 晶片）。</li>
+          </ul>
+        </div>
+
+        <div class="step-box">
+          <span class="step-number">步驟 2</span>
+          <h4>執行安裝與完成登入</h4>
+          <p>按兩下安裝檔案並依循畫面引導（按「下一步」直至完成）。首次開啟後，點選「Sign in / 登入」，綁定你的 Google / 專屬開發者帳號。</p>
+        </div>
+      </section>
+
+      <!-- 1-3 -->
+      <section id="sec-1-3" class="content-section">
+        <h2>1-3 工作環境（Workspace）深度解析：單資料夾 vs 多資料夾運作</h2>
+        <p>Antigravity 是一個**「具備環境感知能力的代理（Agent）」**，它必須明確知道它在哪裡操作檔案。這就是為什麼「工作區（Workspace）」的概念至關重要！</p>
+
+        <div class="step-box">
+          <h4>💡 工作環境的核心運作邏輯</h4>
+          <p>當你在 Antigravity 中開啟一個資料夾時，AI 會將該資料夾設為<strong>「作用中工作區（Active Workspace）」</strong>與<strong>「指令執行根目錄（Working Directory）」</strong>。AI 的所有檔案建立、搜尋、修改與終端機指令，都預設在這個安全邊界之內進行，避免影響到電腦的其他私人資料。</p>
+        </div>
+
+        <h3>兩種工作區使用模式：</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-weight: 700; color: #818cf8; font-size: 1.05rem; margin-bottom: 0.5rem;">📁 模式 A：單一資料夾工作區（初學推薦）</div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+              <strong>適合場景：</strong> 獨立的小型專案、單一網站或新手練習。<br>
+              <strong>設定方式：</strong> 點選頂部選單 <code>File ➔ Open Folder</code>（開啟資料夾），選擇一個乾淨的空目錄（如 <code>C:\MyProjects\web-demo</code>）。<br>
+              <strong>優點：</strong> 結構單純、AI 不會被外部檔案干擾，所有的相對路徑（如 <code>PIC/image.jpg</code>）都能直接對應。
+            </p>
+          </div>
+
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-weight: 700; color: #38bdf8; font-size: 1.05rem; margin-bottom: 0.5rem;">🗂️ 模式 B：多資料夾工作區（Multi-root Workspace）</div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+              <strong>適合場景：</strong> 前後端分離專案（如 <code>frontend/</code> 與 <code>backend/</code>）或需要引用另一個共用素材庫時。<br>
+              <strong>設定方式：</strong> 先開啟主資料夾，再點選 <code>File ➔ Add Folder to Workspace...</code>（新增資料夾至工作區）。<br>
+              <strong>注意事項：</strong> AI 會同時讀取多個根目錄。向 AI 提問時，建議特別指明目標目錄（例如：「請在 frontend 資料夾中建立網頁」）。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1-4 權限與自動同意 -->
+      <section id="sec-1-4" class="content-section">
+        <h2>1-4 權限管理與自動同意（Auto-Approval）：我們到底授權了什麼？</h2>
+        <p>傳統 AI（如一般聊天機器人）只能「回答文字」，但 <strong>Antigravity 具備「行動力（Agency）」</strong> —— 它可以真正幫你寫入檔案、刪除檔案、執行 PowerShell/Bash 終端機指令。因此，理解「我們授予了它什麼權限」是每位學員最重要的安全第一課！</p>
+
+        <div class="step-box">
+          <h4>🛡️ Antigravity 的四大核心能力權限</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>讀取檔案（Read Tools）：</strong> 檢視專案目錄與讀取檔案內容，用來理解現有專案架構。</li>
+            <li><strong>寫入與修改檔案（Write & Edit Tools）：</strong> 建立新檔案、替換或覆蓋程式碼區塊。</li>
+            <li><strong>執行系統指令（Terminal / Run Command）：</strong> 在終端機執行指令（例如 <code>git status</code>、<code>npm install</code>、<code>gh repo create</code> 等）。</li>
+            <li><strong>網路與外部整合（Web Search / API）：</strong> 查詢最新官方文件、呼叫外掛外連服務等。</li>
+          </ol>
+        </div>
+
+        <h3>什麼是「自動同意（Auto-Approval / Yolo Mode）」？</h3>
+        <p>當 Antigravity 打算修改檔案或在你的電腦終端機跑一段命令時，系統會採取以下兩種防護行為之一：</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+          <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-weight: 700; color: #10b981; font-size: 1rem; margin-bottom: 0.5rem;">👤 手動審查模式（預設安全模式）</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+              每次 AI 準備執行終端機命令或修改關鍵檔案時，視窗會跳出「審查確認按鈕（Approve / Reject）」，讓你看清楚即將執行的指令與程式碼差異（Diff），你點擊「Approve」後它才會動手。<br>
+              <strong>適合：</strong> 初學者、在重要生產環境或包含敏感機密的電腦上。
+            </p>
+          </div>
+
+          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-weight: 700; color: #f59e0b; font-size: 1rem; margin-bottom: 0.5rem;">⚡ 自動同意模式（Auto-Approve）</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+              在設定中啟用自動同意後，AI 會自主連續執行讀取、修復、寫檔與指令跑完一整串工作流，不需要你每一動都手動按「同意」，開發速度極快。<br>
+              <strong>適合：</strong> 獨立練習資料夾、快速原型開發（如本課程製作產品網頁與部署）。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <span>🚨</span>
+          <div>
+            <strong>給學生的資安守則：</strong>
+            <ul style="padding-left: 1.25rem; margin-top: 0.25rem; line-height: 1.7;">
+              <li><strong>絕對不要</strong>將個人的整顆硬碟根目錄（如 <code>C:\</code>）設為 Workspace！請永遠建立獨立的專案子資料夾。</li>
+              <li>如果工作區內有 <code>.env</code> 或包含密碼、API Key 的檔案，請確認是否設定好 <code>.gitignore</code>，避免被自動推送至公開 GitHub。</li>
+              <li>在執行未知系統指令前，如果不確定指令意圖，請在對話中直接詢問 Antigravity：「這條指令的作用是什麼？會不會影響我的系統？」</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1-5 -->
+      <section id="sec-1-5" class="content-section">
+        <h2>1-5 第一次與 AI 助手對話實戰</h2>
+        <p>理解了工作區與權限後，現在我們在乾淨的練習資料夾中，在右側的 AI 對話框中輸入下面這段話：</p>
+
+        <div class="prompt-card">
+          <div class="prompt-tag">💬 提示詞示範（複製發送給 Antigravity）</div>
+          <div class="prompt-body">
+            "你好 Antigravity！我是剛開始學習網頁開發的新手。請幫我在目前的資料夾中建立一個 hello.html 檔案，裡面放一個簡短歡迎標題『歡迎來到 Antigravity 的奇幻世界』，並加上一個漂亮的漸層背景！"
+          </div>
+        </div>
+
+        <p>發送後，你會看到 Antigravity 會自動呼叫工具建立檔案，並把完整的 HTML 程式碼寫入你的資料夾中。接著只要用瀏覽器點開 <code>hello.html</code>，你就能看到生動的網頁畫面！</p>
+        
+        <div class="callout callout-tip">
+          <span>🎉</span>
+          <div>太棒了！你已經完整了解 Antigravity 的環境、權限機制與對話方式。下一章我們將利用更豐富的提示詞與多維度圖片，打造出專業的商品介紹網頁！</div>
+        </div>
+      </section>
+
+      <!-- 分頁按鈕 -->
+      <div class="lesson-nav">
+        <div></div>
+        <a href="chapter2.html" class="btn-primary">下一章：製作產品介紹網頁 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

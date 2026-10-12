@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 3 章：GitHub 註冊與功能介紹 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge">Chapter 03</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">回首頁</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">☀️ 淺色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節目錄</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載及安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html" class="active">第 3 章：GitHub 註冊與功能介紹</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 自動發布</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-3-1">3-1 為什麼我們需要 GitHub？</a></li>
+        <li><a href="#sec-3-2">3-2 帳號註冊步驟詳解</a></li>
+        <li><a href="#sec-3-3">3-3 核心概念三分鐘搞懂</a></li>
+        <li><a href="#sec-3-4">3-4 必備安全設定（2FA）</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill">第 3 章 · 雲端基礎</span>
+        <h1>註冊 GitHub 以及 GitHub 的功能介紹</h1>
+        <p class="desc">在上一章我們做出了精美的產品網頁，但它目前只躺在你的電腦裡。本章將帶你踏入全球超過一億開發者都在使用的平台 —— GitHub！</p>
+      </div>
+
+      <!-- 3-1 -->
+      <section id="sec-3-1" class="content-section">
+        <h2>3-1 為什麼我們需要 GitHub？</h2>
+        <p><strong>GitHub</strong> 是全球最大、最具權威的程式碼代管平台（可以把它想成是「程式碼專用的 Google Drive 或雲端保險箱」+「工程師的社群履歷」）。</p>
+        <p>擁有 GitHub 帳號能為你帶來三大好處：</p>
+        <div class="step-box">
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>雲端備份與歷史紀錄（版本控制）：</strong> 每一次修改都能追蹤，即使不小心改壞了也能一鍵坐時光機還原。</li>
+            <li><strong>免費架設網站（GitHub Pages）：</strong> 只要上傳 HTML/CSS，GitHub 就免費提供全世界可瀏覽的網址與伺服器。</li>
+            <li><strong>與 AI 工具無縫整合：</strong> Antigravity 能直接跟 GitHub 雲端串接，自動為你部署專案！</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3-2 -->
+      <section id="sec-3-2" class="content-section">
+        <h2>3-2 使用 Google 帳號快速註冊流程</h2>
+        <p>為降低初學者註冊門檻，我們推薦直接使用 <strong>Google 帳號（Continue with Google）</strong> 進行快速授權註冊！免去手動輸入長密碼與收認證信的等待。</p>
+
+        <div class="step-box">
+          <span class="step-number">步驟 1</span>
+          <h4>前往 GitHub 註冊頁面</h4>
+          <p>開啟瀏覽器進入 <a href="https://github.com/signup" target="_blank" style="color: #818cf8; text-decoration: underline;">https://github.com/signup</a>，點選 <strong>「Continue with Google」</strong> 按鈕，並選擇你要綁定的 Google 帳號。</p>
+        </div>
+
+        <div class="step-box">
+          <span class="step-number">步驟 2</span>
+          <h4>設定你的專屬 Username（使用者名稱）</h4>
+          <p>授權後，GitHub 會請你輸入一個全球唯一的 Username。這一步<strong>非常重要</strong>，請務必提醒學員注意以下命名規則！</p>
+        </div>
+
+        <!-- 注意事項清單 -->
+        <div class="callout callout-warning">
+          <span>⚠️</span>
+          <div>
+            <strong>使用 Google 帳號註冊 GitHub 的四大重要注意事項：</strong>
+            <ol style="padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+              <li><strong>Username 影響未來的個人網址：</strong><br>
+                你的 Username 會直接變成未來的公開網址（例如你的帳號是 <code>alex-tw</code>，網址就會是 <code>https://alex-tw.github.io/my-product-page/</code>）。建議使用<strong>簡短、好記的英文字母與數字</strong>，避免難辨認的亂碼或底線。
+              </li>
+              <li><strong>建議使用「個人私有」Google 帳號，而非學校/公司帳號：</strong><br>
+                許多學校（<code>.edu</code>）或公司機構帳號，在學生畢業或員工離職後會被收回或封鎖對外授權，可能導致未來無法登入 GitHub 遺失作品。請指導學員優先使用個人長期持有的 Gmail。
+              </li>
+              <li><strong>仍需自訂一組 GitHub 獨立密碼（方便 CLI 與 Git 使用）：</strong><br>
+                雖然平常可以用 Google 一鍵登入網頁，但在終端機執行 <code>gh auth login</code> 或使用命令列時，若沒有設定獨立密碼，有時需要改用網頁授權碼。註冊完成後，建議到 <strong>Settings ➔ Password</strong> 設定一組專用密碼。
+              </li>
+              <li><strong>檢查 Google 帳號的兩步驟驗證（2FA）：</strong><br>
+                GitHub 目前對所有用戶強制執行 2FA 雙重驗證。如果 Google 帳號遺失或被鎖定，可能會影響 GitHub 存取，請妥善保管恢復金鑰。
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3-3 -->
+      <section id="sec-3-3" class="content-section">
+        <h2>3-3 核心概念三分鐘搞懂</h2>
+        <p>初學者最常被術語搞混，其實只要記住這四個觀念：</p>
+        <div class="step-box">
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>Repository（儲存庫 / 簡稱 Repo）：</strong> 存放專案的地方，就像一個雲端專案資料夾。</li>
+            <li><strong>Commit（提交）：</strong> 存檔點。記錄「誰在什麼時候修改了什麼檔案」。</li>
+            <li><strong>Push（推送）：</strong> 把你電腦裡做好的存檔點，同步上傳到 GitHub 雲端。</li>
+            <li><strong>GitHub Pages：</strong> GitHub 提供的免費靜態網站託管服務，讓全世界的人只要有網址就能連上你的網頁。</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 3-4 -->
+      <section id="sec-3-4" class="content-section">
+        <h2>3-4 必備安全設定：雙重身分驗證（2FA）</h2>
+        <p>GitHub 目前強制要求所有使用者開啟 2FA（Two-Factor Authentication）。</p>
+        <div class="callout callout-warning">
+          <span>⚠️</span>
+          <div>
+            <strong>注意事項：</strong>
+            請在 GitHub 右上角頭像 ➔ <strong>Settings</strong> ➔ <strong>Password and authentication</strong> 中開啟 2FA。推薦使用手機 Authenticator App（如 Google Authenticator 或 Microsoft Authenticator）掃描綁定。
+          </div>
+        </div>
+        <p>完成註冊與設定後，你已經擁有了雲端基地！下一章我們將運用 <strong>GitHub CLI</strong>，免手動點擊網頁，讓 Antigravity 一鍵將你的產品發布到全球！</p>
+      </section>
+
+      <!-- 分頁導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter2.html" class="btn-secondary">⬅ 上一章：製作產品介紹網頁</a>
+        <a href="chapter4.html" class="btn-primary">下一章：GitHub CLI 自動發布 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

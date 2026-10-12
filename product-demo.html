@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartSound Pro - 頂級降噪無線耳機</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #38bdf8;
+      --bg-dark: #0a0f1d;
+      --card-bg: #141d30;
+      --card-border: #23314e;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(10, 15, 29, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 3rem;
+    }
+    .logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #a5b4fc, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 2rem; font-size: 0.95rem; color: var(--text-sub); }
+    .nav-links a:hover { color: #fff; }
+    .btn-buy {
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      color: #fff; padding: 0.5rem 1.25rem; border-radius: 999px; font-weight: 600; font-size: 0.9rem;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 5rem 2rem;
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center;
+    }
+    .hero-text h1 {
+      font-size: 3.25rem; line-height: 1.2; font-weight: 800; margin-bottom: 1.25rem;
+    }
+    .hero-text h1 span {
+      background: linear-gradient(135deg, #818cf8, #38bdf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-text p { color: var(--text-sub); font-size: 1.15rem; margin-bottom: 2rem; }
+    .hero-actions { display: flex; gap: 1rem; align-items: center; }
+    .hero-img-box {
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(10, 15, 29, 0) 70%);
+      padding: 1.5rem; text-align: center;
+    }
+    .hero-img-box img {
+      width: 100%; max-width: 440px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Gallery (Multi-angle) */
+    .section-title { text-align: center; margin-bottom: 3rem; }
+    .section-title h2 { font-size: 2.25rem; font-weight: 800; }
+    .section-title p { color: var(--text-sub); margin-top: 0.5rem; }
+
+    .gallery-section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;
+    }
+    .gallery-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+      overflow: hidden; padding: 1.25rem; text-align: center;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+    .gallery-card:hover {
+      transform: translateY(-6px); border-color: var(--primary);
+    }
+    .gallery-card img {
+      width: 100%; height: 220px; object-fit: contain; margin-bottom: 1rem;
+    }
+    .gallery-card.cover img { object-fit: cover; border-radius: 8px; }
+    .gallery-card h4 { font-size: 1.1rem; margin-bottom: 0.35rem; }
+    .gallery-card p { font-size: 0.85rem; color: var(--text-sub); }
+
+    /* Features */
+    .features-section { padding: 4rem 2rem; background: #0c1324; }
+    .features-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
+    }
+    .feature-item {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+      padding: 2rem;
+    }
+    .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .feature-item h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .feature-item p { color: var(--text-sub); font-size: 0.95rem; }
+
+    /* Pricing */
+    .pricing-section { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+    .price-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 2.5rem;
+      text-align: center; position: relative;
+    }
+    .price-card.featured {
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);
+    }
+    .price-card.featured::before {
+      content: "熱銷推薦"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--primary); color: #fff; font-size: 0.75rem; font-weight: 700;
+      padding: 0.2rem 0.8rem; border-radius: 999px;
+    }
+    .price-card .price { font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: #fff; }
+    .price-card ul { list-style: none; text-align: left; margin: 1.5rem 0; color: var(--text-sub); font-size: 0.9rem; line-height: 2; }
+    .price-card button {
+      width: 100%; padding: 0.85rem; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
+      background: var(--primary); color: #fff; font-size: 1rem;
+    }
+
+    /* Footer */
+    footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--card-border); color: var(--text-sub); font-size: 0.85rem; }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero-actions { justify-content: center; }
+      header { padding: 1rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 導覽列 -->
+  <header>
+    <div class="logo">SmartSound Pro</div>
+    <div class="nav-links">
+      <a href="#gallery">多維視角</a>
+      <a href="#features">功能亮點</a>
+      <a href="#pricing">方案售價</a>
+    </div>
+    <a href="#pricing" class="btn-buy">立即預購</a>
+  </header>
+
+  <!-- 英雄展示區 -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>沉浸純淨音質<br><span>隔絕世界喧囂</span></h1>
+      <p>專為音樂鑑賞與專業創作者打造。全新 40mm 高解析動圈單體，搭載智慧混合主動降噪，每一刻都是純粹天籟。</p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn-buy" style="padding: 0.85rem 2rem; font-size: 1rem;">立即預購優惠 ➔</a>
+        <a href="#gallery" style="color: var(--text-sub); font-weight: 600; margin-left: 0.5rem;">欣賞細節</a>
+      </div>
+    </div>
+    <div class="hero-img-box">
+      <!-- 英雄區展示圖 -->
+      <img src="PIC/ATHM20XBT_m01.jpg" alt="SmartSound Pro 旗艦降噪耳機">
+    </div>
+  </section>
+
+  <!-- 多角度展示圖鑑 -->
+  <section id="gallery" class="gallery-section">
+    <div class="section-title">
+      <h2>360° 多維工藝視角</h2>
+      <p>融合極簡工業美學與極致人體工學，感受每一處細膩雕琢</p>
+    </div>
+    <div class="gallery-grid">
+      <!-- 視角 1 -->
+      <div class="gallery-card">
+        <img src="PIC/ATHM20XBT_m01.jpg" alt="經典45度角">
+        <h4>45° 經典立體視角</h4>
+        <p>優雅弧度頭樑與可折疊轉軸結構，展現流暢線條</p>
+      </div>
+
+      <!-- 視角 2 -->
+      <div class="gallery-card">
+        <img src="PIC/headphone_front.jpg" alt="正面對稱視角">
+        <h4>正視人體工學平衡</h4>
+        <p>加厚記憶海綿耳墊，均勻分散頭部壓力，長時間佩戴無負擔</p>
+      </div>
+
+      <!-- 視角 3 -->
+      <div class="gallery-card">
+        <img src="PIC/headphone_side.jpg" alt="側面特寫細節">
+        <h4>金屬霧面單側特寫</h4>
+        <p>高質感噴砂鋁合金耳罩銘牌，支援直覺式觸控音量調節</p>
+      </div>
+
+      <!-- 視角 4 -->
+      <div class="gallery-card cover">
+        <img src="PIC/headphone_lifestyle.jpg" alt="辦公桌情境">
+        <h4>辦公與生活品味</h4>
+        <p>融入極簡辦公桌搭設，專注工作與靈感創作的最佳拍檔</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 大特點 -->
+  <section id="features" class="features-section">
+    <div class="section-title">
+      <h2>無與倫比的核心科技</h2>
+      <p>極致規格，只為呈現最真實的聲音感動</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon">🔇</div>
+        <h3>次世代主動降噪 (ANC)</h3>
+        <p>前饋與反饋雙麥克風陣列，精準過濾 98% 外部環境低頻噪音，鬧市中亦如身處錄音室。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        <h3>40 小時超長續航力</h3>
+        <p>一次充飽可連續聆聽 40 小時，支援快充功能，充 10 分鐘即可續航 3 小時暢聽。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">☁️</div>
+        <h3>極致輕量與親膚配戴</h3>
+        <p>全機僅 216 克，搭配透氣親膚蛋白皮革，告別夾頭壓迫感，享受無感佩戴體驗。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 價格方案 -->
+  <section id="pricing" class="pricing-section">
+    <div class="section-title">
+      <h2>預購早鳥方案</h2>
+      <p>限量早鳥名額，搶先擁有極致純淨之聲</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>標準版 Standard</h3>
+        <div class="price">NT$ 3,990</div>
+        <ul>
+          <li>✓ 40mm 鑑賞級發聲單體</li>
+          <li>✓ 30 小時續航能力</li>
+          <li>✓ 附 Type-C 充電線</li>
+          <li>✓ 原廠一年完整保固</li>
+        </ul>
+        <button onclick="alert('感謝預購標準版！')">選擇標準版</button>
+      </div>
+      <div class="price-card featured">
+        <h3>旗艦降噪版 Pro</h3>
+        <div class="price">NT$ 5,990</div>
+        <ul>
+          <li>✓ 智慧混合主動降噪 (ANC)</li>
+          <li>✓ 40 小時超長續航 + 快速充電</li>
+          <li>✓ 頂級硬殼收納旅行包</li>
+          <li>✓ 專屬 APP 等化器 (EQ) 調音</li>
+          <li>✓ 原廠兩年尊榮保固</li>
+        </ul>
+        <button onclick="alert('感謝預購旗艦降噪版 Pro！')">立即預購旗艦版</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 早鳥預購表單區 -->
+  <section id="preorder" style="padding: 5rem 2rem; background: #0c1324; border-top: 1px solid var(--card-border);">
+    <div class="section-title">
+      <h2>即刻預約享早鳥免運</h2>
+      <p>登記成功後系統將自動發送預購確認信至您的信箱，搶先鎖定早鳥優惠價</p>
+    </div>
+
+    <div style="max-width: 600px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 2.5rem;">
+      <form id="preorderForm">
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-sub);">您的稱呼 / 姓名 *</label>
+          <input type="text" id="custName" required placeholder="例如：王小明" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--card-border); background: #0a0f1d; color: #fff; font-size: 0.95rem;">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-sub);">電子信箱 (將收取確認信) *</label>
+          <input type="email" id="custEmail" required placeholder="例如：user@example.com" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--card-border); background: #0a0f1d; color: #fff; font-size: 0.95rem;">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-sub);">聯絡電話 *</label>
+          <input type="tel" id="custPhone" required placeholder="例如：0912-345-678" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--card-border); background: #0a0f1d; color: #fff; font-size: 0.95rem;">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-sub);">預購款式方案 *</label>
+          <select id="custPlan" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--card-border); background: #0a0f1d; color: #fff; font-size: 0.95rem;">
+            <option value="旗艦降噪版 Pro (NT$ 5,990)">🔥 旗艦降噪版 Pro (NT$ 5,990) - 推薦</option>
+            <option value="標準版 Standard (NT$ 3,990)">標準版 Standard (NT$ 3,990)</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-sub);">付款方式 *</label>
+          <select id="payMethod" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--card-border); background: #0a0f1d; color: #fff; font-size: 0.95rem;">
+            <option value="ECPay_Credit">💳 信用卡線上付款 (綠界 ECPay 測試環境)</option>
+            <option value="Preorder_Only">📝 僅登記早鳥名額 (貨到付款)</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-sub);">備註留言 / 特殊需求</label>
+          <textarea id="custNotes" rows="3" placeholder="希望到貨時間、配件加購或其他問題..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--card-border); background: #0a0f1d; color: #fff; font-size: 0.95rem;"></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn" style="width: 100%; padding: 1rem; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 1.05rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">
+          前往付款 / 送出登記 ➔
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 綠界測試刷卡模擬視窗 (Modal) -->
+  <div id="ecpayModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #ffffff; color: #1e293b; max-width: 460px; width: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5);">
+      <!-- 綠界官方風格 Header -->
+      <div style="background: #007354; color: #fff; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span>綠界科技 ECPay</span>
+          <span style="font-size: 0.75rem; background: #f59e0b; padding: 0.1rem 0.5rem; border-radius: 4px;">測試環境 Sandbox</span>
+        </div>
+        <button onclick="closeEcpayModal()" style="background: none; border: none; color: #fff; font-size: 1.25rem; cursor: pointer;">✕</button>
+      </div>
+
+      <!-- 收銀台內容 -->
+      <div style="padding: 1.5rem;">
+        <div style="background: #f1f5f9; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.88rem;">
+          <div>特店編號：<strong>2000132 (官方共用測試特店)</strong></div>
+          <div>訂單金額：<strong style="color: #007354; font-size: 1.1rem;" id="modalAmount">NT$ 5,990</strong></div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">測試信用卡號 (官方白名單)</label>
+          <input type="text" id="testCard" value="4311-9522-2222-2222" style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.95rem;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">有效期限</label>
+            <input type="text" value="12/30" style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">背面末三碼</label>
+            <input type="text" value="222" style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;">
+          </div>
+        </div>
+
+        <button onclick="confirmEcpayPayment()" id="payBtn" style="width: 100%; padding: 0.85rem; background: #007354; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer;">
+          確認刷卡支付 (免扣款) ➔
+        </button>
+        <p style="text-align: center; font-size: 0.75rem; color: #64748b; margin-top: 0.75rem;">
+          🔒 此為綠界科技 ECPay 授權之學生安全測試模擬介面，不會產生任何真實扣款。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer>
+    <p>© 2026 SmartSound Pro. 本頁面由 Antigravity 透過提示詞與多維度圖像生成技術全自動打造。</p>
+  </footer>
+
+  <script>
+    let currentPayload = {};
+
+    const form = document.getElementById('preorderForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const ecpayModal = document.getElementById('ecpayModal');
+    const modalAmount = document.getElementById('modalAmount');
+
+    function closeEcpayModal() {
+      ecpayModal.style.display = 'none';
+      submitBtn.disabled = false;
+      submitBtn.innerText = '前往付款 / 送出登記 ➔';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const planVal = document.getElementById('custPlan').value;
+      const amount = planVal.includes('5,990') ? 'NT$ 5,990' : 'NT$ 3,990';
+      const payMethod = document.getElementById('payMethod').value;
+
+      currentPayload = {
+        name: document.getElementById('custName').value,
+        email: document.getElementById('custEmail').value,
+        phone: document.getElementById('custPhone').value,
+        plan: planVal,
+        amount: amount,
+        payMethod: payMethod,
+        notes: document.getElementById('custNotes').value
+      };
+
+      submitBtn.disabled = true;
+
+      if (payMethod === 'ECPay_Credit') {
+        // 喚醒綠界金流收銀台
+        submitBtn.innerText = '正在跳轉至綠界科技安全收銀台...';
+        modalAmount.innerText = amount;
+        setTimeout(() => {
+          ecpayModal.style.display = 'flex';
+        }, 600);
+      } else {
+        // 純預購登記
+        submitBtn.innerText = '正在傳送至 Google 試算表...';
+        setTimeout(() => {
+          alert(`🎉 恭喜 ${currentPayload.name}！\n\n預購資料已成功登記！\n我們已自動寄送一封預購確認信至 ${currentPayload.email}，請查收！`);
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.innerText = '前往付款 / 送出登記 ➔';
+        }, 1000);
+      }
+    });
+
+    function confirmEcpayPayment() {
+      const payBtn = document.getElementById('payBtn');
+      payBtn.disabled = true;
+      payBtn.innerText = '3D 授權驗證中...';
+
+      setTimeout(() => {
+        alert(`✅ 【綠界科技 ECPay 刷卡授權成功！】\n\n` +
+              `💳 特店：SmartSound Pro (特店代號: 2000132)\n` +
+              `💰 付款金額：${currentPayload.amount}\n` +
+              `👤 訂購人：${currentPayload.name}\n` +
+              `📱 手機 LINE 機器人已收到「收款成功」推播通知！\n` +
+              `✉️ 購買憑證已寄發至 ${currentPayload.email}。`);
+        
+        closeEcpayModal();
+        form.reset();
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>
