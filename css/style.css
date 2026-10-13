@@ -764,21 +764,21 @@ footer.site-footer {
   max-height: 84vh;
   overflow: auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 10px;
 }
 
 .image-lightbox-img {
-  max-width: 94vw;
-  max-height: 82vh;
+  max-width: 92vw;
+  max-height: 80vh;
   width: auto;
   height: auto;
+  margin: auto;
+  object-fit: contain;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.3);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
   cursor: zoom-in;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
@@ -786,7 +786,8 @@ footer.site-footer {
 .image-lightbox-img.zoomed-full {
   max-width: none;
   max-height: none;
-  width: 1800px;
+  width: 1600px;
+  height: auto;
   cursor: zoom-out;
 }
 

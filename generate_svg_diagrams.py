@@ -5,7 +5,7 @@ os.makedirs(pic_dir, exist_ok=True)
 
 # Common SVG header & styling
 def svg_wrap(width, height, content):
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" height="100%">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}">
   <defs>
     <style>
       .title {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }}
