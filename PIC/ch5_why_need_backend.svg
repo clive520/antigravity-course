@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="rgba(56, 189, 248, 0.1)"/>
+    </linearGradient>
+    <linearGradient id="card-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="rgba(129, 140, 248, 0.12)"/>
+    </linearGradient>
+    <linearGradient id="card-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="rgba(16, 185, 129, 0.12)"/>
+    </linearGradient>
+    <filter id="shadow1" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad1)"/>
+
+  <!-- Grid decoration -->
+  <g opacity="0.05" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="110" x2="1600" y2="110"/>
+    <line x1="0" y1="220" x2="1600" y2="220"/>
+    <line x1="0" y1="330" x2="1600" y2="330"/>
+    <line x1="0" y1="440" x2="1600" y2="440"/>
+    <line x1="0" y1="550" x2="1600" y2="550"/>
+    <line x1="0" y1="660" x2="1600" y2="660"/>
+    <line x1="0" y1="770" x2="1600" y2="770"/>
+    <line x1="200" y1="0" x2="200" y2="880"/>
+    <line x1="400" y1="0" x2="400" y2="880"/>
+    <line x1="600" y1="0" x2="600" y2="880"/>
+    <line x1="800" y1="0" x2="800" y2="880"/>
+    <line x1="1000" y1="0" x2="1000" y2="880"/>
+    <line x1="1200" y1="0" x2="1200" y2="880"/>
+    <line x1="1400" y1="0" x2="1400" y2="880"/>
+  </g>
+
+  <!-- Header -->
+  <g transform="translate(80, 50)">
+    <rect x="0" y="0" width="140" height="28" rx="14" fill="#38bdf8" fill-opacity="0.15"/>
+    <text x="70" y="19" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 5 章 · 架構全景圖</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">為什麼靜態網頁需要後端？GitHub Pages 與 GAS 的黃金組合</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">拆解「純靜態網頁」的本質限制，以及如何透過「Google Apps Script」打造零成本全功能商業站點</text>
+  </g>
+
+  <!-- 3 Columns Architecture -->
+  <!-- Column 1: Front-end Static (GitHub Pages) -->
+  <g transform="translate(80, 165)">
+    <rect width="440" height="570" rx="16" fill="url(#card-blue)" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow1)"/>
+    
+    <rect x="25" y="24" width="130" height="28" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="90" y="43" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">前端：靜態託管</text>
+    <text x="170" y="44" fill="#f8fafc" font-size="17" font-weight="700" font-family="system-ui, sans-serif">GitHub Pages 網頁</text>
+
+    <!-- Component details -->
+    <rect x="25" y="70" width="390" height="150" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="45" y="100" fill="#38bdf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">✔ 負責工作：視覺展示與互動</text>
+    <text x="45" y="128" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• HTML5：產品結構與商品預購表單</text>
+    <text x="45" y="152" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• CSS3：現代科技美學、RWD 行動適配</text>
+    <text x="45" y="176" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• JavaScript：表單驗證、點擊事件監聽</text>
+    <text x="45" y="200" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 全球 CDN 免費高頻寬託管</text>
+
+    <!-- Bottlenecks / Pain points -->
+    <rect x="25" y="240" width="390" height="200" rx="10" fill="#0f172a" stroke="#f43f5e" stroke-width="1.2"/>
+    <rect x="40" y="255" width="115" height="24" rx="4" fill="#f43f5e" fill-opacity="0.2"/>
+    <text x="97" y="272" fill="#f87171" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">❌ 靜態網頁痛點</text>
+
+    <g transform="translate(45, 305)">
+      <text x="0" y="0" fill="#fca5a5" font-size="13" font-weight="600" font-family="system-ui, sans-serif">1. 無法持久保存訪客資料：</text>
+      <text x="0" y="20" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">表單一重整，客戶輸入的姓名信箱立即消失。</text>
+      
+      <text x="0" y="50" fill="#fca5a5" font-size="13" font-weight="600" font-family="system-ui, sans-serif">2. 無法主動寄送通知信：</text>
+      <text x="0" y="70" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">瀏覽器受安全限制，不能直接以站長身分寄信。</text>
+
+      <text x="0" y="100" fill="#fca5a5" font-size="13" font-weight="600" font-family="system-ui, sans-serif">3. 傳統後端門檻過高：</text>
+      <text x="0" y="120" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">租用 AWS/GCP 伺服器每年需花費數千元。</text>
+    </g>
+
+    <!-- Bottom summary tag -->
+    <rect x="25" y="460" width="390" height="85" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1"/>
+    <text x="45" y="490" fill="#818cf8" font-size="13" font-weight="700" font-family="system-ui, sans-serif">💡 解決方案：</text>
+    <text x="45" y="514" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">使用 fetch() 將資料非同步 POST 到雲端後端，</text>
+    <text x="45" y="534" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">由 Google 雲端免費替我們完成存檔與寄信！</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <g transform="translate(535, 430)">
+    <polygon points="0,0 24,12 0,24" fill="#818cf8"/>
+    <text x="12" y="-12" fill="#818cf8" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">fetch(POST)</text>
+  </g>
+
+  <!-- Column 2: Serverless Middle (Google Apps Script) -->
+  <g transform="translate(580, 165)">
+    <rect width="440" height="570" rx="16" fill="url(#card-purple)" stroke="#818cf8" stroke-width="1.8" filter="url(#shadow1)"/>
+    
+    <rect x="25" y="24" width="130" height="28" rx="6" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="90" y="43" fill="#818cf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">樞紐：無伺服器</text>
+    <text x="170" y="44" fill="#f8fafc" font-size="17" font-weight="700" font-family="system-ui, sans-serif">Google Apps Script</text>
+
+    <!-- Core strengths -->
+    <rect x="25" y="70" width="390" height="150" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="45" y="100" fill="#818cf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">⚡ 核心特點：零伺服器維護</text>
+    <text x="45" y="128" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 100% 免費無伺服器架構（Serverless）</text>
+    <text x="45" y="152" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 免安裝 Node.js、免部屬 Linux 系統</text>
+    <text x="45" y="176" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• Google 官方自動擴展與負載平衡</text>
+    <text x="45" y="200" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 現代 JavaScript 語法，學習曲線平緩</text>
+
+    <!-- Pipeline tasks -->
+    <rect x="25" y="240" width="390" height="200" rx="10" fill="#0f172a" stroke="#818cf8" stroke-width="1"/>
+    <rect x="40" y="255" width="140" height="24" rx="4" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="110" y="272" fill="#a5b4fc" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">⚙️ doPost(e) 處理中心</text>
+
+    <g transform="translate(45, 305)">
+      <text x="0" y="0" fill="#e2e8f0" font-size="13" font-weight="600" font-family="system-ui, sans-serif">1. 接收與解析前端 JSON 封包</text>
+      <text x="0" y="20" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace">name, email, phone, plan, notes</text>
+
+      <text x="0" y="50" fill="#e2e8f0" font-size="13" font-weight="600" font-family="system-ui, sans-serif">2. 指揮 Google 試算表寫入</text>
+      <text x="0" y="70" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace">SpreadsheetApp.appendRow([...])</text>
+
+      <text x="0" y="100" fill="#e2e8f0" font-size="13" font-weight="600" font-family="system-ui, sans-serif">3. 調用 Gmail 自動發送感謝信</text>
+      <text x="0" y="120" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace">GmailApp.sendEmail(email, ...)</text>
+    </g>
+
+    <!-- Bottom summary tag -->
+    <rect x="25" y="460" width="390" height="85" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+    <text x="45" y="490" fill="#34d399" font-size="13" font-weight="700" font-family="system-ui, sans-serif">✔ 成果回應：</text>
+    <text x="45" y="514" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">回傳 { status: 'success' } JSON 數據給前端，</text>
+    <text x="45" y="534" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">網頁即時呈現「預購成功！」提示彈窗。</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <g transform="translate(1035, 430)">
+    <polygon points="0,0 24,12 0,24" fill="#34d399"/>
+    <text x="12" y="-12" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">API 控制</text>
+  </g>
+
+  <!-- Column 3: Google Ecosystem -->
+  <g transform="translate(1080, 165)">
+    <rect width="440" height="570" rx="16" fill="url(#card-green)" stroke="#34d399" stroke-width="1.5" filter="url(#shadow1)"/>
+    
+    <rect x="25" y="24" width="130" height="28" rx="6" fill="#34d399" fill-opacity="0.2"/>
+    <text x="90" y="43" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">後端：雲端生態系</text>
+    <text x="170" y="44" fill="#f8fafc" font-size="17" font-weight="700" font-family="system-ui, sans-serif">Google 官方服務群</text>
+
+    <!-- Service 1: Google Sheets -->
+    <rect x="25" y="70" width="390" height="150" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+    <rect x="40" y="85" width="160" height="24" rx="4" fill="#10b981" fill-opacity="0.2"/>
+    <text x="120" y="102" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">📊 Google 試算表 (Sheets)</text>
+    <text x="45" y="132" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">你的「視覺化無代碼資料庫」：</text>
+    <text x="45" y="154" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 支援 1,000 萬格容量，存取數萬筆訂單</text>
+    <text x="45" y="174" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 即時線上多人協作，手機 App 隨時查看</text>
+    <text x="45" y="194" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 一鍵匯出 Excel、CSV 進行商業財務分析</text>
+
+    <!-- Service 2: Gmail API -->
+    <rect x="25" y="240" width="390" height="150" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+    <rect x="40" y="255" width="130" height="24" rx="4" fill="#ef4444" fill-opacity="0.2"/>
+    <text x="105" y="272" fill="#f87171" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">✉️ Gmail 郵件系統</text>
+    <text x="45" y="302" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">你的「專屬客戶關係通知員」：</text>
+    <text x="45" y="324" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 透過自己的 Gmail 官方伺服器發信</text>
+    <text x="45" y="344" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 送達率高，不易被判為垃圾郵件</text>
+    <text x="45" y="364" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 支援客製化姓名與訂購方案 HTML 排版</text>
+
+    <!-- Service 3: Future Expansion -->
+    <rect x="25" y="410" width="390" height="135" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1"/>
+    <rect x="40" y="425" width="140" height="24" rx="4" fill="#f59e0b" fill-opacity="0.2"/>
+    <text x="110" y="442" fill="#fbbf24" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">🚀 未來彈性擴充能力</text>
+    <text x="45" y="472" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• LINE Notify / 機器人推播（第 7 章）</text>
+    <text x="45" y="494" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 綠界 ECPay 金流串接驗證（第 8 章）</text>
+    <text x="45" y="516" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• Google 日曆預約行程與雲端硬碟備份</text>
+  </g>
+
+  <!-- Bottom Global Banner -->
+  <g transform="translate(80, 765)">
+    <rect width="1440" height="65" rx="12" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+    <text x="40" y="38" fill="#f8fafc" font-size="15" font-weight="600" font-family="system-ui, sans-serif">💡 結論：靜態網頁負責「門面外觀」，GAS 負責「大腦運算」，Google 試算表負責「資料庫」。三者結合，就是當今初學者最低成本、最高效的雲端全端解決方案！</text>
+  </g>
+</svg>

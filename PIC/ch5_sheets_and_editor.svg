@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow3" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad3)"/>
+
+  <!-- Header -->
+  <g transform="translate(80, 45)">
+    <rect x="0" y="0" width="160" height="28" rx="14" fill="#10b981" fill-opacity="0.15"/>
+    <text x="80" y="19" fill="#10b981" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 5 章 · 介面與生態指引</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">Google 試算表與 Apps Script 編輯器核心指引</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">免下載任何安裝檔，瀏覽器 2 步開啟雲端編輯器，掌握三大內建原生核心元件</text>
+  </g>
+
+  <!-- Top Entry Flow -->
+  <g transform="translate(80, 155)">
+    <rect width="1440" height="120" rx="12" fill="#1e293b" stroke="#334155" stroke-width="1.2" filter="url(#shadow3)"/>
+    
+    <!-- Step 1 -->
+    <g transform="translate(30, 20)">
+      <circle cx="16" cy="16" r="16" fill="#10b981" fill-opacity="0.2"/>
+      <text x="16" y="21" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">1</text>
+      <text x="44" y="21" fill="#f8fafc" font-size="15" font-weight="700" font-family="system-ui, sans-serif">開啟空白試算表</text>
+      <rect x="44" y="32" width="280" height="36" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+      <text x="56" y="55" fill="#34d399" font-size="13" font-family="'JetBrains Mono', monospace">https://sheets.new</text>
+      <text x="44" y="84" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">瀏覽器輸入快捷網址，自動建立新表格</text>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <g transform="translate(390, 58)">
+      <polygon points="0,0 16,8 0,16" fill="#34d399"/>
+    </g>
+
+    <!-- Step 2 -->
+    <g transform="translate(435, 20)">
+      <circle cx="16" cy="16" r="16" fill="#38bdf8" fill-opacity="0.2"/>
+      <text x="16" y="21" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">2</text>
+      <text x="44" y="21" fill="#f8fafc" font-size="15" font-weight="700" font-family="system-ui, sans-serif">頂部選單開啟 Apps Script</text>
+      <rect x="44" y="32" width="370" height="36" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+      <text x="56" y="55" fill="#38bdf8" font-size="13" font-family="system-ui, sans-serif">擴充功能 (Extensions) ➔ Apps Script</text>
+      <text x="44" y="84" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">試算表與後端腳本自動綁定（Container-bound）</text>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <g transform="translate(865, 58)">
+      <polygon points="0,0 16,8 0,16" fill="#38bdf8"/>
+    </g>
+
+    <!-- Step 3 -->
+    <g transform="translate(910, 20)">
+      <circle cx="16" cy="16" r="16" fill="#818cf8" fill-opacity="0.2"/>
+      <text x="16" y="21" fill="#818cf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">3</text>
+      <text x="44" y="21" fill="#f8fafc" font-size="15" font-weight="700" font-family="system-ui, sans-serif">進入雲端 IDE 程式碼編輯器</text>
+      <rect x="44" y="32" width="455" height="36" rx="6" fill="#0f172a" stroke="#818cf8" stroke-width="1"/>
+      <text x="56" y="55" fill="#818cf8" font-size="13" font-family="'JetBrains Mono', monospace">Code.gs (內建語法高亮、版本控管、部署按鈕)</text>
+      <text x="44" y="84" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">貼上 Antigravity 提供的程式碼即可完成後端撰寫</text>
+    </g>
+  </g>
+
+  <!-- Middle 3 Core Components -->
+  <g transform="translate(80, 305)">
+    <!-- Component 1 -->
+    <g transform="translate(0, 0)">
+      <rect width="460" height="320" rx="14" fill="url(#card-grad3)" stroke="#10b981" stroke-width="1.5" filter="url(#shadow3)"/>
+      <rect x="25" y="20" width="130" height="26" rx="6" fill="#10b981" fill-opacity="0.2"/>
+      <text x="90" y="38" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">核心 1 · 資料庫</text>
+      <text x="25" y="75" fill="#f8fafc" font-size="18" font-weight="700" font-family="'JetBrains Mono', monospace">SpreadsheetApp</text>
+      <text x="25" y="98" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">試算表引擎（視覺化表格資料庫）</text>
+
+      <rect x="20" y="115" width="420" height="85" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="32" y="140" fill="#34d399" font-size="12" font-family="'JetBrains Mono', monospace">let ss = SpreadsheetApp.getActiveSpreadsheet();</text>
+      <text x="32" y="162" fill="#34d399" font-size="12" font-family="'JetBrains Mono', monospace">let sheet = ss.getActiveSheet();</text>
+      <text x="32" y="184" fill="#a7f3d0" font-size="12" font-weight="700" font-family="'JetBrains Mono', monospace">sheet.appendRow([時間, 姓名, 信箱, 方案]);</text>
+
+      <g transform="translate(25, 225)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• <code>appendRow()</code> 自動在最後一行追加新訂單</text>
+        <text x="0" y="24" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 免寫複雜的 SQL 語法，免維護資料庫伺服器</text>
+        <text x="0" y="48" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 每一筆預購資料即時入帳，支援手機隨身查單</text>
+        <text x="0" y="72" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 單一試算表高達 1,000 萬儲存格容量</text>
+      </g>
+    </g>
+
+    <!-- Component 2 -->
+    <g transform="translate(490, 0)">
+      <rect width="460" height="320" rx="14" fill="url(#card-grad3)" stroke="#ef4444" stroke-width="1.5" filter="url(#shadow3)"/>
+      <rect x="25" y="20" width="130" height="26" rx="6" fill="#ef4444" fill-opacity="0.2"/>
+      <text x="90" y="38" fill="#f87171" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">核心 2 · 通訊中心</text>
+      <text x="25" y="75" fill="#f8fafc" font-size="18" font-weight="700" font-family="'JetBrains Mono', monospace">GmailApp</text>
+      <text x="25" y="98" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">郵件引擎（自動化客戶關係管理）</text>
+
+      <rect x="20" y="115" width="420" height="85" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="32" y="140" fill="#f87171" font-size="12" font-family="'JetBrains Mono', monospace">GmailApp.sendEmail(email, subject, body, {</text>
+      <text x="44" y="162" fill="#fca5a5" font-size="12" font-family="'JetBrains Mono', monospace">name: 'SmartSound 官方團隊',</text>
+      <text x="44" y="184" fill="#fca5a5" font-size="12" font-family="'JetBrains Mono', monospace">htmlBody: '感謝預購！您的方案是...'</text>
+      <text x="32" y="196" fill="#f87171" font-size="12" font-family="'JetBrains Mono', monospace">});</text>
+
+      <g transform="translate(25, 225)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 透過自己的 Gmail 官方伺服器寄信，信譽良好</text>
+        <text x="0" y="24" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 支援 HTML 富文本排版與產品圖片嵌入</text>
+        <text x="0" y="48" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 免費版每日提供 100 封額度（企業版 1500 封）</text>
+        <text x="0" y="72" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 訪客下單後立即收到確認信，安心感加倍！</text>
+      </g>
+    </g>
+
+    <!-- Component 3 -->
+    <g transform="translate(980, 0)">
+      <rect width="460" height="320" rx="14" fill="url(#card-grad3)" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow3)"/>
+      <rect x="25" y="20" width="130" height="26" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+      <text x="90" y="38" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">核心 3 · 雲端窗口</text>
+      <text x="25" y="75" fill="#f8fafc" font-size="18" font-weight="700" font-family="'JetBrains Mono', monospace">ContentService</text>
+      <text x="25" y="98" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">Web API 封裝器（跨網域通訊協議）</text>
+
+      <rect x="20" y="115" width="420" height="85" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="32" y="140" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace">let response = { status: 'success' };</text>
+      <text x="32" y="162" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace">return ContentService</text>
+      <text x="44" y="184" fill="#7dd3fc" font-size="12" font-family="'JetBrains Mono', monospace">.createTextOutput(JSON.stringify(response))</text>
+      <text x="44" y="196" fill="#7dd3fc" font-size="12" font-family="'JetBrains Mono', monospace">.setMimeType(ContentService.MimeType.JSON);</text>
+
+      <g transform="translate(25, 225)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 將執行結果包裝成標準 JSON 格式</text>
+        <text x="0" y="24" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 解決瀏覽器跨來源資源共用（CORS）限制</text>
+        <text x="0" y="48" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 允許任何網域（GitHub Pages、本機）呼叫 API</text>
+        <text x="0" y="72" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 每日支援數萬次 API 呼叫，承載中小型網站</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Deployment Golden Rule -->
+  <g transform="translate(80, 655)">
+    <rect width="1440" height="170" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="1.8" filter="url(#shadow3)"/>
+    <rect x="30" y="20" width="160" height="28" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="110" y="39" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">⭐ 部署 Web App 二大黃金設定</text>
+    <text x="210" y="39" fill="#f8fafc" font-size="16" font-weight="700" font-family="system-ui, sans-serif">第 6 章實戰前必須牢記的設定法則（點擊 Deploy ➔ New deployment）：</text>
+
+    <g transform="translate(30, 70)">
+      <!-- Rule 1 -->
+      <g transform="translate(0, 0)">
+        <rect width="660" height="75" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+        <text x="20" y="28" fill="#34d399" font-size="14" font-weight="700" font-family="system-ui, sans-serif">規則 1：執行身分 (Execute as) ➔ 選擇「我 (Me: your-account@gmail.com)」</text>
+        <text x="20" y="52" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">代表程式碼永遠使用「你的管理者權限」操作試算表與寄發 Gmail，訪客不需具備任何權限即可寫入。</text>
+      </g>
+
+      <!-- Rule 2 -->
+      <g transform="translate(710, 0)">
+        <rect width="670" height="75" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1"/>
+        <text x="20" y="28" fill="#f59e0b" font-size="14" font-weight="700" font-family="system-ui, sans-serif">規則 2：誰能存取 (Who has access) ➔ 選擇「任何人 (Anyone)」</text>
+        <text x="20" y="52" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">代表全世界的網路訪客在 GitHub Pages 上點擊下單時，不需要登入任何 Google 帳號就能成功提交！</text>
+      </g>
+    </g>
+  </g>
+</svg>
