@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Image Lightbox (Click to Zoom) for all instructional images
+  // Image Lightbox with Box-Selection Zoom & Interactive Pan/Reset
   const lessonImages = document.querySelectorAll('.lesson-content img');
   if (lessonImages.length > 0) {
     // Create Lightbox DOM
@@ -52,28 +52,225 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.className = 'image-lightbox-overlay';
     overlay.innerHTML = `
       <div class="image-lightbox-toolbar">
-        <button type="button" class="image-lightbox-btn" id="lightboxZoomToggle">🔍 切換原始大小</button>
-        <button type="button" class="image-lightbox-btn" id="lightboxCloseBtn">✕ 關閉 (ESC)</button>
+        <div class="image-lightbox-group">
+          <button type="button" class="image-lightbox-btn active" id="lightboxModeBox" title="按住滑鼠左鍵框選任意局部，立即放大至全螢幕">🔲 框選放大</button>
+          <button type="button" class="image-lightbox-btn" id="lightboxModePan" title="按住滑鼠拖曳移動圖片">✋ 拖曳平移</button>
+        </div>
+        <div class="image-lightbox-group">
+          <button type="button" class="image-lightbox-btn" id="lightboxZoomOut" title="縮小">➖</button>
+          <span class="image-lightbox-zoom-level" id="lightboxZoomLevel">100%</span>
+          <button type="button" class="image-lightbox-btn" id="lightboxZoomIn" title="放大">➕</button>
+        </div>
+        <button type="button" class="image-lightbox-btn" id="lightboxResetBtn" title="還原全圖適應視窗">🔄 還原全圖</button>
+        <button type="button" class="image-lightbox-btn" id="lightboxCloseBtn" title="關閉燈箱 (ESC)">✕ 關閉</button>
       </div>
       <div class="image-lightbox-stage" id="lightboxStage">
-        <img src="" alt="" class="image-lightbox-img" id="lightboxImg">
+        <div class="image-lightbox-img-wrapper" id="lightboxWrapper">
+          <img src="" alt="" class="image-lightbox-img" id="lightboxImg" draggable="false">
+        </div>
+        <div class="image-lightbox-selection-box" id="lightboxSelectionBox"></div>
       </div>
       <div class="image-lightbox-caption" id="lightboxCaption"></div>
     `;
     document.body.appendChild(overlay);
 
     const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxWrapper = document.getElementById('lightboxWrapper');
+    const lightboxSelectionBox = document.getElementById('lightboxSelectionBox');
     const lightboxCaption = document.getElementById('lightboxCaption');
     const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
-    const lightboxZoomToggle = document.getElementById('lightboxZoomToggle');
+    const lightboxResetBtn = document.getElementById('lightboxResetBtn');
+    const lightboxZoomIn = document.getElementById('lightboxZoomIn');
+    const lightboxZoomOut = document.getElementById('lightboxZoomOut');
+    const lightboxZoomLevel = document.getElementById('lightboxZoomLevel');
+    const lightboxModeBox = document.getElementById('lightboxModeBox');
+    const lightboxModePan = document.getElementById('lightboxModePan');
     const lightboxStage = document.getElementById('lightboxStage');
+
+    let currentMode = 'box'; // 'box' or 'pan'
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDrawing = false;
+    let isPanning = false;
+    let startX = 0;
+    let startY = 0;
+    let panStartX = 0;
+    let panStartY = 0;
+
+    const setMode = (mode) => {
+      currentMode = mode;
+      if (mode === 'box') {
+        lightboxModeBox.classList.add('active');
+        lightboxModePan.classList.remove('active');
+        lightboxStage.classList.remove('mode-pan');
+      } else {
+        lightboxModePan.classList.add('active');
+        lightboxModeBox.classList.remove('active');
+        lightboxStage.classList.add('mode-pan');
+      }
+    };
+
+    lightboxModeBox.addEventListener('click', () => setMode('box'));
+    lightboxModePan.addEventListener('click', () => setMode('pan'));
+
+    const updateZoomDisplay = () => {
+      lightboxZoomLevel.innerText = `${Math.round(scale * 100)}%`;
+    };
+
+    const applyTransform = (animate = false) => {
+      lightboxWrapper.style.transition = animate ? 'transform 0.28s cubic-bezier(0.2, 0, 0, 1)' : 'none';
+      lightboxWrapper.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      updateZoomDisplay();
+    };
+
+    const resetZoom = (animate = true) => {
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      applyTransform(animate);
+    };
+
+    lightboxResetBtn.addEventListener('click', () => resetZoom(true));
+
+    lightboxZoomIn.addEventListener('click', () => {
+      scale = Math.min(scale * 1.35, 16);
+      applyTransform(true);
+    });
+
+    lightboxZoomOut.addEventListener('click', () => {
+      scale = Math.max(scale / 1.35, 0.75);
+      if (scale <= 1) {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+      }
+      applyTransform(true);
+    });
+
+    // Mouse Wheel Zoom
+    lightboxStage.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const rect = lightboxStage.getBoundingClientRect();
+      const stageCenterX = rect.width / 2;
+      const stageCenterY = rect.height / 2;
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const x_content = (mouseX - stageCenterX - translateX) / scale;
+      const y_content = (mouseY - stageCenterY - translateY) / scale;
+
+      const factor = e.deltaY < 0 ? 1.2 : 0.83;
+      let newScale = Math.min(Math.max(scale * factor, 0.75), 16);
+      if (newScale <= 1.05 && factor < 1) {
+        newScale = 1;
+        translateX = 0;
+        translateY = 0;
+      } else {
+        translateX = mouseX - stageCenterX - x_content * newScale;
+        translateY = mouseY - stageCenterY - y_content * newScale;
+      }
+      scale = newScale;
+      applyTransform(false);
+    }, { passive: false });
+
+    // Drag / Box Selection Mouse Events
+    lightboxStage.addEventListener('mousedown', (e) => {
+      if (e.button !== 0 && e.button !== 1 && e.button !== 2) return;
+      const isRightOrMiddle = e.button === 2 || e.button === 1 || e.shiftKey || e.altKey;
+
+      if (currentMode === 'pan' || isRightOrMiddle) {
+        isPanning = true;
+        panStartX = e.clientX - translateX;
+        panStartY = e.clientY - translateY;
+        lightboxStage.style.cursor = 'grabbing';
+      } else if (currentMode === 'box' && e.button === 0) {
+        isDrawing = true;
+        const rect = lightboxStage.getBoundingClientRect();
+        startX = e.clientX;
+        startY = e.clientY;
+        lightboxSelectionBox.style.left = `${startX - rect.left}px`;
+        lightboxSelectionBox.style.top = `${startY - rect.top}px`;
+        lightboxSelectionBox.style.width = '0px';
+        lightboxSelectionBox.style.height = '0px';
+        lightboxSelectionBox.style.display = 'block';
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isPanning) {
+        translateX = e.clientX - panStartX;
+        translateY = e.clientY - panStartY;
+        applyTransform(false);
+      } else if (isDrawing) {
+        const rect = lightboxStage.getBoundingClientRect();
+        const curX = Math.min(Math.max(e.clientX, rect.left), rect.right);
+        const curY = Math.min(Math.max(e.clientY, rect.top), rect.bottom);
+
+        const left = Math.min(startX, curX) - rect.left;
+        const top = Math.min(startY, curY) - rect.top;
+        const width = Math.abs(curX - startX);
+        const height = Math.abs(curY - startY);
+
+        lightboxSelectionBox.style.left = `${left}px`;
+        lightboxSelectionBox.style.top = `${top}px`;
+        lightboxSelectionBox.style.width = `${width}px`;
+        lightboxSelectionBox.style.height = `${height}px`;
+      }
+    });
+
+    window.addEventListener('mouseup', (e) => {
+      if (isPanning) {
+        isPanning = false;
+        lightboxStage.style.cursor = currentMode === 'pan' ? 'grab' : 'crosshair';
+      }
+
+      if (isDrawing) {
+        isDrawing = false;
+        lightboxSelectionBox.style.display = 'none';
+
+        const rect = lightboxStage.getBoundingClientRect();
+        const curX = Math.min(Math.max(e.clientX, rect.left), rect.right);
+        const curY = Math.min(Math.max(e.clientY, rect.top), rect.bottom);
+
+        const boxLeft = Math.min(startX, curX) - rect.left;
+        const boxTop = Math.min(startY, curY) - rect.top;
+        const boxWidth = Math.abs(curX - startX);
+        const boxHeight = Math.abs(curY - startY);
+
+        // If drawn box is larger than 25px in both dimensions, trigger Box Zoom
+        if (boxWidth >= 25 && boxHeight >= 25) {
+          const boxCenterX = boxLeft + boxWidth / 2;
+          const boxCenterY = boxTop + boxHeight / 2;
+          const stageCenterX = rect.width / 2;
+          const stageCenterY = rect.height / 2;
+
+          const x_content = (boxCenterX - stageCenterX - translateX) / scale;
+          const y_content = (boxCenterY - stageCenterY - translateY) / scale;
+
+          const zoomRatio = Math.min(rect.width / boxWidth, rect.height / boxHeight) * 0.94;
+          const newScale = Math.min(Math.max(scale * zoomRatio, 1), 16);
+
+          translateX = - x_content * newScale;
+          translateY = - y_content * newScale;
+          scale = newScale;
+
+          applyTransform(true);
+        }
+      }
+    });
+
+    // Context menu prevent so right click pan feels smooth
+    lightboxStage.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const openLightbox = (src, alt) => {
       lightboxImg.src = src;
       lightboxImg.alt = alt || '';
-      lightboxImg.classList.remove('zoomed-full');
-      lightboxZoomToggle.innerText = '🔍 切換 100% 原始尺寸';
-      lightboxCaption.innerText = alt ? `${alt}（點擊圖片可切換縮放，按 ESC 關閉）` : '點擊圖片可切換縮放，按 ESC 關閉';
+      resetZoom(false);
+      setMode('box');
+      lightboxCaption.innerHTML = alt 
+        ? `${alt} <span class="hint">（💡 按住滑鼠左鍵「框選」任一區域立即放大至全螢幕，按「還原全圖」復原）</span>` 
+        : '<span class="hint">（💡 按住滑鼠左鍵「框選」任一區域立即放大至全螢幕，按「還原全圖」復原）</span>';
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
     };
@@ -81,20 +278,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeLightbox = () => {
       overlay.classList.remove('active');
       document.body.style.overflow = '';
+      resetZoom(false);
     };
 
-    const toggleFullZoom = (e) => {
-      if (e) e.stopPropagation();
-      const isFull = lightboxImg.classList.toggle('zoomed-full');
-      lightboxZoomToggle.innerText = isFull ? '🗗 適應視窗大小' : '🔍 切換 100% 原始尺寸';
-    };
-
-    lightboxImg.addEventListener('click', toggleFullZoom);
-    lightboxZoomToggle.addEventListener('click', toggleFullZoom);
     lightboxCloseBtn.addEventListener('click', closeLightbox);
 
     overlay.addEventListener('click', (e) => {
-      if (e.target === overlay || e.target === lightboxStage) {
+      if (e.target === overlay) {
         closeLightbox();
       }
     });
