@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 820" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .badge-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 14px; fill: #ffffff; text-anchor: middle; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+      .note-bold { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 15px; text-anchor: middle; }
+      .note-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14px; fill: #94a3b8; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="1600" height="820" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">Antigravity 權限管理模式對照圖</text>
+  <text x="800" y="78" class="subtitle">在中央對話輸入框的 Permissions 選單中隨時切換：「逐步審查」或「極速放行」</text>
+
+  <!-- Left Card: Request Review -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="130" width="710" height="640" rx="18" fill="#0f1e30" stroke="#0ea5e9" stroke-width="3"/>
+    <rect x="80" y="150" width="670" height="56" rx="12" fill="#0284c7"/>
+    <text x="415" y="186" class="card-title">🛡️ [預設模式] 手動審查模式 (Default / Request Review)</text>
+
+    <!-- Flow box -->
+    <rect x="85" y="225" width="660" height="95" rx="10" fill="#182d46" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="415" y="258" font-family="sans-serif" font-weight="700" font-size="16px" fill="#7dd3fc" text-anchor="middle">【運作流程】</text>
+    <text x="415" y="292" font-family="sans-serif" font-weight="600" font-size="17px" fill="#f8fafc" text-anchor="middle">提出指令 ➔ 彈出確認視窗 [Approve / Reject] ➔ 人工點擊執行</text>
+
+    <!-- Item 1 -->
+    <rect x="85" y="340" width="660" height="75" rx="10" fill="#14263c" stroke="#475569" stroke-width="1"/>
+    <text x="110" y="370" font-family="sans-serif" font-weight="700" font-size="17px" fill="#38bdf8">[核心特徵]</text>
+    <text x="110" y="398" class="item-desc">AI 在執行任何系統終端機指令前，必須等待你點擊 Approve 授權</text>
+
+    <!-- Item 2 -->
+    <rect x="85" y="430" width="660" height="75" rx="10" fill="#14263c" stroke="#475569" stroke-width="1"/>
+    <text x="110" y="460" font-family="sans-serif" font-weight="700" font-size="17px" fill="#38bdf8">[適合對象]</text>
+    <text x="110" y="488" class="item-desc">初學者、第一次接觸命令行、或正在處理公司正式重要專案</text>
+
+    <!-- Item 3 -->
+    <rect x="85" y="520" width="660" height="75" rx="10" fill="#14263c" stroke="#475569" stroke-width="1"/>
+    <text x="110" y="550" font-family="sans-serif" font-weight="700" font-size="17px" fill="#38bdf8">[使用體驗]</text>
+    <text x="110" y="578" class="item-desc">安全感 100%！但每動都需要手動點擊同意，操作節奏較為緊湊</text>
+
+    <!-- Bottom Advice -->
+    <rect x="85" y="630" width="660" height="60" rx="10" fill="#0369a1"/>
+    <text x="415" y="667" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#ffffff" text-anchor="middle">💡 學習建議：初次安裝時維持此預設模式最安心！</text>
+  </g>
+
+  <!-- Right Card: Always Proceed -->
+  <g filter="url(#shadow)">
+    <rect x="830" y="130" width="710" height="640" rx="18" fill="#2d1e0f" stroke="#f59e0b" stroke-width="3"/>
+    <rect x="850" y="150" width="670" height="56" rx="12" fill="#d97706"/>
+    <text x="1185" y="186" class="card-title">⚡ [高效模式] 自動同意模式 (Always Proceed / Auto)</text>
+
+    <!-- Flow box -->
+    <rect x="855" y="225" width="660" height="95" rx="10" fill="#463016" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="1185" y="258" font-family="sans-serif" font-weight="700" font-size="16px" fill="#fde68a" text-anchor="middle">【運作流程】</text>
+    <text x="1185" y="292" font-family="sans-serif" font-weight="600" font-size="17px" fill="#f8fafc" text-anchor="middle">提出指令 ➔ AI 連續自主執行 (建檔 + 改碼 + 終端機) ➔ 一鍵完工</text>
+
+    <!-- Item 1 -->
+    <rect x="855" y="340" width="660" height="75" rx="10" fill="#3c2814" stroke="#475569" stroke-width="1"/>
+    <text x="880" y="370" font-family="sans-serif" font-weight="700" font-size="17px" fill="#f59e0b">[核心特徵]</text>
+    <text x="880" y="398" class="item-desc">AI 連續執行讀取、寫檔、建檔與指令，完全不打斷使用者思考</text>
+
+    <!-- Item 2 -->
+    <rect x="855" y="430" width="660" height="75" rx="10" fill="#3c2814" stroke="#475569" stroke-width="1"/>
+    <text x="880" y="460" font-family="sans-serif" font-weight="700" font-size="17px" fill="#f59e0b">[適合對象]</text>
+    <text x="880" y="488" class="item-desc">練習獨立網頁、原型快速開發、想體驗 Agentic 全自動流程</text>
+
+    <!-- Item 3 -->
+    <rect x="855" y="520" width="660" height="75" rx="10" fill="#3c2814" stroke="#475569" stroke-width="1"/>
+    <text x="880" y="550" font-family="sans-serif" font-weight="700" font-size="17px" fill="#f59e0b">[使用體驗]</text>
+    <text x="880" y="578" class="item-desc">開發速度極快！建議在乾淨獨立的練習專案資料夾中使用</text>
+
+    <!-- Bottom Advice -->
+    <rect x="855" y="630" width="660" height="60" rx="10" fill="#b45309"/>
+    <text x="1185" y="667" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#ffffff" text-anchor="middle">🚀 本課程推薦：製作耳機網頁與發布時切換此模式最省時！</text>
+  </g>
+
+</svg>

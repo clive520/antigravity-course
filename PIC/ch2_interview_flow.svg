@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 780" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .badge-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 14px; fill: #ffffff; text-anchor: middle; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+      .note-bold { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 15px; text-anchor: middle; }
+      .note-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14px; fill: #94a3b8; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="1600" height="780" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">「先問答、後動工」反向訪談法三部曲</text>
+  <text x="800" y="78" class="subtitle">提示詞不用一次想破頭！請 AI 扮演顧問主動提問，像做選擇題一樣輕鬆敲定需求</text>
+
+  <!-- Step 1 Card -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="130" width="450" height="600" rx="18" fill="#151b2b" stroke="#6366f1" stroke-width="3"/>
+    <rect x="80" y="150" width="410" height="52" rx="10" fill="#6366f1"/>
+    <text x="285" y="182" class="card-title">步驟 1：啟動反向訪談</text>
+    <text x="285" y="224" class="card-sub" fill="#a5b4fc">【叫 AI 先別急著寫程式！】</text>
+
+    <rect x="80" y="245" width="410" height="455" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="105" y="285" font-family="sans-serif" font-weight="700" font-size="16px" fill="#a5b4fc">💬 使用者輸入開場白提示詞：</text>
+    <text x="105" y="325" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">「我想做耳機銷售網頁，</text>
+    <text x="105" y="358" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">  請先不要開始寫程式！</text>
+    <text x="105" y="391" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">  請扮演網頁企劃顧問，</text>
+    <text x="105" y="424" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">  向我提出 4 個關鍵問題</text>
+    <text x="105" y="457" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">  並提供選項讓我挑選！」</text>
+
+    <line x1="105" y1="500" x2="465" y2="500" stroke="#334155" stroke-width="1"/>
+    <text x="105" y="540" font-family="sans-serif" font-weight="700" font-size="16px" fill="#f59e0b">⚡ 內建捷徑：直接輸入指令</text>
+    <text x="105" y="575" font-family="sans-serif" font-weight="600" font-size="16px" fill="#38bdf8">/grill-me 我想做耳機網頁</text>
+    <text x="105" y="620" class="item-desc">即可一鍵啟動互動式選擇題訪談！</text>
+  </g>
+
+  <!-- Vector Arrow 1 -->
+  <polygon points="535,410 565,430 535,450" fill="#a5b4fc"/>
+
+  <!-- Step 2 Card -->
+  <g filter="url(#shadow)">
+    <rect x="585" y="130" width="450" height="600" rx="18" fill="#0f1e30" stroke="#0ea5e9" stroke-width="3"/>
+    <rect x="605" y="150" width="410" height="52" rx="10" fill="#0284c7"/>
+    <text x="810" y="182" class="card-title">步驟 2：像做選擇題回答</text>
+    <text x="810" y="224" class="card-sub" fill="#38bdf8">【快速挑選符合預期的選項】</text>
+
+    <rect x="605" y="245" width="410" height="455" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="630" y="285" font-family="sans-serif" font-weight="700" font-size="16px" fill="#7dd3fc">🤖 AI 顧問逐一列出問題讓你挑：</text>
+    <text x="630" y="325" font-family="sans-serif" font-weight="500" font-size="15.5px" fill="#e2e8f0">1. 配色：(A) 曜石黑  (B) 純白  (C) 霓虹？</text>
+    <text x="630" y="365" font-family="sans-serif" font-weight="500" font-size="15.5px" fill="#e2e8f0">2. 賣點：主動降噪、超長續航、舒適？</text>
+    <text x="630" y="405" font-family="sans-serif" font-weight="500" font-size="15.5px" fill="#e2e8f0">3. 方案：單一售價 vs 雙版本？</text>
+    <text x="630" y="445" font-family="sans-serif" font-weight="500" font-size="15.5px" fill="#e2e8f0">4. 行動：填寫預購表單 vs 外部賣場？</text>
+
+    <line x1="630" y1="485" x2="990" y2="485" stroke="#334155" stroke-width="1"/>
+    <text x="630" y="525" font-family="sans-serif" font-weight="700" font-size="16px" fill="#34d399">👤 你只需輕鬆回覆幾個字：</text>
+    <text x="630" y="565" font-family="sans-serif" font-weight="600" font-size="15.5px" fill="#f8fafc">「1選A曜石黑、2強調降噪與續航、</text>
+    <text x="630" y="598" font-family="sans-serif" font-weight="600" font-size="15.5px" fill="#f8fafc">  3分標準/旗艦兩版、4填預購表單」</text>
+    <text x="630" y="640" font-family="sans-serif" font-weight="600" font-size="14.5px" fill="#f59e0b">不用自己憋出一整篇規格，超省力！</text>
+  </g>
+
+  <!-- Vector Arrow 2 -->
+  <polygon points="1060,410 1090,430 1060,450" fill="#38bdf8"/>
+
+  <!-- Step 3 Card -->
+  <g filter="url(#shadow)">
+    <rect x="1110" y="130" width="430" height="600" rx="18" fill="#102820" stroke="#10b981" stroke-width="3"/>
+    <rect x="1130" y="150" width="390" height="52" rx="10" fill="#059669"/>
+    <text x="1325" y="182" class="card-title">步驟 3：精準生成成果</text>
+    <text x="1325" y="224" class="card-sub" fill="#6ee7b7">【100% 貼合心中想像與期待】</text>
+
+    <rect x="1130" y="245" width="390" height="455" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="1155" y="285" font-family="sans-serif" font-weight="700" font-size="16px" fill="#6ee7b7">🎉 AI 彙整規格確認書後一鍵動工：</text>
+    <text x="1155" y="335" class="item-title">• 自動建立完整結構 index.html</text>
+    <text x="1155" y="380" class="item-title">• 精準套用專案 PIC 資料夾耳機照片</text>
+    <text x="1155" y="425" class="item-title">• 一次到位！產出完全不偏離預期</text>
+    <text x="1155" y="470" class="item-title">• 程式碼結構乾淨、支援手機 RWD</text>
+
+    <rect x="1155" y="530" width="340" height="120" rx="10" fill="#065f46"/>
+    <text x="1325" y="575" font-family="sans-serif" font-weight="700" font-size="18px" fill="#ffffff" text-anchor="middle">🎯 巨大優勢：</text>
+    <text x="1325" y="615" font-family="sans-serif" font-weight="700" font-size="17px" fill="#fde68a" text-anchor="middle">省下 80% 來回除錯與重做時間！</text>
+  </g>
+
+</svg>

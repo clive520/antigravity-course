@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 860" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .badge-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 14px; fill: #ffffff; text-anchor: middle; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+      .note-bold { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 15px; text-anchor: middle; }
+      .note-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14px; fill: #94a3b8; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="1600" height="860" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">商業產品介紹頁（Landing Page）5 大核心架構解剖</text>
+  <text x="800" y="78" class="subtitle">在向 AI 下達提示詞前，先掌握現代高轉換率產品網頁的骨架架構</text>
+
+  <!-- Browser Frame -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="125" width="1480" height="700" rx="16" fill="#0f172a" stroke="#475569" stroke-width="2.5"/>
+    <!-- Browser titlebar -->
+    <path d="M 60 141 Q 60 125 76 125 L 1524 125 Q 1540 125 1540 141 L 1540 165 L 60 165 Z" fill="#1e293b"/>
+    <!-- 3 Traffic lights -->
+    <circle cx="85" cy="145" r="6" fill="#ef4444"/>
+    <circle cx="105" cy="145" r="6" fill="#f59e0b"/>
+    <circle cx="125" cy="145" r="6" fill="#10b981"/>
+    <!-- Address bar mockup -->
+    <rect x="250" y="133" width="1100" height="24" rx="6" fill="#0f172a"/>
+    <text x="800" y="150" font-family="sans-serif" font-size="13px" fill="#94a3b8" text-anchor="middle">https://yoursite.github.io/product-demo.html</text>
+
+    <!-- Block 1: Navbar -->
+    <rect x="90" y="185" width="1420" height="100" rx="12" fill="#182030" stroke="#6366f1" stroke-width="2"/>
+    <rect x="110" y="200" width="380" height="36" rx="8" fill="#6366f1"/>
+    <text x="300" y="224" class="pill-text">[區塊 1] 頂部導覽列 (Navbar)</text>
+    <text x="110" y="265" font-family="sans-serif" font-weight="600" font-size="17.5px" fill="#f8fafc">SmartSound Pro 品牌 Logo  ＋  功能選單導航（特色、圖鑑、定價） ＋  [立即預購] 行動按鈕</text>
+
+    <!-- Block 2: Hero -->
+    <rect x="90" y="305" width="1420" height="100" rx="12" fill="#182030" stroke="#0ea5e9" stroke-width="2"/>
+    <rect x="110" y="320" width="380" height="36" rx="8" fill="#0284c7"/>
+    <text x="300" y="344" class="pill-text">[區塊 2] 主視覺區 (Hero Section)</text>
+    <text x="110" y="385" font-family="sans-serif" font-weight="600" font-size="17.5px" fill="#f8fafc">超吸睛主標題  ＋  痛點副標題  ＋  耳機高畫質主圖  ＋  [搶先預購] 主要行動呼籲按鈕 (CTA)</text>
+
+    <!-- Block 3: Features -->
+    <rect x="90" y="425" width="1420" height="100" rx="12" fill="#182030" stroke="#10b981" stroke-width="2"/>
+    <rect x="110" y="440" width="380" height="36" rx="8" fill="#059669"/>
+    <text x="300" y="464" class="pill-text">[區塊 3] 核心賣點 (Features 3 大特色)</text>
+    <text x="110" y="505" font-family="sans-serif" font-weight="600" font-size="17.5px" fill="#f8fafc">【🎧 頂級主動降噪】  ｜  【🔋 40 小時超長續航】  ｜  【☁️ 人體工學極致舒適耳罩】</text>
+
+    <!-- Block 4: Gallery & Pricing -->
+    <rect x="90" y="545" width="1420" height="100" rx="12" fill="#182030" stroke="#f59e0b" stroke-width="2"/>
+    <rect x="110" y="560" width="380" height="36" rx="8" fill="#d97706"/>
+    <text x="300" y="584" class="pill-text">[區塊 4] 多角度圖鑑與定價 (Gallery &amp; Pricing)</text>
+    <text x="110" y="625" font-family="sans-serif" font-weight="600" font-size="17.5px" fill="#f8fafc">多視角照片展示（正面/側面/情境） ＋  [標準版 $3,990] 與 [旗艦版 $5,990] 雙方案比較表</text>
+
+    <!-- Block 5: Form & Footer -->
+    <rect x="90" y="665" width="1420" height="100" rx="12" fill="#182030" stroke="#64748b" stroke-width="2"/>
+    <rect x="110" y="680" width="380" height="36" rx="8" fill="#475569"/>
+    <text x="300" y="704" class="pill-text">[區塊 5] 預購表單與頁尾 (Form &amp; Footer)</text>
+    <text x="110" y="745" font-family="sans-serif" font-weight="600" font-size="17.5px" fill="#f8fafc">姓名/Email/電話線上表單輸入框  ＋  隱私保護政策  ＋  版權聲明與社群連結</text>
+  </g>
+
+</svg>

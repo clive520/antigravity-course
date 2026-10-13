@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 780" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .badge-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 14px; fill: #ffffff; text-anchor: middle; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+      .note-bold { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 15px; text-anchor: middle; }
+      .note-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14px; fill: #94a3b8; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="1600" height="780" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">對話式迭代微調（Iterative Tuning）進化路徑</text>
+  <text x="800" y="78" class="subtitle">生成第一版後不用自己改程式！動口說一句，AI 自動精準進行局部增量修復</text>
+
+  <!-- Stage 1 Card -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="130" width="450" height="600" rx="18" fill="#1e293b" stroke="#64748b" stroke-width="3"/>
+    <rect x="80" y="150" width="410" height="52" rx="10" fill="#475569"/>
+    <text x="285" y="182" class="card-title">階段 1：初版網頁 (V1 原型)</text>
+    <text x="285" y="224" class="card-sub" fill="#cbd5e1">【基本骨架建立，待細緻打磨】</text>
+
+    <!-- Item 1 -->
+    <rect x="80" y="250" width="410" height="95" rx="10" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+    <text x="105" y="285" class="item-title">[骨架完成]</text>
+    <text x="105" y="318" class="item-desc">已建立導覽、標題、耳機照片與預購表單</text>
+
+    <!-- Item 2 -->
+    <rect x="80" y="360" width="410" height="95" rx="10" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+    <text x="105" y="395" class="item-title">[細節不足]</text>
+    <text x="105" y="428" class="item-desc">Hero 標題不夠突出、按鈕顏色偏暗缺動感</text>
+
+    <!-- Item 3 -->
+    <rect x="80" y="470" width="410" height="95" rx="10" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+    <text x="105" y="505" class="item-title">[區塊待補]</text>
+    <text x="105" y="538" class="item-desc">缺少顧客好評背書與多角度耳機寫真展示</text>
+
+    <!-- Bottom Status -->
+    <rect x="80" y="590" width="410" height="95" rx="10" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+    <text x="285" y="630" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#94a3b8" text-anchor="middle">評估：骨架正確，但缺乏商業轉單吸引力</text>
+    <text x="285" y="660" font-family="sans-serif" font-weight="500" font-size="14.5px" fill="#cbd5e1" text-anchor="middle">➔ 準備向 AI 下達第 2 輪微調指令</text>
+  </g>
+
+  <!-- Vector Arrow 1 -->
+  <polygon points="535,410 565,430 535,450" fill="#f59e0b"/>
+
+  <!-- Stage 2 Card -->
+  <g filter="url(#shadow)">
+    <rect x="585" y="130" width="450" height="600" rx="18" fill="#2d1e0f" stroke="#f59e0b" stroke-width="3"/>
+    <rect x="605" y="150" width="410" height="52" rx="10" fill="#d97706"/>
+    <text x="810" y="182" class="card-title">階段 2：對話微調 (自然語言指令)</text>
+    <text x="810" y="224" class="card-sub" fill="#fde68a">【動口不動手：針對細節下達指令】</text>
+
+    <!-- Prompt 1 -->
+    <rect x="605" y="250" width="410" height="130" rx="10" fill="#181e2c" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="630" y="285" font-family="sans-serif" font-weight="700" font-size="16px" fill="#f59e0b">[指令 1：視覺強化]</text>
+    <text x="630" y="322" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">「請把 Hero 標題字體加大，</text>
+    <text x="630" y="354" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">  並把按鈕改成亮橘色漸層按鈕！」</text>
+
+    <!-- Prompt 2 -->
+    <rect x="605" y="395" width="410" height="130" rx="10" fill="#181e2c" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="630" y="430" font-family="sans-serif" font-weight="700" font-size="16px" fill="#f59e0b">[指令 2：擴充區塊]</text>
+    <text x="630" y="467" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">「請在產品特色後面加上 3 位顧客</text>
+    <text x="630" y="499" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">  的五星好評推薦評價卡片！」</text>
+
+    <!-- Prompt 3 -->
+    <rect x="605" y="540" width="410" height="130" rx="10" fill="#181e2c" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="630" y="575" font-family="sans-serif" font-weight="700" font-size="16px" fill="#f59e0b">[指令 3：互動體驗]</text>
+    <text x="630" y="612" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">「點擊預購按鈕時平滑捲動到表單，</text>
+    <text x="630" y="644" font-family="sans-serif" font-weight="600" font-size="16px" fill="#f8fafc">  送出後跳出感謝訂閱的提示訊息！」</text>
+  </g>
+
+  <!-- Vector Arrow 2 -->
+  <polygon points="1060,410 1090,430 1060,450" fill="#10b981"/>
+
+  <!-- Stage 3 Card -->
+  <g filter="url(#shadow)">
+    <rect x="1110" y="130" width="430" height="600" rx="18" fill="#102820" stroke="#10b981" stroke-width="3"/>
+    <rect x="1130" y="150" width="390" height="52" rx="10" fill="#059669"/>
+    <text x="1325" y="182" class="card-title">階段 3：最終成品 (V2 商業旗艦版)</text>
+    <text x="1325" y="224" class="card-sub" fill="#6ee7b7">【視覺精緻、高信任感與高轉換率】</text>
+
+    <!-- Item 1 -->
+    <rect x="1130" y="250" width="390" height="95" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+    <text x="1155" y="285" class="item-title">[視覺層次豐富]</text>
+    <text x="1155" y="318" class="item-desc">亮橘色發光 CTA 按鈕 ＋ 大器科技感標題</text>
+
+    <!-- Item 2 -->
+    <rect x="1130" y="360" width="390" height="95" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+    <text x="1155" y="395" class="item-title">[完整信任背書]</text>
+    <text x="1155" y="428" class="item-desc">五星好評評價卡片 ＋ 雙版本價格比較表</text>
+
+    <!-- Item 3 -->
+    <rect x="1130" y="470" width="390" height="95" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+    <text x="1155" y="505" class="item-title">[流暢互動體驗]</text>
+    <text x="1155" y="538" class="item-desc">平滑錨點捲動 ＋ 表單填寫即時驗證彈窗</text>
+
+    <!-- Item 4 -->
+    <rect x="1130" y="580" width="390" height="95" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+    <text x="1155" y="615" class="item-title">[自適應 RWD]</text>
+    <text x="1155" y="648" class="item-desc">電腦大螢幕與手機窄螢幕皆能完美呈現</text>
+  </g>
+
+</svg>

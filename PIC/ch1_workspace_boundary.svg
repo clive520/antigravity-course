@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 820" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .badge-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 14px; fill: #ffffff; text-anchor: middle; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+      .note-bold { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 15px; text-anchor: middle; }
+      .note-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14px; fill: #94a3b8; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="1600" height="820" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">Project 專案工作區安全邊界示意圖</text>
+  <text x="800" y="78" class="subtitle">Antigravity 具備「環境隔離沙盒」：只在授權資料夾內操作，保護個人電腦安全</text>
+
+  <!-- Left Card: Green Safe Sandbox -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="130" width="710" height="640" rx="18" fill="#102820" stroke="#10b981" stroke-width="3"/>
+    <rect x="80" y="150" width="670" height="56" rx="12" fill="#10b981"/>
+    <text x="415" y="186" class="card-title">✅ [安全沙盒] AI 獲授權操作工作區</text>
+
+    <!-- Path Bar -->
+    <rect x="85" y="225" width="660" height="60" rx="10" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+    <text x="415" y="262" font-family="sans-serif" font-weight="700" font-size="18px" fill="#f8fafc" text-anchor="middle">📁 授權資料夾路徑：C:\Antigravity\web-demo\</text>
+
+    <!-- Item 1 -->
+    <rect x="85" y="305" width="660" height="85" rx="10" fill="#14362a" stroke="#34d399" stroke-width="1"/>
+    <text x="110" y="340" font-family="sans-serif" font-weight="700" font-size="18px" fill="#34d399">[允許] 建立與修改網頁檔案</text>
+    <text x="110" y="368" class="item-desc">自由新增與編輯 index.html、style.css、main.js 等專案原始碼</text>
+
+    <!-- Item 2 -->
+    <rect x="85" y="405" width="660" height="85" rx="10" fill="#14362a" stroke="#34d399" stroke-width="1"/>
+    <text x="110" y="440" font-family="sans-serif" font-weight="700" font-size="18px" fill="#34d399">[允許] 讀取專案圖片素材</text>
+    <text x="110" y="468" class="item-desc">讀寫本資料夾內的 PIC/ 照片庫，快速插入網頁版面</text>
+
+    <!-- Item 3 -->
+    <rect x="85" y="505" width="660" height="85" rx="10" fill="#14362a" stroke="#34d399" stroke-width="1"/>
+    <text x="110" y="540" font-family="sans-serif" font-weight="700" font-size="18px" fill="#34d399">[允許] 執行專案終端機命令</text>
+    <text x="110" y="568" class="item-desc">執行 git 初始化、GitHub CLI 發布網頁等專案建置指令</text>
+
+    <!-- Safe Guarantee Banner -->
+    <rect x="85" y="630" width="660" height="60" rx="10" fill="#065f46"/>
+    <text x="415" y="667" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#ffffff" text-anchor="middle">🛡️ 安全保證：AI 所有寫入操作嚴格受限於此資料夾內，絕不外溢！</text>
+  </g>
+
+  <!-- Right Card: Red Protected Area -->
+  <g filter="url(#shadow)">
+    <rect x="830" y="130" width="710" height="640" rx="18" fill="#2d1218" stroke="#f43f5e" stroke-width="3"/>
+    <rect x="850" y="150" width="670" height="56" rx="12" fill="#e11d48"/>
+    <text x="1185" y="186" class="card-title">🔒 [系統保護] 未授權禁止存取區域</text>
+
+    <!-- Path Bar -->
+    <rect x="855" y="225" width="660" height="60" rx="10" fill="#4c1d2c" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="1185" y="262" font-family="sans-serif" font-weight="700" font-size="18px" fill="#fecdd3" text-anchor="middle">🚫 外部磁碟與目錄：桌面 / C 槽根目錄 / 個人相片</text>
+
+    <!-- Item 1 -->
+    <rect x="855" y="305" width="660" height="85" rx="10" fill="#3c1923" stroke="#fb7185" stroke-width="1"/>
+    <text x="880" y="340" font-family="sans-serif" font-weight="700" font-size="18px" fill="#fb7185">[禁止] 個人桌面與我的文件</text>
+    <text x="880" y="368" class="item-desc">AI 預設無法越界存取電腦桌面、下載資料夾與私人物件</text>
+
+    <!-- Item 2 -->
+    <rect x="855" y="405" width="660" height="85" rx="10" fill="#3c1923" stroke="#fb7185" stroke-width="1"/>
+    <text x="880" y="440" font-family="sans-serif" font-weight="700" font-size="18px" fill="#fb7185">[禁止] 作業系統核心根目錄</text>
+    <text x="880" y="468" class="item-desc">C:\Windows 及系統開機檔案受到作業系統與沙盒雙重隔離防護</text>
+
+    <!-- Item 3 -->
+    <rect x="855" y="505" width="660" height="85" rx="10" fill="#3c1923" stroke="#fb7185" stroke-width="1"/>
+    <text x="880" y="540" font-family="sans-serif" font-weight="700" font-size="18px" fill="#fb7185">[禁止] 私人密碼與個人隱私</text>
+    <text x="880" y="568" class="item-desc">未經授權禁止讀取外圍個人文件與機密金鑰，避免個資外洩</text>
+
+    <!-- Warning Banner -->
+    <rect x="855" y="630" width="660" height="60" rx="10" fill="#9f1239"/>
+    <text x="1185" y="667" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#ffffff" text-anchor="middle">⚠️ 新手守則：切勿將整個桌面或 C:\ 槽設為專案資料夾！</text>
+  </g>
+
+</svg>
