@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 820" width="1600" height="820">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="820" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">GitHub 快速註冊與 Username 網址結構解密</text>
+  <text x="800" y="78" class="subtitle">推薦 Continue with Google 註冊方式，並掌握影響一輩子網址的 Username 命名原則</text>
+
+  <!-- Left Card: Google Signup Steps -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="130" width="710" height="640" rx="18" fill="#151b2b" stroke="#6366f1" stroke-width="3"/>
+    <rect x="80" y="150" width="670" height="56" rx="12" fill="#4f46e5"/>
+    <text x="415" y="186" class="card-title">🚀 推薦註冊方式：Continue with Google (一鍵授權)</text>
+
+    <!-- Step 1 -->
+    <rect x="85" y="230" width="660" height="85" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="110" y="265" class="item-title">[步驟 1] 前往官網點選「Continue with Google」</text>
+    <text x="110" y="295" class="item-desc">網址：github.com/signup ➔ 點選 Google 圖示免去繁瑣輸入信箱流程</text>
+
+    <!-- Step 2 -->
+    <rect x="85" y="330" width="660" height="85" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="110" y="365" class="item-title">[步驟 2] 務必挑選「個人長期持有的 Gmail 帳號」</text>
+    <text x="110" y="395" class="item-desc">避免使用學校 (.edu) 或公司帳號，畢業離職帳號被收回將導致作品遺失！</text>
+
+    <!-- Step 3 -->
+    <rect x="85" y="430" width="660" height="85" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="110" y="465" class="item-title">[步驟 3] 註冊後到 Settings 補設「獨立專用密碼」</text>
+    <text x="110" y="495" class="item-desc">方便第 4 章在命令列終端機透過 GitHub CLI (gh auth login) 自動發布</text>
+
+    <!-- Step 4 -->
+    <rect x="85" y="530" width="660" height="85" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="110" y="565" class="item-title">[步驟 4] 開啟 2FA 雙重身分驗證 (強制安全政策)</text>
+    <text x="110" y="595" class="item-desc">使用 Google Authenticator 或 Microsoft Authenticator 手機 App 綁定保護</text>
+
+    <!-- Bottom summary -->
+    <rect x="85" y="635" width="660" height="55" rx="10" fill="#312e81"/>
+    <text x="415" y="670" font-family="sans-serif" font-weight="700" font-size="16px" fill="#c7d2fe" text-anchor="middle">💡 效益：30 秒快速通關，安全有保障！</text>
+  </g>
+
+  <!-- Right Card: URL Structure Anatomy -->
+  <g filter="url(#shadow)">
+    <rect x="830" y="130" width="710" height="640" rx="18" fill="#0f1e30" stroke="#0ea5e9" stroke-width="3"/>
+    <rect x="850" y="150" width="670" height="56" rx="12" fill="#0284c7"/>
+    <text x="1185" y="186" class="card-title">🔍 重要！你的 Username 如何決定未來的官方網址？</text>
+
+    <!-- Big URL Breakdown Box -->
+    <rect x="855" y="230" width="660" height="150" rx="12" fill="#0f172a" stroke="#0ea5e9" stroke-width="2"/>
+    <text x="1185" y="270" font-family="sans-serif" font-weight="700" font-size="15px" fill="#7dd3fc" text-anchor="middle">【 GitHub Pages 網站網址解剖公式 】</text>
+    
+    <!-- URL Components -->
+    <rect x="880" y="295" width="610" height="60" rx="8" fill="#1e293b"/>
+    <text x="900" y="333" font-family="Courier New, monospace" font-weight="700" font-size="17px" fill="#94a3b8">https://</text>
+    <text x="990" y="333" font-family="Courier New, monospace" font-weight="700" font-size="20px" fill="#38bdf8">your-name</text>
+    <text x="1105" y="333" font-family="Courier New, monospace" font-weight="700" font-size="17px" fill="#94a3b8">.github.io/</text>
+    <text x="1225" y="333" font-family="Courier New, monospace" font-weight="700" font-size="20px" fill="#34d399">my-product</text>
+    <text x="1355" y="333" font-family="Courier New, monospace" font-weight="700" font-size="17px" fill="#94a3b8">/</text>
+
+    <!-- Component Explanations -->
+    <rect x="855" y="400" width="660" height="100" rx="10" fill="#162e44" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="880" y="435" font-family="sans-serif" font-weight="700" font-size="17px" fill="#38bdf8">🔹 前段：your-name（你的 GitHub Username）</text>
+    <text x="880" y="465" class="item-desc">• 代表你的個人/品牌網域，永久固定於 github.io 之前</text>
+    <text x="880" y="488" class="item-desc">• 命名原則：簡短、好記、純英文小寫與數字，避免複雜亂碼！</text>
+
+    <rect x="855" y="515" width="660" height="100" rx="10" fill="#14362a" stroke="#10b981" stroke-width="1.5"/>
+    <text x="880" y="550" font-family="sans-serif" font-weight="700" font-size="17px" fill="#34d399">🔹 後段：my-product（你的專案 Repo 名稱）</text>
+    <text x="880" y="580" class="item-desc">• 代表此網站的專案名稱（例如：smart-headphone、landing-demo）</text>
+    <text x="880" y="603" class="item-desc">• 一個帳號可以建立無數個不同 Repo，擁有無數個專屬網站！</text>
+
+    <!-- Good vs Bad Example -->
+    <rect x="855" y="635" width="660" height="55" rx="10" fill="#0c4a6e"/>
+    <text x="1185" y="670" font-family="sans-serif" font-weight="700" font-size="15.5px" fill="#ffffff" text-anchor="middle">✔ 好名字：alex-dev、clive-tw  ｜  ✖ 避免：user129384_xyz99</text>
+  </g>
+
+</svg>

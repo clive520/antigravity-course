@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 840" width="1600" height="840">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="840" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">GitHub 4 大核心術語白話對照圖</text>
+  <text x="800" y="78" class="subtitle">不要被英文名詞嚇到！用生活中的譬喻，30 秒輕鬆掌握版本控制與發布核心概念</text>
+
+  <!-- 4 Cards Grid (2 x 2) -->
+
+  <!-- CARD 1: Repository -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="130" width="710" height="315" rx="16" fill="#151b2b" stroke="#6366f1" stroke-width="2.5"/>
+    <rect x="80" y="150" width="670" height="48" rx="10" fill="#6366f1"/>
+    <text x="415" y="181" class="card-title">1. Repository（儲存庫 / 簡稱 Repo）</text>
+
+    <rect x="85" y="215" width="660" height="55" rx="8" fill="#312e81"/>
+    <text x="415" y="249" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#c7d2fe" text-anchor="middle">💡 生活白話比喻：【雲端專屬置物櫃 / 雲端專案資料夾】</text>
+
+    <text x="110" y="305" font-family="sans-serif" font-weight="600" font-size="16.5px" fill="#f8fafc">• 專門用來存放你「某一個特定網站或專案」所有檔案的雲端空間。</text>
+    <text x="110" y="340" class="item-desc">• 一個 Repo 就是一個獨立資料夾，裡面有 HTML、CSS、JS 與照片。</text>
+    <text x="110" y="375" class="item-desc">• 可以設定為「公開（Public，讓大家看網頁）」或「私有（Private，自己看）」。</text>
+    <text x="110" y="410" font-family="sans-serif" font-weight="600" font-size="15px" fill="#a5b4fc">➔ 本課實例：我們建立一個名為 antigravity-course 的 Repo 來放耳機網站！</text>
+  </g>
+
+  <!-- CARD 2: Commit -->
+  <g filter="url(#shadow)">
+    <rect x="830" y="130" width="710" height="315" rx="16" fill="#0f1e30" stroke="#0ea5e9" stroke-width="2.5"/>
+    <rect x="850" y="150" width="670" height="48" rx="10" fill="#0284c7"/>
+    <text x="1185" y="181" class="card-title">2. Commit（提交 / 歷史存檔點）</text>
+
+    <rect x="855" y="215" width="660" height="55" rx="8" fill="#0c4a6e"/>
+    <text x="1185" y="249" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#bae6fd" text-anchor="middle">💡 生活白話比喻：【遊戲存檔點（Save Point）+ 時光機標籤】</text>
+
+    <text x="880" y="305" font-family="sans-serif" font-weight="600" font-size="16.5px" fill="#f8fafc">• 記錄「誰、在什麼時候、修改了哪些程式碼」的一張歷史快照紀錄。</text>
+    <text x="880" y="340" class="item-desc">• 每次存檔時都附帶一句訊息（如「完成耳機 Hero 區塊」、「換新圖」）。</text>
+    <text x="880" y="375" class="item-desc">• 如果改壞了版面，隨時可以點擊歷史紀錄「一鍵坐時光機還原」。</text>
+    <text x="880" y="410" font-family="sans-serif" font-weight="600" font-size="15px" fill="#7dd3fc">➔ 本課實例：每次叫 Antigravity 改完網頁，它都會自動幫你建立 Commit！</text>
+  </g>
+
+  <!-- CARD 3: Push -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="475" width="710" height="315" rx="16" fill="#2d1e0f" stroke="#f59e0b" stroke-width="2.5"/>
+    <rect x="80" y="495" width="670" height="48" rx="10" fill="#d97706"/>
+    <text x="415" y="526" class="card-title">3. Push（推送 / 雲端同步上傳）</text>
+
+    <rect x="85" y="560" width="660" height="55" rx="8" fill="#78350f"/>
+    <text x="415" y="594" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#fde68a" text-anchor="middle">💡 生活白話比喻：【按下『同步到雲端』按鈕（Upload to Cloud）】</text>
+
+    <text x="110" y="650" font-family="sans-serif" font-weight="600" font-size="16.5px" fill="#f8fafc">• 把你在本機電腦裡存好的 Commit 存檔點，正式傳送到 GitHub 雲端。</text>
+    <text x="110" y="685" class="item-desc">• 只要沒有 Push，你的所有修改都只留在本機，雲端跟別人都看不到。</text>
+    <text x="110" y="720" class="item-desc">• 一旦 Push 成功，雲端資料庫瞬間同步更新，永久安全備份。</text>
+    <text x="110" y="755" font-family="sans-serif" font-weight="600" font-size="15px" fill="#fde68a">➔ 本課實例：終端機執行 git push，即可把剛做好的產品頁秒傳到 GitHub！</text>
+  </g>
+
+  <!-- CARD 4: GitHub Pages -->
+  <g filter="url(#shadow)">
+    <rect x="830" y="475" width="710" height="315" rx="16" fill="#102820" stroke="#10b981" stroke-width="2.5"/>
+    <rect x="850" y="495" width="670" height="48" rx="10" fill="#059669"/>
+    <text x="1185" y="526" class="card-title">4. GitHub Pages（全球免費網站託管主機）</text>
+
+    <rect x="855" y="560" width="660" height="55" rx="8" fill="#064e3b"/>
+    <text x="1185" y="594" font-family="sans-serif" font-weight="700" font-size="16.5px" fill="#6ee7b7" text-anchor="middle">💡 生活白話比喻：【免費的全球 24 小時開張店面 ＋ 專屬門牌】</text>
+
+    <text x="880" y="650" font-family="sans-serif" font-weight="600" font-size="16.5px" fill="#f8fafc">• GitHub 贈送給每位開發者的頂級福利：免費靜態網站伺服器！</text>
+    <text x="880" y="685" class="item-desc">• 免買網址、免租虛擬主機、免設定 Linux 伺服器、內建 HTTPS 加密。</text>
+    <text x="880" y="720" class="item-desc">• 只要將 Repo 的 main 分支開啟 Pages，全世界任何人都能立即造訪！</text>
+    <text x="880" y="755" font-family="sans-serif" font-weight="600" font-size="15px" fill="#6ee7b7">➔ 本課實例：第 4 章我們將利用 GitHub CLI 一秒開啟 Pages，讓耳機官網上線！</text>
+  </g>
+
+</svg>

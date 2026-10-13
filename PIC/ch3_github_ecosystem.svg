@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 860" width="1600" height="860">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 800; font-size: 32px; fill: #f8fafc; text-anchor: middle; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 500; font-size: 17px; fill: #94a3b8; text-anchor: middle; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 20px; fill: #ffffff; text-anchor: middle; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 15px; text-anchor: middle; }
+      .item-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 700; font-size: 17px; fill: #f8fafc; }
+      .item-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 400; font-size: 14.5px; fill: #cbd5e1; }
+      .pill-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif; font-weight: 600; font-size: 13.5px; fill: #ffffff; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="860" fill="#0b0f19"/>
+
+  <!-- Top Banner -->
+  <rect x="0" y="0" width="1600" height="96" fill="#0f172a"/>
+  <line x1="0" y1="96" x2="1600" y2="96" stroke="#334155" stroke-width="2"/>
+  <text x="800" y="44" class="title">從本機開發到全球發布：GitHub 運作全景圖</text>
+  <text x="800" y="78" class="subtitle">為什麼我們需要 GitHub？串聯「本機工作區」與「全球公開網站」的關鍵橋樑</text>
+
+  <!-- Step 1: Local PC -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="130" width="440" height="680" rx="18" fill="#151b2b" stroke="#6366f1" stroke-width="3"/>
+    <rect x="80" y="150" width="400" height="52" rx="10" fill="#6366f1"/>
+    <text x="280" y="182" class="card-title">① 本機開發環境 (Local PC)</text>
+    <text x="280" y="224" class="card-sub" fill="#a5b4fc">【你的電腦與 Antigravity】</text>
+
+    <!-- Content 1 -->
+    <rect x="80" y="245" width="400" height="110" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="105" y="280" class="item-title">💻 Antigravity 專案資料夾</text>
+    <text x="105" y="310" class="item-desc">位於本地硬碟：C:\Antigravity\web-demo\</text>
+    <text x="105" y="335" class="item-desc">包含 index.html、style.css 與 PIC/ 照片</text>
+
+    <!-- Content 2 -->
+    <rect x="80" y="375" width="400" height="110" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="105" y="410" class="item-title">💾 本地 Git 版本控制 (Commit)</text>
+    <text x="105" y="440" class="item-desc">建立時光機存檔點，記錄每次修改</text>
+    <text x="105" y="465" class="item-desc">即使改壞也能一鍵安全復原</text>
+
+    <!-- Bottleneck Alert -->
+    <rect x="80" y="505" width="400" height="140" rx="12" fill="#3c1923" stroke="#f43f5e" stroke-width="1.5"/>
+    <text x="105" y="540" font-family="sans-serif" font-weight="700" font-size="16px" fill="#fb7185">⚠️ 遇到的瓶頸痛點：</text>
+    <text x="105" y="572" class="item-desc">• 目前網頁只有「你自己」的電腦看得到</text>
+    <text x="105" y="602" class="item-desc">• 無法傳送網址給朋友、客戶或主管瀏覽</text>
+    <text x="105" y="632" class="item-desc">• 電腦一旦關機或硬碟損毀，檔案就消失！</text>
+
+    <!-- Action Arrow Box -->
+    <rect x="80" y="665" width="400" height="60" rx="10" fill="#4f46e5"/>
+    <text x="280" y="702" font-family="sans-serif" font-weight="700" font-size="16px" fill="#ffffff" text-anchor="middle">準備執行：git push 同步上雲端 ➔</text>
+  </g>
+
+  <!-- Vector Arrow 1 -->
+  <polygon points="525,440 555,460 525,480" fill="#6366f1"/>
+
+  <!-- Step 2: GitHub Cloud -->
+  <g filter="url(#shadow)">
+    <rect x="580" y="130" width="440" height="680" rx="18" fill="#0f1e30" stroke="#0ea5e9" stroke-width="3"/>
+    <rect x="600" y="150" width="400" height="52" rx="10" fill="#0284c7"/>
+    <text x="800" y="182" class="card-title">② GitHub 雲端代管 (Cloud Hub)</text>
+    <text x="800" y="224" class="card-sub" fill="#38bdf8">【全球最大的程式碼雲端保險箱】</text>
+
+    <!-- Content 1 -->
+    <rect x="600" y="245" width="400" height="110" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="625" y="280" class="item-title">☁️ 雲端儲存庫 (Repository / Repo)</text>
+    <text x="625" y="310" class="item-desc">永不遺失的專案雲端備份</text>
+    <text x="625" y="335" class="item-desc">無論換電腦、重灌都能隨時抓取回來</text>
+
+    <!-- Content 2 -->
+    <rect x="600" y="375" width="400" height="110" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="625" y="410" class="item-title">🤖 與 AI 助理 (Antigravity) 串接</text>
+    <text x="625" y="440" class="item-desc">支援 GitHub CLI 授權登入 (gh auth login)</text>
+    <text x="625" y="465" class="item-desc">讓 AI 能替你自主自動推播更新</text>
+
+    <!-- Value box -->
+    <rect x="600" y="505" width="400" height="140" rx="12" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="625" y="540" font-family="sans-serif" font-weight="700" font-size="16px" fill="#7dd3fc">✨ 核心價值解鎖：</text>
+    <text x="625" y="572" class="item-desc">• 全球 1 億＋ 開發者與頂尖科技公司採用</text>
+    <text x="625" y="602" class="item-desc">• 完整的版本時間軸，記錄誰在何時改了碼</text>
+    <text x="625" y="632" class="item-desc">• 免費享有強大的持續整合與網站託管！</text>
+
+    <!-- Action Arrow Box -->
+    <rect x="600" y="665" width="400" height="60" rx="10" fill="#0369a1"/>
+    <text x="800" y="702" font-family="sans-serif" font-weight="700" font-size="16px" fill="#ffffff" text-anchor="middle">啟動託管：開啟 GitHub Pages ➔</text>
+  </g>
+
+  <!-- Vector Arrow 2 -->
+  <polygon points="1045,440 1075,460 1045,480" fill="#0ea5e9"/>
+
+  <!-- Step 3: Public Website -->
+  <g filter="url(#shadow)">
+    <rect x="1100" y="130" width="440" height="680" rx="18" fill="#102820" stroke="#10b981" stroke-width="3"/>
+    <rect x="1120" y="150" width="400" height="52" rx="10" fill="#059669"/>
+    <text x="1320" y="182" class="card-title">③ 全球公開網頁 (GitHub Pages)</text>
+    <text x="1320" y="224" class="card-sub" fill="#6ee7b7">【全世界只要有網址都能連上】</text>
+
+    <!-- Content 1 -->
+    <rect x="1120" y="245" width="400" height="110" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="1145" y="280" class="item-title">🌐 免費專屬 HTTPS 商業網址</text>
+    <text x="1145" y="310" class="item-desc">內建 SSL 安全憑證，瀏覽器不跳警告</text>
+    <text x="1145" y="335" class="item-desc">格式：https://[帳號].github.io/[專案名]/</text>
+
+    <!-- Content 2 -->
+    <rect x="1120" y="375" width="400" height="110" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="1145" y="410" class="item-title">⚡ 全球 CDN 極速自動分發</text>
+    <text x="1145" y="440" class="item-desc">微軟與 GitHub 雲端全球機房加速</text>
+    <text x="1145" y="465" class="item-desc">手機、平板、電腦開網頁秒載入！</text>
+
+    <!-- Result Banner -->
+    <rect x="1120" y="505" width="400" height="140" rx="12" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+    <text x="1145" y="540" font-family="sans-serif" font-weight="700" font-size="16px" fill="#6ee7b7">🎉 最終達成目標：</text>
+    <text x="1145" y="572" class="item-desc">• 你的降噪耳機銷售官網正式上線開賣！</text>
+    <text x="1145" y="602" class="item-desc">• 可直接貼到 LINE、FB、IG 讓客戶下單</text>
+    <text x="1145" y="632" class="item-desc">• 免租用主機、免買網址，0 成本營運！</text>
+
+    <!-- Milestone Box -->
+    <rect x="1120" y="665" width="400" height="60" rx="10" fill="#047857"/>
+    <text x="1320" y="702" font-family="sans-serif" font-weight="700" font-size="16px" fill="#ffffff" text-anchor="middle">成就達成：正式成為線上網站站長！</text>
+  </g>
+
+</svg>
