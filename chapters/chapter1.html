@@ -94,6 +94,14 @@
           <h4>執行安裝與完成登入</h4>
           <p>按兩下安裝檔案並依循畫面引導（按「下一步」直至完成）。首次開啟後，點選「Sign in / 登入」，綁定你的 Google / 專屬開發者帳號。</p>
         </div>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch1_ide_layout.jpg" alt="Antigravity 三大核心視窗介面配置圖" style="width: 100%; max-width: 780px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>▲ 圖 1-1：Antigravity 介面三大區塊導覽</strong><br>
+            ① <strong>左側檔案總管（File Explorer）</strong>：查看工作區裡有哪些檔案 ｜ ② <strong>中間編輯預覽區（Code Editor）</strong>：檢視 AI 寫好的程式碼 ｜ ③ <strong>右側 AI 對話框（Agent Chat）</strong>：我們下達指令的地方
+          </div>
+        </div>
       </section>
 
       <!-- 1-3 -->
@@ -104,6 +112,14 @@
         <div class="step-box">
           <h4>💡 工作環境的核心運作邏輯</h4>
           <p>當你在 Antigravity 中開啟一個資料夾時，AI 會將該資料夾設為<strong>「作用中工作區（Active Workspace）」</strong>與<strong>「指令執行根目錄（Working Directory）」</strong>。AI 的所有檔案建立、搜尋、修改與終端機指令，都預設在這個安全邊界之內進行，避免影響到電腦的其他私人資料。</p>
+        </div>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch1_workspace_boundary.jpg" alt="Workspace 安全沙盒邊界示意圖" style="width: 100%; max-width: 780px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>▲ 圖 1-2：工作區（Workspace）就像 AI 的「專屬安全工作室」</strong><br>
+            開啟獨立的專案資料夾後，AI 只會在發光的安全邊界內建立與修改網頁；外圍的電腦桌面、C 槽系統與私人照片皆受到隔離保護。
+          </div>
         </div>
 
         <h3>兩種工作區使用模式：</h3>
@@ -145,6 +161,14 @@
 
         <h3>什麼是「自動同意（Auto-Approval / Yolo Mode）」？</h3>
         <p>當 Antigravity 打算修改檔案或在你的電腦終端機跑一段命令時，系統會採取以下兩種防護行為之一：</p>
+
+        <div style="margin: 1.5rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch1_permission_modes.jpg" alt="手動審查模式 vs 自動同意模式對照圖" style="width: 100%; max-width: 780px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>▲ 圖 1-3：手動審查模式（左）與自動同意模式（右）運作差異</strong><br>
+            左方會在每次執行指令前跳出 <code>Approve / Reject</code> 確認視窗；右方則授權 AI 連續自動完成建檔、改碼與部署，大幅提升開發效率。
+          </div>
+        </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
           <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 1.25rem;">
