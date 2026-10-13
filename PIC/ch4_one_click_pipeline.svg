@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow3" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad3)"/>
+
+  <!-- Header -->
+  <g transform="translate(80, 45)">
+    <rect x="0" y="0" width="160" height="28" rx="14" fill="#34d399" fill-opacity="0.15"/>
+    <text x="80" y="19" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 4 章 · 自動化全景圖</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">自然語言一鍵推送：Antigravity 背景全自動流水線</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">學員只要說一句話，AI 自動替你串聯 Git 版本控制、雲端儲存庫與 Pages 靜態網站伺服器</text>
+  </g>
+
+  <!-- Prompt Input Card -->
+  <g transform="translate(80, 160)">
+    <rect width="1440" height="110" rx="12" fill="#1e293b" stroke="#38bdf8" stroke-width="1.8" filter="url(#shadow3)"/>
+    <rect x="25" y="18" width="160" height="26" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="105" y="36" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">學員送出自然語言提示詞</text>
+    <text x="200" y="36" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">口語化吩咐，不需硬記任何命令列參數</text>
+    <rect x="25" y="54" width="1390" height="42" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="45" y="80" fill="#f8fafc" font-size="14" font-weight="600" font-family="system-ui, sans-serif">"Antigravity，請幫我建立名為 smartsound-page 的公開 repo，把目前的程式碼和照片推上去，並開啟 Pages 網址！"</text>
+  </g>
+
+  <!-- Vertical Arrow Down -->
+  <g transform="translate(800, 280)">
+    <polygon points="0,0 12,18 -12,18" fill="#38bdf8"/>
+  </g>
+
+  <!-- 4 Stages Pipeline -->
+  <g transform="translate(80, 310)">
+    <!-- Stage 1 -->
+    <g transform="translate(0, 0)">
+      <rect width="335" height="340" rx="12" fill="url(#card-grad3)" stroke="#38bdf8" stroke-width="1.2" filter="url(#shadow3)"/>
+      <rect x="20" y="20" width="80" height="24" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">階段 01</text>
+      <text x="20" y="70" fill="#f8fafc" font-size="17" font-weight="700" font-family="system-ui, sans-serif">專案封裝與追蹤</text>
+      <text x="20" y="94" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">掃描檔案與建立暫存區</text>
+
+      <rect x="18" y="115" width="299" height="70" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="142" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace">$ git init</text>
+      <text x="30" y="165" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace">$ git add .</text>
+
+      <g transform="translate(20, 205)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 建立本機 <code>.git</code> 資料庫</text>
+        <text x="0" y="24" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 打包 HTML、CSS、JS</text>
+        <text x="0" y="48" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 打包 PIC 資料夾高畫質圖片</text>
+        <text x="0" y="72" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 自動忽略系統暫存檔</text>
+      </g>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <g transform="translate(345, 170)">
+      <polygon points="0,0 16,8 0,16" fill="#38bdf8"/>
+    </g>
+
+    <!-- Stage 2 -->
+    <g transform="translate(368, 0)">
+      <rect width="335" height="340" rx="12" fill="url(#card-grad3)" stroke="#818cf8" stroke-width="1.2" filter="url(#shadow3)"/>
+      <rect x="20" y="20" width="80" height="24" rx="6" fill="#818cf8" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#818cf8" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">階段 02</text>
+      <text x="20" y="70" fill="#f8fafc" font-size="17" font-weight="700" font-family="system-ui, sans-serif">建立歷史存檔點</text>
+      <text x="20" y="94" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">產生版本控制 Commit 快照</text>
+
+      <rect x="18" y="115" width="299" height="70" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="142" fill="#818cf8" font-size="11" font-family="'JetBrains Mono', monospace">$ git commit -m \</text>
+      <text x="30" y="165" fill="#818cf8" font-size="11" font-family="'JetBrains Mono', monospace">  "feat: initial release"</text>
+
+      <g transform="translate(20, 205)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 記錄本次版本修改歷史</text>
+        <text x="0" y="24" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 生成唯一的 SHA 雜湊金鑰</text>
+        <text x="0" y="48" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 隨時可坐時光機還原</text>
+        <text x="0" y="72" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 本機版本庫正式成立！</text>
+      </g>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <g transform="translate(713, 170)">
+      <polygon points="0,0 16,8 0,16" fill="#818cf8"/>
+    </g>
+
+    <!-- Stage 3 -->
+    <g transform="translate(736, 0)">
+      <rect width="335" height="340" rx="12" fill="url(#card-grad3)" stroke="#34d399" stroke-width="1.2" filter="url(#shadow3)"/>
+      <rect x="20" y="20" width="80" height="24" rx="6" fill="#34d399" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">階段 03</text>
+      <text x="20" y="70" fill="#f8fafc" font-size="17" font-weight="700" font-family="system-ui, sans-serif">雲端建庫與推送</text>
+      <text x="20" y="94" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">呼叫 GitHub CLI 工具同步</text>
+
+      <rect x="18" y="115" width="299" height="70" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="140" fill="#34d399" font-size="11" font-family="'JetBrains Mono', monospace">$ gh repo create smartsound \</text>
+      <text x="30" y="162" fill="#34d399" font-size="11" font-family="'JetBrains Mono', monospace">  --public --source=. --push</text>
+
+      <g transform="translate(20, 205)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 透過 Token 通過雲端驗證</text>
+        <text x="0" y="24" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 建立遠端公開（Public）倉庫</text>
+        <text x="0" y="48" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 一鍵將代碼推送至 main 分支</text>
+        <text x="0" y="72" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 雲端儲存庫立即生成！</text>
+      </g>
+    </g>
+
+    <!-- Arrow 3 -> 4 -->
+    <g transform="translate(1081, 170)">
+      <polygon points="0,0 16,8 0,16" fill="#34d399"/>
+    </g>
+
+    <!-- Stage 4 -->
+    <g transform="translate(1105, 0)">
+      <rect width="335" height="340" rx="12" fill="url(#card-grad3)" stroke="#f59e0b" stroke-width="1.2" filter="url(#shadow3)"/>
+      <rect x="20" y="20" width="80" height="24" rx="6" fill="#f59e0b" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#f59e0b" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">階段 04</text>
+      <text x="20" y="70" fill="#f8fafc" font-size="17" font-weight="700" font-family="system-ui, sans-serif">啟動 Pages 伺服器</text>
+      <text x="20" y="94" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">API 啟用全球靜態網站託管</text>
+
+      <rect x="18" y="115" width="299" height="70" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="140" fill="#f59e0b" font-size="11" font-family="'JetBrains Mono', monospace">$ gh api repos/:owner/:repo \</text>
+      <text x="30" y="162" fill="#f59e0b" font-size="11" font-family="'JetBrains Mono', monospace">  /pages -F "source[branch]=main"</text>
+
+      <g transform="translate(20, 205)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 免開網頁手動點擊 Settings</text>
+        <text x="0" y="24" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 綁定 main 分支根目錄發布</text>
+        <text x="0" y="48" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• GitHub Actions 啟動自動編譯</text>
+        <text x="0" y="72" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 取得專屬正式公開網址！</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Result Box -->
+  <g transform="translate(80, 680)">
+    <rect width="1440" height="150" rx="14" fill="#064e3b" stroke="#34d399" stroke-width="1.8" filter="url(#shadow3)"/>
+    <rect x="30" y="20" width="160" height="28" rx="6" fill="#10b981" fill-opacity="0.3"/>
+    <text x="110" y="39" fill="#a7f3d0" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">🎉 終端機與對話回報結果</text>
+    
+    <text x="30" y="78" fill="#ffffff" font-size="17" font-weight="800" font-family="system-ui, sans-serif">全球公開上線網址生成完畢：</text>
+    <rect x="30" y="92" width="750" height="40" rx="6" fill="#022c22" stroke="#34d399" stroke-width="1"/>
+    <text x="50" y="117" fill="#6ee7b7" font-size="15" font-weight="700" font-family="'JetBrains Mono', monospace">https://&lt;你的帳號&gt;.github.io/smartsound-page/</text>
+    
+    <text x="810" y="104" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">✔ 任何人點擊連結即可直接檢視你的產品銷售頁！</text>
+    <text x="810" y="125" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">✔ 後續有任何修改，只需再次吩咐「幫我推送更新」，幾秒鐘即時同步！</text>
+  </g>
+</svg>

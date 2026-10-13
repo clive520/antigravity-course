@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow2" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad2)"/>
+
+  <!-- Header -->
+  <g transform="translate(80, 50)">
+    <rect x="0" y="0" width="140" height="28" rx="14" fill="#818cf8" fill-opacity="0.15"/>
+    <text x="70" y="19" fill="#818cf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 4 章 · 安全授權機制</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">GitHub CLI 8 碼代碼安全配對流程（Device Activation）</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">零密碼外洩！了解 Antigravity 如何透過官方 OAuth Device Flow 安全取得倉庫操作權限</text>
+  </g>
+
+  <!-- 4 Step Flow Cards -->
+  <!-- Step 1: Terminal trigger -->
+  <g transform="translate(80, 165)">
+    <rect width="325" height="440" rx="14" fill="url(#card-grad2)" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow2)"/>
+    <rect x="20" y="20" width="80" height="26" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="60" y="38" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">步驟 1</text>
+    <text x="20" y="75" fill="#f8fafc" font-size="18" font-weight="700" font-family="system-ui, sans-serif">AI 觸發授權指令</text>
+    <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">終端機產生一次性安全代碼</text>
+
+    <!-- Terminal preview box -->
+    <rect x="18" y="130" width="289" height="200" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+    <!-- Terminal header dots -->
+    <circle cx="34" cy="148" r="4.5" fill="#ef4444"/>
+    <circle cx="48" cy="148" r="4.5" fill="#f59e0b"/>
+    <circle cx="62" cy="148" r="4.5" fill="#10b981"/>
+    <text x="80" y="152" fill="#64748b" font-size="11" font-family="'JetBrains Mono', monospace">Terminal (gh auth)</text>
+    <text x="28" y="185" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace">$ gh auth login</text>
+    <text x="28" y="210" fill="#94a3b8" font-size="11" font-family="'JetBrains Mono', monospace">? How would you like to auth?</text>
+    <text x="28" y="230" fill="#34d399" font-size="11" font-family="'JetBrains Mono', monospace">> Login with a web browser</text>
+    <text x="28" y="260" fill="#f59e0b" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">! First copy one-time code:</text>
+    <rect x="28" y="272" width="160" height="34" rx="4" fill="#1e1b4b" stroke="#818cf8" stroke-width="1"/>
+    <text x="108" y="295" fill="#38bdf8" font-size="15" font-weight="700" text-anchor="middle" font-family="'JetBrains Mono', monospace">ABCD-1234</text>
+
+    <text x="20" y="360" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 系統生成 8 位英數代碼</text>
+    <text x="20" y="385" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 代碼僅具 15 分鐘時效性</text>
+    <text x="20" y="410" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 密碼全程不經過終端機</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <g transform="translate(415, 370)">
+    <polygon points="0,0 20,10 0,20" fill="#38bdf8"/>
+  </g>
+
+  <!-- Step 2: Browser Activation -->
+  <g transform="translate(445, 165)">
+    <rect width="325" height="440" rx="14" fill="url(#card-grad2)" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow2)"/>
+    <rect x="20" y="20" width="80" height="26" rx="6" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="60" y="38" fill="#818cf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">步驟 2</text>
+    <text x="20" y="75" fill="#f8fafc" font-size="18" font-weight="700" font-family="system-ui, sans-serif">瀏覽器開啟驗證頁</text>
+    <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">前往 GitHub 官方 Device 頁面</text>
+
+    <!-- Browser mockup -->
+    <rect x="18" y="130" width="289" height="200" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <!-- Browser tab -->
+    <rect x="18" y="130" width="289" height="28" rx="8" fill="#1e293b"/>
+    <circle cx="34" cy="144" r="4" fill="#64748b"/>
+    <circle cx="46" cy="144" r="4" fill="#64748b"/>
+    <rect x="65" y="135" width="220" height="18" rx="4" fill="#0f172a"/>
+    <text x="75" y="148" fill="#94a3b8" font-size="10" font-family="'JetBrains Mono', monospace">github.com/login/device</text>
+    
+    <text x="162" y="185" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">Device Activation</text>
+    <text x="162" y="205" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="system-ui, sans-serif">輸入剛才終端機顯示的代碼：</text>
+    <rect x="45" y="218" width="235" height="42" rx="6" fill="#020617" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="162" y="246" fill="#38bdf8" font-size="16" font-weight="700" text-anchor="middle" font-family="'JetBrains Mono', monospace">ABCD - 1234</text>
+    <rect x="85" y="275" width="155" height="30" rx="6" fill="#2563eb"/>
+    <text x="162" y="295" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">Continue ➔</text>
+
+    <text x="20" y="360" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 系統自動打開預設瀏覽器</text>
+    <text x="20" y="385" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 認證網址為 GitHub 官方網域</text>
+    <text x="20" y="410" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 貼上代碼並按 Continue</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <g transform="translate(780, 370)">
+    <polygon points="0,0 20,10 0,20" fill="#818cf8"/>
+  </g>
+
+  <!-- Step 3: Google Authorize -->
+  <g transform="translate(810, 165)">
+    <rect width="325" height="440" rx="14" fill="url(#card-grad2)" stroke="#34d399" stroke-width="1.5" filter="url(#shadow2)"/>
+    <rect x="20" y="20" width="80" height="26" rx="6" fill="#34d399" fill-opacity="0.2"/>
+    <text x="60" y="38" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">步驟 3</text>
+    <text x="20" y="75" fill="#f8fafc" font-size="18" font-weight="700" font-family="system-ui, sans-serif">點擊授權配對</text>
+    <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">Google 帳號已在第 3 章登入</text>
+
+    <!-- Authorize UI Mockup -->
+    <rect x="18" y="130" width="289" height="200" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <rect x="18" y="130" width="289" height="28" rx="8" fill="#1e293b"/>
+    <text x="162" y="148" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="system-ui, sans-serif">GitHub Authorize OAuth App</text>
+    <circle cx="162" cy="180" r="18" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="162" y="186" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">gh</text>
+    <text x="162" y="215" fill="#f8fafc" font-size="12" font-weight="600" text-anchor="middle" font-family="system-ui, sans-serif">Authorize GitHub CLI</text>
+    <text x="162" y="235" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="system-ui, sans-serif">允許建立 Repository 與發布 Pages</text>
+
+    <rect x="55" y="258" width="215" height="38" rx="6" fill="#15803d" stroke="#22c55e" stroke-width="1"/>
+    <text x="162" y="282" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">✔ Authorize github</text>
+
+    <text x="20" y="360" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 不需再次輸入密碼</text>
+    <text x="20" y="385" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 認證身分直接繼承 Google 登入</text>
+    <text x="20" y="410" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 單次授權，終生有效</text>
+  </g>
+
+  <!-- Arrow 3 -> 4 -->
+  <g transform="translate(1145, 370)">
+    <polygon points="0,0 20,10 0,20" fill="#34d399"/>
+  </g>
+
+  <!-- Step 4: Token Saved -->
+  <g transform="translate(1175, 165)">
+    <rect width="345" height="440" rx="14" fill="url(#card-grad2)" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow2)"/>
+    <rect x="20" y="20" width="80" height="26" rx="6" fill="#f59e0b" fill-opacity="0.2"/>
+    <text x="60" y="38" fill="#f59e0b" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">步驟 4</text>
+    <text x="20" y="75" fill="#f8fafc" font-size="18" font-weight="700" font-family="system-ui, sans-serif">本機安全 Token 存檔</text>
+    <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">Antigravity 獲得合法操作憑證</text>
+
+    <!-- Key & Token Box -->
+    <rect x="18" y="130" width="309" height="200" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+    <!-- Terminal success -->
+    <circle cx="34" cy="148" r="4.5" fill="#ef4444"/>
+    <circle cx="48" cy="148" r="4.5" fill="#f59e0b"/>
+    <circle cx="62" cy="148" r="4.5" fill="#10b981"/>
+    <text x="80" y="152" fill="#64748b" font-size="11" font-family="'JetBrains Mono', monospace">Terminal Output</text>
+    
+    <text x="28" y="185" fill="#34d399" font-size="12" font-weight="700" font-family="'JetBrains Mono', monospace">✔ Authentication complete.</text>
+    <text x="28" y="210" fill="#cbd5e1" font-size="11" font-family="'JetBrains Mono', monospace">- Logged in to github.com</text>
+    <text x="28" y="230" fill="#38bdf8" font-size="11" font-family="'JetBrains Mono', monospace">- Active account: alex-tw</text>
+    <text x="28" y="255" fill="#94a3b8" font-size="10" font-family="'JetBrains Mono', monospace">Token safely stored in:</text>
+    <rect x="28" y="265" width="280" height="42" rx="4" fill="#1e1b4b" stroke="#f59e0b" stroke-width="1"/>
+    <text x="38" y="290" fill="#f59e0b" font-size="10" font-family="'JetBrains Mono', monospace">~/.config/gh/hosts.yml (加密憑證)</text>
+
+    <text x="20" y="360" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 本機產生安全 OAuth Token</text>
+    <text x="20" y="385" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 未來發布不再跳出授權視窗</text>
+    <text x="20" y="410" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 隨時可從 GitHub 後台撤銷</text>
+  </g>
+
+  <!-- Bottom Security Callout -->
+  <g transform="translate(80, 645)">
+    <rect width="1440" height="175" rx="14" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect x="30" y="25" width="130" height="28" rx="6" fill="#34d399" fill-opacity="0.2"/>
+    <text x="95" y="44" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">🛡️ 安全性承諾</text>
+    <text x="180" y="44" fill="#f8fafc" font-size="16" font-weight="700" font-family="system-ui, sans-serif">為什麼 Device Flow 是最安全的授權方式？</text>
+    
+    <g transform="translate(30, 75)">
+      <text x="0" y="0" fill="#cbd5e1" font-size="14" font-family="system-ui, sans-serif"><tspan fill="#38bdf8" font-weight="700">1. 零密碼傳遞：</tspan> Antigravity 與終端機從始至終「完全碰不到你的 Google 或 GitHub 密碼」，避免側錄或外洩風險。</text>
+      <text x="0" y="30" fill="#cbd5e1" font-size="14" font-family="system-ui, sans-serif"><tspan fill="#818cf8" font-weight="700">2. 權限最小化：</tspan> 產生的 Token 僅具備代碼推送與建立 Repo 權限，無法變更您的帳號個人隱私或金流資訊。</text>
+      <text x="0" y="60" fill="#cbd5e1" font-size="14" font-family="system-ui, sans-serif"><tspan fill="#f59e0b" font-weight="700">3. 隨時可撤銷：</tspan> 若換電腦或不再使用，可在 GitHub 網頁版「Settings ➔ Applications」一鍵刪除該 Token，立即終止連線。</text>
+    </g>
+  </g>
+</svg>

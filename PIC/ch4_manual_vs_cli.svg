@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(30, 41, 59, 0.9)"/>
+      <stop offset="100%" stop-color="rgba(244, 63, 94, 0.08)"/>
+    </linearGradient>
+    <linearGradient id="card-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(30, 41, 59, 0.9)"/>
+      <stop offset="100%" stop-color="rgba(56, 189, 248, 0.12)"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad)"/>
+
+  <!-- Grid decoration -->
+  <g opacity="0.05" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="110" x2="1600" y2="110"/>
+    <line x1="0" y1="220" x2="1600" y2="220"/>
+    <line x1="0" y1="330" x2="1600" y2="330"/>
+    <line x1="0" y1="440" x2="1600" y2="440"/>
+    <line x1="0" y1="550" x2="1600" y2="550"/>
+    <line x1="0" y1="660" x2="1600" y2="660"/>
+    <line x1="0" y1="770" x2="1600" y2="770"/>
+    <line x1="200" y1="0" x2="200" y2="880"/>
+    <line x1="400" y1="0" x2="400" y2="880"/>
+    <line x1="600" y1="0" x2="600" y2="880"/>
+    <line x1="800" y1="0" x2="800" y2="880"/>
+    <line x1="1000" y1="0" x2="1000" y2="880"/>
+    <line x1="1200" y1="0" x2="1200" y2="880"/>
+    <line x1="1400" y1="0" x2="1400" y2="880"/>
+  </g>
+
+  <!-- Header -->
+  <g transform="translate(80, 50)">
+    <rect x="0" y="0" width="130" height="28" rx="14" fill="#38bdf8" fill-opacity="0.15"/>
+    <text x="65" y="19" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 4 章 · 發布方式對比</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">傳統手動網頁發布 vs. Antigravity + CLI 自動化一鍵上線</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">比較手動 7 步繁複網頁操作與 AI 對話一鍵發布，看見效率躍升 90% 的關鍵優勢</text>
+  </g>
+
+  <!-- Left: Traditional Manual Panel -->
+  <g transform="translate(80, 165)">
+    <rect width="690" height="580" rx="16" fill="url(#card-red)" stroke="#f43f5e" stroke-width="1.5" stroke-opacity="0.4" filter="url(#shadow)"/>
+    
+    <!-- Top badge -->
+    <rect x="30" y="24" width="140" height="30" rx="6" fill="#f43f5e" fill-opacity="0.2"/>
+    <text x="100" y="44" fill="#f43f5e" font-size="14" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">[ 傳統手動模式 ]</text>
+    <text x="185" y="44" fill="#cbd5e1" font-size="15" font-weight="600" font-family="system-ui, sans-serif">繁瑣步驟與高錯誤率</text>
+
+    <!-- Manual Steps List -->
+    <g transform="translate(30, 75)">
+      <!-- Step 1 -->
+      <g transform="translate(0, 0)">
+        <circle cx="16" cy="16" r="16" fill="#ef4444" fill-opacity="0.25"/>
+        <text x="16" y="21" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">1</text>
+        <text x="44" y="21" fill="#f1f5f9" font-size="14" font-weight="600" font-family="system-ui, sans-serif">開啟瀏覽器登入 GitHub 官網</text>
+      </g>
+      <!-- Step 2 -->
+      <g transform="translate(0, 48)">
+        <circle cx="16" cy="16" r="16" fill="#ef4444" fill-opacity="0.25"/>
+        <text x="16" y="21" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">2</text>
+        <text x="44" y="21" fill="#f1f5f9" font-size="14" font-weight="600" font-family="system-ui, sans-serif">點擊右上角 New 建立新的空白儲存庫</text>
+      </g>
+      <!-- Step 3 -->
+      <g transform="translate(0, 96)">
+        <circle cx="16" cy="16" r="16" fill="#ef4444" fill-opacity="0.25"/>
+        <text x="16" y="21" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">3</text>
+        <text x="44" y="21" fill="#f1f5f9" font-size="14" font-weight="600" font-family="system-ui, sans-serif">手動填寫 Repository 名稱、勾選 Public、按確認</text>
+      </g>
+      <!-- Step 4 -->
+      <g transform="translate(0, 144)">
+        <circle cx="16" cy="16" r="16" fill="#ef4444" fill-opacity="0.25"/>
+        <text x="16" y="21" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">4</text>
+        <text x="44" y="21" fill="#f1f5f9" font-size="14" font-weight="600" font-family="system-ui, sans-serif">切換回本機終端機，手動輸入 5~6 行 Git 指令</text>
+        <text x="44" y="42" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace">git remote add / git branch -M / git push -u ...</text>
+      </g>
+      <!-- Step 5 -->
+      <g transform="translate(0, 206)">
+        <circle cx="16" cy="16" r="16" fill="#ef4444" fill-opacity="0.25"/>
+        <text x="16" y="21" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">5</text>
+        <text x="44" y="21" fill="#f1f5f9" font-size="14" font-weight="600" font-family="system-ui, sans-serif">推送成功後，再次切換回瀏覽器專案首頁</text>
+      </g>
+      <!-- Step 6 -->
+      <g transform="translate(0, 254)">
+        <circle cx="16" cy="16" r="16" fill="#ef4444" fill-opacity="0.25"/>
+        <text x="16" y="21" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">6</text>
+        <text x="44" y="21" fill="#f1f5f9" font-size="14" font-weight="600" font-family="system-ui, sans-serif">點擊 Settings ➔ 尋找 Pages 選單 ➔ 選擇 Branch 儲存</text>
+      </g>
+      <!-- Step 7 -->
+      <g transform="translate(0, 302)">
+        <circle cx="16" cy="16" r="16" fill="#ef4444" fill-opacity="0.25"/>
+        <text x="16" y="21" fill="#f87171" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">7</text>
+        <text x="44" y="21" fill="#f1f5f9" font-size="14" font-weight="600" font-family="system-ui, sans-serif">重新整理網頁 3~5 次等待部署完成，手動複製網址</text>
+      </g>
+    </g>
+
+    <!-- Disadvantage Summary Box -->
+    <rect x="30" y="445" width="630" height="105" rx="10" fill="#0f172a" stroke="#f43f5e" stroke-width="1" stroke-opacity="0.3"/>
+    <text x="50" y="475" fill="#f87171" font-size="14" font-weight="700" font-family="system-ui, sans-serif">[ 痛點總結 ]</text>
+    <text x="50" y="502" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 耗時：約 8 ~ 10 分鐘，視窗反覆切換容易漏步</text>
+    <text x="50" y="526" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 挫折感：初學者常卡在 remote 網址打錯或 Pages 分支未選</text>
+  </g>
+
+  <!-- Right: Antigravity + CLI Panel -->
+  <g transform="translate(830, 165)">
+    <rect width="690" height="580" rx="16" fill="url(#card-green)" stroke="#38bdf8" stroke-width="2" filter="url(#shadow)"/>
+    
+    <!-- Top badge -->
+    <rect x="30" y="24" width="165" height="30" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="112" y="44" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">[ Antigravity + CLI ]</text>
+    <text x="210" y="44" fill="#38bdf8" font-size="15" font-weight="700" font-family="system-ui, sans-serif">自然語言對話 · 全自動一鍵搞定</text>
+
+    <!-- AI Steps -->
+    <g transform="translate(30, 75)">
+      <!-- AI Step 1: Speak -->
+      <g transform="translate(0, 0)">
+        <circle cx="18" cy="18" r="18" fill="#38bdf8" fill-opacity="0.25"/>
+        <text x="18" y="24" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">1</text>
+        <text x="48" y="20" fill="#f8fafc" font-size="15" font-weight="700" font-family="system-ui, sans-serif">學員只要在對話框動口說一句話：</text>
+        <rect x="48" y="32" width="580" height="60" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="64" y="56" fill="#38bdf8" font-size="13" font-weight="600" font-family="system-ui, sans-serif">"幫我把耳機網頁推到 GitHub 上面，建立 repo 並開啟 Pages 網址！"</text>
+        <text x="64" y="78" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">完全不需記憶複雜的 Git / GitHub 命令語法</text>
+      </g>
+
+      <!-- AI Step 2: Background execution -->
+      <g transform="translate(0, 115)">
+        <circle cx="18" cy="18" r="18" fill="#38bdf8" fill-opacity="0.25"/>
+        <text x="18" y="24" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">2</text>
+        <text x="48" y="20" fill="#f8fafc" font-size="15" font-weight="700" font-family="system-ui, sans-serif">Antigravity 在背景終端機自動流水線執行：</text>
+        <rect x="48" y="32" width="580" height="96" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+        <text x="64" y="56" fill="#34d399" font-size="12" font-family="'JetBrains Mono', monospace">✔ git init &amp;&amp; git add . &amp;&amp; git commit -m "Initial commit"</text>
+        <text x="64" y="80" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace">✔ gh repo create smartsound-page --public --push</text>
+        <text x="64" y="104" fill="#818cf8" font-size="12" font-family="'JetBrains Mono', monospace">✔ gh api repos/:owner/:repo/pages (啟用託管服務)</text>
+      </g>
+
+      <!-- AI Step 3: Direct URL return -->
+      <g transform="translate(0, 265)">
+        <circle cx="18" cy="18" r="18" fill="#34d399" fill-opacity="0.25"/>
+        <text x="18" y="24" fill="#34d399" font-size="14" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">3</text>
+        <text x="48" y="20" fill="#f8fafc" font-size="15" font-weight="700" font-family="system-ui, sans-serif">AI 在對話框直接印出全球專屬上線網址！</text>
+        <rect x="48" y="32" width="580" height="48" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.2"/>
+        <text x="64" y="62" fill="#a7f3d0" font-size="14" font-weight="700" font-family="system-ui, sans-serif">🌐 https://&lt;你的帳號&gt;.github.io/smartsound-page/</text>
+      </g>
+    </g>
+
+    <!-- Advantage Summary Box -->
+    <rect x="30" y="445" width="630" height="105" rx="10" fill="#0f172a" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+    <text x="50" y="475" fill="#34d399" font-size="14" font-weight="700" font-family="system-ui, sans-serif">[ 核心優勢 ]</text>
+    <text x="50" y="502" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 極速體驗：全程僅需 10 秒，動口完成所有操作</text>
+    <text x="50" y="526" fill="#cbd5e1" font-size="13" font-family="system-ui, sans-serif">• 零挫折感：自動建立 Repository、配置 Pages 分支並驗證連線</text>
+  </g>
+
+  <!-- Bottom Global Banner -->
+  <g transform="translate(80, 770)">
+    <rect width="1440" height="60" rx="12" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+    <text x="40" y="36" fill="#f8fafc" font-size="15" font-weight="600" font-family="system-ui, sans-serif">💡 結論：使用 GitHub CLI 將開發者繁瑣的網頁操作完全抽象化，配合 Antigravity 的終端機代理能力，實現真正「動口即上線」！</text>
+  </g>
+</svg>
