@@ -168,10 +168,15 @@
           <span>🚨</span>
           <div>
             <strong>給學生的資安守則：</strong>
-            <ul style="padding-left: 1.25rem; margin-top: 0.25rem; line-height: 1.7;">
-              <li><strong>絕對不要</strong>將個人的整顆硬碟根目錄（如 <code>C:\</code>）設為 Workspace！請永遠建立獨立的專案子資料夾。</li>
-              <li>如果工作區內有 <code>.env</code> 或包含密碼、API Key 的檔案，請確認是否設定好 <code>.gitignore</code>，避免被自動推送至公開 GitHub。</li>
-              <li>在執行未知系統指令前，如果不確定指令意圖，請在對話中直接詢問 Antigravity：「這條指令的作用是什麼？會不會影響我的系統？」</li>
+            <ul style="padding-left: 1.25rem; margin-top: 0.25rem; line-height: 1.8;">
+              <li><strong>絕對不要</strong>將個人的整顆硬碟根目錄（如 <code>C:\</code>）或「桌面」直接設為 Workspace！請永遠建立一個專門放這個專案的獨立新資料夾。</li>
+              <li><strong>不要在專案資料夾裡放私人密碼檔：</strong> 後續第 4 章我們會將整個資料夾發布到公開的網路上（GitHub）。因此請勿將私人帳密筆記、身分證照片放在這個資料夾內。</li>
+              <li><strong>💡 初學者小百科：什麼是 <code>.gitignore</code>（忽略清單）？</strong><br>
+                如果未來你的專案裡真的有一些「只能在自己電腦用、絕對不能傳上網」的私密金鑰檔案（例如寫著密碼的 <code>.env</code> 檔），你可以直接對 Antigravity 說：<br>
+                <em>「請幫我建立一份 .gitignore 忽略清單，把我的私密檔案排除，不要上傳到 GitHub！」</em><br>
+                這張 <code>.gitignore</code> 就像是貼在門口的<strong>「請勿搬運清單」</strong>，AI 在幫你上傳網站時就會自動跳過這些機密檔案，只讓它們安全留在你的電腦裡！
+              </li>
+              <li>在執行未知系統指令前，如果不確定指令意圖，請隨時在對話中詢問 Antigravity：「這條指令的作用是什麼？會不會影響我的系統？」</li>
             </ul>
           </div>
         </div>
