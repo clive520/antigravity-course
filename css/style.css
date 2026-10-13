@@ -683,3 +683,117 @@ footer.site-footer {
     font-size: 2rem;
   }
 }
+
+/* Zoomable Instructional Images & Lightbox Modal */
+.lesson-content img {
+  cursor: zoom-in;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.lesson-content img:hover {
+  transform: scale(1.012);
+  box-shadow: 0 10px 28px rgba(56, 189, 248, 0.22);
+  border-color: #38bdf8 !important;
+}
+
+.img-zoom-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.image-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 15, 28, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.image-lightbox-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.image-lightbox-toolbar {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.6rem;
+  z-index: 10001;
+}
+
+.image-lightbox-btn {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #f8fafc;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.image-lightbox-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+}
+
+.image-lightbox-stage {
+  max-width: 95vw;
+  max-height: 84vh;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.image-lightbox-img {
+  max-width: 94vw;
+  max-height: 82vh;
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+  cursor: zoom-in;
+  transition: transform 0.2s ease;
+}
+
+.image-lightbox-img.zoomed-full {
+  max-width: none;
+  max-height: none;
+  width: 1500px;
+  cursor: zoom-out;
+}
+
+.image-lightbox-caption {
+  margin-top: 0.85rem;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 85vw;
+}
+
