@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 4 章 上課簡報：GitHub CLI 自動化一鍵發布上線 - Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(56, 189, 248, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #34d399;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Top Quick Header */
+    .deck-header {
+      position: fixed;
+      top: 10px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 900;
+      pointer-events: none;
+    }
+
+    .deck-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+    }
+
+    .deck-brand a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .deck-brand .badge {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-cyan);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .deck-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .tool-btn {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .tool-btn:hover {
+      color: var(--text-main);
+      border-color: var(--accent-cyan);
+      background: rgba(30, 41, 59, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .timer-badge {
+      font-family: var(--font-mono);
+      color: var(--accent-emerald);
+      font-weight: 700;
+    }
+
+    /* Main Slide Deck Container */
+    .deck-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 36px 60px 36px;
+    }
+
+    .slide {
+      position: absolute;
+      width: min(1560px, 94vw);
+      height: min(880px, 86vh);
+      background: radial-gradient(circle at top right, rgba(30, 41, 59, 0.65), rgba(11, 17, 32, 0.95) 70%);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 44px 54px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateY(20px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+      overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      transform: scale(0.96) translateX(-40px);
+    }
+
+    .slide.next {
+      transform: scale(0.96) translateX(40px);
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 6px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 22px;
+      flex-shrink: 0;
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .slide-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* Slide Body */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      height: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      height: 100%;
+    }
+
+    /* Slide Cards */
+    .slide-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .slide-card.highlight {
+      border-color: var(--border-highlight);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), var(--bg-card) 60%);
+    }
+
+    .slide-card.purple {
+      border-color: rgba(129, 140, 248, 0.4);
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.12), var(--bg-card) 60%);
+    }
+
+    .slide-card.success {
+      border-color: rgba(52, 211, 153, 0.4);
+      background: radial-gradient(circle at top left, rgba(52, 211, 153, 0.12), var(--bg-card) 60%);
+    }
+
+    .slide-card.warning {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: radial-gradient(circle at top left, rgba(245, 158, 11, 0.12), var(--bg-card) 60%);
+    }
+
+    .slide-card.danger {
+      border-color: rgba(244, 63, 94, 0.4);
+      background: radial-gradient(circle at top left, rgba(244, 63, 94, 0.12), var(--bg-card) 60%);
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .card-list li strong {
+      color: var(--text-main);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Diagram Holder */
+    .slide-diagram-holder {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      max-height: 520px;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .slide-diagram-holder img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .diagram-caption {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .diagram-zoom-hint {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      pointer-events: none;
+    }
+
+    /* Code & Prompt Cards */
+    .prompt-box {
+      background: #020617;
+      border: 1px solid var(--border-highlight);
+      border-radius: 12px;
+      padding: 18px 22px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      position: relative;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .prompt-tag {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-cyan);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    /* Cover Slide */
+    .slide-cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+      gap: 20px;
+    }
+
+    .cover-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 999px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .cover-title {
+      font-size: 3.6rem;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 40%, #38bdf8 80%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 1040px;
+    }
+
+    .cover-desc {
+      font-size: 1.35rem;
+      color: #94a3b8;
+      max-width: 860px;
+      line-height: 1.6;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cover-meta-badge {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Bottom Control Bar */
+    .deck-controls {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      z-index: 900;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      min-width: 65px;
+      text-align: center;
+    }
+
+    .shortcut-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      padding-left: 12px;
+      margin-left: 4px;
+    }
+
+    /* Overview Modal Grid */
+    .overview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(6, 9, 19, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .overview-modal.open {
+      display: flex;
+    }
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .overview-thumb {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .overview-thumb:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.15);
+    }
+
+    .overview-thumb.current {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.08);
+      outline: 2px solid var(--accent-cyan);
+    }
+
+    .thumb-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .thumb-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    /* Image Fullscreen Zoom Modal */
+    .image-zoom-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(15px);
+      z-index: 2500;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+      padding: 30px;
+    }
+
+    .image-zoom-modal.open {
+      display: flex;
+    }
+
+    .image-zoom-modal img {
+      max-width: 95%;
+      max-height: 95%;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div id="progressBar" class="slide-progress-bar"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="deck-header">
+    <div class="deck-brand">
+      <a href="../chapters/chapter4.html">
+        <span>🚀 Antigravity 實戰學院</span>
+      </a>
+      <span class="badge">Chapter 04 課堂簡報</span>
+    </div>
+
+    <div class="deck-tools">
+      <button id="timerBtn" class="tool-btn" title="點擊暫停/繼續計時">
+        <span>⏱️</span>
+        <span id="timerDisplay" class="timer-badge">00:00</span>
+      </button>
+      <button id="overviewBtn" class="tool-btn" title="開啟投影片總覽 (快速鍵 O)">
+        <span>▦</span>
+        <span>總覽 (O)</span>
+      </button>
+      <button id="fullscreenBtn" class="tool-btn" title="切換全螢幕 (快速鍵 F)">
+        <span>⛶</span>
+        <span>全螢幕 (F)</span>
+      </button>
+      <a href="../chapters/chapter4.html" class="tool-btn" style="text-decoration: none;">
+        <span>📖</span>
+        <span>回課本</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Slide Stage -->
+  <div class="deck-stage">
+
+    <!-- Slide 1: 封面 -->
+    <section class="slide active" data-slide="1">
+      <div class="slide-cover">
+        <div class="cover-pill">⚡ Antigravity 自動發布核心</div>
+        <h1 class="cover-title">第 4 章：GitHub CLI 自動化一鍵發布上線</h1>
+        <p class="cover-desc">免手動開網頁！口語吩咐 Antigravity，結合官方 GitHub CLI 工具，10 秒全自動建庫、推送並生成全球公開網址</p>
+        
+        <div class="cover-meta">
+          <div class="cover-meta-badge">
+            <span>⏱️ 課程時長</span>
+            <strong>20 分鐘</strong>
+          </div>
+          <div class="cover-meta-badge">
+            <span>🎯 核心技術</span>
+            <strong>GitHub CLI (gh) · OAuth Device Flow · Pages API</strong>
+          </div>
+          <div class="cover-meta-badge">
+            <span>🌐 最終產出</span>
+            <strong>可分享給任何人的專屬公開官網網址</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: 本章學習目標 -->
+    <section class="slide" data-slide="2">
+      <div class="slide-header">
+        <span class="slide-badge">AGENDA</span>
+        <h2 class="slide-title">第 4 章 課堂學習目標</h2>
+        <p class="slide-subtitle">見證真正的 AI 代理實力：從繁瑣的手動操作跨入自然語言全自動化流水線</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">🆚</span>
+              <span>1. 手動 vs CLI</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot"></span><span>手動 7 步繁瑣切換痛點</span></li>
+              <li><span class="dot"></span><span>AI + CLI 10 秒自然語言完成</span></li>
+              <li><span class="dot"></span><span>發布效率躍升 90% 以上</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card purple">
+            <div class="card-header-bar">
+              <span class="card-icon">📦</span>
+              <span>2. AI 自動安裝 CLI</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>免去官網手動搜尋下載</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>一句話觸發 winget / brew</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>自動讀取 gh 版本號驗證</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card warning">
+            <div class="card-header-bar">
+              <span class="card-icon">🛡️</span>
+              <span>3. 8 碼安全授權</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>OAuth Device Flow 機制</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>AI 碰不到你的帳號密碼</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>本機安全 Token 加密存放</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card success">
+            <div class="card-header-bar">
+              <span class="card-icon">🚀</span>
+              <span>4. 口語化一鍵推送</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>Repo 命名方式：自訂 vs AI 取</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>背景 4 階段全自動工作鏈</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>即時產出 GitHub Pages 網址！</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: 4-1 為什麼需要 GitHub CLI？ -->
+    <section class="slide" data-slide="3">
+      <div class="slide-header">
+        <span class="slide-badge">4-1 工具定位</span>
+        <h2 class="slide-title">為什麼需要 GitHub CLI (gh 指令)？</h2>
+        <p class="slide-subtitle">GitHub 官方打造的終端機神兵利器，讓網頁操作完全被自然語言抽象化</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <!-- Left: Problem -->
+          <div class="slide-card danger">
+            <div class="card-header-bar" style="color: var(--accent-rose);">
+              <span class="card-icon">😫</span>
+              <span>傳統手動發布的折磨</span>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
+              過去想要把做好的網頁上線，學員需要：<br>
+              <strong>開瀏覽器 ➔ 點 New ➔ 打名字 ➔ 本機開終端機下 5~6 行 Git 指令 ➔ 回網頁點 Settings ➔ 找 Pages 選單 ➔ 點 Save...</strong><br><br>
+              步驟繁瑣容易漏步，而且初學者常卡在 remote 網址打錯或分支選錯！
+            </p>
+          </div>
+
+          <!-- Right: Solution -->
+          <div class="slide-card highlight">
+            <div class="card-header-bar" style="color: var(--accent-cyan);">
+              <span class="card-icon">⚡</span>
+              <span>Antigravity + CLI 的魔法</span>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
+              <strong>GitHub CLI (<code>gh</code>)</strong> 能用一行指令在雲端建庫並啟用伺服器。<br><br>
+              更厲害的是：因為 <strong>Antigravity 具備終端機代理能力</strong>，學員<strong>連指令都不用背</strong>！你只要在中央對話框說一句話，AI 就會自動在背景替你執行所有 CLI 指令！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: 4-1 手動發布 vs. 自動發布對決 -->
+    <section class="slide" data-slide="4">
+      <div class="slide-header">
+        <span class="slide-badge">4-1 效率對決</span>
+        <h2 class="slide-title">傳統手動網頁發布 vs. Antigravity + CLI 自動化發布</h2>
+        <p class="slide-subtitle">點擊右方圖表可進入全螢幕燈箱放大檢視詳細步驟</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="align-items: center;">
+          <div class="slide-diagram-holder" onclick="openZoomModal('../PIC/ch4_manual_vs_cli.svg')">
+            <img src="../PIC/ch4_manual_vs_cli.svg" alt="傳統手動網頁發布 vs. Antigravity + CLI 自動化一鍵上線">
+            <div class="diagram-zoom-hint">🔍 點擊放大全圖</div>
+            <div class="diagram-caption">▲ 圖 4-1：傳統手動流程 vs. Antigravity + CLI 自動化發布對決</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="slide-card danger" style="padding: 16px;">
+              <strong style="color: var(--accent-rose);">❌ 傳統手動模式痛點：</strong>
+              <ul class="card-list" style="font-size: 0.88rem; margin-top: 6px;">
+                <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>耗時：</strong> 需 8 ~ 10 分鐘，視窗反覆切換容易漏步。</span></li>
+                <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>挫折感高：</strong> Git remote 網址打錯或 Pages 分支未選直接報錯。</span></li>
+              </ul>
+            </div>
+
+            <div class="slide-card success" style="padding: 16px;">
+              <strong style="color: var(--accent-emerald);">✔ Antigravity + CLI 核心優勢：</strong>
+              <ul class="card-list" style="font-size: 0.88rem; margin-top: 6px;">
+                <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>極速省時：</strong> 全程僅需 10 秒，動口完成所有操作。</span></li>
+                <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>零挫折感：</strong> 自動建庫、配置分支並驗證連線，100% 成功率。</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: 4-2 讓 AI 幫我們安裝 CLI -->
+    <section class="slide" data-slide="5">
+      <div class="slide-header">
+        <span class="slide-badge">4-2 動口安裝</span>
+        <h2 class="slide-title">動口不動手：下指令請 Antigravity 安裝 GitHub CLI</h2>
+        <p class="slide-subtitle">不用到官網找下載頁面，複製提示詞交給 AI 自動處理系統套件安裝</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="prompt-box" style="display: flex; flex-direction: column; justify-content: center;">
+            <span class="prompt-tag">💬 提示詞 1：請 AI 自動檢查與安裝 GitHub CLI（複製貼上）</span>
+            <p style="font-size: 0.95rem; line-height: 1.7;">
+              "Antigravity，請先幫我檢查我的電腦目前有沒有安裝 GitHub CLI（gh 指令）。如果還沒有安裝，請幫我執行系統指令安裝它（例如 Windows 透過 winget，或 macOS 透過 brew），並確認是否能正常讀取版本號！"
+            </p>
+          </div>
+
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">🤖</span>
+              <span>AI 在背景替你執行的 3 大動作</span>
+            </div>
+            <ul class="card-list" style="gap: 14px;">
+              <li>
+                <span class="dot"></span>
+                <div>
+                  <strong>動作 1：檢查現有版本</strong><br>
+                  <code style="color: var(--accent-cyan); font-size: 0.85rem;">gh --version</code>
+                </div>
+              </li>
+              <li>
+                <span class="dot"></span>
+                <div>
+                  <strong>動作 2：自動執行系統套件安裝指令</strong><br>
+                  <span style="font-size: 0.88rem;">Windows 自動執行 <code>winget install --id GitHub.cli</code><br>macOS 自動執行 <code>brew install gh</code></span>
+                </div>
+              </li>
+              <li>
+                <span class="dot"></span>
+                <div>
+                  <strong>動作 3：回報安裝成功訊息</strong><br>
+                  <span style="font-size: 0.88rem;">在對話框向你回報已就緒，學員完全不用開啟終端機手動敲指令！</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: 4-3 AI 如何取得帳號資格？ -->
+    <section class="slide" data-slide="6">
+      <div class="slide-header">
+        <span class="slide-badge">4-3 安全機制</span>
+        <h2 class="slide-title">關鍵解密：Antigravity 是如何取得你的帳號資格的？</h2>
+        <p class="slide-subtitle">很多學員會好奇：「AI 怎麼知道我是誰？它會不會偷存我的密碼？」</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="slide-card danger">
+            <div class="card-header-bar" style="color: var(--accent-rose);">
+              <span class="card-icon">❓</span>
+              <span>學員最擔心的安全疑慮</span>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.7;">
+              「AI 怎麼能把東西推到我的 GitHub？」<br>
+              「我要把 Google 帳號跟密碼告訴 AI 嗎？」<br><br>
+              <strong>絕對不用！</strong><br>
+              Antigravity 本身<strong>「完全不會、也絕對不應該知道你的密碼」</strong>！
+            </p>
+          </div>
+
+          <div class="slide-card success">
+            <div class="card-header-bar" style="color: var(--accent-emerald);">
+              <span class="card-icon">🛡️</span>
+              <span>官方 OAuth Device Flow 安全規範</span>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.7;">
+              GitHub 採用全球標準的 <strong>Device Activation（設備配對驗證）</strong>：<br><br>
+              1. 終端機會生成一組隨機的 <strong>8 碼一次性安全代碼</strong>。<br>
+              2. 系統引導你開啟 GitHub 官方驗證網頁貼上代碼。<br>
+              3. 你在官方網頁授權後，GitHub 派發一把加密 Token 給你本機。<br>
+              4. <strong>全程零密碼傳遞，安全等級高達 100%！</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: 4-3 8 碼代碼安全配對流程圖 -->
+    <section class="slide" data-slide="7">
+      <div class="slide-header">
+        <span class="slide-badge">4-3 授權實戰</span>
+        <h2 class="slide-title">GitHub CLI 8 碼代碼安全配對流程（Device Activation）</h2>
+        <p class="slide-subtitle">只需執行一次！本機產生加密憑證 Token，從此享受終生自動推送</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="align-items: center;">
+          <div class="slide-diagram-holder" onclick="openZoomModal('../PIC/ch4_device_flow_auth.svg')">
+            <img src="../PIC/ch4_device_flow_auth.svg" alt="GitHub CLI 8 碼代碼安全配對流程">
+            <div class="diagram-zoom-hint">🔍 點擊放大全圖</div>
+            <div class="diagram-caption">▲ 圖 4-2：GitHub CLI 8 碼代碼安全配對流程（Device Activation）</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="slide-card highlight" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-cyan);">步驟 1：AI 觸發授權指令</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">對話吩咐「請幫我啟動 GitHub CLI 登入」，終端機顯示一次性 8 碼代碼（如 <code>ABCD-1234</code>）。</p>
+            </div>
+            <div class="slide-card purple" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-indigo);">步驟 2：官方瀏覽器開啟驗證頁</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">系統自動開啟 <code>github.com/login/device</code>，將 8 碼貼入輸入框按 Continue。</p>
+            </div>
+            <div class="slide-card success" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-emerald);">步驟 3：Google 一鍵確認授權</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">因為第 3 章已登入 Google，點擊「Authorize github」按鈕一鍵授權。</p>
+            </div>
+            <div class="slide-card warning" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-amber);">步驟 4：本機安全 Token 存檔完畢</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">高強度加密 Token 存於本機 <code>hosts.yml</code>，Antigravity 獲得合法推代碼權限！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: 4-4 Repo 名稱設定 -->
+    <section class="slide" data-slide="8">
+      <div class="slide-header">
+        <span class="slide-badge">4-4 命名決策</span>
+        <h2 class="slide-title">推送時的 Repo 名稱：由 AI 決定還是自己指定？</h2>
+        <p class="slide-subtitle">兩種都可以！完全取決於你在對話框中怎麼對 Antigravity 吩咐</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <!-- Option A -->
+          <div class="slide-card highlight">
+            <div class="card-header-bar" style="color: var(--accent-cyan);">
+              <span class="card-icon">🏷️</span>
+              <span>方式 A：由自己指定 Repo 名稱（★強烈推薦）</span>
+            </div>
+            <ul class="card-list" style="font-size: 0.92rem;">
+              <li><span class="dot"></span><span><strong>特點：</strong> 精確掌控公開網址外觀，絕不會出現意外的名稱。</span></li>
+              <li><span class="dot"></span><span><strong>範例口語：</strong> <em>「請把專案推送到名為 <code>smartsound-page</code> 的公開 repo...」</em></span></li>
+              <li><span class="dot"></span><span><strong>產生的公開網址：</strong><br>
+                <code style="color: var(--accent-cyan); font-size: 0.88rem; background: #020617; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-top: 4px;">https://&lt;帳號&gt;.github.io/smartsound-page/</code>
+              </span></li>
+            </ul>
+          </div>
+
+          <!-- Option B -->
+          <div class="slide-card purple">
+            <div class="card-header-bar" style="color: var(--accent-indigo);">
+              <span class="card-icon">🤖</span>
+              <span>方式 B：讓 Antigravity 依專案自動命名</span>
+            </div>
+            <ul class="card-list" style="font-size: 0.92rem;">
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span><strong>特點：</strong> 適合不想花腦筋想英文名稱的學員。</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span><strong>運作原理：</strong> AI 會預設使用「目前資料夾名稱」或分析網頁標題。</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span><strong>範例口語：</strong> <em>「請幫我取一個合適簡短的英文名稱建立 Repo 並推上去...」</em></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: 4-5 口語化一鍵推送提示詞實戰 -->
+    <section class="slide" data-slide="9">
+      <div class="slide-header">
+        <span class="slide-badge">4-5 口語推送</span>
+        <h2 class="slide-title">自然語言口語化一鍵推送提示詞</h2>
+        <p class="slide-subtitle">只要完成一次性授權，日常開發中學員只要用最輕鬆的口語吩咐 AI 即可</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="prompt-box" style="display: flex; flex-direction: column; justify-content: center;">
+            <span class="prompt-tag">💬 實戰示範提示詞（由我指定名稱 · 直接複製貼上）</span>
+            <p style="font-size: 0.95rem; line-height: 1.7;">
+              "Antigravity，我已經做好第二章的耳機介紹網頁了！請幫我用 git 和 GitHub CLI (gh)，在我的 GitHub 上建立一個公開（Public）的 repository，名稱叫做『<strong style="color: var(--accent-cyan);">smartsound-page</strong>』，把目前的程式碼和照片都推上去，並幫我開啟 GitHub Pages。最後請將可以在瀏覽器觀看的網址列印給我！"
+            </p>
+          </div>
+
+          <div class="slide-card success" style="justify-content: center; gap: 16px;">
+            <div class="card-header-bar" style="color: var(--accent-emerald);">
+              <span class="card-icon">🎉</span>
+              <span>成果回報：學員會收到的結果</span>
+            </div>
+            <div style="background: #020617; border: 1px solid rgba(52, 211, 153, 0.4); padding: 16px; border-radius: 10px; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.8;">
+              <span style="color: #34d399;">✔ Repository 建立成功：</span> github.com/alex-tw/smartsound-page<br>
+              <span style="color: #34d399;">✔ GitHub Pages 服務已啟動！</span><br>
+              <span style="color: #38bdf8; font-weight: 700;">🌐 公開瀏覽網址：</span><br>
+              <a href="#" style="color: #fff; text-decoration: underline;">https://alex-tw.github.io/smartsound-page/</a>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">
+              （註：首次發布約需等待 1~2 分鐘供 GitHub 雲端完成快取建置，刷新即可正常瀏覽）
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: 4-5 背景全自動流水線圖解 -->
+    <section class="slide" data-slide="10">
+      <div class="slide-header">
+        <span class="slide-badge">4-5 全自動流水線</span>
+        <h2 class="slide-title">自然語言一鍵推送：Antigravity 背景全自動流水線</h2>
+        <p class="slide-subtitle">學員說一句話，AI 自動替你串聯 Git 版本控制、雲端儲存庫與 Pages 伺服器</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="align-items: center;">
+          <div class="slide-diagram-holder" onclick="openZoomModal('../PIC/ch4_one_click_pipeline.svg')">
+            <img src="../PIC/ch4_one_click_pipeline.svg" alt="Antigravity 背景全自動流水線">
+            <div class="diagram-zoom-hint">🔍 點擊放大全圖</div>
+            <div class="diagram-caption">▲ 圖 4-3：自然語言一鍵推送：Antigravity 背景全自動流水線</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="slide-card highlight" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-cyan);">階段 01：專案封裝與追蹤</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">執行 <code>git init & git add .</code>，自動打包 HTML、CSS 與 PIC 資料夾圖片。</p>
+            </div>
+            <div class="slide-card purple" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-indigo);">階段 02：建立歷史存檔點</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">執行 <code>git commit -m "initial release"</code>，產生不可竄改的版本快照。</p>
+            </div>
+            <div class="slide-card success" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-emerald);">階段 03：雲端建庫與推送</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">執行 <code>gh repo create --public --push</code>，在雲端開庫並同步代碼。</p>
+            </div>
+            <div class="slide-card warning" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-amber);">階段 04：啟動 Pages 伺服器</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">呼叫 <code>gh api .../pages</code> 啟用靜態託管，回報專屬公開網址！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: 課堂實作演練 -->
+    <section class="slide" data-slide="11">
+      <div class="slide-header">
+        <span class="slide-badge">LAB CHALLENGE</span>
+        <h2 class="slide-title">課堂動手做挑戰：見證你的耳機官網全球上線！</h2>
+        <p class="slide-subtitle">跟隨三大實操步驟，將第二章完成的產品介紹頁一鍵部署至全世界</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">1️⃣</span>
+              <span>步驟一：一次性授權</span>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              對 Antigravity 吩咐：<br>
+              <em>「請幫我啟動 GitHub CLI 登入」</em><br><br>
+              複製終端機 8 碼代碼，在彈出的瀏覽器貼上並按 Authorize。
+            </p>
+          </div>
+
+          <div class="slide-card purple">
+            <div class="card-header-bar">
+              <span class="card-icon">2️⃣</span>
+              <span>步驟二：口語發布</span>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              在對話框貼上口語發布提示詞：<br>
+              <em>「幫我把專案推上名為 smartsound-page 的公開 repo 並開啟 Pages！」</em>
+            </p>
+          </div>
+
+          <div class="slide-card success">
+            <div class="card-header-bar">
+              <span class="card-icon">3️⃣</span>
+              <span>步驟三：手機驗收</span>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              複製 AI 回傳的 GitHub Pages 網址。<br><br>
+              用手機瀏覽器打開或傳給隔壁同學，驗收你的第一個全球公開網站！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 12: 本章重點回顧與下一章預告 -->
+    <section class="slide" data-slide="12">
+      <div class="slide-header">
+        <span class="slide-badge">SUMMARY</span>
+        <h2 class="slide-title">第 4 章 重點回顧與下一章預告</h2>
+        <p class="slide-subtitle">恭喜！你的產品網頁已經正式在全球公開網路上面世！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">🧠</span>
+              <span>四大核心記憶點</span>
+            </div>
+            <ul class="card-list" style="gap: 12px;">
+              <li><span class="dot"></span><span><strong>GitHub CLI 威力：</strong> 將手動 7 步網頁操作完全抽象化為 10 秒命令。</span></li>
+              <li><span class="dot"></span><span><strong>Device Flow 8 碼配對：</strong> 零密碼傳遞，安全授權本機加密 Token。</span></li>
+              <li><span class="dot"></span><span><strong>指定 Repo 命名：</strong> 精確掌控未來的公開網址結構。</span></li>
+              <li><span class="dot"></span><span><strong>背景 4 階段流水線：</strong> 打包 ➔ 存檔 ➔ 建庫 ➔ 開啟 Pages 伺服器。</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card warning" style="justify-content: center; gap: 18px;">
+            <div class="card-header-bar" style="color: var(--accent-amber);">
+              <span class="card-icon">🚀</span>
+              <span>下一章精彩預告：第 5 章</span>
+            </div>
+            <h4 style="font-size: 1.25rem; color: #fff;">認識 Google Apps Script (GAS)：初學者的免費雲端超能力</h4>
+            <p style="font-size: 0.94rem; color: var(--text-muted); line-height: 1.6;">
+              網頁上線了，但如果訪客填寫預購表單，資料會去哪裡？<br>
+              靜態網頁無法保存資料、也無法寄信。下一章我們將帶你認識 Google 官方的<strong>免費無伺服器後端（GAS）</strong>，打通 Google 試算表資料庫與 Gmail 自動回信！
+            </p>
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px; font-size: 0.88rem; color: var(--accent-cyan);">
+              👉 門面已就緒，下一章準備替網頁裝上「強大雲端大腦」！
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <footer class="deck-controls">
+    <button id="prevBtn" class="nav-btn" title="上一頁 (← 或 PageUp)">◀</button>
+    <div id="slideCounter" class="slide-counter">01 / 12</div>
+    <button id="nextBtn" class="nav-btn" title="下一頁 (→、空白鍵 或 PageDown)">▶</button>
+    <span class="shortcut-hint">快捷鍵：[←][→] 換頁 · [F] 全螢幕 · [O] 總覽</span>
+  </footer>
+
+  <!-- Overview Grid Modal -->
+  <div id="overviewModal" class="overview-modal">
+    <div class="overview-header">
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">📋 簡報總覽目錄 (點擊直接跳頁)</h2>
+      <button id="closeOverviewBtn" class="tool-btn" style="font-size: 1rem;">✕ 關閉 (Esc)</button>
+    </div>
+    <div id="overviewGrid" class="overview-grid">
+      <!-- Generated dynamically by JS -->
+    </div>
+  </div>
+
+  <!-- Image Zoom Modal -->
+  <div id="imageZoomModal" class="image-zoom-modal" onclick="closeZoomModal()">
+    <img id="zoomedImg" src="" alt="放大檢視">
+  </div>
+
+  <script>
+    // Slide Presentation Engine for Chapter 4
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const slideCounter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+    const overviewModal = document.getElementById('overviewModal');
+    const overviewGrid = document.getElementById('overviewGrid');
+    const overviewBtn = document.getElementById('overviewBtn');
+    const closeOverviewBtn = document.getElementById('closeOverviewBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerBtn = document.getElementById('timerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const imageZoomModal = document.getElementById('imageZoomModal');
+    const zoomedImg = document.getElementById('zoomedImg');
+
+    const slideTitles = [
+      "封面：第 4 章 GitHub CLI 自動化一鍵發布上線",
+      "課堂學習目標 (Agenda)",
+      "4-1 為什麼需要 GitHub CLI (gh)？",
+      "4-1 手動發布 vs CLI 自動化發布對決",
+      "4-2 動口不動手：請 AI 安裝 CLI",
+      "4-3 關鍵解密：AI 如何取得帳號資格？",
+      "4-3 8 碼代碼安全配對流程圖解",
+      "4-4 Repo 名稱設定：自己指定 vs AI 取",
+      "4-5 自然語言口語化一鍵推送提示詞",
+      "4-5 背景全自動流水線圖解",
+      "課堂動手做挑戰：耳機官網全球上線",
+      "本章重點回顧與第 5 章預告"
+    ];
+
+    function updateSlide(targetIndex) {
+      if (targetIndex < 1) targetIndex = 1;
+      if (targetIndex > totalSlides) targetIndex = totalSlides;
+
+      slides.forEach((slide, idx) => {
+        const slideNum = idx + 1;
+        slide.classList.remove('active', 'prev', 'next');
+        if (slideNum === targetIndex) {
+          slide.classList.add('active');
+        } else if (slideNum < targetIndex) {
+          slide.classList.add('prev');
+        } else {
+          slide.classList.add('next');
+        }
+      });
+
+      currentSlide = targetIndex;
+      slideCounter.textContent = `${String(currentSlide).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      progressBar.style.width = `${((currentSlide - 1) / (totalSlides - 1)) * 100}%`;
+
+      prevBtn.disabled = (currentSlide === 1);
+      nextBtn.disabled = (currentSlide === totalSlides);
+
+      window.location.hash = `#${currentSlide}`;
+      updateOverviewCurrent();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) updateSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) updateSlide(currentSlide - 1);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (imageZoomModal.classList.contains('open')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (overviewModal.classList.contains('open')) {
+        if (e.key === 'Escape' || e.key === 'o' || e.key === 'O') {
+          toggleOverview();
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          updateSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          updateSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case 'o':
+        case 'O':
+          e.preventDefault();
+          toggleOverview();
+          break;
+      }
+    });
+
+    // Touch Swipe
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    window.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 50) {
+        if (diff < 0) nextSlide();
+        else prevSlide();
+      }
+    }
+
+    // Fullscreen Toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Overview Grid Construction
+    function buildOverview() {
+      overviewGrid.innerHTML = '';
+      slideTitles.forEach((title, idx) => {
+        const slideNum = idx + 1;
+        const thumb = document.createElement('div');
+        thumb.className = `overview-thumb ${slideNum === currentSlide ? 'current' : ''}`;
+        thumb.innerHTML = `
+          <div class="thumb-num">SLIDE ${String(slideNum).padStart(2, '0')}</div>
+          <div class="thumb-title">${title}</div>
+        `;
+        thumb.addEventListener('click', () => {
+          updateSlide(slideNum);
+          toggleOverview();
+        });
+        overviewGrid.appendChild(thumb);
+      });
+    }
+
+    function updateOverviewCurrent() {
+      const thumbs = document.querySelectorAll('.overview-thumb');
+      thumbs.forEach((thumb, idx) => {
+        if (idx + 1 === currentSlide) {
+          thumb.classList.add('current');
+        } else {
+          thumb.classList.remove('current');
+        }
+      });
+    }
+
+    function toggleOverview() {
+      const isOpen = overviewModal.classList.contains('open');
+      if (isOpen) {
+        overviewModal.classList.remove('open');
+      } else {
+        buildOverview();
+        overviewModal.classList.add('open');
+      }
+    }
+
+    overviewBtn.addEventListener('click', toggleOverview);
+    closeOverviewBtn.addEventListener('click', toggleOverview);
+
+    // Image Zoom Modal
+    function openZoomModal(imgSrc) {
+      zoomedImg.src = imgSrc;
+      imageZoomModal.classList.add('open');
+    }
+
+    function closeZoomModal() {
+      imageZoomModal.classList.remove('open');
+    }
+
+    // Classroom Timer
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let timerRunning = true;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (timerRunning) {
+          timerSeconds++;
+          const mins = Math.floor(timerSeconds / 60);
+          const secs = timerSeconds % 60;
+          timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+      }, 1000);
+    }
+
+    timerBtn.addEventListener('click', () => {
+      timerRunning = !timerRunning;
+      timerBtn.style.opacity = timerRunning ? '1' : '0.6';
+    });
+
+    window.addEventListener('load', () => {
+      const hash = parseInt(window.location.hash.replace('#', ''), 10);
+      if (!isNaN(hash) && hash >= 1 && hash <= totalSlides) {
+        updateSlide(hash);
+      } else {
+        updateSlide(1);
+      }
+      startTimer();
+    });
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+  </script>
+</body>
+</html>
