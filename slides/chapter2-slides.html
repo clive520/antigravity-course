@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 2 章 上課簡報：利用 Antigravity 製作產品介紹網頁 - Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(56, 189, 248, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #34d399;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Top Quick Header */
+    .deck-header {
+      position: fixed;
+      top: 10px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 900;
+      pointer-events: none;
+    }
+
+    .deck-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+    }
+
+    .deck-brand a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .deck-brand .badge {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-cyan);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .deck-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .tool-btn {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .tool-btn:hover {
+      color: var(--text-main);
+      border-color: var(--accent-cyan);
+      background: rgba(30, 41, 59, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .timer-badge {
+      font-family: var(--font-mono);
+      color: var(--accent-emerald);
+      font-weight: 700;
+    }
+
+    /* Main Slide Deck Container */
+    .deck-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 36px 60px 36px;
+    }
+
+    .slide {
+      position: absolute;
+      width: min(1560px, 94vw);
+      height: min(880px, 86vh);
+      background: radial-gradient(circle at top right, rgba(30, 41, 59, 0.65), rgba(11, 17, 32, 0.95) 70%);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 44px 54px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateY(20px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+      overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      transform: scale(0.96) translateX(-40px);
+    }
+
+    .slide.next {
+      transform: scale(0.96) translateX(40px);
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 6px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 22px;
+      flex-shrink: 0;
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .slide-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* Slide Body */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      height: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      height: 100%;
+    }
+
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      height: 100%;
+    }
+
+    /* Slide Cards */
+    .slide-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .slide-card.highlight {
+      border-color: var(--border-highlight);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), var(--bg-card) 60%);
+    }
+
+    .slide-card.purple {
+      border-color: rgba(129, 140, 248, 0.4);
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.12), var(--bg-card) 60%);
+    }
+
+    .slide-card.success {
+      border-color: rgba(52, 211, 153, 0.4);
+      background: radial-gradient(circle at top left, rgba(52, 211, 153, 0.12), var(--bg-card) 60%);
+    }
+
+    .slide-card.warning {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: radial-gradient(circle at top left, rgba(245, 158, 11, 0.12), var(--bg-card) 60%);
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .card-list li strong {
+      color: var(--text-main);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Diagram Holder */
+    .slide-diagram-holder {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      max-height: 520px;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .slide-diagram-holder img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .diagram-caption {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .diagram-zoom-hint {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      pointer-events: none;
+    }
+
+    /* Code & Prompt Cards */
+    .prompt-box {
+      background: #020617;
+      border: 1px solid var(--border-highlight);
+      border-radius: 12px;
+      padding: 18px 22px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      position: relative;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .prompt-tag {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-cyan);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    /* Cover Slide */
+    .slide-cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+      gap: 20px;
+    }
+
+    .cover-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 999px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .cover-title {
+      font-size: 3.6rem;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 40%, #38bdf8 80%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 1020px;
+    }
+
+    .cover-desc {
+      font-size: 1.35rem;
+      color: #94a3b8;
+      max-width: 860px;
+      line-height: 1.6;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cover-meta-badge {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Bottom Control Bar */
+    .deck-controls {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      z-index: 900;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      min-width: 65px;
+      text-align: center;
+    }
+
+    .shortcut-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      padding-left: 12px;
+      margin-left: 4px;
+    }
+
+    /* Overview Modal Grid */
+    .overview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(6, 9, 19, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .overview-modal.open {
+      display: flex;
+    }
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .overview-thumb {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .overview-thumb:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.15);
+    }
+
+    .overview-thumb.current {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.08);
+      outline: 2px solid var(--accent-cyan);
+    }
+
+    .thumb-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .thumb-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    /* Image Fullscreen Zoom Modal */
+    .image-zoom-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(15px);
+      z-index: 2500;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+      padding: 30px;
+    }
+
+    .image-zoom-modal.open {
+      display: flex;
+    }
+
+    .image-zoom-modal img {
+      max-width: 95%;
+      max-height: 95%;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div id="progressBar" class="slide-progress-bar"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="deck-header">
+    <div class="deck-brand">
+      <a href="../chapters/chapter2.html">
+        <span>🚀 Antigravity 實戰學院</span>
+      </a>
+      <span class="badge">Chapter 02 課堂簡報</span>
+    </div>
+
+    <div class="deck-tools">
+      <button id="timerBtn" class="tool-btn" title="點擊暫停/繼續計時">
+        <span>⏱️</span>
+        <span id="timerDisplay" class="timer-badge">00:00</span>
+      </button>
+      <button id="overviewBtn" class="tool-btn" title="開啟投影片總覽 (快速鍵 O)">
+        <span>▦</span>
+        <span>總覽 (O)</span>
+      </button>
+      <button id="fullscreenBtn" class="tool-btn" title="切換全螢幕 (快速鍵 F)">
+        <span>⛶</span>
+        <span>全螢幕 (F)</span>
+      </button>
+      <a href="../chapters/chapter2.html" class="tool-btn" style="text-decoration: none;">
+        <span>📖</span>
+        <span>回課本</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Slide Stage -->
+  <div class="deck-stage">
+
+    <!-- Slide 1: 封面 -->
+    <section class="slide active" data-slide="1">
+      <div class="slide-cover">
+        <div class="cover-pill">🎧 Antigravity 商業網頁實戰系列</div>
+        <h1 class="cover-title">第 2 章：利用 Antigravity 製作產品介紹網頁</h1>
+        <p class="cover-desc">掌握提示詞工程核心、問答式需求訪談法（/grill-me）與多角度商品展示圖鑑，打造高轉換率現代產品官網</p>
+        
+        <div class="cover-meta">
+          <div class="cover-meta-badge">
+            <span>⏱️ 課程時長</span>
+            <strong>25 ~ 30 分鐘</strong>
+          </div>
+          <div class="cover-meta-badge">
+            <span>🎯 實戰難度</span>
+            <strong>進階實作 · 免寫程式</strong>
+          </div>
+          <div class="cover-meta-badge">
+            <span>🚀 成果產出</span>
+            <strong>SmartSound Pro 產品官網 (product-demo.html)</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: 本章學習目標 -->
+    <section class="slide" data-slide="2">
+      <div class="slide-header">
+        <span class="slide-badge">AGENDA</span>
+        <h2 class="slide-title">第 2 章 課堂學習目標</h2>
+        <p class="slide-subtitle">學會像資深產品企劃一樣引導 AI，打造零落差的商業網頁</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">📐</span>
+              <span>1. 網頁黃金骨架</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot"></span><span>拆解 Landing Page 5 大核心區塊</span></li>
+              <li><span class="dot"></span><span>Hero 看板、賣點、方案售價與表單</span></li>
+              <li><span class="dot"></span><span>現代電商高轉換率視覺動線</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card purple">
+            <div class="card-header-bar">
+              <span class="card-icon">💬</span>
+              <span>2. 反向訪談法</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>標準提示詞 4 大支柱公式</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>先問答、後動工：叫 AI 反過來提問</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>隱藏神技：<code>/grill-me</code> 互動訪談</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card warning">
+            <div class="card-header-bar">
+              <span class="card-icon">📸</span>
+              <span>3. 多維度商品圖</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>單張照片衍生多視角電商圖鑑</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>立體45度、正視、側面、情境桌拍</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>圖片素材路徑無縫整合至網頁</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card success">
+            <div class="card-header-bar">
+              <span class="card-icon">🔄</span>
+              <span>4. 迭代微調技巧</span>
+            </div>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>動口不動手：越改越完美的秘訣</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>局部增量修改，不破壞原有排版</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>即時預覽 product-demo.html</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: 2-1 產品頁面 5 大核心骨架 -->
+    <section class="slide" data-slide="3">
+      <div class="slide-header">
+        <span class="slide-badge">2-1 結構規劃</span>
+        <h2 class="slide-title">商業產品介紹頁（Landing Page）5 大核心骨架</h2>
+        <p class="slide-subtitle">在向 AI 下指令前，先理解現代高轉換率頁面的黃金結構</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="align-items: center;">
+          <div class="slide-diagram-holder" onclick="openZoomModal('../PIC/ch2_landing_page_anatomy.svg')">
+            <img src="../PIC/ch2_landing_page_anatomy.svg" alt="Landing Page 5 大核心骨架解剖圖">
+            <div class="diagram-zoom-hint">🔍 點擊放大全圖</div>
+            <div class="diagram-caption">▲ 圖 2-1：商業產品介紹頁 5 大核心骨架解剖圖</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="slide-card" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-cyan);">① 頂部導覽列（Header / Nav）</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">品牌 Logo、錨點跳轉連結、右上角顯眼的「立即預購」行動按鈕。</p>
+            </div>
+            <div class="slide-card highlight" style="padding: 14px 18px;">
+              <strong style="color: #fff;">② 英雄看板區（Hero Section）★ 第一印象</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">搶眼標語、產品副標、質感情境主圖與核心 Call-to-Action 購買按鈕。</p>
+            </div>
+            <div class="slide-card" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-indigo);">③ 產品核心亮點（Features）</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">3~4 個圖文並茂特色卡片（主動降噪、40H 長續航、人體工學耳罩）。</p>
+            </div>
+            <div class="slide-card" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-amber);">④ 方案售價表（Pricing）</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">標準版 vs 旗艦版價格比較，突顯熱門推薦方案與權益差異。</p>
+            </div>
+            <div class="slide-card" style="padding: 14px 18px;">
+              <strong style="color: var(--accent-emerald);">⑤ 預購表單與頁尾（Footer）</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">線上收集姓名、Email 與電話名單，以及社群連結與版權宣告。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: 2-2 提示詞架構與痛點 -->
+    <section class="slide" data-slide="4">
+      <div class="slide-header">
+        <span class="slide-badge">2-2 提示詞工程</span>
+        <h2 class="slide-title">提示詞痛點剖析與標準公式</h2>
+        <p class="slide-subtitle">為什麼很多人向 AI 提問做出來的網站跟想的完全不一樣？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <!-- Left: Pain points -->
+          <div class="slide-card danger">
+            <div class="card-header-bar" style="color: var(--accent-rose);">
+              <span class="card-icon">❌</span>
+              <span>初學者最常犯的錯誤提問</span>
+            </div>
+            <div style="background: #020617; border: 1px solid rgba(244, 63, 94, 0.3); padding: 14px; border-radius: 8px; font-family: var(--font-mono); color: #fca5a5;">
+              "幫我做一個好看的耳機網站"
+            </div>
+            <ul class="card-list" style="margin-top: 8px;">
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>AI 只能瞎猜：</strong> 什麼叫「好看」？純白簡約、深色科技，還是粉嫩可愛？</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>區塊完全隨機：</strong> 沒有指定區塊，AI 可能只寫了兩行字或漏掉價格表。</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>圖片無法對應：</strong> AI 不知道你電腦裡有什麼素材，隨便放了死圖或空白框。</span></li>
+            </ul>
+          </div>
+
+          <!-- Right: Formula -->
+          <div class="slide-card highlight">
+            <div class="card-header-bar" style="color: var(--accent-cyan);">
+              <span class="card-icon">🎯</span>
+              <span>高品質提示詞四大黃金支柱公式</span>
+            </div>
+            <div style="background: #020617; border: 1px solid var(--border-highlight); padding: 14px; border-radius: 8px; font-size: 0.95rem; line-height: 1.6;">
+              <strong style="color: var(--accent-cyan);">[角色設定]</strong> + 
+              <strong style="color: var(--accent-indigo);">[任務內容]</strong> + 
+              <strong style="color: var(--accent-amber);">[風格規範]</strong> + 
+              <strong style="color: var(--accent-emerald);">[必備區塊]</strong>
+            </div>
+            <ul class="card-list" style="margin-top: 8px; font-size: 0.92rem;">
+              <li><span class="dot"></span><span><strong>1. 角色設定：</strong> 你是一位資深電商前端設計師。</span></li>
+              <li><span class="dot"></span><span><strong>2. 任務內容：</strong> 請為 SmartSound Pro 耳機製作單頁 HTML 銷售官網。</span></li>
+              <li><span class="dot"></span><span><strong>3. 風格規範：</strong> 採用現代簡潔科技曜石黑風格、支援手機版 RWD。</span></li>
+              <li><span class="dot"></span><span><strong>4. 必備區塊：</strong> 必須包含導覽、Hero、三項特點、價格表、預購表單。</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: 2-2 先問答、後動工（反向訪談法） -->
+    <section class="slide" data-slide="5">
+      <div class="slide-header">
+        <span class="slide-badge">2-2 初學大絕招</span>
+        <h2 class="slide-title">初學者最強心法：先問答、後動工（反向訪談法）</h2>
+        <p class="slide-subtitle">不會寫長篇大論？請 AI「反過來問你問題」，像做選擇題一樣輕鬆完成規格！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="align-items: center;">
+          <div class="slide-diagram-holder" onclick="openZoomModal('../PIC/ch2_interview_flow.svg')">
+            <img src="../PIC/ch2_interview_flow.svg" alt="反向訪談法流程圖">
+            <div class="diagram-zoom-hint">🔍 點擊放大全圖</div>
+            <div class="diagram-caption">▲ 圖 2-2：「先問答、後動工」反向訪談法三步驟流程圖</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="slide-card highlight">
+              <div class="card-header-bar">
+                <span class="card-icon">🧠</span>
+                <span>為什麼「反向訪談」能保證 100% 成功？</span>
+              </div>
+              <p style="font-size: 0.94rem; color: var(--text-muted); line-height: 1.6;">
+                一般人剛想做網站時，腦海裡通常只有模糊的輪廓（「我想賣耳機」），很難第一時間把配色、定價、排版、欄位全部想齊。<br><br>
+                <strong>讓 AI 扮演你的「網頁企劃顧問」：</strong><br>
+                由 AI 主動列出 4~5 個關鍵選項問你，你只要回覆「1.選A、2.選B」，AI 就幫你把提示詞規格自動補齊！
+              </p>
+            </div>
+
+            <div class="slide-card success">
+              <strong style="color: var(--accent-emerald);">三步驟工作流：</strong>
+              <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-top: 6px;">
+                <strong>① 請 AI 先提問</strong> ➔ <strong>② 你回答選項</strong> ➔ <strong>③ AI 彙整規格確認後精準動工！</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: 2-2 萬用反向訪談提示詞與實戰對照 -->
+    <section class="slide" data-slide="6">
+      <div class="slide-header">
+        <span class="slide-badge">2-2 實戰示範</span>
+        <h2 class="slide-title">萬用反向訪談提示詞與一問一答實錄</h2>
+        <p class="slide-subtitle">複製這段開場白，任何人都能在 1 分鐘內啟動專業需求訪談</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="prompt-box" style="display: flex; flex-direction: column; justify-content: center;">
+            <span class="prompt-tag">💬 萬用「反向訪談」開場白（想不到怎麼寫，貼這段就對了！）</span>
+            <p style="font-size: 0.95rem; line-height: 1.7;">
+              "我想製作一個介紹『SmartSound Pro 頂級降噪無線耳機』的產品銷售網頁，但我還沒有想好所有細節。<br><br>
+              <strong style="color: var(--accent-amber);">請你先不要開始寫程式！</strong>請先扮演資深網頁企劃顧問，針對這個網站的「視覺風格、主打賣點、價格方案、圖片配置與行動按鈕」，一次向我提出 4～5 個關鍵問題（每個問題請提供建議選項讓我挑選）。等我回答完、確認好規格後，你再開始幫我寫網頁！"
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="background: rgba(56, 189, 248, 0.08); border-left: 4px solid #38bdf8; padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 0.88rem; line-height: 1.5;">
+              <strong style="color: #38bdf8;">🤖 AI 主動提問：</strong><br>
+              1. 視覺風格：(A) 曜石黑 (B) 極簡白？<br>
+              2. 賣點：強調降噪、續航還是音質？<br>
+              3. 方案：單一售價還是分標準/旗艦版？<br>
+              4. 客戶行動：填寫預購單還是導購外鏈？
+            </div>
+
+            <div style="background: rgba(129, 140, 248, 0.1); border-left: 4px solid #818cf8; padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 0.88rem; line-height: 1.5;">
+              <strong style="color: #818cf8;">👤 你只要輕鬆回 20 個字：</strong><br>
+              「1.選A曜石黑 2.強調降噪與40H續航 3.分標準$3990與旗艦$5990 4.填寫預購單，並使用 PIC 資料夾的耳機照片！」
+            </div>
+
+            <div style="background: rgba(52, 211, 153, 0.08); border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 0.88rem; line-height: 1.5;">
+              <strong style="color: #10b981;">🎉 結果：AI 產出完美規格並動工！</strong><br>
+              雙方規格完全對齊，做出的成品與心中所想 100% 吻合！
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: 2-2 /grill-me 內建指令 -->
+    <section class="slide" data-slide="7">
+      <div class="slide-header">
+        <span class="slide-badge">2-2 隱藏捷徑</span>
+        <h2 class="slide-title">Antigravity 2.0 內建神技：/grill-me 指令</h2>
+        <p class="slide-subtitle">一行斜線指令，在對話框內直接彈出「互動式選擇題問答視窗」</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">⚡</span>
+              <span>什麼是 <code>/grill-me</code> 斜線指令？</span>
+            </div>
+            <p style="font-size: 0.98rem; color: var(--text-muted); line-height: 1.7;">
+              在中央對話輸入框中，只要輸入 <strong><code>/grill-me</code></strong> 加上你的初步想法，AI 就會進入「嚴格訪談模式（Interview Mode）」。<br><br>
+              它不會立刻冒然開始敲代碼，而是像資深架構師一樣，針對設計決策逐題向你提問，直到所有不確定的細節全部釐清為止！
+            </p>
+            <div style="background: #020617; border: 1px solid var(--border-highlight); padding: 14px; border-radius: 8px; font-family: var(--font-mono); color: var(--accent-cyan); font-size: 0.95rem; margin-top: auto;">
+              /grill-me 我想為降噪耳機做一個單頁銷售官網
+            </div>
+          </div>
+
+          <div class="slide-card success">
+            <div class="card-header-bar">
+              <span class="card-icon">🎛️</span>
+              <span>互動式選項彈窗特色</span>
+            </div>
+            <ul class="card-list" style="gap: 14px;">
+              <li>
+                <span class="dot" style="background: var(--accent-emerald);"></span>
+                <div>
+                  <strong>可點選按鈕視窗：</strong><br>
+                  直接在畫面上點選「(Recommended) 曜石黑科技風格」、「深色雙方案」等選項。
+                </div>
+              </li>
+              <li>
+                <span class="dot" style="background: var(--accent-emerald);"></span>
+                <div>
+                  <strong>支援自訂補充（Write-in）：</strong><br>
+                  若選項都不滿意，可以在對話欄直接輸入自己的特殊需求。
+                </div>
+              </li>
+              <li>
+                <span class="dot" style="background: var(--accent-emerald);"></span>
+                <div>
+                  <strong>自動收斂需求：</strong><br>
+                  問答結束後自動整理成規格檔案，一鍵點擊 Proceed 動工！
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: 2-3 多模態圖片生成展示 -->
+    <section class="slide" data-slide="8">
+      <div class="slide-header">
+        <span class="slide-badge">2-3 多模態生成</span>
+        <h2 class="slide-title">多模態商品圖片：一張原圖延伸 4 大視角圖鑑</h2>
+        <p class="slide-subtitle">Antigravity 不只能寫代碼，還能依據商品照片延伸不同視角的電商素材</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <!-- Photo 1 -->
+          <div class="slide-card" style="padding: 14px; text-align: center;">
+            <div style="background: #020617; border-radius: 10px; overflow: hidden; height: 210px; display: flex; align-items: center; justify-content: center;">
+              <img src="../PIC/ATHM20XBT_m01.jpg" alt="原始45度角" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+            <div style="font-weight: 700; color: #818cf8; margin-top: 10px; font-size: 0.95rem;">原圖：立體45度視角</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">商品實體立體角度，適合用在特色卡片或細節介紹。</p>
+          </div>
+
+          <!-- Photo 2 -->
+          <div class="slide-card highlight" style="padding: 14px; text-align: center;">
+            <div style="background: #020617; border-radius: 10px; overflow: hidden; height: 210px; display: flex; align-items: center; justify-content: center;">
+              <img src="../PIC/headphone_front.jpg" alt="正面雙耳對稱" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+            <div style="font-weight: 700; color: #38bdf8; margin-top: 10px; font-size: 0.95rem;">AI 生成：正視雙耳對稱</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">展現人體工學頭樑與對稱耳罩結構，突顯配戴舒適度。</p>
+          </div>
+
+          <!-- Photo 3 -->
+          <div class="slide-card highlight" style="padding: 14px; text-align: center;">
+            <div style="background: #020617; border-radius: 10px; overflow: hidden; height: 210px; display: flex; align-items: center; justify-content: center;">
+              <img src="../PIC/headphone_side.jpg" alt="側面特寫細節" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+            <div style="font-weight: 700; color: #38bdf8; margin-top: 10px; font-size: 0.95rem;">AI 生成：側面特寫耳罩</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">展示金屬霧黑側蓋質感、實體按鍵配置與降噪麥克風孔。</p>
+          </div>
+
+          <!-- Photo 4 -->
+          <div class="slide-card warning" style="padding: 14px; text-align: center;">
+            <div style="background: #020617; border-radius: 10px; overflow: hidden; height: 210px; display: flex; align-items: center; justify-content: center;">
+              <img src="../PIC/headphone_lifestyle.jpg" alt="辦公桌美學情境" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="font-weight: 700; color: #f59e0b; margin-top: 10px; font-size: 0.95rem;">AI 生成：情境美學桌拍</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">極具氛圍感的現代辦公桌面擺拍，<strong>最適合放在 Hero 看板當主圖！</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: 2-3 整合素材與完整提示詞實戰 -->
+    <section class="slide" data-slide="9">
+      <div class="slide-header">
+        <span class="slide-badge">2-3 提示詞整合</span>
+        <h2 class="slide-title">整合圖片素材與網頁架構的高效提示詞</h2>
+        <p class="slide-subtitle">將 PIC 資料夾中的圖片名稱與對應版位明確指派給 AI</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="prompt-box" style="font-size: 0.88rem; line-height: 1.6;">
+            <span class="prompt-tag">💬 整合「網頁結構 + 多角度圖片」提示詞（複製貼上）</span>
+            <p>
+              "請幫我設計一個名為『SmartSound Pro - 頂級降噪無線耳機』的現代產品介紹網頁。<br><br>
+              <strong>【素材與圖片配置要求】：</strong><br>
+              - Hero 看板主圖：放置 <code>PIC/headphone_lifestyle.jpg</code>。<br>
+              - 外觀特寫區：使用圖片卡片展示 <code>PIC/headphone_front.jpg</code>（對稱耳罩）與 <code>PIC/headphone_side.jpg</code>（金屬霧黑側蓋細節）。<br><br>
+              <strong>【網頁規格】：</strong><br>
+              1. 建立單一 index.html，曜石黑現代科技風格與精緻微動態。<br>
+              2. 包含導覽列、Hero、3 大特色卡片、雙版本售價表（標準版 $3,990 / 旗艦版 $5,990）與預購表單。<br>
+              3. 確保圖片在手機與電腦版皆完美適配（RWD）。"
+            </p>
+          </div>
+
+          <div class="slide-card success" style="justify-content: center; align-items: center; text-align: center; gap: 20px;">
+            <div style="font-size: 3rem;">🎉</div>
+            <h3 style="font-size: 1.5rem; color: #fff;">產品官網已成功生成！</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 440px; line-height: 1.6;">
+              Antigravity 會自動將這 4 張圖片嵌入對應版位，並自動加上 CSS 漸層與 RWD 彈性排版。
+            </p>
+            <a href="../product-demo.html" target="_blank" class="tool-btn" style="background: #2563eb; color: #fff; border-color: #3b82f6; padding: 12px 24px; font-size: 1rem; border-radius: 10px; text-decoration: none;">
+              👀 現場點擊預覽：product-demo.html 官網成果 ➔
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: 2-4 對話式迭代微調 -->
+    <section class="slide" data-slide="10">
+      <div class="slide-header">
+        <span class="slide-badge">2-4 迭代進化</span>
+        <h2 class="slide-title">對話式迭代微調（Iterative Tuning）</h2>
+        <p class="slide-subtitle">看哪裡不滿意就吩咐一句，AI 精準局部增量修改，不破壞原有排版！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="align-items: center;">
+          <div class="slide-diagram-holder" onclick="openZoomModal('../PIC/ch2_iterative_tuning.svg')">
+            <img src="../PIC/ch2_iterative_tuning.svg" alt="對話式迭代微調進化對照圖">
+            <div class="diagram-zoom-hint">🔍 點擊放大全圖</div>
+            <div class="diagram-caption">▲ 圖 2-3：對話式迭代微調（Iterative Tuning）視覺進化對照圖</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="slide-card highlight" style="padding: 16px;">
+              <strong style="color: var(--accent-cyan); font-size: 1rem;">💬 範例 1：微調視覺與按鈕</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px; font-family: var(--font-sans);">
+                <em>「請把 Hero 標題的字體再放大一點，並把立即預購按鈕改成亮橘色漸層。」</em>
+              </p>
+            </div>
+
+            <div class="slide-card purple" style="padding: 16px;">
+              <strong style="color: var(--accent-indigo); font-size: 1rem;">💬 範例 2：新增功能區塊</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px; font-family: var(--font-sans);">
+                <em>「請在產品特色卡片後面，加上一個顧客五星好評推薦（Testimonials）區塊。」</em>
+              </p>
+            </div>
+
+            <div class="slide-card success" style="padding: 16px;">
+              <strong style="color: var(--accent-emerald); font-size: 1rem;">💬 範例 3：強化互動體驗</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px; font-family: var(--font-sans);">
+                <em>「點擊右上角預購按鈕時，請平滑捲動到表單區，送出後彈出溫馨感謝彈窗。」</em>
+              </p>
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--text-muted); background: #020617; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+              💡 核心原則：向 AI 提需求像聊天一樣自然，它會精確替換 HTML/CSS 片段，保持程式碼乾淨利落！
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: 課堂實作演練 -->
+    <section class="slide" data-slide="11">
+      <div class="slide-header">
+        <span class="slide-badge">LAB CHALLENGE</span>
+        <h2 class="slide-title">課堂動手做挑戰：打造你的耳機官網</h2>
+        <p class="slide-subtitle">跟隨三大實戰步驟，親身體驗從需求訪談到產出產品頁面的全過程</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">1️⃣</span>
+              <span>步驟一：發起訪談</span>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              在中央對話輸入框貼上「反向訪談提示詞」或輸入 <code>/grill-me</code>。<br><br>
+              請 AI 扮演企劃顧問，針對風格、賣點、價格問你問題，並回覆你的選擇。
+            </p>
+          </div>
+
+          <div class="slide-card purple">
+            <div class="card-header-bar">
+              <span class="card-icon">2️⃣</span>
+              <span>步驟二：生成 index.html</span>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              確認規格無誤後，請 AI 建立 <code>index.html</code>。<br><br>
+              指定將 <code>PIC/</code> 資料夾內的多角度商品照片完整配置進 Hero 與特色卡片。
+            </p>
+          </div>
+
+          <div class="slide-card success">
+            <div class="card-header-bar">
+              <span class="card-icon">3️⃣</span>
+              <span>步驟三：完成 2 次微調</span>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              在瀏覽器打開網頁檢視成果。<br><br>
+              挑出想調整的細節（例如修改按鈕顏色、調整定價數字），吩咐 AI 完成 2 次局部修改！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 12: 本章重點回顧與下一章預告 -->
+    <section class="slide" data-slide="12">
+      <div class="slide-header">
+        <span class="slide-badge">SUMMARY</span>
+        <h2 class="slide-title">第 2 章 重點回顧與下一章預告</h2>
+        <p class="slide-subtitle">你已經成功完成產品介紹頁面，下一步：把作品發布到全世界！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="slide-card highlight">
+            <div class="card-header-bar">
+              <span class="card-icon">🧠</span>
+              <span>四大核心收穫</span>
+            </div>
+            <ul class="card-list" style="gap: 12px;">
+              <li><span class="dot"></span><span><strong>Landing Page 5 大骨架：</strong> 掌握高轉換率電商頁面黃金結構。</span></li>
+              <li><span class="dot"></span><span><strong>先問答、後動工心法：</strong> 讓 AI 當企劃顧問，零門檻把需求定義清楚。</span></li>
+              <li><span class="dot"></span><span><strong>多維度商品圖鑑：</strong> 單張照片延伸 4 視角，打造質感視覺衝擊。</span></li>
+              <li><span class="dot"></span><span><strong>對話增量微調：</strong> 像與資深設計師共事一樣，越改越完美。</span></li>
+            </ul>
+          </div>
+
+          <div class="slide-card warning" style="justify-content: center; gap: 18px;">
+            <div class="card-header-bar" style="color: var(--accent-amber);">
+              <span class="card-icon">🚀</span>
+              <span>下一章精彩預告：第 3 章</span>
+            </div>
+            <h4 style="font-size: 1.25rem; color: #fff;">註冊 GitHub 以及 GitHub 的功能介紹</h4>
+            <p style="font-size: 0.94rem; color: var(--text-muted); line-height: 1.6;">
+              現在你的耳機官網只躺在你個人的電腦裡。<br>
+              下一章，我們將帶你註冊全球最大開源平台 GitHub，並在第 4 章教你<strong>口語化一鍵把剛做好的產品頁面發布成公開網址</strong>，讓全世界的顧客都能立即下單！
+            </p>
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px; font-size: 0.88rem; color: var(--accent-cyan);">
+              👉 請妥善保存本章做好的 <code>index.html</code> 與 <code>PIC/</code> 照片，下一章發布馬上用！
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <footer class="deck-controls">
+    <button id="prevBtn" class="nav-btn" title="上一頁 (← 或 PageUp)">◀</button>
+    <div id="slideCounter" class="slide-counter">01 / 12</div>
+    <button id="nextBtn" class="nav-btn" title="下一頁 (→、空白鍵 或 PageDown)">▶</button>
+    <span class="shortcut-hint">快捷鍵：[←][→] 換頁 · [F] 全螢幕 · [O] 總覽</span>
+  </footer>
+
+  <!-- Overview Grid Modal -->
+  <div id="overviewModal" class="overview-modal">
+    <div class="overview-header">
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">📋 簡報總覽目錄 (點擊直接跳頁)</h2>
+      <button id="closeOverviewBtn" class="tool-btn" style="font-size: 1rem;">✕ 關閉 (Esc)</button>
+    </div>
+    <div id="overviewGrid" class="overview-grid">
+      <!-- Generated dynamically by JS -->
+    </div>
+  </div>
+
+  <!-- Image Zoom Modal -->
+  <div id="imageZoomModal" class="image-zoom-modal" onclick="closeZoomModal()">
+    <img id="zoomedImg" src="" alt="放大檢視">
+  </div>
+
+  <script>
+    // Slide Presentation Engine for Chapter 2
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const slideCounter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+    const overviewModal = document.getElementById('overviewModal');
+    const overviewGrid = document.getElementById('overviewGrid');
+    const overviewBtn = document.getElementById('overviewBtn');
+    const closeOverviewBtn = document.getElementById('closeOverviewBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerBtn = document.getElementById('timerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const imageZoomModal = document.getElementById('imageZoomModal');
+    const zoomedImg = document.getElementById('zoomedImg');
+
+    const slideTitles = [
+      "封面：第 2 章 製作產品介紹網頁",
+      "課堂學習目標 (Agenda)",
+      "2-1 產品頁面 5 大核心骨架解剖",
+      "2-2 提示詞痛點與標準公式",
+      "2-2 初學大絕招：先問答後動工（反向訪談法）",
+      "2-2 萬用反向訪談提示詞與實戰對照",
+      "2-2 Antigravity 隱藏神技：/grill-me 指令",
+      "2-3 多模態商品圖：單張原圖延伸 4 視角",
+      "2-3 整合素材與完整提示詞實戰",
+      "2-4 對話式迭代微調（Iterative Tuning）",
+      "課堂動手做挑戰：打造耳機官網",
+      "本章重點回顧與第 3 章預告"
+    ];
+
+    function updateSlide(targetIndex) {
+      if (targetIndex < 1) targetIndex = 1;
+      if (targetIndex > totalSlides) targetIndex = totalSlides;
+
+      slides.forEach((slide, idx) => {
+        const slideNum = idx + 1;
+        slide.classList.remove('active', 'prev', 'next');
+        if (slideNum === targetIndex) {
+          slide.classList.add('active');
+        } else if (slideNum < targetIndex) {
+          slide.classList.add('prev');
+        } else {
+          slide.classList.add('next');
+        }
+      });
+
+      currentSlide = targetIndex;
+      slideCounter.textContent = `${String(currentSlide).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      progressBar.style.width = `${((currentSlide - 1) / (totalSlides - 1)) * 100}%`;
+
+      prevBtn.disabled = (currentSlide === 1);
+      nextBtn.disabled = (currentSlide === totalSlides);
+
+      window.location.hash = `#${currentSlide}`;
+      updateOverviewCurrent();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) updateSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) updateSlide(currentSlide - 1);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (imageZoomModal.classList.contains('open')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (overviewModal.classList.contains('open')) {
+        if (e.key === 'Escape' || e.key === 'o' || e.key === 'O') {
+          toggleOverview();
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          updateSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          updateSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case 'o':
+        case 'O':
+          e.preventDefault();
+          toggleOverview();
+          break;
+      }
+    });
+
+    // Touch Swipe
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    window.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 50) {
+        if (diff < 0) nextSlide();
+        else prevSlide();
+      }
+    }
+
+    // Fullscreen Toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Overview Grid Construction
+    function buildOverview() {
+      overviewGrid.innerHTML = '';
+      slideTitles.forEach((title, idx) => {
+        const slideNum = idx + 1;
+        const thumb = document.createElement('div');
+        thumb.className = `overview-thumb ${slideNum === currentSlide ? 'current' : ''}`;
+        thumb.innerHTML = `
+          <div class="thumb-num">SLIDE ${String(slideNum).padStart(2, '0')}</div>
+          <div class="thumb-title">${title}</div>
+        `;
+        thumb.addEventListener('click', () => {
+          updateSlide(slideNum);
+          toggleOverview();
+        });
+        overviewGrid.appendChild(thumb);
+      });
+    }
+
+    function updateOverviewCurrent() {
+      const thumbs = document.querySelectorAll('.overview-thumb');
+      thumbs.forEach((thumb, idx) => {
+        if (idx + 1 === currentSlide) {
+          thumb.classList.add('current');
+        } else {
+          thumb.classList.remove('current');
+        }
+      });
+    }
+
+    function toggleOverview() {
+      const isOpen = overviewModal.classList.contains('open');
+      if (isOpen) {
+        overviewModal.classList.remove('open');
+      } else {
+        buildOverview();
+        overviewModal.classList.add('open');
+      }
+    }
+
+    overviewBtn.addEventListener('click', toggleOverview);
+    closeOverviewBtn.addEventListener('click', toggleOverview);
+
+    // Image Zoom Modal
+    function openZoomModal(imgSrc) {
+      zoomedImg.src = imgSrc;
+      imageZoomModal.classList.add('open');
+    }
+
+    function closeZoomModal() {
+      imageZoomModal.classList.remove('open');
+    }
+
+    // Classroom Timer
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let timerRunning = true;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (timerRunning) {
+          timerSeconds++;
+          const mins = Math.floor(timerSeconds / 60);
+          const secs = timerSeconds % 60;
+          timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+      }, 1000);
+    }
+
+    timerBtn.addEventListener('click', () => {
+      timerRunning = !timerRunning;
+      timerBtn.style.opacity = timerRunning ? '1' : '0.6';
+    });
+
+    window.addEventListener('load', () => {
+      const hash = parseInt(window.location.hash.replace('#', ''), 10);
+      if (!isNaN(hash) && hash >= 1 && hash <= totalSlides) {
+        updateSlide(hash);
+      } else {
+        updateSlide(1);
+      }
+      startTimer();
+    });
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+  </script>
+</body>
+</html>
