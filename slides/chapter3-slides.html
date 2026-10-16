@@ -90,7 +90,7 @@
       color: var(--text-main);
       text-decoration: none;
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -99,9 +99,9 @@
     .deck-brand .badge {
       background: rgba(56, 189, 248, 0.2);
       color: var(--accent-cyan);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 2px 10px;
       border-radius: 999px;
     }
 
@@ -116,9 +116,9 @@
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid var(--border-color);
       color: var(--text-muted);
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 8px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
@@ -139,6 +139,7 @@
       font-family: var(--font-mono);
       color: var(--accent-emerald);
       font-weight: 700;
+      font-size: 0.95rem;
     }
 
     /* Main Slide Deck Container */
@@ -151,7 +152,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 48px 36px 60px 36px;
+      padding: 44px 36px 56px 36px;
     }
 
     .slide {
@@ -161,7 +162,7 @@
       background: radial-gradient(circle at top right, rgba(30, 41, 59, 0.65), rgba(11, 17, 32, 0.95) 70%);
       border: 1px solid var(--border-color);
       border-radius: 24px;
-      padding: 44px 54px;
+      padding: 42px 50px;
       box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
       display: flex;
       flex-direction: column;
@@ -188,6 +189,7 @@
       transform: scale(0.96) translateX(40px);
     }
 
+    /* Scrollbar for slides if content overflows */
     .slide::-webkit-scrollbar {
       width: 6px;
     }
@@ -198,7 +200,7 @@
 
     /* Slide Header */
     .slide-header {
-      margin-bottom: 22px;
+      margin-bottom: 24px;
       flex-shrink: 0;
     }
 
@@ -206,21 +208,21 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
       color: var(--accent-cyan);
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 4px 12px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 4px 14px;
       border-radius: 999px;
       margin-bottom: 10px;
       letter-spacing: 0.05em;
     }
 
     .slide-title {
-      font-size: 2.3rem;
+      font-size: clamp(2.4rem, 2.8vw, 3rem);
       font-weight: 800;
-      line-height: 1.25;
+      line-height: 1.2;
       letter-spacing: -0.02em;
       background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 100%);
       -webkit-background-clip: text;
@@ -228,10 +230,11 @@
     }
 
     .slide-subtitle {
-      font-size: 1.05rem;
-      color: var(--text-muted);
+      font-size: 1.25rem;
+      color: #cbd5e1;
       margin-top: 6px;
       line-height: 1.5;
+      font-weight: 500;
     }
 
     /* Slide Body */
@@ -243,7 +246,7 @@
       gap: 20px;
     }
 
-    /* Grid Layouts */
+    /* Layout Grids */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -255,7 +258,7 @@
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: 22px;
       height: 100%;
     }
 
@@ -270,11 +273,11 @@
     .slide-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 22px;
+      border-radius: 20px;
+      padding: 26px 30px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
       position: relative;
       overflow: hidden;
       backdrop-filter: blur(12px);
@@ -287,66 +290,74 @@
     }
 
     .slide-card.purple {
-      border-color: rgba(129, 140, 248, 0.4);
+      border-color: rgba(129, 140, 248, 0.45);
       background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.12), var(--bg-card) 60%);
     }
 
     .slide-card.success {
-      border-color: rgba(52, 211, 153, 0.4);
+      border-color: rgba(52, 211, 153, 0.45);
       background: radial-gradient(circle at top left, rgba(52, 211, 153, 0.12), var(--bg-card) 60%);
     }
 
     .slide-card.warning {
-      border-color: rgba(245, 158, 11, 0.4);
+      border-color: rgba(245, 158, 11, 0.45);
       background: radial-gradient(circle at top left, rgba(245, 158, 11, 0.12), var(--bg-card) 60%);
     }
 
     .slide-card.danger {
-      border-color: rgba(244, 63, 94, 0.4);
+      border-color: rgba(244, 63, 94, 0.45);
       background: radial-gradient(circle at top left, rgba(244, 63, 94, 0.12), var(--bg-card) 60%);
     }
 
     .card-header-bar {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 1.15rem;
-      font-weight: 700;
+      gap: 12px;
+      font-size: 1.45rem;
+      font-weight: 800;
       color: var(--text-main);
+      line-height: 1.3;
     }
 
     .card-icon {
-      font-size: 1.5rem;
+      font-size: 1.9rem;
       line-height: 1;
+      flex-shrink: 0;
     }
 
     .card-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      font-size: 0.96rem;
-      color: var(--text-muted);
+      gap: 14px;
+      font-size: 1.25rem;
+      color: #e2e8f0;
       line-height: 1.6;
+    }
+
+    .grid-4 .card-list {
+      font-size: 1.15rem;
+      gap: 12px;
     }
 
     .card-list li {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
     }
 
     .card-list li strong {
-      color: var(--text-main);
+      color: #ffffff;
+      font-weight: 700;
     }
 
     .dot {
       display: inline-block;
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--accent-cyan);
-      margin-top: 8px;
+      margin-top: 10px;
       flex-shrink: 0;
     }
 
@@ -354,14 +365,14 @@
     .slide-diagram-holder {
       background: rgba(15, 23, 42, 0.95);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 18px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100%;
-      max-height: 520px;
+      max-height: 540px;
       position: relative;
       cursor: zoom-in;
     }
@@ -370,15 +381,16 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      border-radius: 8px;
+      border-radius: 12px;
       display: block;
     }
 
     .diagram-caption {
-      margin-top: 8px;
-      font-size: 0.82rem;
+      margin-top: 10px;
+      font-size: 0.95rem;
       color: var(--text-muted);
       text-align: center;
+      font-weight: 600;
     }
 
     .diagram-zoom-hint {
@@ -387,14 +399,40 @@
       right: 16px;
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid var(--border-color);
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--accent-cyan);
       pointer-events: none;
     }
 
-    /* Cover Slide */
+    /* Code & Prompt Cards */
+    .prompt-box {
+      background: #020617;
+      border: 1px solid var(--border-highlight);
+      border-radius: 16px;
+      padding: 24px 28px;
+      font-family: var(--font-sans);
+      font-size: 1.35rem;
+      line-height: 1.7;
+      color: #f1f5f9;
+      position: relative;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .prompt-tag {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-cyan);
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    /* Cover Slide Styling */
     .slide-cover {
       display: flex;
       flex-direction: column;
@@ -402,7 +440,7 @@
       align-items: center;
       text-align: center;
       height: 100%;
-      gap: 20px;
+      gap: 24px;
     }
 
     .cover-pill {
@@ -412,49 +450,54 @@
       background: rgba(56, 189, 248, 0.15);
       border: 1px solid rgba(56, 189, 248, 0.35);
       color: var(--accent-cyan);
-      font-size: 0.95rem;
-      font-weight: 700;
-      padding: 6px 18px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      padding: 8px 24px;
       border-radius: 999px;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
     }
 
     .cover-title {
-      font-size: 3.6rem;
+      font-size: clamp(3rem, 4.5vw, 4.2rem);
       font-weight: 900;
       line-height: 1.15;
       letter-spacing: -0.03em;
       background: linear-gradient(135deg, #ffffff 40%, #38bdf8 80%, #818cf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      max-width: 1020px;
+      max-width: 1100px;
     }
 
     .cover-desc {
-      font-size: 1.35rem;
-      color: #94a3b8;
-      max-width: 860px;
+      font-size: 1.6rem;
+      color: #cbd5e1;
+      max-width: 900px;
       line-height: 1.6;
+      font-weight: 500;
     }
 
     .cover-meta {
       display: flex;
-      gap: 16px;
+      gap: 20px;
       margin-top: 15px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .cover-meta-badge {
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.85);
       border: 1px solid var(--border-color);
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      color: #cbd5e1;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      color: #e2e8f0;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    .cover-meta-badge strong {
+      color: var(--accent-cyan);
     }
 
     /* Bottom Control Bar */
@@ -465,10 +508,10 @@
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--border-color);
-      padding: 6px 16px;
+      padding: 8px 20px;
       border-radius: 999px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(12px);
@@ -479,9 +522,9 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 1.1rem;
-      width: 32px;
-      height: 32px;
+      font-size: 1.2rem;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -502,18 +545,18 @@
 
     .slide-counter {
       font-family: var(--font-mono);
-      font-size: 0.92rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--text-main);
-      min-width: 65px;
+      min-width: 75px;
       text-align: center;
     }
 
     .shortcut-hint {
-      font-size: 0.78rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       border-left: 1px solid rgba(255, 255, 255, 0.15);
-      padding-left: 12px;
+      padding-left: 14px;
       margin-left: 4px;
     }
 
@@ -547,43 +590,43 @@
 
     .overview-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
     }
 
     .overview-thumb {
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
+      border-radius: 14px;
+      padding: 18px;
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .overview-thumb:hover {
       border-color: var(--accent-cyan);
       transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
     }
 
     .overview-thumb.current {
       border-color: var(--accent-cyan);
-      background: rgba(56, 189, 248, 0.08);
+      background: rgba(56, 189, 248, 0.1);
       outline: 2px solid var(--accent-cyan);
     }
 
     .thumb-num {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: var(--accent-cyan);
     }
 
     .thumb-title {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--text-main);
       line-height: 1.4;
@@ -596,7 +639,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.92);
       backdrop-filter: blur(15px);
       z-index: 2500;
       display: none;
@@ -664,7 +707,7 @@
       <div class="slide-cover">
         <div class="cover-pill">☁️ Antigravity 雲端部署系列</div>
         <h1 class="cover-title">第 3 章：GitHub 註冊與功能介紹</h1>
-        <p class="cover-desc">全球最大程式碼代管基地：從 Google 快速註冊、Username 網址結構解析到 4 大核心術語三分鐘搞懂</p>
+        <p class="cover-desc">全球最大程式碼代管基地：從 Google 快速註冊、Username 網址結構到 4 大核心術語三分鐘搞懂</p>
         
         <div class="cover-meta">
           <div class="cover-meta-badge">
@@ -677,17 +720,17 @@
           </div>
           <div class="cover-meta-badge">
             <span>🌐 最終目標</span>
-            <strong>獲得全球唯一的個人開發者身分證與網址基地</strong>
+            <strong>建立全球唯一開發者身分證與發布基地</strong>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Slide 2: 本章學習目標 -->
+    <!-- Slide 2: 本章學習目標 (Agenda) -->
     <section class="slide" data-slide="2">
       <div class="slide-header">
         <span class="slide-badge">AGENDA</span>
-        <h2 class="slide-title">第 3 章 課堂學習目標</h2>
+        <h2 class="slide-title">第 3 章 課堂學習地圖</h2>
         <p class="slide-subtitle">踏入全球超過一億工程師都在使用的雲端平台，做好作品發布準備</p>
       </div>
       <div class="slide-body">
@@ -698,9 +741,9 @@
               <span>1. 為什麼要 GitHub</span>
             </div>
             <ul class="card-list">
-              <li><span class="dot"></span><span>全球最大代管平台與雲端保險箱</span></li>
+              <li><span class="dot"></span><span>全球最大代管平台</span></li>
               <li><span class="dot"></span><span>時光機版本控制防失誤</span></li>
-              <li><span class="dot"></span><span>免費全球網站託管（Pages）</span></li>
+              <li><span class="dot"></span><span>免費全球網站託管 Pages</span></li>
             </ul>
           </div>
 
@@ -712,26 +755,26 @@
             <ul class="card-list">
               <li><span class="dot" style="background: var(--accent-indigo);"></span><span>github.com 一鍵 Continue</span></li>
               <li><span class="dot" style="background: var(--accent-indigo);"></span><span>免記密碼、免收確認信</span></li>
-              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>挑選專屬個人 Gmail 帳號</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>專屬個人 Gmail 帳號綁定</span></li>
             </ul>
           </div>
 
           <div class="slide-card warning">
             <div class="card-header-bar">
               <span class="card-icon">⚠️</span>
-              <span>3. 註冊四大避坑守則</span>
+              <span>3. 註冊四大避坑</span>
             </div>
             <ul class="card-list">
-              <li><span class="dot" style="background: var(--accent-amber);"></span><span>Username 決定一輩子的網址</span></li>
-              <li><span class="dot" style="background: var(--accent-amber);"></span><span>禁綁學校/公司可能被收回信箱</span></li>
-              <li><span class="dot" style="background: var(--accent-amber);"></span><span>補設專用密碼供 CLI 終端機用</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>Username 決定公開網址</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>嚴禁綁定學校/公司信箱</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>補設專用密碼與 2FA 金鑰</span></li>
             </ul>
           </div>
 
           <div class="slide-card success">
             <div class="card-header-bar">
               <span class="card-icon">📚</span>
-              <span>4. 核心名詞白話解密</span>
+              <span>4. 4 大核心術語</span>
             </div>
             <ul class="card-list">
               <li><span class="dot" style="background: var(--accent-emerald);"></span><span>Repository 倉庫：專案資料夾</span></li>
@@ -748,7 +791,7 @@
       <div class="slide-header">
         <span class="slide-badge">3-1 雲端定位</span>
         <h2 class="slide-title">為什麼我們需要 GitHub？</h2>
-        <p class="slide-subtitle">不僅是代碼的 Google Drive，更是全球軟體開發者的通用身分證</p>
+        <p class="slide-subtitle">不僅是程式碼的 Google Drive，更是全球軟體開發者的通用身分證</p>
       </div>
       <div class="slide-body">
         <div class="grid-3">
@@ -757,21 +800,21 @@
               <span class="card-icon">⏳</span>
               <span>1. 雲端備份與時光機</span>
             </div>
-            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
-              <strong>每一次修改都能完整追蹤：</strong><br>
-              誰在何時修改了哪一行代碼一清二楚。即使不小心把網頁改壞了，也能一鍵坐「時光機」倒轉還原，不怕心血遺失！
-            </p>
+            <ul class="card-list">
+              <li><span class="dot"></span><span><strong>完整追蹤記錄：</strong> 清楚記錄何時修改了哪一行代碼</span></li>
+              <li><span class="dot"></span><span><strong>隨時倒轉還原：</strong> 改壞了一鍵坐時光機還原，不怕心血遺失</span></li>
+            </ul>
           </div>
 
           <div class="slide-card success">
             <div class="card-header-bar" style="color: var(--accent-emerald);">
               <span class="card-icon">🌐</span>
-              <span>2. 免費架站（GitHub Pages）</span>
+              <span>2. 免費全球架站 (Pages)</span>
             </div>
-            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
-              <strong>免花一毛錢租伺服器：</strong><br>
-              只要上傳 HTML/CSS，GitHub 官方就免費提供高頻寬、全世界可連線的專屬網址與伺服器，讓你的作品集被全球看見！
-            </p>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>免租金伺服器：</strong> 上傳 HTML 即贈送高頻寬雲端主機</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>專屬 HTTPS 網址：</strong> 作品集立刻向全世界公開展示！</span></li>
+            </ul>
           </div>
 
           <div class="slide-card purple">
@@ -779,10 +822,10 @@
               <span class="card-icon">🤖</span>
               <span>3. 與 AI 代理無縫整合</span>
             </div>
-            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
-              <strong>命令列自動化打通：</strong><br>
-              Antigravity 具備終端機執行能力，下一章我們將教你如何「一句話吩咐 AI」，自動在 GitHub 上建庫並完成雲端發布！
-            </p>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span><strong>命令列自動化打通：</strong> 支援終端機工具執行</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span><strong>一句話吩咐 AI：</strong> 自動建庫、推送並生成全球網址！</span></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -803,18 +846,26 @@
             <div class="diagram-caption">▲ 圖 3-1：從本機開發到全球發布：GitHub 運作全景圖</div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 14px;">
-            <div class="slide-card highlight" style="padding: 16px;">
-              <strong style="color: var(--accent-cyan);">① 本機電腦開發（Local Antigravity）</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">在第 1、2 章中，我們在專案資料夾內撰寫 HTML、整理商品圖片，檔案目前只躺在本機硬碟裡。</p>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="slide-card highlight" style="padding: 20px 24px;">
+              <div class="card-header-bar" style="font-size: 1.25rem; color: var(--accent-cyan);">
+                <span>① 本機電腦開發（Local Antigravity）</span>
+              </div>
+              <p style="font-size: 1.15rem; color: #cbd5e1; margin-top: 6px;">在專案資料夾撰寫 HTML、配置商品照片，檔案目前只躺在本機硬碟裡。</p>
             </div>
-            <div class="slide-card purple" style="padding: 16px;">
-              <strong style="color: var(--accent-indigo);">② Git Commit 存檔與 Push 上傳</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">將本機變更打成一個不可竄改的「存檔快照（Commit）」，並透過加密連線推送到雲端。</p>
+
+            <div class="slide-card purple" style="padding: 20px 24px;">
+              <div class="card-header-bar" style="font-size: 1.25rem; color: var(--accent-indigo);">
+                <span>② Git 存檔與 Push 上傳（Commit & Push）</span>
+              </div>
+              <p style="font-size: 1.15rem; color: #cbd5e1; margin-top: 6px;">將變更打包成不可竄改的「存檔快照（Commit）」，加密同步推送到雲端。</p>
             </div>
-            <div class="slide-card success" style="padding: 16px;">
-              <strong style="color: var(--accent-emerald);">③ 雲端儲存庫與 GitHub Pages 發布</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">GitHub 雲端接收檔案，啟動全球 CDN 伺服器，生成專屬 HTTPS 網址供任何人訪問！</p>
+
+            <div class="slide-card success" style="padding: 20px 24px;">
+              <div class="card-header-bar" style="font-size: 1.25rem; color: var(--accent-emerald);">
+                <span>③ 雲端儲存庫與 Pages 全球發布</span>
+              </div>
+              <p style="font-size: 1.15rem; color: #cbd5e1; margin-top: 6px;">GitHub 雲端接收檔案，啟動全球 CDN 伺服器，生成專屬 HTTPS 公開網址！</p>
             </div>
           </div>
         </div>
@@ -833,29 +884,31 @@
           <div class="slide-card highlight">
             <div class="card-header-bar">
               <span class="card-icon">1️⃣</span>
-              <span>步驟 1：前往官網首頁點擊授權</span>
+              <span>步驟 1：前往官網點擊授權</span>
             </div>
-            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
-              開啟瀏覽器進入 GitHub 官方首頁：<br>
-              <code style="color: var(--accent-cyan); font-size: 1.05rem; background: #020617; padding: 4px 10px; border-radius: 6px; display: inline-block; margin: 8px 0;">https://github.com/</code><br>
-              點選畫面醒目的 <strong>「Continue with Google」</strong> 或右上角 <strong>Sign up</strong>，選擇你要綁定的 Google 帳號授權登入。
-            </p>
-            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 12px; border-radius: 8px; font-size: 0.88rem; color: #bae6fd; margin-top: auto;">
-              💡 避免手動輸入長信箱與等待確認信，Google 一鍵授權最順暢！
+            <div style="background: #020617; border: 1px solid var(--border-color); padding: 14px 20px; border-radius: 10px; font-family: var(--font-mono); color: var(--accent-cyan); font-size: 1.2rem; font-weight: 700;">
+              官方首頁：https://github.com/
+            </div>
+            <ul class="card-list" style="margin-top: 6px;">
+              <li><span class="dot"></span><span>點選畫面醒目的 <strong>「Continue with Google」</strong> 快速登入</span></li>
+              <li><span class="dot"></span><span>免手動輸入長信箱、免等待確認驗證信</span></li>
+            </ul>
+            <div style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); padding: 12px 18px; border-radius: 10px; font-size: 1.05rem; color: #bae6fd; margin-top: auto;">
+              💡 Google 一鍵授權登入最順暢，日後隨時可同步！
             </div>
           </div>
 
           <div class="slide-card purple">
             <div class="card-header-bar">
               <span class="card-icon">2️⃣</span>
-              <span>步驟 2：設定專屬 Username（使用者名稱）</span>
+              <span>步驟 2：設定專屬 Username</span>
             </div>
-            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
-              Google 授權後，系統會要求你輸入一個<strong>「全球唯一的使用者名稱（Username）」</strong>。<br><br>
-              這一步<strong>非常關鍵</strong>！因為這個英文字串未來會直接變成你的個人首頁與所有網站的永久網址骨幹！
-            </p>
-            <div style="background: rgba(129, 140, 248, 0.1); border: 1px solid rgba(129, 140, 248, 0.3); padding: 12px; border-radius: 8px; font-size: 0.88rem; color: #c7d2fe; margin-top: auto;">
-              👉 請務必遵循下一頁的命名黃金原則，避免日後後悔！
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>輸入一個<strong>「全球唯一的英數使用者名稱」</strong></span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>這串英文字會直接變成你的<strong>個人首頁與所有網站的永久網址骨幹</strong>！</span></li>
+            </ul>
+            <div style="background: rgba(129, 140, 248, 0.12); border: 1px solid rgba(129, 140, 248, 0.35); padding: 12px 18px; border-radius: 10px; font-size: 1.05rem; color: #c7d2fe; margin-top: auto;">
+              👉 請務必遵循下一頁的命名黃金原則，避免日後外部連結失效！
             </div>
           </div>
         </div>
@@ -877,26 +930,26 @@
             <div class="diagram-caption">▲ 圖 3-2：GitHub 快速註冊流程與 Username 網址結構解密</div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 14px;">
-            <div class="slide-card highlight" style="padding: 16px;">
-              <strong style="color: var(--accent-cyan); font-size: 1.05rem;">🌐 網址結構對應公式：</strong>
-              <div style="background: #020617; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.9rem; margin-top: 8px; color: #fff;">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="slide-card highlight" style="padding: 18px 24px;">
+              <strong style="color: var(--accent-cyan); font-size: 1.25rem;">🌐 網址結構對應公式：</strong>
+              <div style="background: #020617; border: 1px solid var(--border-color); padding: 12px 18px; border-radius: 10px; font-family: var(--font-mono); font-size: 1.15rem; margin-top: 8px; color: #fff;">
                 https://<span style="color: var(--accent-cyan); font-weight: 700;">your-username</span>.github.io/<span style="color: var(--accent-emerald); font-weight: 700;">project-name</span>/
               </div>
             </div>
 
-            <div class="slide-card success" style="padding: 16px;">
-              <strong style="color: var(--accent-emerald);">✔ 推薦命名原則（Good Practice）：</strong>
-              <ul class="card-list" style="font-size: 0.88rem; margin-top: 6px;">
-                <li><span class="dot" style="background: var(--accent-emerald);"></span><span>使用<strong>簡短、好記的英文字母與數字</strong>（如 <code>alex-tw</code> 或 <code>david-chen</code>）。</span></li>
-                <li><span class="dot" style="background: var(--accent-emerald);"></span><span>使用連字號 <code>-</code> 分隔詞彙，避免難以識別的底線 <code>_</code>。</span></li>
+            <div class="slide-card success" style="padding: 18px 24px;">
+              <strong style="color: var(--accent-emerald); font-size: 1.25rem;">✔ 推薦命名原則（Good Practice）：</strong>
+              <ul class="card-list" style="font-size: 1.15rem; margin-top: 6px;">
+                <li><span class="dot" style="background: var(--accent-emerald);"></span><span>使用<strong>簡短、好記的英數字</strong>（如 <code>alex-tw</code> 或 <code>david-chen</code>）</span></li>
+                <li><span class="dot" style="background: var(--accent-emerald);"></span><span>使用連字號 <code>-</code> 分隔詞彙，避免難以識別的底線 <code>_</code></span></li>
               </ul>
             </div>
 
-            <div class="slide-card danger" style="padding: 16px;">
-              <strong style="color: var(--accent-rose);">❌ 避免地雷命名（Bad Practice）：</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
-                避免一長串隨機數字亂碼（如 <code>user88392019</code>），否則未來客戶或面試官看到網址會懷疑是釣魚詐騙網站！
+            <div class="slide-card danger" style="padding: 18px 24px;">
+              <strong style="color: var(--accent-rose); font-size: 1.25rem;">❌ 避免地雷命名（Bad Practice）：</strong>
+              <p style="font-size: 1.15rem; color: #cbd5e1; margin-top: 6px;">
+                避免隨機數字亂碼（如 <code>user88392019</code>），否則會被客戶或面試官懷疑是釣魚詐騙網址！
               </p>
             </div>
           </div>
@@ -918,39 +971,47 @@
               <span class="card-icon">1️⃣</span>
               <span>網址不可逆</span>
             </div>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
-              Username 直接成為永久公開網址。雖然日後可在後台更改，但舊網址外部連結會全部失效，務必一次取好！
-            </p>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span>Username 決定網址</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span>日後更改舊連結失效</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>務必一次取好！</strong></span></li>
+            </ul>
           </div>
 
           <div class="slide-card danger">
             <div class="card-header-bar" style="color: var(--accent-rose);">
               <span class="card-icon">2️⃣</span>
-              <span>避用學校/公司信箱</span>
+              <span>避用機構信箱</span>
             </div>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
-              <code>.edu</code> 或公司機構信箱在畢業離職後常被收回或封鎖對外授權，將導致無法登入遺失所有作品！<strong>請一律用個人 Gmail</strong>。
-            </p>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><code>.edu</code> 或公司信箱</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span>離職畢業常被收回</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>請一律用個人 Gmail</strong></span></li>
+            </ul>
           </div>
 
           <div class="slide-card warning">
             <div class="card-header-bar" style="color: var(--accent-amber);">
               <span class="card-icon">3️⃣</span>
-              <span>補設獨立專用密碼</span>
+              <span>補設專用密碼</span>
             </div>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
-              雖然日常網頁用 Google 登入，但第 4 章在終端機執行 <code>gh auth login</code> 時，建議到 Settings 設定一組密碼備用。
-            </p>
+            <ul class="card-list">
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>日常可用 Google 登入</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span>但終端機執行指令時</span></li>
+              <li><span class="dot" style="background: var(--accent-amber);"></span><span><strong>建議在 Settings 備妥密碼</strong></span></li>
+            </ul>
           </div>
 
           <div class="slide-card highlight">
             <div class="card-header-bar" style="color: var(--accent-cyan);">
               <span class="card-icon">4️⃣</span>
-              <span>保管 2FA 恢復金鑰</span>
+              <span>保管 2FA 金鑰</span>
             </div>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
-              GitHub 強制開啟雙重驗證。如果 Google 帳號或手機遺失，恢復金鑰（Recovery Codes）是救回帳號的唯一鑰匙！
-            </p>
+            <ul class="card-list">
+              <li><span class="dot"></span><span>GitHub 全球強制 2FA</span></li>
+              <li><span class="dot"></span><span>手機遺失救星</span></li>
+              <li><span class="dot"></span><span><strong>16 組備用碼妥善保存</strong></span></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -971,25 +1032,33 @@
             <div class="diagram-caption">▲ 圖 3-3：GitHub 4 大核心術語白話對照圖</div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div class="slide-card" style="padding: 14px 18px;">
-              <strong style="color: var(--accent-cyan);">📁 1. Repository（儲存庫 / 簡稱 Repo）</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;"><strong>比喻：雲端專案資料夾</strong>。存放這個網站所有程式碼與圖片的專屬保險箱。</p>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="slide-card" style="padding: 16px 22px;">
+              <div class="card-header-bar" style="font-size: 1.25rem; color: var(--accent-cyan);">
+                <span>📁 1. Repository（儲存庫 / Repo）</span>
+              </div>
+              <p style="font-size: 1.1rem; color: #cbd5e1; margin-top: 4px;"><strong>比喻：雲端專案資料夾</strong>。存放這個網站所有程式碼與圖片的專屬保險箱。</p>
             </div>
 
-            <div class="slide-card" style="padding: 14px 18px;">
-              <strong style="color: var(--accent-indigo);">💾 2. Commit（提交 / 存檔快照）</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;"><strong>比喻：遊戲進度存檔點</strong>。記錄「誰在何時修改了什麼」，隨時可坐時光機還原。</p>
+            <div class="slide-card" style="padding: 16px 22px;">
+              <div class="card-header-bar" style="font-size: 1.25rem; color: var(--accent-indigo);">
+                <span>💾 2. Commit（提交 / 存檔快照）</span>
+              </div>
+              <p style="font-size: 1.1rem; color: #cbd5e1; margin-top: 4px;"><strong>比喻：遊戲進度存檔點</strong>。記錄「誰在何時修改了什麼」，隨時可坐時光機還原。</p>
             </div>
 
-            <div class="slide-card" style="padding: 14px 18px;">
-              <strong style="color: var(--accent-amber);">🚀 3. Push（推送 / 上傳同步）</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;"><strong>比喻：上傳備份至雲端</strong>。把你電腦裡做好的存檔點，同步傳到 GitHub 伺服器。</p>
+            <div class="slide-card" style="padding: 16px 22px;">
+              <div class="card-header-bar" style="font-size: 1.25rem; color: var(--accent-amber);">
+                <span>🚀 3. Push（推送 / 上傳同步）</span>
+              </div>
+              <p style="font-size: 1.1rem; color: #cbd5e1; margin-top: 4px;"><strong>比喻：上傳備份至雲端</strong>。把你電腦裡做好的存檔點，同步傳到 GitHub 伺服器。</p>
             </div>
 
-            <div class="slide-card success" style="padding: 14px 18px;">
-              <strong style="color: var(--accent-emerald);">🌐 4. GitHub Pages（全球展示櫥窗）</strong>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;"><strong>比喻：免租金的 24H 網路店面</strong>。自動把 Repo 變成全世界都能看見的公開網站！</p>
+            <div class="slide-card success" style="padding: 16px 22px;">
+              <div class="card-header-bar" style="font-size: 1.25rem; color: var(--accent-emerald);">
+                <span>🌐 4. GitHub Pages（全球展示櫥窗）</span>
+              </div>
+              <p style="font-size: 1.1rem; color: #cbd5e1; margin-top: 4px;"><strong>比喻：免租金的 24H 網路店面</strong>。自動把 Repo 變成全世界都能看見的公開網站！</p>
             </div>
           </div>
         </div>
@@ -1011,15 +1080,15 @@
               <span class="card-icon">😱</span>
               <span>過去的手動存檔悲劇</span>
             </div>
-            <div style="background: #020617; border: 1px solid rgba(244, 63, 94, 0.3); padding: 14px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.88rem; color: #fca5a5; line-height: 1.8;">
+            <div style="background: #020617; border: 1px solid rgba(244, 63, 94, 0.4); padding: 16px 20px; border-radius: 12px; font-family: var(--font-mono); font-size: 1.1rem; color: #fca5a5; line-height: 1.8;">
               index.html<br>
               index_修改版.html<br>
               index_真的最後版.html<br>
               index_打死不改最終版_v3.html
             </div>
             <ul class="card-list" style="margin-top: 8px;">
-              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>檔案堆滿桌面：</strong> 根本分不清哪一個才是能用的正式版本。</span></li>
-              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>改壞無法復原：</strong> 覆蓋儲存後一旦改壞，之前的努力全部泡湯。</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>檔案堆滿桌面：</strong> 根本分不清哪一個才是正式版本</span></li>
+              <li><span class="dot" style="background: var(--accent-rose);"></span><span><strong>改壞無法復原：</strong> 覆蓋儲存後一旦改壞，心血全部泡湯</span></li>
             </ul>
           </div>
 
@@ -1029,14 +1098,14 @@
               <span class="card-icon">⏱️</span>
               <span>Git Commit 時光機美學</span>
             </div>
-            <div style="background: #020617; border: 1px solid rgba(52, 211, 153, 0.3); padding: 14px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.88rem; color: #a7f3d0; line-height: 1.8;">
+            <div style="background: #020617; border: 1px solid rgba(52, 211, 153, 0.4); padding: 16px 20px; border-radius: 12px; font-family: var(--font-mono); font-size: 1.1rem; color: #a7f3d0; line-height: 1.8;">
               [Commit 1] 完成 Hero 看板排版<br>
               [Commit 2] 增加耳機 4 視角圖片輪播<br>
               [Commit 3] 微調按鈕為亮橘色漸層
             </div>
             <ul class="card-list" style="margin-top: 8px;">
-              <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>資料夾永遠只有一份乾淨檔案：</strong> 所有歷史紀錄藏在 <code>.git</code> 庫中。</span></li>
-              <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>一鍵倒帶：</strong> 隨時能回到過去任何一個存檔點，無所畏懼！</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>永遠只有一份乾淨檔案：</strong> 歷史紀錄藏在 <code>.git</code> 中</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span><strong>一鍵倒帶：</strong> 隨時能回到過去任何存檔點，無所畏懼！</span></li>
             </ul>
           </div>
         </div>
@@ -1048,7 +1117,7 @@
       <div class="slide-header">
         <span class="slide-badge">3-4 安全防護</span>
         <h2 class="slide-title">必備安全防護：雙重身分驗證（2FA）</h2>
-        <p class="slide-subtitle">GitHub 強制要求！保護你的雲端儲存庫不被駭客盜用</p>
+        <p class="slide-subtitle">GitHub 全球強制要求！保護你的雲端儲存庫不被駭客盜用</p>
       </div>
       <div class="slide-body">
         <div class="grid-2">
@@ -1057,12 +1126,12 @@
               <span class="card-icon">🛡️</span>
               <span>什麼是 2FA（雙重身分驗證）？</span>
             </div>
-            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.7;">
-              即使駭客猜中了你的登入密碼，如果沒有你手機上的<strong>「6 位動態即時驗證碼」</strong>，也絕對無法登入你的帳號！<br><br>
-              目前 GitHub 對全球所有活躍帳號實施<strong>強制 2FA 政策</strong>，未開啟將會被限制推代碼等關鍵權限。
-            </p>
-            <div style="background: #020617; border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; font-size: 0.88rem; color: #cbd5e1; margin-top: auto;">
-              📱 推薦 Authenticator App：<strong>Google Authenticator</strong> 或 <strong>Microsoft Authenticator</strong>。
+            <ul class="card-list">
+              <li><span class="dot"></span><span><strong>密碼遭竊也不怕：</strong> 必須搭配手機<strong>「6 位動態即時驗證碼」</strong>才能登入</span></li>
+              <li><span class="dot"></span><span><strong>GitHub 全球強制：</strong> 活躍帳號皆須開啟，保障開發者資安</span></li>
+            </ul>
+            <div style="background: #020617; border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 10px; font-size: 1.1rem; color: #cbd5e1; margin-top: auto;">
+              📱 推薦驗證器：<strong>Google Authenticator</strong> 或 <strong>Microsoft Authenticator</strong>。
             </div>
           </div>
 
@@ -1071,26 +1140,26 @@
               <span class="card-icon">⚙️</span>
               <span>設定三步驟指引</span>
             </div>
-            <ul class="card-list" style="gap: 14px;">
+            <ul class="card-list" style="gap: 18px;">
               <li>
                 <span class="dot"></span>
                 <div>
-                  <strong>步驟 1：進入安全選單</strong><br>
-                  <span style="font-size: 0.88rem;">點擊右上角個人頭像 ➔ <strong>Settings</strong> ➔ <strong>Password and authentication</strong>。</span>
+                  <strong>步驟 1：進入安全設定</strong><br>
+                  <span style="font-size: 1.05rem; color: var(--text-muted);">點擊個人頭像 ➔ Settings ➔ Password and authentication</span>
                 </div>
               </li>
               <li>
                 <span class="dot"></span>
                 <div>
-                  <strong>步驟 2：掃描 QR Code 綁定手機</strong><br>
-                  <span style="font-size: 0.88rem;">點擊「Enable two-factor authentication」，用手機驗證 App 掃描條碼並輸入 6 位碼。</span>
+                  <strong>步驟 2：手機 App 掃描條碼</strong><br>
+                  <span style="font-size: 1.05rem; color: var(--text-muted);">使用驗證 App 掃描 QR Code 並輸入 6 位碼確認綁定</span>
                 </div>
               </li>
               <li>
                 <span class="dot"></span>
                 <div>
                   <strong>步驟 3：下載備用金鑰（Recovery Codes）</strong><br>
-                  <span style="font-size: 0.88rem;">將系統生成的 16 組備用碼妥善存入保險箱，手機遺失時可用於自救！</span>
+                  <span style="font-size: 1.05rem; color: var(--text-muted);">將 16 組備用碼妥善儲存，手機遺失時可用於自救！</span>
                 </div>
               </li>
             </ul>
@@ -1113,10 +1182,10 @@
               <span class="card-icon">1️⃣</span>
               <span>任務一：Google 授權</span>
             </div>
-            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
-              打開瀏覽器進入 <code>github.com</code>。<br><br>
-              使用個人 Gmail 完成 Continue with Google 註冊授權。
-            </p>
+            <ul class="card-list" style="font-size: 1.15rem;">
+              <li><span class="dot"></span><span>打開瀏覽器進入 <code>github.com</code></span></li>
+              <li><span class="dot"></span><span>使用個人 Gmail 點選 Continue with Google 完成快速授權</span></li>
+            </ul>
           </div>
 
           <div class="slide-card purple">
@@ -1124,11 +1193,10 @@
               <span class="card-icon">2️⃣</span>
               <span>任務二：設定 Username</span>
             </div>
-            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
-              挑選一個專業、好記的英數名稱。<br><br>
-              確認你的專屬公開首頁：<br>
-              <code>github.com/你的名稱</code>
-            </p>
+            <ul class="card-list" style="font-size: 1.15rem;">
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>挑選簡短、好記的英數字</span></li>
+              <li><span class="dot" style="background: var(--accent-indigo);"></span><span>確認你的個人公開首頁：<br><code>github.com/你的名稱</code></span></li>
+            </ul>
           </div>
 
           <div class="slide-card success">
@@ -1136,10 +1204,10 @@
               <span class="card-icon">3️⃣</span>
               <span>任務三：啟用 2FA 與密碼</span>
             </div>
-            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
-              到 Settings 綁定 Authenticator App 開啟 2FA。<br><br>
-              補設一組專用密碼，做好第 4 章 CLI 自動發布準備！
-            </p>
+            <ul class="card-list" style="font-size: 1.15rem;">
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>綁定 Authenticator 開啟 2FA</span></li>
+              <li><span class="dot" style="background: var(--accent-emerald);"></span><span>補設專用密碼，做好第 4 章 CLI 自動發布準備！</span></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -1159,11 +1227,11 @@
               <span class="card-icon">🧠</span>
               <span>四大核心記憶點</span>
             </div>
-            <ul class="card-list" style="gap: 12px;">
-              <li><span class="dot"></span><span><strong>GitHub 三大價值：</strong> 版本時光機、免費架設網站、AI 工具直通車。</span></li>
-              <li><span class="dot"></span><span><strong>Username 命名重要性：</strong> 直接決定未來的個人公開網址門牌。</span></li>
-              <li><span class="dot"></span><span><strong>4 大核心術語：</strong> Repo 倉庫、Commit 存檔、Push 上傳、Pages 網站。</span></li>
-              <li><span class="dot"></span><span><strong>帳號安全基石：</strong> 強制開啟 2FA 雙重驗證並妥善備份金鑰。</span></li>
+            <ul class="card-list" style="gap: 16px;">
+              <li><span class="dot"></span><span><strong>GitHub 三大價值：</strong> 版本時光機、免費架設網站、AI 工具直通車</span></li>
+              <li><span class="dot"></span><span><strong>Username 命名原則：</strong> 直接決定一輩子的個人公開網址門牌</span></li>
+              <li><span class="dot"></span><span><strong>4 大核心術語：</strong> Repo 倉庫、Commit 存檔、Push 上傳、Pages 網站</span></li>
+              <li><span class="dot"></span><span><strong>帳號安全基石：</strong> 強制開啟 2FA 雙重驗證並妥善備份金鑰</span></li>
             </ul>
           </div>
 
@@ -1172,12 +1240,12 @@
               <span class="card-icon">🚀</span>
               <span>下一章精彩預告：第 4 章</span>
             </div>
-            <h4 style="font-size: 1.25rem; color: #fff;">GitHub CLI 自動化一鍵發布上線</h4>
-            <p style="font-size: 0.94rem; color: var(--text-muted); line-height: 1.6;">
-              告別手動開網頁點選 New Repo、上傳檔案的繁瑣流程！<br>
+            <h4 style="font-size: 1.45rem; color: #fff; font-weight: 800;">GitHub CLI 自動化一鍵發布上線</h4>
+            <p style="font-size: 1.15rem; color: #cbd5e1; line-height: 1.6;">
+              告別手動開網頁點選 New Repo、拖曳上傳檔案的繁瑣流程！<br>
               下一章我們將教你使用 <strong>GitHub CLI (gh)</strong>，只要口語化吩咐 Antigravity 一句話，AI 就會在背景自動完成建庫、推送並啟動 Pages 服務，10 秒生成可點擊的公開網址！
             </p>
-            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px; font-size: 0.88rem; color: var(--accent-cyan);">
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px; font-size: 1.05rem; color: var(--accent-cyan); font-weight: 600;">
               👉 雲端基地已就緒，準備見證「動口即發布」的奇蹟！
             </div>
           </div>
@@ -1198,7 +1266,7 @@
   <!-- Overview Grid Modal -->
   <div id="overviewModal" class="overview-modal">
     <div class="overview-header">
-      <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">📋 簡報總覽目錄 (點擊直接跳頁)</h2>
+      <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff;">📋 簡報總覽目錄 (點擊直接跳頁)</h2>
       <button id="closeOverviewBtn" class="tool-btn" style="font-size: 1rem;">✕ 關閉 (Esc)</button>
     </div>
     <div id="overviewGrid" class="overview-grid">
@@ -1233,7 +1301,7 @@
 
     const slideTitles = [
       "封面：第 3 章 GitHub 註冊與功能介紹",
-      "課堂學習目標 (Agenda)",
+      "課堂學習地圖 (Agenda)",
       "3-1 為什麼我們需要 GitHub？",
       "3-1 GitHub 運作全景圖",
       "3-2 Google 帳號授權註冊步驟",
@@ -1269,7 +1337,10 @@
       prevBtn.disabled = (currentSlide === 1);
       nextBtn.disabled = (currentSlide === totalSlides);
 
+      // Save to hash
       window.location.hash = `#${currentSlide}`;
+
+      // Update overview active state
       updateOverviewCurrent();
     }
 
@@ -1281,6 +1352,7 @@
       if (currentSlide > 1) updateSlide(currentSlide - 1);
     }
 
+    // Keyboard listener
     window.addEventListener('keydown', (e) => {
       if (imageZoomModal.classList.contains('open')) {
         if (e.key === 'Escape') closeZoomModal();
@@ -1329,7 +1401,7 @@
       }
     });
 
-    // Touch Swipe
+    // Touch Swipe listener
     let touchStartX = 0;
     let touchEndX = 0;
     window.addEventListener('touchstart', (e) => {
@@ -1436,6 +1508,7 @@
       timerBtn.style.opacity = timerRunning ? '1' : '0.6';
     });
 
+    // Hash check on load
     window.addEventListener('load', () => {
       const hash = parseInt(window.location.hash.replace('#', ''), 10);
       if (!isNaN(hash) && hash >= 1 && hash <= totalSlides) {
