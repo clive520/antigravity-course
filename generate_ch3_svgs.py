@@ -154,7 +154,7 @@ content_2 = """
     <!-- Step 1 -->
     <rect x="85" y="230" width="660" height="85" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
     <text x="110" y="265" class="item-title">[步驟 1] 前往官網點選「Continue with Google」</text>
-    <text x="110" y="295" class="item-desc">網址：github.com/signup ➔ 點選 Google 圖示免去繁瑣輸入信箱流程</text>
+    <text x="110" y="295" class="item-desc">網址：github.com ➔ 點選 Google 圖示免去繁瑣輸入信箱流程</text>
 
     <!-- Step 2 -->
     <rect x="85" y="330" width="660" height="85" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
