@@ -57,6 +57,11 @@
         <span class="meta-pill">第 6 章 · 全端自動化實戰</span>
         <h1>實戰串接 GAS：打造預購資料庫與自動寄發確認信</h1>
         <p class="desc">不用寫一行程式碼！本章帶你掌握「資料庫欄位規劃」思維，並運用精準的提示詞（Prompt），引導 Antigravity 同時寫好後端 GAS 雲端腳本、自動化 Gmail 寄信模板，以及前端網頁表單串接！</p>
+        <div style="margin-top: 1rem;">
+          <a href="../slides/chapter6-slides.html" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.92rem; border-radius: 8px;">
+            <span>📽️ 開啟本章簡報 (Slides 模式) ↗</span>
+          </a>
+        </div>
       </div>
 
       <!-- 6-1 資料庫規劃 -->
@@ -64,6 +69,14 @@
         <h2>6-1 資料庫思維：Google 試算表（Excel）欄位該如何規劃？</h2>
         <p>很多初學者在做表單時，往往直接抓起試算表隨便填。在軟體工程中，<strong>「資料庫結構規劃（Schema Design）」</strong>是最關鍵的第一步！</p>
         <p>為我們的「SmartSound Pro 耳機早鳥預購」，我們需要規劃以下 6 個標準資料欄位：</p>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch6_database_schema.svg" alt="預購表單 6 大標準欄位與試算表資料庫規劃" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>📊 圖 6-1：預購表單 6 大標準欄位與試算表資料庫規劃</strong><br>
+            以時間戳記為錨點，規劃標準鍵值結構，確保資料寫入原子性與一致性。
+          </div>
+        </div>
 
         <div class="step-box">
           <h4>📋 推薦的預購表單欄位架構（第一列標題）：</h4>
@@ -178,6 +191,14 @@
       <!-- 6-4 發布 Web App -->
       <section id="sec-6-4" class="content-section">
         <h2>6-4 發布為 Web App 並取得專屬 API 網址</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch6_fullstack_pipeline.svg" alt="全端實戰串接流水線整體架構" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>⚡ 圖 6-2：全端實戰串接流水線（前端 ➔ GAS ➔ 試算表 ➔ Gmail）</strong><br>
+            前端非同步 POST 請求送入 GAS doPost 核心，兼顧資料庫留存與自動化即時郵件通知。
+          </div>
+        </div>
         <p>程式碼存檔後，必須將它發布為全世界可訪問的公開窗口：</p>
 
         <div class="step-box">
@@ -248,6 +269,14 @@
       <!-- 6-6 實測驗收與成果展示 -->
       <section id="sec-6-6" class="content-section">
         <h2>6-6 享受奇蹟時刻：全端串接實測驗收與自動寄信</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch6_deploy_comparison.svg" alt="前後端部署模式對照與版本更新" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🔄 圖 6-3：前後端部署模式對照與版本更新生命週期</strong><br>
+            前端透過 Git push 自動化 CI/CD，GAS 後端則必須透過「管理部署」發布「新版本」方可即時生效。
+          </div>
+        </div>
         <p>接好之後，用瀏覽器打開 <code>product-demo.html</code>，立刻親自下第一筆測試訂單：</p>
         
         <div class="step-box" style="border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">

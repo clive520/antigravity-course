@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad-ch6-2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-grad-ch6-2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow-ch6-2" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad-ch6-2)"/>
+
+  <!-- Header -->
+  <g transform="translate(80, 45)">
+    <rect x="0" y="0" width="160" height="28" rx="14" fill="#38bdf8" fill-opacity="0.15"/>
+    <text x="80" y="19" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 6 章 · 全端自動化流水線</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">全端實戰串接：前端表單 ➔ GAS 雲端大腦 ➔ 試算表存檔 ➔ Gmail 自動回信</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">拆解真實商業系統的四階段自動化闭環，由 Antigravity 一手包辦前後端整合</text>
+  </g>
+
+  <!-- 4 Pipeline Stages -->
+  <g transform="translate(80, 160)">
+    <!-- Stage 1: Frontend Form -->
+    <g transform="translate(0, 0)">
+      <rect width="320" height="480" rx="16" fill="url(#card-grad-ch6-2)" stroke="#38bdf8" stroke-width="1.8" filter="url(#shadow-ch6-2)"/>
+      <rect x="20" y="20" width="80" height="26" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#38bdf8" font-size="12" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">階段 01</text>
+      <text x="20" y="78" fill="#f8fafc" font-size="20" font-weight="800" font-family="system-ui, sans-serif">前端送出預購單</text>
+      <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">GitHub Pages 靜態官網</text>
+
+      <rect x="18" y="125" width="284" height="210" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="152" fill="#38bdf8" font-size="12" font-weight="700" font-family="monospace">fetch(GAS_URL, {</text>
+      <text x="45" y="176" fill="#cbd5e1" font-size="12" font-family="monospace">method: 'POST',</text>
+      <text x="45" y="200" fill="#cbd5e1" font-size="12" font-family="monospace">body: JSON.stringify({</text>
+      <text x="60" y="224" fill="#a7f3d0" font-size="11" font-family="monospace">name: '王小明',</text>
+      <text x="60" y="246" fill="#a7f3d0" font-size="11" font-family="monospace">email: 'user@gmail.com',</text>
+      <text x="60" y="268" fill="#a7f3d0" font-size="11" font-family="monospace">plan: '旗艦降噪版 Pro'</text>
+      <text x="45" y="292" fill="#cbd5e1" font-size="12" font-family="monospace">})</text>
+      <text x="30" y="316" fill="#38bdf8" font-size="12" font-weight="700" font-family="monospace">})</text>
+
+      <g transform="translate(20, 360)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">前端核心處理：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 監聽表單 submit 事件</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 鎖定送出按鈕防重複送單</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 顯示「寫入資料庫中...」轉圈</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 打包 JSON 跨域發送</text>
+      </g>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <g transform="translate(332, 230)">
+      <line x1="0" y1="0" x2="36" y2="0" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,4"/>
+      <polygon points="36,-5 46,0 36,5" fill="#38bdf8"/>
+      <text x="23" y="-12" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">POST</text>
+    </g>
+
+    <!-- Stage 2: GAS Web App Backend -->
+    <g transform="translate(388, 0)">
+      <rect width="320" height="480" rx="16" fill="url(#card-grad-ch6-2)" stroke="#818cf8" stroke-width="1.8" filter="url(#shadow-ch6-2)"/>
+      <rect x="20" y="20" width="80" height="26" rx="6" fill="#818cf8" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#818cf8" font-size="12" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">階段 02</text>
+      <text x="20" y="78" fill="#f8fafc" font-size="20" font-weight="800" font-family="system-ui, sans-serif">GAS 雲端核心解析</text>
+      <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">Google Apps Script Web App</text>
+
+      <rect x="18" y="125" width="284" height="210" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="152" fill="#818cf8" font-size="12" font-weight="700" font-family="monospace">function doPost(e) {</text>
+      <text x="45" y="178" fill="#cbd5e1" font-size="11" font-family="monospace">var data = JSON.parse(</text>
+      <text x="60" y="200" fill="#f59e0b" font-size="11" font-family="monospace">e.postData.contents</text>
+      <text x="45" y="222" fill="#cbd5e1" font-size="11" font-family="monospace">);</text>
+      <text x="45" y="250" fill="#64748b" font-size="11" font-family="monospace">// 拆解出 5 個欄位</text>
+      <text x="45" y="272" fill="#818cf8" font-size="11" font-family="monospace">var name = data.name;</text>
+      <text x="45" y="294" fill="#818cf8" font-size="11" font-family="monospace">var email = data.email;</text>
+      <text x="30" y="318" fill="#818cf8" font-size="12" font-weight="700" font-family="monospace">}</text>
+
+      <g transform="translate(20, 360)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">後端核心處理：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 攔截 doPost 請求</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• JSON 反序列化解析參數</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 同步調度資料庫與郵件 API</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 執行時間僅需 1~2 秒</text>
+      </g>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <g transform="translate(720, 230)">
+      <line x1="0" y1="0" x2="36" y2="0" stroke="#818cf8" stroke-width="2" stroke-dasharray="4,4"/>
+      <polygon points="36,-5 46,0 36,5" fill="#818cf8"/>
+      <text x="23" y="-12" fill="#818cf8" font-size="11" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">寫入</text>
+    </g>
+
+    <!-- Stage 3: Google Sheets Database -->
+    <g transform="translate(776, 0)">
+      <rect width="320" height="480" rx="16" fill="url(#card-grad-ch6-2)" stroke="#34d399" stroke-width="1.8" filter="url(#shadow-ch6-2)"/>
+      <rect x="20" y="20" width="80" height="26" rx="6" fill="#34d399" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#34d399" font-size="12" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">階段 03</text>
+      <text x="20" y="78" fill="#f8fafc" font-size="20" font-weight="800" font-family="system-ui, sans-serif">試算表即時記帳</text>
+      <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">Google 試算表雲端資料庫</text>
+
+      <rect x="18" y="125" width="284" height="210" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="152" fill="#34d399" font-size="12" font-weight="700" font-family="monospace">sheet.appendRow([</text>
+      <text x="45" y="178" fill="#cbd5e1" font-size="11" font-family="monospace">new Date(),</text>
+      <text x="45" y="200" fill="#a7f3d0" font-size="11" font-family="monospace">name, email, phone,</text>
+      <text x="45" y="222" fill="#a7f3d0" font-size="11" font-family="monospace">plan, notes</text>
+      <text x="30" y="246" fill="#34d399" font-size="12" font-weight="700" font-family="monospace">]);</text>
+      <rect x="30" y="260" width="260" height="55" rx="6" fill="#134e4a" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+      <text x="40" y="280" fill="#34d399" font-size="10" font-weight="700" font-family="system-ui, sans-serif">✔ 第一列下方自動追加一筆新訂單</text>
+      <text x="40" y="300" fill="#a7f3d0" font-size="10" font-family="system-ui, sans-serif">2026/10/20 | 王小明 | 旗艦降噪版</text>
+
+      <g transform="translate(20, 360)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">資料庫核心處理：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 永遠保存在個人 Google 雲端</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 不受網頁重整影響</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 手機與電腦隨時即時查閱</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 支援多人共編與出貨標記</text>
+      </g>
+    </g>
+
+    <!-- Arrow 3 -> 4 -->
+    <g transform="translate(1108, 230)">
+      <line x1="0" y1="0" x2="36" y2="0" stroke="#34d399" stroke-width="2" stroke-dasharray="4,4"/>
+      <polygon points="36,-5 46,0 36,5" fill="#34d399"/>
+      <text x="23" y="-12" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">發信</text>
+    </g>
+
+    <!-- Stage 4: Gmail Auto-reply -->
+    <g transform="translate(1164, 0)">
+      <rect width="320" height="480" rx="16" fill="url(#card-grad-ch6-2)" stroke="#f43f5e" stroke-width="1.8" filter="url(#shadow-ch6-2)"/>
+      <rect x="20" y="20" width="80" height="26" rx="6" fill="#f43f5e" fill-opacity="0.2"/>
+      <text x="60" y="37" fill="#f43f5e" font-size="12" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">階段 04</text>
+      <text x="20" y="78" fill="#f8fafc" font-size="20" font-weight="800" font-family="system-ui, sans-serif">Gmail 自動寄信</text>
+      <text x="20" y="102" fill="#94a3b8" font-size="13" font-family="system-ui, sans-serif">專屬排版 HTML 訂單確認信</text>
+
+      <rect x="18" y="125" width="284" height="210" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="30" y="152" fill="#f43f5e" font-size="12" font-weight="700" font-family="monospace">GmailApp.sendEmail(</text>
+      <text x="45" y="178" fill="#cbd5e1" font-size="11" font-family="monospace">email,</text>
+      <text x="45" y="200" fill="#cbd5e1" font-size="11" font-family="monospace">'【SmartSound Pro】預購成功通知',</text>
+      <text x="45" y="222" fill="#cbd5e1" font-size="11" font-family="monospace">'', { htmlBody: htmlTemplate }</text>
+      <text x="30" y="246" fill="#f43f5e" font-size="12" font-weight="700" font-family="monospace">);</text>
+      <rect x="30" y="260" width="260" height="55" rx="6" fill="#881337" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1"/>
+      <text x="40" y="280" fill="#f43f5e" font-size="10" font-weight="700" font-family="system-ui, sans-serif">✉️ 顧客手機「叮咚！」即刻收到</text>
+      <text x="40" y="300" fill="#fda4af" font-size="10" font-family="system-ui, sans-serif">「親愛的 王小明 您好，感謝預購...」</text>
+
+      <g transform="translate(20, 360)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">自動回信價值：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 建立專業品牌信任感</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 顧客隨時有憑有據留存</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 完全由個人 Gmail 免費發出</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 零人工客服寄件負擔</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Response Feedback Bar -->
+  <g transform="translate(80, 680)">
+    <rect width="1440" height="130" rx="14" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="38" fill="#38bdf8" font-size="17" font-weight="800" font-family="system-ui, sans-serif">🔄 最後一步：回傳 JSON 成功響應 ➔ 前端網頁彈出「🎉 預購成功！」提示</text>
+    <text x="30" y="70" fill="#cbd5e1" font-size="13.5" font-family="system-ui, sans-serif">GAS 執行完畢後透過 ContentService 回傳 { status: 'success' }，前端即刻清空輸入欄位，並透過 GitHub CLI 一鍵推送到全世界！</text>
+  </g>
+</svg>

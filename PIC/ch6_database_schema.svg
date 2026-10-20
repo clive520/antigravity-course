@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad-ch6-1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-grad-ch6-1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow-ch6-1" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad-ch6-1)"/>
+
+  <!-- Header -->
+  <g transform="translate(80, 45)">
+    <rect x="0" y="0" width="160" height="28" rx="14" fill="#38bdf8" fill-opacity="0.15"/>
+    <text x="80" y="19" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 6 章 · 資料庫架構</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">預購表單 6 大標準欄位與試算表資料庫規劃 (Schema Design)</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">軟體工程思維：先定義清楚資料庫欄位與型態，再讓 AI 精準產出對接程式碼</text>
+  </g>
+
+  <!-- 6 Columns Container Grid -->
+  <g transform="translate(80, 160)">
+    <!-- Col 1: Timestamp -->
+    <g transform="translate(0, 0)">
+      <rect width="220" height="460" rx="14" fill="url(#card-grad-ch6-1)" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow-ch6-1)"/>
+      <rect x="18" y="18" width="50" height="26" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+      <text x="43" y="36" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">欄位 1</text>
+      <text x="18" y="76" fill="#f8fafc" font-size="18" font-weight="800" font-family="system-ui, sans-serif">登記時間</text>
+      <text x="18" y="100" fill="#38bdf8" font-size="13" font-family="monospace">timestamp</text>
+
+      <rect x="15" y="125" width="190" height="90" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="25" y="152" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">資料型別：日期時間</text>
+      <text x="25" y="180" fill="#34d399" font-size="12" font-weight="700" font-family="monospace">new Date()</text>
+      <text x="25" y="200" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">2026/10/20 20:30:15</text>
+
+      <g transform="translate(18, 240)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">核心功能目的：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 記錄下單確切時間</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 判定早鳥優惠資格</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 系統自動生成填入</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 無需訪客手動填寫</text>
+      </g>
+    </g>
+
+    <!-- Col 2: Name -->
+    <g transform="translate(244, 0)">
+      <rect width="220" height="460" rx="14" fill="url(#card-grad-ch6-1)" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow-ch6-1)"/>
+      <rect x="18" y="18" width="50" height="26" rx="6" fill="#818cf8" fill-opacity="0.2"/>
+      <text x="43" y="36" fill="#818cf8" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">欄位 2</text>
+      <text x="18" y="76" fill="#f8fafc" font-size="18" font-weight="800" font-family="system-ui, sans-serif">客戶姓名</text>
+      <text x="18" y="100" fill="#818cf8" font-size="13" font-family="monospace">name</text>
+
+      <rect x="15" y="125" width="190" height="90" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="25" y="152" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">資料型別：字串 (String)</text>
+      <text x="25" y="180" fill="#818cf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">"王小明"</text>
+      <text x="25" y="200" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">前端必填 (required)</text>
+
+      <g transform="translate(18, 240)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">核心功能目的：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 尊榮稱呼與識別</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 自動回信抬頭稱謂</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 例：「親愛的 王小明」</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 核對匯款與訂單人</text>
+      </g>
+    </g>
+
+    <!-- Col 3: Email -->
+    <g transform="translate(488, 0)">
+      <rect width="220" height="460" rx="14" fill="url(#card-grad-ch6-1)" stroke="#f43f5e" stroke-width="1.8" filter="url(#shadow-ch6-1)"/>
+      <rect x="18" y="18" width="80" height="26" rx="6" fill="#f43f5e" fill-opacity="0.2"/>
+      <text x="58" y="36" fill="#f43f5e" font-size="12" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">欄位 3 ★重要</text>
+      <text x="18" y="76" fill="#f8fafc" font-size="18" font-weight="800" font-family="system-ui, sans-serif">電子信箱</text>
+      <text x="18" y="100" fill="#f43f5e" font-size="13" font-family="monospace">email</text>
+
+      <rect x="15" y="125" width="190" height="90" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="25" y="152" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">資料型別：Email 格式</text>
+      <text x="25" y="180" fill="#f43f5e" font-size="12" font-weight="700" font-family="monospace">user@gmail.com</text>
+      <text x="25" y="200" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">自動發信目標地址</text>
+
+      <g transform="translate(18, 240)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">核心功能目的：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 唯一收件聯絡信箱</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• GmailApp 寄發目標</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 寄送預購確認信件</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 確保客戶收到通知</text>
+      </g>
+    </g>
+
+    <!-- Col 4: Phone -->
+    <g transform="translate(732, 0)">
+      <rect width="220" height="460" rx="14" fill="url(#card-grad-ch6-1)" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow-ch6-1)"/>
+      <rect x="18" y="18" width="50" height="26" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+      <text x="43" y="36" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">欄位 4</text>
+      <text x="18" y="76" fill="#f8fafc" font-size="18" font-weight="800" font-family="system-ui, sans-serif">聯絡電話</text>
+      <text x="18" y="100" fill="#38bdf8" font-size="13" font-family="monospace">phone</text>
+
+      <rect x="15" y="125" width="190" height="90" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="25" y="152" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">資料型別：字串 (String)</text>
+      <text x="25" y="180" fill="#38bdf8" font-size="13" font-weight="700" font-family="monospace">0912-345-678</text>
+      <text x="25" y="200" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">防止開頭 0 被截斷</text>
+
+      <g transform="translate(18, 240)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">核心功能目的：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 後續出貨物流聯絡</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 簡訊發送包裹單號</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 門市取件身分驗證</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 第 7 章串接推播！</text>
+      </g>
+    </g>
+
+    <!-- Col 5: Plan -->
+    <g transform="translate(976, 0)">
+      <rect width="220" height="460" rx="14" fill="url(#card-grad-ch6-1)" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow-ch6-1)"/>
+      <rect x="18" y="18" width="50" height="26" rx="6" fill="#f59e0b" fill-opacity="0.2"/>
+      <text x="43" y="36" fill="#f59e0b" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">欄位 5</text>
+      <text x="18" y="76" fill="#f8fafc" font-size="18" font-weight="800" font-family="system-ui, sans-serif">預購方案</text>
+      <text x="18" y="100" fill="#f59e0b" font-size="13" font-family="monospace">plan</text>
+
+      <rect x="15" y="125" width="190" height="90" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="25" y="152" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">資料型別：選項 (Select)</text>
+      <text x="25" y="180" fill="#f59e0b" font-size="13" font-weight="700" font-family="system-ui, sans-serif">旗艦降噪版 Pro</text>
+      <text x="25" y="200" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">標定商品與售價</text>
+
+      <g transform="translate(18, 240)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">核心功能目的：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 標記客戶購買版本</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 標準版 ($3,990)</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 旗艦降噪 ($5,990)</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 自動帶入信件明細</text>
+      </g>
+    </g>
+
+    <!-- Col 6: Notes -->
+    <g transform="translate(1220, 0)">
+      <rect width="220" height="460" rx="14" fill="url(#card-grad-ch6-1)" stroke="#34d399" stroke-width="1.5" filter="url(#shadow-ch6-1)"/>
+      <rect x="18" y="18" width="50" height="26" rx="6" fill="#34d399" fill-opacity="0.2"/>
+      <text x="43" y="36" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">欄位 6</text>
+      <text x="18" y="76" fill="#f8fafc" font-size="18" font-weight="800" font-family="system-ui, sans-serif">備註留言</text>
+      <text x="18" y="100" fill="#34d399" font-size="13" font-family="monospace">notes</text>
+
+      <rect x="15" y="125" width="190" height="90" rx="8" fill="#020617" stroke="#334155" stroke-width="1"/>
+      <text x="25" y="152" fill="#94a3b8" font-size="11" font-family="system-ui, sans-serif">資料型別：文字區塊</text>
+      <text x="25" y="180" fill="#34d399" font-size="12" font-weight="700" font-family="system-ui, sans-serif">"請於平日晚上配送"</text>
+      <text x="25" y="200" fill="#64748b" font-size="10" font-family="system-ui, sans-serif">非必填選填項目</text>
+
+      <g transform="translate(18, 240)">
+        <text x="0" y="0" fill="#cbd5e1" font-size="13" font-weight="600" font-family="system-ui, sans-serif">核心功能目的：</text>
+        <text x="0" y="24" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 客製化特殊需求</text>
+        <text x="0" y="46" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 指定配送時段或地址</text>
+        <text x="0" y="68" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 售後客服溝通紀錄</text>
+        <text x="0" y="90" fill="#94a3b8" font-size="12" font-family="system-ui, sans-serif">• 保留彈性擴充空間</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Tip Banner -->
+  <g transform="translate(80, 660)">
+    <rect width="1440" height="150" rx="14" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="42" fill="#38bdf8" font-size="18" font-weight="800" font-family="system-ui, sans-serif">💡 AI 實戰心法：請 Antigravity 產出 Excel 範本，免手動建表！</text>
+    <text x="30" y="75" fill="#cbd5e1" font-size="14" font-family="system-ui, sans-serif">向 AI 下達提示詞：「請幫我建立 preorder_database_template.xlsx，放好上述 6 個欄位標題與一筆範例資料」，</text>
+    <text x="30" y="105" fill="#cbd5e1" font-size="14" font-family="system-ui, sans-serif">一鍵拖曳上傳至 Google Drive 另存為「Google 試算表」，立即完成雲端資料庫建置！</text>
+  </g>
+</svg>

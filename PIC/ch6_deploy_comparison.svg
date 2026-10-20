@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 880" width="1600" height="880">
+  <defs>
+    <linearGradient id="bg-grad-ch6-3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card-grad-ch6-3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow-ch6-3" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="880" fill="url(#bg-grad-ch6-3)"/>
+
+  <!-- Header -->
+  <g transform="translate(80, 45)">
+    <rect x="0" y="0" width="160" height="28" rx="14" fill="#38bdf8" fill-opacity="0.15"/>
+    <text x="80" y="19" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle" font-family="system-ui, sans-serif">第 6 章 · 部署觀念解密</text>
+    <text x="0" y="60" fill="#f8fafc" font-size="28" font-weight="800" font-family="system-ui, sans-serif">前端 GitHub vs. 後端 GAS 部署機制大對照（避免改了沒生效！）</text>
+    <text x="0" y="88" fill="#94a3b8" font-size="15" font-family="system-ui, sans-serif">為什麼修改了 GAS 後端程式碼線上卻沒反應？徹底搞懂版本切換的關鍵差異</text>
+  </g>
+
+  <!-- 2 Big Comparison Cards -->
+  <g transform="translate(80, 160)">
+    <!-- Left: Frontend GitHub Pages (Auto) -->
+    <g transform="translate(0, 0)">
+      <rect width="690" height="490" rx="16" fill="url(#card-grad-ch6-3)" stroke="#38bdf8" stroke-width="1.8" filter="url(#shadow-ch6-3)"/>
+      <rect x="25" y="25" width="130" height="28" rx="6" fill="#38bdf8" fill-opacity="0.2"/>
+      <text x="90" y="44" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">前端網頁部署</text>
+      <text x="25" y="88" fill="#f8fafc" font-size="22" font-weight="800" font-family="system-ui, sans-serif">GitHub Pages：全自動化更新</text>
+      <text x="25" y="115" fill="#94a3b8" font-size="14" font-family="system-ui, sans-serif">HTML / CSS / JS 前端程式碼修改後的更新方式</text>
+
+      <!-- Steps Flow -->
+      <g transform="translate(25, 145)">
+        <rect width="640" height="70" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+        <text x="20" y="28" fill="#38bdf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">步驟 1 · 口語吩咐 AI 提交代碼</text>
+        <text x="20" y="52" fill="#cbd5e1" font-size="12" font-family="system-ui, sans-serif">對 Antigravity 說「幫我推送到 GitHub」，AI 在背景執行 git commit &amp; push</text>
+
+        <rect y="90" width="640" height="70" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+        <text x="20" y="118" fill="#38bdf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">步驟 2 · GitHub 伺服器背景自動建置 (CI/CD)</text>
+        <text x="20" y="142" fill="#cbd5e1" font-size="12" font-family="system-ui, sans-serif">偵測到 main 分支有新代碼，全球 CDN 伺服器自動拉取、編譯並發布</text>
+
+        <rect y="180" width="640" height="70" rx="10" fill="#020617" stroke="#34d399" stroke-width="1"/>
+        <text x="20" y="208" fill="#34d399" font-size="14" font-weight="700" font-family="system-ui, sans-serif">步驟 3 · 1~2 分鐘後全球網頁自動生效！</text>
+        <text x="20" y="232" fill="#cbd5e1" font-size="12" font-family="system-ui, sans-serif">重新整理瀏覽器網址，最新修改的標題、排版與按鈕直接呈現</text>
+      </g>
+
+      <g transform="translate(25, 420)">
+        <rect width="640" height="45" rx="8" fill="#0369a1" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1"/>
+        <text x="20" y="28" fill="#38bdf8" font-size="13" font-weight="700" font-family="system-ui, sans-serif">✔ 結論：只要推上 GitHub，一切自動搞定，不需手動操作任何後台！</text>
+      </g>
+    </g>
+
+    <!-- Right: Backend GAS (Manual New Version) -->
+    <g transform="translate(750, 0)">
+      <rect width="690" height="490" rx="16" fill="url(#card-grad-ch6-3)" stroke="#f43f5e" stroke-width="1.8" filter="url(#shadow-ch6-3)"/>
+      <rect x="25" y="25" width="130" height="28" rx="6" fill="#f43f5e" fill-opacity="0.2"/>
+      <text x="90" y="44" fill="#f43f5e" font-size="13" font-weight="800" text-anchor="middle" font-family="system-ui, sans-serif">後端 GAS 部署</text>
+      <text x="25" y="88" fill="#f8fafc" font-size="22" font-weight="800" font-family="system-ui, sans-serif">GAS Web App：必須手動發布新版本</text>
+      <text x="25" y="115" fill="#fca5a5" font-size="14" font-weight="700" font-family="system-ui, sans-serif">★ 90% 初學者卡關痛點：GAS 無法從本機自動上傳！</text>
+
+      <!-- Steps Flow -->
+      <g transform="translate(25, 145)">
+        <rect width="640" height="70" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+        <text x="20" y="28" fill="#818cf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">步驟 1 · 手動複製程式碼並存檔</text>
+        <text x="20" y="52" fill="#cbd5e1" font-size="12" font-family="system-ui, sans-serif">將 AI 改好的 GAS 程式碼複製，貼回 Google Apps Script 編輯器按儲存</text>
+
+        <rect y="90" width="640" height="70" rx="10" fill="#020617" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="20" y="118" fill="#f43f5e" font-size="14" font-weight="800" font-family="system-ui, sans-serif">步驟 2 · 關鍵死穴：點「管理部署作業」➔ 建立「新版本 (New Version)」</text>
+        <text x="20" y="142" fill="#fda4af" font-size="12" font-family="system-ui, sans-serif">點鉛筆圖示編輯，版本下拉選「新版本」，再點右下角「部署」按鈕！</text>
+
+        <rect y="180" width="640" height="70" rx="10" fill="#020617" stroke="#334155" stroke-width="1"/>
+        <text x="20" y="208" fill="#34d399" font-size="14" font-weight="700" font-family="system-ui, sans-serif">步驟 3 · Web App 網址保持不變，程式邏輯更新生效！</text>
+        <text x="20" y="232" fill="#cbd5e1" font-size="12" font-family="system-ui, sans-serif">原有的 API 網址維持相同，前端網頁送出的請求立刻跑最新後端邏輯</text>
+      </g>
+
+      <g transform="translate(25, 420)">
+        <rect width="640" height="45" rx="8" fill="#881337" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1"/>
+        <text x="20" y="28" fill="#fca5a5" font-size="13" font-weight="700" font-family="system-ui, sans-serif">🚨 警告：如果只按儲存沒點「新版本部署」，API 網址將永遠停留在舊代碼！</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Tip -->
+  <g transform="translate(80, 680)">
+    <rect width="1440" height="130" rx="14" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="42" fill="#38bdf8" font-size="17" font-weight="800" font-family="system-ui, sans-serif">💡 教學記憶口訣：前端改動「動口推」，後端改動「手動新版本」！</text>
+    <text x="30" y="75" fill="#cbd5e1" font-size="13.5" font-family="system-ui, sans-serif">牢記這項架構差異，未來無論在課堂、公司專案或自由接案，遇上「表單資料沒進去」的狀況，3 秒鐘就能精準除錯！</text>
+  </g>
+</svg>

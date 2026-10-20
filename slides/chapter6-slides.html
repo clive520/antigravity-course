@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 6 章 上課簡報：實戰串接 GAS — 打造預購資料庫與自動寄發確認信</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(56, 189, 248, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #34d399;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Top Quick Header */
+    .deck-header {
+      position: fixed;
+      top: 10px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .deck-header * {
+      pointer-events: auto;
+    }
+
+    .deck-title {
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deck-title span {
+      color: var(--accent-cyan);
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .timer-pill {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-amber);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Slide Deck Viewport */
+    .deck-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px 70px;
+      position: relative;
+    }
+
+    /* Individual Slide */
+    .slide {
+      position: absolute;
+      width: calc(100% - 80px);
+      max-width: 1500px;
+      height: calc(100% - 100px);
+      max-height: 840px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      padding: 40px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.97) translateY(12px);
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 20px;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-cyan);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .slide-title {
+      font-size: clamp(2.4rem, 2.8vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    /* Slide Body Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      margin: 10px 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      height: 100%;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      height: 100%;
+      align-items: center;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      height: 100%;
+      align-items: center;
+    }
+
+    /* Slide Content Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--border-highlight);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-badge {
+      align-self: flex-start;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+    }
+
+    .card h3 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card p, .card ul {
+      color: #cbd5e1;
+      font-size: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .grid-4 .card h3 {
+      font-size: 1.3rem;
+    }
+
+    .grid-4 .card p, .grid-4 .card ul {
+      font-size: 1.15rem;
+      line-height: 1.45;
+    }
+
+    .card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card ul li {
+      position: relative;
+      padding-left: 22px;
+    }
+
+    .card ul li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+
+    /* Image Container in Slide */
+    .img-box {
+      width: 100%;
+      height: 100%;
+      max-height: 480px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: zoom-in;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .img-box:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    .img-box img {
+      max-width: 95%;
+      max-height: 95%;
+      object-fit: contain;
+    }
+
+    .zoom-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Code block inside slide */
+    .code-preview {
+      background: #040711;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #38bdf8;
+      overflow-x: auto;
+    }
+
+    .code-preview .keyword { color: #f43f5e; }
+    .code-preview .fn { color: #818cf8; }
+    .code-preview .str { color: #34d399; }
+    .code-preview .comment { color: #64748b; font-style: italic; }
+
+    /* Bottom Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-chapter-pill {
+      font-size: 0.85rem;
+      color: var(--accent-indigo);
+      font-weight: 600;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 10px;
+      border-radius: 9999px;
+    }
+
+    /* Bottom Deck Floating Navigation */
+    .deck-nav {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      padding: 8px 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-cyan);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .nav-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dot.active {
+      width: 22px;
+      border-radius: 9999px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+    }
+
+    /* Overview Modal Grid */
+    .overview-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 9, 19, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .overview-modal.active {
+      display: flex;
+    }
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      max-width: 1400px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .overview-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .thumb-card {
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .thumb-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+    }
+
+    .thumb-card.active {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+
+    .thumb-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .thumb-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .thumb-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Image Zoom Modal */
+    .zoom-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      cursor: zoom-out;
+    }
+
+    .zoom-modal.active {
+      display: flex;
+    }
+
+    .zoom-modal img {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--border-color);
+      background: #0b1120;
+    }
+
+    .zoom-close {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      font-size: 1.8rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Slide Hero Title */
+    .hero-title {
+      font-size: clamp(3rem, 4vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 30%, #38bdf8 70%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .hero-desc {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 900px;
+    }
+
+    .kbd-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Deck Top Controls -->
+  <header class="deck-header">
+    <div class="deck-title">
+      <span>第 06 章</span> 實戰串接 GAS — 打造預購資料庫與自動寄發確認信
+    </div>
+    <div class="deck-controls">
+      <div class="timer-pill" id="timerBtn" title="點擊重設計時器">
+        ⏱️ <span id="timerDisplay">00:00</span>
+      </div>
+      <button class="btn-icon" id="overviewBtn" title="幻燈片總覽 [O]">
+        📑
+      </button>
+      <button class="btn-icon" id="fullscreenBtn" title="切換全螢幕 [F]">
+        ⛶
+      </button>
+      <a href="../chapters/chapter6.html" class="btn-icon" title="返回講義手冊" style="text-decoration:none;">
+        📖
+      </a>
+    </div>
+  </header>
+
+  <!-- Deck Viewport -->
+  <main class="deck-viewport">
+
+    <!-- Slide 1: 封面 -->
+    <div class="slide active" data-slide="1">
+      <div class="slide-header">
+        <div class="slide-tag">CHAPTER 06 • FULLSTACK PIPELINE</div>
+        <h1 class="hero-title">實戰串接 GAS<br>打造預購資料庫與自動寄發確認信</h1>
+        <p class="hero-desc">前後端整合全攻略：用 Google Sheets 當免費用量資料庫，以 Google Apps Script 為無伺服器後端，打通全自動化電商預購流水線！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">STEP 1</span>
+            <h3>📊 雲端試算表資料庫</h3>
+            <p>零維護成本、直觀可視化的預購資料表結構規劃。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">STEP 2</span>
+            <h3>⚡ 無伺服器 GAS 後端</h3>
+            <p>接收 Fetch API 請求，即時驗證、防呆並寫入資料庫。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">STEP 3</span>
+            <h3>✉️ 個人化 Gmail 自動回信</h3>
+            <p>顧客送單後秒速收到圖文並茂的個人專屬預購確認信。</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">Google Antigravity 實戰教學</span>
+          <span>按 <kbd class="kbd-hint">→</kbd> 或 <kbd class="kbd-hint">Space</kbd> 翻頁</span>
+        </div>
+        <div class="slide-counter">01 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 2: 本章學習目標 -->
+    <div class="slide" data-slide="2">
+      <div class="slide-header">
+        <div class="slide-tag">ROADMAP</div>
+        <h2 class="slide-title">本章 4 大核心成果</h2>
+        <p class="slide-subtitle">從純前端靜態頁面，跨越為具備真實後端能力的專業全端應用</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="card">
+            <span class="card-badge">01</span>
+            <h3>📋 資料庫欄位</h3>
+            <ul>
+              <li>6 大標準預購規格設計</li>
+              <li>時間戳記與防重複欄位</li>
+              <li>試算表保護與權限設定</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="card-badge">02</span>
+            <h3>⚙️ GAS Web App</h3>
+            <ul>
+              <li>doPost(e) 處理 JSON 資料</li>
+              <li>appendRow 高效寫入</li>
+              <li>結構化 JSON 回傳格式</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="card-badge">03</span>
+            <h3>🚀 前端 Fetch 串接</h3>
+            <ul>
+              <li>非同步 POST 請求發送</li>
+              <li>送單時按鈕防重複連點</li>
+              <li>成功/失敗動態 Toast 提示</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="card-badge">04</span>
+            <h3>📬 Gmail 自動通知</h3>
+            <ul>
+              <li>GmailApp 自動化寄信</li>
+              <li>客製化 HTML 郵件模板</li>
+              <li>訂單唯一編號生成</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-0 本章架構</span>
+        </div>
+        <div class="slide-counter">02 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 3: 6-1 預購資料庫規格規劃 -->
+    <div class="slide" data-slide="3">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-1</div>
+        <h2 class="slide-title">預購資料庫 6 大標準欄位規格</h2>
+        <p class="slide-subtitle">試算表首行欄位是後端存取的關鍵契約，名稱與順序必須保持嚴格一致</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="img-box" onclick="openZoomModal('../PIC/ch6_database_schema.svg')">
+            <img src="../PIC/ch6_database_schema.svg" alt="預購表單 6 大標準欄位與試算表資料庫規劃">
+            <span class="zoom-hint">🔍 點擊放大查看</span>
+          </div>
+          <div class="card" style="height: 100%; justify-content: center;">
+            <span class="card-badge">SPECIFICATION</span>
+            <h3>欄位標準定義</h3>
+            <ul>
+              <li><strong>Timestamp</strong>：系統自動寫入登記時間</li>
+              <li><strong>Name</strong>：訂購人全名（不可為空）</li>
+              <li><strong>Email</strong>：通知收件信箱（格式驗證）</li>
+              <li><strong>Phone</strong>：聯絡電話（配送與確認簡訊）</li>
+              <li><strong>Plan</strong>：預購方案（早鳥版/旗艦版）</li>
+              <li><strong>Notes</strong>：備註需求（顏色、發票載具等）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-1 資料庫規格</span>
+        </div>
+        <div class="slide-counter">03 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 4: 6-1 建立 Google 試算表與關聯指令碼 -->
+    <div class="slide" data-slide="4">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-1</div>
+        <h2 class="slide-title">建立容器關聯指令碼 (Container-Bound)</h2>
+        <p class="slide-subtitle">直接從試算表內建選單開啟 Apps Script，原生享有最高權限與簡易存取能力</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">STEP 1</span>
+            <h3>建立空白試算表</h3>
+            <p>在 Google Drive 新增試算表，命名為「NovaWave 旗艦耳機預購名單」，並將第一列填入 6 個標準標題。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">STEP 2</span>
+            <h3>啟動 Apps Script</h3>
+            <p>點選上方功能表：<br><strong>「擴充功能」➔「Apps Script」</strong><br>系統自動建立與此試算表綁定的雲端腳本專案。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">STEP 3</span>
+            <h3>綁定 Sheet ID</h3>
+            <p>指令碼內部可透過 <code>SpreadsheetApp.getActiveSpreadsheet()</code> 直接存取，無需手動複製試算表網址或 ID！</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-1 試算表設定</span>
+        </div>
+        <div class="slide-counter">04 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 5: 6-2 撰寫 GAS 後端接收腳本 doPost(e) -->
+    <div class="slide" data-slide="5">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-2</div>
+        <h2 class="slide-title">撰寫 GAS 核心接收函式：doPost(e)</h2>
+        <p class="slide-subtitle">監聽 HTTP POST 請求、解析 Payload、防呆檢查並呼叫 appendRow 寫入</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="code-preview">
+<span class="keyword">function</span> <span class="fn">doPost</span>(e) {
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> data = JSON.parse(e.postData.contents);
+    <span class="keyword">const</span> sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    
+    <span class="comment">// 寫入試算表下一列</span>
+    sheet.<span class="fn">appendRow</span>([
+      <span class="keyword">new</span> Date(),
+      data.name,
+      data.email,
+      data.phone,
+      data.plan,
+      data.notes || <span class="str">""</span>
+    ]);
+
+    <span class="comment">// 寄出確認信</span>
+    <span class="fn">sendConfirmationEmail</span>(data);
+
+    <span class="keyword">return</span> ContentService.<span class="fn">createTextOutput</span>(
+      JSON.stringify({ status: <span class="str">"success"</span> })
+    ).setMimeType(ContentService.MimeType.JSON);
+  } <span class="keyword">catch</span> (err) {
+    <span class="comment">/* 錯誤捕捉與日誌記錄 */</span>
+  }
+}
+          </div>
+          <div class="card" style="height: 100%; justify-content: center;">
+            <span class="card-badge">KEY CONCEPTS</span>
+            <h3>核心邏輯 3 大要點</h3>
+            <ul>
+              <li><strong>postData.contents</strong>：前端送來的 JSON 字串，需先以 <code>JSON.parse()</code> 解析。</li>
+              <li><strong>sheet.appendRow()</strong>：原子化寫入新列，自帶鎖定機制防止高併發衝突覆寫。</li>
+              <li><strong>createTextOutput()</strong>：務必將輸出設為 <code>MimeType.JSON</code>，以利前端解析。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-2 GAS 後端腳本</span>
+        </div>
+        <div class="slide-counter">05 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 6: 6-2 部署為網頁應用程式 Web App -->
+    <div class="slide" data-slide="6">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-2</div>
+        <h2 class="slide-title">關鍵部署設定：公開 Web App</h2>
+        <p class="slide-subtitle">最容易踩雷的權限設定！執行身分與存取權限配置原則</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">STEP 1</span>
+            <h3>建立新部署</h3>
+            <p>點選右上角<strong>「部署」➔「新增部署」</strong>，類型選擇<strong>「網頁應用程式 (Web app)」</strong>。</p>
+          </div>
+          <div class="card" style="border-color: rgba(52, 211, 153, 0.6);">
+            <span class="card-badge" style="color: var(--accent-emerald);">STEP 2 (關鍵)</span>
+            <h3>執行身分：我 (Me)</h3>
+            <p>讓所有使用者送出的表單，都借用<strong>「你自己的帳號權限」</strong>寫入試算表與寄發信件。</p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.6);">
+            <span class="card-badge" style="color: var(--accent-rose);">STEP 3 (必選)</span>
+            <h3>存取權限：所有人 (Anyone)</h3>
+            <p><strong>必須設定為「所有人」</strong>，外網訪客與前端網頁才能無需登入 Google 順利呼叫 API。</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-2 Web App 部署</span>
+        </div>
+        <div class="slide-counter">06 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 7: 6-3 前端表單串接 Fetch API -->
+    <div class="slide" data-slide="7">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-3</div>
+        <h2 class="slide-title">前端 Fetch API 非同步送單</h2>
+        <p class="slide-subtitle">監聽表單 submit、阻擋預設重整、鎖定按鈕防止連點</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="code-preview">
+form.addEventListener(<span class="str">'submit'</span>, <span class="keyword">async</span> (e) => {
+  e.preventDefault();
+  submitBtn.disabled = <span class="keyword">true</span>;
+  submitBtn.textContent = <span class="str">'資料傳送中...'</span>;
+
+  <span class="keyword">const</span> payload = {
+    name: form.name.value,
+    email: form.email.value,
+    phone: form.phone.value,
+    plan: form.plan.value,
+    notes: form.notes.value
+  };
+
+  <span class="keyword">await</span> fetch(GAS_WEB_APP_URL, {
+    method: <span class="str">'POST'</span>,
+    body: JSON.stringify(payload)
+  });
+
+  showToast(<span class="str">'預購成功！確認信已寄發'</span>);
+  form.reset();
+  submitBtn.disabled = <span class="keyword">false</span>;
+});
+          </div>
+          <div class="card" style="height: 100%; justify-content: center;">
+            <span class="card-badge">UX BEST PRACTICES</span>
+            <h3>良好使用者體驗三部曲</h3>
+            <ul>
+              <li><strong>e.preventDefault()</strong>：避免原生表單跳頁刷新的破碎感。</li>
+              <li><strong>按鈕鎖定 (Disabled)</strong>：避免使用者在網路延遲時連續瘋狂點擊，產生重複訂單。</li>
+              <li><strong>狀態即時反饋</strong>：使用 Toast 浮動視窗或成功燈號，讓使用者清楚知道訂單已完成。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-3 前端 Fetch 實戰</span>
+        </div>
+        <div class="slide-counter">07 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 8: 6-4 全端實戰流水線架構 -->
+    <div class="slide" data-slide="8">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-4</div>
+        <h2 class="slide-title">全端自動化流水線整體架構</h2>
+        <p class="slide-subtitle">前端網頁、GAS 雲端處理、試算表儲存與 Gmail 寄送的完整閉環</p>
+      </div>
+      <div class="slide-body">
+        <div class="img-box" onclick="openZoomModal('../PIC/ch6_fullstack_pipeline.svg')">
+          <img src="../PIC/ch6_fullstack_pipeline.svg" alt="全端實戰串接流水線整體架構">
+          <span class="zoom-hint">🔍 點擊放大查看</span>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-4 全端流水線</span>
+        </div>
+        <div class="slide-counter">08 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 9: 6-4 自動寄發確認信：GmailApp -->
+    <div class="slide" data-slide="9">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-4</div>
+        <h2 class="slide-title">GmailApp 自動寄發個人化信件</h2>
+        <p class="slide-subtitle">打造專屬 HTML 郵件模板，即刻通知顧客預購詳情與訂單編號</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="height: 100%; justify-content: center;">
+            <span class="card-badge">GMAILAPP API</span>
+            <h3>GmailApp.sendEmail 參數</h3>
+            <ul>
+              <li><strong>recipient</strong>：收件人電子郵件（如 data.email）</li>
+              <li><strong>subject</strong>：信件主旨（含訂單編號）</li>
+              <li><strong>body</strong>：純文字替代備案（防止不支援 HTML）</li>
+              <li><strong>options.htmlBody</strong>：精緻美觀的 HTML 排版設計</li>
+              <li><strong>options.name</strong>：寄件者自訂名稱（如 NovaWave 團隊）</li>
+            </ul>
+          </div>
+          <div class="card" style="height: 100%; justify-content: center;">
+            <span class="card-badge">TEMPLATE TIPS</span>
+            <h3>信件模板設計要訣</h3>
+            <ul>
+              <li><strong>內聯樣式 (Inline CSS)</strong>：郵件客戶端對外部 CSS 支援差，樣式需寫在 tag 上。</li>
+              <li><strong>訂單編號產生</strong>：以 <code>Date.now()</code> 搭配隨機碼產生唯一防重序號。</li>
+              <li><strong>免費用量注意</strong>：免費 Gmail 每日限制 100 封，Workspace 帳號每日 1,500 封。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-4 Gmail 自動通知</span>
+        </div>
+        <div class="slide-counter">09 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 10: 6-5 跨網域 CORS 與 GAS 排錯 -->
+    <div class="slide" data-slide="10">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-5</div>
+        <h2 class="slide-title">GAS 特殊行為與跨網域排錯</h2>
+        <p class="slide-subtitle">掌握 HTTP 302 重定向機制與 no-cors 的真實行為特徵</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">ISSUE 1</span>
+            <h3>HTTP 302 重新導向</h3>
+            <p>GAS Web App 在接收請求後會發出 302 重定向至 <code>googleusercontent.com</code>，瀏覽器 Fetch 預設會自動跟隨 (redirect: follow)。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">ISSUE 2</span>
+            <h3>mode: 'no-cors' 迷思</h3>
+            <p>雖可抑制瀏覽器紅字報錯，但會將回應轉為 opaque，前端將<strong>無法讀取後端回傳的 JSON 結果</strong>，請優先確保後端正確輸出 JSON。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">ISSUE 3</span>
+            <h3>401 / 403 權限錯誤</h3>
+            <p>百分之九十的串接失敗是因為「部署存取權限」未設為「所有人 (Anyone)」，請進入部署管理重新檢查。</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-5 CORS 與排錯</span>
+        </div>
+        <div class="slide-counter">10 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 11: 6-6 部署模式對照與版本更新 -->
+    <div class="slide" data-slide="11">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 6-6</div>
+        <h2 class="slide-title">前後端部署模式對照與版本更新</h2>
+        <p class="slide-subtitle">前端 GitHub Actions 自動推送 vs 後端 GAS Web App 手動發布新版本</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="img-box" onclick="openZoomModal('../PIC/ch6_deploy_comparison.svg')">
+            <img src="../PIC/ch6_deploy_comparison.svg" alt="前端 GitHub Pages 自動部署 vs 後端 GAS 手動發布版本對照圖">
+            <span class="zoom-hint">🔍 點擊放大查看</span>
+          </div>
+          <div class="card" style="height: 100%; justify-content: center;">
+            <span class="card-badge">DEPLOYMENT RULES</span>
+            <h3>版本更新黃金法則</h3>
+            <ul>
+              <li><strong>前端網頁</strong>：<code>git push</code> 至 GitHub，Actions 幾秒鐘內全自動編譯發布。</li>
+              <li><strong>後端 GAS (必記)</strong>：修改 code.gs 儲存後，<strong>必須點選「管理部署」➔「編輯」➔版本選擇「新版本」➔儲存</strong>，外部呼叫才會生效！</li>
+              <li>若僅儲存未開新版本，外網呼叫的仍會是舊版快取。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">6-6 部署機制對照</span>
+        </div>
+        <div class="slide-counter">11 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 12: 總結與通關成就 -->
+    <div class="slide" data-slide="12">
+      <div class="slide-header">
+        <div class="slide-tag">CONGRATULATIONS</div>
+        <h1 class="hero-title">恭喜通關！全端自動化完成 🎉</h1>
+        <p class="hero-desc">你已經建立起具備「前端互動 ➔ 無伺服器後端 ➔ 雲端資料庫 ➔ 個人化通知」的真實商業自動化系統！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">ACHIEVEMENT</span>
+            <h3>✨ 完整全端電商通路</h3>
+            <p>零主機維護成本，即時收集真實潛在客戶預購訂單。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">ACHIEVEMENT</span>
+            <h3>🛡️ 企業級架構與防護</h3>
+            <p>按鈕防連點、資料格式防呆與異常容錯處理完備。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">NEXT CHAPTER</span>
+            <h3>🎨 第 7 章精彩預告</h3>
+            <p>進一步自訂外觀設計、品牌風格統一與進階效能優化！</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">第 06 章 總結</span>
+        </div>
+        <div class="slide-counter">12 / 12</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Floating Navigation -->
+  <nav class="deck-nav">
+    <button class="nav-btn" id="prevBtn" title="上一頁 [←]">
+      ❮ 上一頁
+    </button>
+    <div class="nav-dots" id="dotsContainer"></div>
+    <button class="nav-btn" id="nextBtn" title="下一頁 [→]">
+      下一頁 ❯
+    </button>
+  </nav>
+
+  <!-- Overview Modal -->
+  <div class="overview-modal" id="overviewModal">
+    <div class="overview-header">
+      <div class="overview-title">📑 投影片總覽 (Slide Overview)</div>
+      <button class="btn-icon" id="closeOverviewBtn" style="font-size: 1.5rem;">✕</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <!-- Image Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <button class="zoom-close" onclick="closeZoomModal()">✕</button>
+    <img id="zoomImg" src="" alt="Zoomed view">
+  </div>
+
+  <script>
+    // State management
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    // Elements
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('dotsContainer');
+    const overviewModal = document.getElementById('overviewModal');
+    const overviewBtn = document.getElementById('overviewBtn');
+    const closeOverviewBtn = document.getElementById('closeOverviewBtn');
+    const overviewGrid = document.getElementById('overviewGrid');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerBtn = document.getElementById('timerBtn');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    // Create navigation dots & overview items
+    slides.forEach((slide, index) => {
+      const slideNum = index + 1;
+      
+      // Dot
+      const dot = document.createElement('div');
+      dot.className = `dot ${slideNum === 1 ? 'active' : ''}`;
+      dot.title = `切換至第 ${slideNum} 頁`;
+      dot.addEventListener('click', () => goToSlide(slideNum));
+      dotsContainer.appendChild(dot);
+
+      // Overview Card
+      const titleEl = slide.querySelector('.slide-title, .hero-title');
+      const title = titleEl ? titleEl.innerText.replace(/\\n/g, ' ') : `投影片 ${slideNum}`;
+      const subtitleEl = slide.querySelector('.slide-subtitle, .hero-desc');
+      const desc = subtitleEl ? subtitleEl.innerText : '';
+
+      const thumb = document.createElement('div');
+      thumb.className = `thumb-card ${slideNum === 1 ? 'active' : ''}`;
+      thumb.innerHTML = `
+        <div class="thumb-num">SLIDE ${String(slideNum).padStart(2, '0')}</div>
+        <div class="thumb-title">${title}</div>
+        <div class="thumb-desc">${desc.substring(0, 55)}${desc.length > 55 ? '...' : ''}</div>
+      `;
+      thumb.addEventListener('click', () => {
+        goToSlide(slideNum);
+        closeOverview();
+      });
+      overviewGrid.appendChild(thumb);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+    const thumbs = document.querySelectorAll('.thumb-card');
+
+    function updateSlide() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx + 1 === currentSlide);
+      });
+      dots.forEach((d, idx) => {
+        d.classList.toggle('active', idx + 1 === currentSlide);
+      });
+      thumbs.forEach((t, idx) => {
+        t.classList.toggle('active', idx + 1 === currentSlide);
+      });
+
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+
+      const progress = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    // Event listeners for navigation
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+      if (overviewModal.classList.contains('active')) {
+        if (e.key === 'Escape' || e.key.toLowerCase() === 'o') closeOverview();
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case 'o':
+        case 'O':
+          e.preventDefault();
+          toggleOverview();
+          break;
+        case 'Escape':
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          }
+          break;
+      }
+    });
+
+    // Overview modal controls
+    function toggleOverview() {
+      overviewModal.classList.toggle('active');
+    }
+    function closeOverview() {
+      overviewModal.classList.remove('active');
+    }
+    overviewBtn.addEventListener('click', toggleOverview);
+    closeOverviewBtn.addEventListener('click', closeOverview);
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>
