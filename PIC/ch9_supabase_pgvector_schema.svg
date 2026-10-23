@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#071720"/>
+    </linearGradient>
+    <linearGradient id="cardGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow2" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad2)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="195" height="30" rx="15" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.5"/>
+    <text x="97.5" y="20" fill="#10b981" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">SUPABASE PGVECTOR</text>
+    <text x="215" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">Supabase 向量資料庫與 RPC 函式設計</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">利用 PostgreSQL 原生擴充套件，實現手冊內文、JSON 出處中繼資料與 768 維語意向量的一體化存儲</text>
+  </g>
+
+  <!-- Left: Table Schema Design -->
+  <g transform="translate(60, 130)" filter="url(#shadow2)">
+    <rect width="420" height="340" rx="14" fill="url(#cardGrad2)" stroke="#10b981" stroke-width="1.5"/>
+    <rect width="420" height="40" rx="14" fill="rgba(16, 185, 129, 0.18)"/>
+    <rect y="28" width="420" height="12" fill="url(#cardGrad2)"/>
+    <text x="20" y="26" fill="#10b981" font-family="'Inter', monospace" font-size="14" font-weight="800">TABLE: handbook_documents</text>
+    
+    <!-- Column 1: id -->
+    <g transform="translate(20, 60)">
+      <rect width="380" height="50" rx="8" fill="#0b1120" stroke="#1e293b"/>
+      <text x="18" y="28" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">id</text>
+      <text x="60" y="28" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="11.5">bigserial primary key</text>
+      <text x="18" y="44" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="10.5">每筆手冊段落的獨立流水編號 (唯一主鍵)</text>
+    </g>
+
+    <!-- Column 2: content -->
+    <g transform="translate(20, 120)">
+      <rect width="380" height="55" rx="8" fill="#0b1120" stroke="#1e293b"/>
+      <text x="18" y="26" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">content</text>
+      <text x="95" y="26" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="11.5">text</text>
+      <text x="18" y="44" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="10.5">切塊後的純文字段落（約 300～500 字，含重疊字）</text>
+    </g>
+
+    <!-- Column 3: metadata -->
+    <g transform="translate(20, 185)">
+      <rect width="380" height="65" rx="8" fill="#0b1120" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="18" y="25" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">metadata</text>
+      <text x="105" y="25" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="11.5">jsonb</text>
+      <text x="18" y="43" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="10.5">{ "doc": "02_出差報銷", "section": "2.1 高鐵標準" }</text>
+      <text x="18" y="58" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="10">手冊出處中繼資訊，供 AI 作答時直接引用</text>
+    </g>
+
+    <!-- Column 4: embedding -->
+    <g transform="translate(20, 260)">
+      <rect width="380" height="60" rx="8" fill="#061a12" stroke="#10b981" stroke-width="1.5"/>
+      <text x="18" y="26" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800">embedding</text>
+      <text x="115" y="26" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="11.5">vector(768)</text>
+      <text x="18" y="45" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="10.5">Google text-embedding-004 產出的 768 維高維語意向量</text>
+    </g>
+  </g>
+
+  <!-- Right: SQL RPC Function match_handbooks -->
+  <g transform="translate(520, 130)" filter="url(#shadow2)">
+    <rect width="420" height="340" rx="14" fill="url(#cardGrad2)" stroke="#38bdf8" stroke-width="1.8"/>
+    <rect width="420" height="40" rx="14" fill="rgba(56, 189, 248, 0.18)"/>
+    <rect y="28" width="420" height="12" fill="url(#cardGrad2)"/>
+    <text x="20" y="26" fill="#38bdf8" font-family="'Inter', monospace" font-size="14" font-weight="800">RPC FUNCTION: match_handbooks()</text>
+
+    <!-- Code Block -->
+    <g transform="translate(20, 55)">
+      <rect width="380" height="265" rx="8" fill="#040711" stroke="#1e293b"/>
+      
+      <text x="16" y="28" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">-- 餘弦距離算子: &lt;=&gt; (Cosine Distance)</text>
+      
+      <text x="16" y="52" fill="#f43f5e" font-family="'JetBrains Mono', monospace" font-size="11.5">create or replace function</text>
+      <text x="210" y="52" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11.5">match_handbooks (</text>
+      
+      <text x="32" y="74" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11">query_embedding <span fill="#10b981">vector(768)</span>,</text>
+      <text x="32" y="94" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11">match_count int default 4</text>
+      
+      <text x="16" y="116" fill="#f43f5e" font-family="'JetBrains Mono', monospace" font-size="11.5">) returns table (...)</text>
+      <text x="16" y="136" fill="#f43f5e" font-family="'JetBrains Mono', monospace" font-size="11.5">language plpgsql as $$</text>
+      <text x="16" y="156" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="11.5">begin</text>
+      
+      <text x="32" y="178" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="11">return query</text>
+      <text x="32" y="198" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11">select id, content, metadata,</text>
+      <text x="32" y="218" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="11">  1 - (embedding &lt;=&gt; query_embedding) as sim</text>
+      <text x="32" y="238" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="11">from handbook_documents</text>
+      <text x="32" y="254" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="11">order by embedding &lt;=&gt; query_embedding limit 4;</text>
+    </g>
+  </g>
+
+  <!-- Bottom Tip -->
+  <g transform="translate(60, 490)">
+    <rect width="880" height="38" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="1"/>
+    <text x="25" y="24" font-size="16">⚡</text>
+    <text x="50" y="24" fill="#34d399" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5" font-weight="600">
+      利用 pgvector 的餘弦算子（&lt;=&gt;），Supabase 可以在幾毫秒內從數萬個段落中精準撈出語意最相符的 Top 4 手冊規範！
+    </text>
+  </g>
+</svg>

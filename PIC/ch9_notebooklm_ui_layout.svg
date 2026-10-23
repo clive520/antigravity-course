@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0b1329"/>
+    </linearGradient>
+    <linearGradient id="cardGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow3" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad3)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 40)">
+    <rect width="185" height="30" rx="15" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="92.5" y="20" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">NOTEBOOKLM UI SPEC</text>
+    <text x="205" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">私有版 NotebookLM 雙欄問答介面佈局</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">左欄負責情境對話與結構化 SOP 呈現，右欄同步呈現手冊真實章節卡片，徹底消除新人對規章的疑惑！</text>
+  </g>
+
+  <!-- Main App Mockup Window -->
+  <g transform="translate(60, 120)" filter="url(#shadow3)">
+    <rect width="880" height="400" rx="14" fill="#0b1120" stroke="#334155" stroke-width="1.5"/>
+    
+    <!-- Top Window Bar -->
+    <rect width="880" height="38" rx="14" fill="#131e36"/>
+    <rect y="26" width="880" height="12" fill="#131e36"/>
+    <circle cx="25" cy="19" r="5" fill="#f43f5e"/>
+    <circle cx="42" cy="19" r="5" fill="#f59e0b"/>
+    <circle cx="59" cy="19" r="5" fill="#10b981"/>
+    <text x="440" y="24" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="600" text-anchor="middle">🏢 NovaTech 企業內部智慧新人導航系統 (Private NotebookLM)</text>
+
+    <!-- Left Column (65% width): Chat & Query -->
+    <g transform="translate(20, 55)">
+      <rect width="530" height="325" rx="10" fill="#060913" stroke="#1e293b"/>
+      
+      <!-- Search Input Box -->
+      <g transform="translate(20, 20)">
+        <rect width="490" height="44" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="20" y="27" font-size="16">🔍</text>
+        <text x="45" y="27" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13">我確診了要怎麼請假？可以 WFH 嗎？</text>
+        <rect x="420" y="7" width="60" height="30" rx="6" fill="#38bdf8"/>
+        <text x="450" y="26" fill="#060913" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="700" text-anchor="middle">諮詢</text>
+      </g>
+
+      <!-- Quick Topic Pills -->
+      <g transform="translate(20, 75)">
+        <text x="0" y="16" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11">熱門情境：</text>
+        <rect x="65" y="0" width="95" height="24" rx="12" fill="#1e293b"/>
+        <text x="112.5" y="16" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">高鐵報銷標準</text>
+        <rect x="170" y="0" width="85" height="24" rx="12" fill="#1e293b"/>
+        <text x="212.5" y="16" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">筆電遺失處理</text>
+        <rect x="265" y="0" width="95" height="24" rx="12" fill="#1e293b"/>
+        <text x="312.5" y="16" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">生理假要證明嗎</text>
+        <rect x="370" y="0" width="85" height="24" rx="12" fill="#1e293b"/>
+        <text x="412.5" y="16" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">生日假幾天</text>
+      </g>
+
+      <!-- AI Answer Card -->
+      <g transform="translate(20, 115)">
+        <rect width="490" height="190" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="1.2"/>
+        <text x="20" y="28" font-size="16">🤖</text>
+        <text x="45" y="28" fill="#10b981" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13" font-weight="800">AI 智慧導航助理回覆：</text>
+        
+        <text x="20" y="55" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="700">若快篩陽性（COVID-19 / 流感），處置 SOP 如下：</text>
+        <text x="20" y="76" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">1. <strong fill="#38bdf8">立即通報</strong>：30 分鐘內告知直屬主管與 HR (hr@example.com)。</text>
+        <text x="20" y="98" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">2. <strong fill="#38bdf8">兩種請假/出勤選擇</strong>：</text>
+        <text x="35" y="118" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ <strong>居家遠距辦公 (WFH)</strong>：經主管同意即可，薪資全額發給，不扣假！</text>
+        <text x="35" y="138" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ <strong>普通傷病假</strong>：拍照快篩試劑（寫姓名日期）即可申請（半薪）。</text>
+        <text x="20" y="162" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11.5">3. 退燒滿 24 小時且症狀緩解後，即可恢復進入辦公室。</text>
+        <rect x="20" y="170" width="220" height="15" rx="3" fill="rgba(56, 189, 248, 0.15)"/>
+        <text x="25" y="181" fill="#38bdf8" font-family="'Noto Sans TC', sans-serif" font-size="9.5">🔍 已比對右側《差勤管理辦法》第 4.1 條</text>
+      </g>
+    </g>
+
+    <!-- Right Column (35% width): Sources (NotebookLM Style) -->
+    <g transform="translate(570, 55)">
+      <rect width="290" height="325" rx="10" fill="#060913" stroke="#1e293b"/>
+      
+      <!-- Right Header -->
+      <g transform="translate(15, 18)">
+        <text x="0" y="16" font-size="16">📑</text>
+        <text x="24" y="16" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">參考來源手冊 (Sources)</text>
+        <rect x="210" y="2" width="45" height="18" rx="4" fill="rgba(16, 185, 129, 0.2)"/>
+        <text x="232.5" y="15" fill="#10b981" font-family="'Inter', sans-serif" font-size="10" font-weight="700" text-anchor="middle">TOP 1</text>
+      </g>
+
+      <!-- Source Card 1 (Matched) -->
+      <g transform="translate(15, 50)">
+        <rect width="260" height="130" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+        <rect width="260" height="26" rx="8" fill="rgba(16, 185, 129, 0.15)"/>
+        <rect y="18" width="260" height="8" fill="#0f172a"/>
+        <text x="12" y="18" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="700">【規章 01】員工差勤與請休假管理辦法</text>
+        
+        <text x="12" y="42" fill="#38bdf8" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="700">第四章 4.1 快篩陽性處置流程</text>
+        <text x="12" y="60" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="10">同仁若快篩陽性應立即通報主管與 HR。得選擇居家遠距辦公（薪資照給）或普通傷病假（半薪）...</text>
+        
+        <line x1="12" y1="92" x2="248" y2="92" stroke="#1e293b"/>
+        <text x="12" y="112" fill="#34d399" font-family="'Inter', sans-serif" font-size="10" font-weight="700">相似度 (Similarity): 89.4%</text>
+        <rect x="180" y="99" width="68" height="20" rx="4" fill="#1e293b"/>
+        <text x="214" y="113" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="9.5" text-anchor="middle">查看原文 ↗</text>
+      </g>
+
+      <!-- Source Card 2 (Secondary) -->
+      <g transform="translate(15, 195)">
+        <rect width="260" height="110" rx="8" fill="#0f172a" stroke="#334155"/>
+        <rect width="260" height="24" rx="8" fill="rgba(51, 65, 85, 0.4)"/>
+        <rect y="16" width="260" height="8" fill="#0f172a"/>
+        <text x="12" y="16" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="10.5" font-weight="600">【規章 01】第三章 3.1 普通傷病假規範</text>
+        
+        <text x="12" y="40" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="10">普通傷病假全年未住院病假累計 30 天折半發給工資。連續逾 2 日需檢附就醫證明...</text>
+        <line x1="12" y1="75" x2="248" y2="75" stroke="#1e293b"/>
+        <text x="12" y="94" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">相似度 (Similarity): 76.2%</text>
+      </g>
+    </g>
+  </g>
+</svg>
