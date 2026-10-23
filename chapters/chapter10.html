@@ -305,8 +305,51 @@ create index on handbook_documents using hnsw (embedding vector_cosine_ops);
 
       <!-- 10-5 對 Antigravity 下達指令實作 -->
       <section id="sec-10-5" class="content-section">
-        <h2>10-5 對 Antigravity 下達 Supabase 開發指令（Prompt 實用模板）</h2>
-        <p>在日常開發中，你完全不需要死背複雜的 PostgreSQL 與 pgvector 語法，只要把需求告訴 Antigravity 即可！</p>
+        <h2>10-5 對 Antigravity 下達 Supabase 開發指令與 CLI 授權實戰</h2>
+        <p>在日常開發中，除了在網頁後台點擊操作，我們更推薦讓 Antigravity 透過 <strong>Supabase CLI</strong> 或代碼腳本全自動替我們建表、做資料庫遷移與同步！</p>
+
+        <!-- Supabase CLI 授權教學專區 -->
+        <div class="step-box" style="margin-bottom: 2rem; border-color: rgba(62, 207, 142, 0.4); background: rgba(62, 207, 142, 0.05);">
+          <h4 style="color: #3ecf8e; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🔑</span> 核心授權：如何讓 Antigravity 以 CLI（Supabase CLI）控制遠端資料庫？
+          </h4>
+          <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.7;">
+            Supabase 官方提供強大的 <strong>Supabase CLI</strong> 工具（透過 <code>npx supabase</code> 執行）。要讓 Antigravity 能替我們執行資料庫遷移、產生型別定義或部署 Edge Functions，需要完成以下授權：
+          </p>
+
+          <div style="margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <!-- 步驟 1: PAT Token -->
+            <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+              <strong style="color: #38bdf8; font-size: 0.95rem;">步驟 1：取得個人存取權杖 (PAT Token)</strong>
+              <ol style="font-size: 0.82rem; color: var(--text-muted); padding-left: 1.1rem; line-height: 1.7; margin: 0.5rem 0;">
+                <li>登入 <a href="https://supabase.com/dashboard/account/tokens" target="_blank" style="color: #38bdf8;">Supabase Account Settings</a>。</li>
+                <li>點選左側 <strong>Access Tokens</strong> ➔ 點擊「Generate new token」。</li>
+                <li>複製生成的 Token（開頭為 <code>sbp_...</code>）。</li>
+                <li>在終端機執行一次性登入：<br>
+                  <code style="color: #38bdf8;">npx supabase login --token 你的sbp_Token</code>
+                  <br>（或在 <code>.env</code> 加入 <code>SUPABASE_ACCESS_TOKEN</code> 達成靜默授權）
+                </li>
+              </ol>
+            </div>
+
+            <!-- 步驟 2: 連結專案 -->
+            <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+              <strong style="color: #3ecf8e; font-size: 0.95rem;">步驟 2：將本機專案連結至雲端 (Link)</strong>
+              <ol style="font-size: 0.82rem; color: var(--text-muted); padding-left: 1.1rem; line-height: 1.7; margin: 0.5rem 0;">
+                <li>至專案後台首頁取得 <strong>Project Reference ID</strong>（網址 <code>/project/xxx</code> 中的代碼）。</li>
+                <li>請 Antigravity 執行連結命令：<br>
+                  <code style="color: #3ecf8e;">npx supabase link --project-ref 你的專案ID</code>
+                </li>
+                <li>輸入建立資料庫時設定的 Database Password 即綁定完成！</li>
+              </ol>
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem; background: rgba(15, 23, 42, 0.6); padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; color: #cbd5e1;">
+            💡 <strong>免安裝 Docker 的輕量腳本授權（Node.js Ingest 專用）</strong>：<br>
+            若只需執行手冊向量切塊匯入腳本，只需在 Supabase 後台「Project Settings」➔「API」複製 <code>URL</code> 與 <strong><code>service_role secret</code></strong>，放入 <code>.env</code> 即可讓 Antigravity 透過 <code>@supabase/supabase-js</code> 以最高權限快速寫入資料！
+          </div>
+        </div>
 
         <div class="prompt-box">
           <div class="prompt-header">
