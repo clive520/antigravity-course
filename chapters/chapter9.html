@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>第 9 章：現代雲端邊緣部署 — 認識 Cloudflare Pages 全球極速平台 - Antigravity 實戰教學</title>
+  <title>第 9 章：現代雲端邊緣平台 — 認識 Cloudflare 全家桶（網頁、資料庫、檔案庫與免費額度全解） - Antigravity 實戰教學</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,179 +39,233 @@
         <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
         <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播通知</a></li>
         <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
-        <li><a href="chapter9.html" class="active">第 9 章：Cloudflare Pages 邊緣部署</a></li>
+        <li><a href="chapter9.html" class="active">第 9 章：Cloudflare 全家桶全解</a></li>
         <li><a href="chapter10.html">第 10 章：企業級 AI 知識庫 (RAG)</a></li>
       </ul>
       <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
       <ul class="sidebar-nav">
-        <li><a href="#sec-9-1">9-1 從 GitHub 跨入 Cloudflare</a></li>
-        <li><a href="#sec-9-2">9-2 註冊與一鍵連結 Git 專案</a></li>
-        <li><a href="#sec-9-3">9-3 全球 330+ 節點與自訂網域</a></li>
-        <li><a href="#sec-9-4">9-4 預覽分支與多人協作網址</a></li>
-        <li><a href="#sec-9-5">9-5 認識 Pages Functions 邊緣運算</a></li>
-        <li><a href="#sec-9-6">9-6 免費額度解析與部署驗收</a></li>
+        <li><a href="#sec-9-1">9-1 全球 330+ 節點 Anycast 概念</a></li>
+        <li><a href="#sec-9-2">9-2 網頁託管 Pages 與運算 Workers</a></li>
+        <li><a href="#sec-9-3">9-3 邊緣資料庫：D1 / KV / Vectorize</a></li>
+        <li><a href="#sec-9-4">9-4 檔案資料庫 R2 (0元出站流量)</a></li>
+        <li><a href="#sec-9-5">9-5 企業門禁 Zero Trust Access</a></li>
+        <li><a href="#sec-9-6">9-6 全套免費額度總表與實戰驗收</a></li>
       </ul>
     </aside>
 
     <!-- 右側內容 -->
     <main class="lesson-content">
       <div class="lesson-header">
-        <span class="meta-pill" style="background: rgba(246, 130, 31, 0.2); color: #f6821f;">第 9 章 · 現代雲端邊緣部署</span>
-        <h1>進階現代雲端邊緣部署：認識 Cloudflare Pages 全球極速平台</h1>
-        <p class="desc">在第 3、4 章中，我們學會用 GitHub Pages 發布靜態網站。但當網站要給全公司員工使用、需要極致載入速度與更高的安全性時，全美最有影響力的雲端安全巨頭 <strong>Cloudflare</strong> 所推出的 <strong>Cloudflare Pages</strong> 便是現代開發者的升級首選！本章帶你無縫升級部署架構，跨入全球 330+ 邊緣節點的極速世界！</p>
+        <span class="meta-pill" style="background: rgba(246, 130, 31, 0.2); color: #f6821f;">第 9 章 · 現代雲端軍火庫</span>
+        <h1>現代雲端邊緣平台：認識 Cloudflare 全家桶（網頁、資料庫、檔案庫與免費額度全解）</h1>
+        <p class="desc">在現代軟體工程界，Cloudflare 已不僅僅是一家防護網路攻擊的公司，它已經進化為全球開發者公認的<strong>「最強 Serverless 雲端軍火庫」</strong>！本章將全面解構 Cloudflare 的五大核心能力：<strong>網頁託管 (Pages)、邊緣運算 (Workers)、三大分散式資料庫 (D1 / KV / Vectorize)、零流量費檔案儲存 (R2) 與企業門禁 (Zero Trust)</strong>，並附上最完整的永久免費額度指南，為第 10 章的企業級 AI 知識庫做好最扎實的技術準備！</p>
       </div>
 
-      <!-- 9-1 從 GitHub 到 Cloudflare -->
+      <!-- 9-1 概念進化 -->
       <section id="sec-9-1" class="content-section">
-        <h2>9-1 告別單一伺服器：從 GitHub Pages 到 Cloudflare Pages 的進化之旅</h2>
-        <p>在過去，如果你的伺服器設在美國，台灣的訪客每次打開網頁都要橫跨半個地球傳送資料，延遲往往高達 200～300 毫秒（ms）。</p>
-        <p>而 <strong>Cloudflare Pages</strong> 是建立在 Cloudflare 享譽全球的 <strong>Anycast 邊緣網路</strong> 之上。當台灣使用者打開你的網頁時，資料直接由「台北或高雄的本地資料中心」瞬間送達，連線延遲大幅降低至 <strong>10～30 毫秒</strong>！</p>
+        <h2>9-1 概念進化：從 GitHub 跨入 Cloudflare 全球 330+ 邊緣節點</h2>
+        <p>在第 3、4 章中，我們學會使用 GitHub Pages 發布網站。GitHub Pages 很好，但它是以美國西岸為主的單一靜態伺服器，亞洲訪客開啟時延遲常在 150～300 毫秒（ms）。</p>
+        <p>而 Cloudflare 擁有全球超過 <strong>330 個城市的 Anycast 邊緣網路</strong>（包含台北、高雄與香港）。當台灣的使用者點開你的網址時，請求是由離他最近的本地資料中心在 <strong>10～30 毫秒內</strong> 瞬間回應！</p>
 
         <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
           <img src="../PIC/ch9_cloudflare_pages_cdn.svg" alt="GitHub Pages vs Cloudflare Pages 對照圖" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
           <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-            <strong>🌐 圖 9-1：GitHub Pages vs. Cloudflare Pages 現代雲端部署架構進化</strong><br>
-            從單一地區快取跨入全球 330+ 邊緣節點，不僅帶來閃電般的載入速度，更天然具備抵禦 DDoS 攻擊與原生存取控管能力。
+            <strong>🌐 圖 9-1：傳統單一託管 vs. Cloudflare 全球邊緣 Anycast CDN 架構進化</strong><br>
+            資料直接駐留在邊緣，帶來極致的載入速度，並自帶免費 SSL 萬用憑證與頂級 DDoS 流量防護。
           </div>
         </div>
+      </section>
+
+      <!-- 9-2 網頁託管 Pages 與運算 Workers -->
+      <section id="sec-9-2" class="content-section">
+        <h2>9-2 網頁與運算雙核心：Cloudflare Pages 託管與 Workers 邊緣運算</h2>
 
         <div class="step-box">
-          <h4>🔥 Cloudflare Pages 的 4 大壓倒性優勢：</h4>
+          <h4>1. Cloudflare Pages（現代前端網站託管）</h4>
+          <p>專門用來放 HTML、CSS、JavaScript 靜態網站或 React/Vue 前端專案：</p>
           <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
-            <li>⚡ <strong>全球邊緣極速（Anycast Edge）</strong>：自動就近由訪客最近的城市提供網頁快取。</li>
-            <li>🔄 <strong>無限流量（Unlimited Bandwidth）</strong>：免費方案不限制每月流量頻寬，完全不用擔心爆量被停機或收取超額費用。</li>
-            <li>🌿 <strong>預覽分支環境（Preview Deployments）</strong>：開新分支推上 Git，Cloudflare 會自動為該分支產生一個專屬測試網址，方便團隊預覽。</li>
-            <li>🛡️ <strong>全端一體化生態系</strong>：可無縫搭配 Workers 邊緣運算、KV 儲存與 Zero Trust 企業身分驗證（這也是我們第 10 章的關鍵武器！）。</li>
+            <li><strong>一鍵 Git 整合</strong>：授權 GitHub 儲存庫，每次 <code>git push</code> 後 10 秒內全球自動編譯上線。</li>
+            <li><strong>分支獨立預覽（Preview Deployments）</strong>：開新分支時，Cloudflare 自動為該分支派發獨立測試網址，主管與客戶驗收不干擾正式線上網站。</li>
+            <li><strong>自訂網域免煩惱</strong>：免費綁定專屬品牌網域名稱，永久自動配置免費 SSL 安全鎖頭。</li>
+            <li>🎁 <strong>免費額度</strong>：⭐ <strong>出站流量永遠完全無限制（Unlimited Bandwidth）</strong>！每月提供 <strong>500 次自動建置（Builds）</strong>。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="margin-top: 1.5rem;">
+          <h4>2. Cloudflare Workers（無伺服器邊緣後端）</h4>
+          <p>不用租用虛擬主機，直接在全球 330+ 節點上執行輕量後端代碼：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
+            <li><strong>毫秒級冷啟動（&lt; 5ms）</strong>：採用 Google V8 隔離區技術，速度是傳統 AWS Lambda 的 100 倍。</li>
+            <li><strong>金鑰安全保管（Secrets）</strong>：後端支援環境變數加密，可安全存放 Google API Key 或資料庫密鑰，前端瀏覽器完全看不到！</li>
+            <li><strong>全端一體化（Pages Functions）</strong>：只要在專案新增 <code>functions/</code> 目錄，就能讓靜態網站秒變具備 API 後端運算能力的全端系統。</li>
+            <li>🎁 <strong>免費額度</strong>：⭐ <strong>每天 100,000 次免費請求（10 萬次/天）</strong>，每次請求享有 10ms CPU 執行時間（等待網路/資料庫的 I/O 時間不計入）。</li>
           </ul>
         </div>
       </section>
 
-      <!-- 9-2 註冊與一鍵連結 Git -->
-      <section id="sec-9-2" class="content-section">
-        <h2>9-2 註冊 Cloudflare 與一鍵連結 GitHub 儲存庫</h2>
-        <p>把現有專案轉移到 Cloudflare Pages 非常簡單，完全不用改寫任何程式碼，只需透過滑鼠在後台完成授權：</p>
+      <!-- 9-3 邊緣資料庫三劍客 -->
+      <section id="sec-9-3" class="content-section">
+        <h2>9-3 邊緣資料庫三劍客：D1 (SQL)、KV (快取) 與 Vectorize (向量庫)</h2>
+        <p>過去在邊緣執行後端最怕「資料庫依然留在美國，連線還是慢」。Cloudflare 推出三種原生邊緣資料庫，讓資料直接住在運算節點旁邊：</p>
 
-        <div class="step-box">
-          <h4>🛠️ 快速上手 3 步驟：</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+            <div style="font-size: 1.3rem; margin-bottom: 0.3rem;">🗃️</div>
+            <strong style="color: #10b981; font-size: 1.1rem;">Cloudflare D1</strong>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0.4rem 0;">邊緣關聯式 SQL 資料庫</p>
+            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+              基於 SQLite 標準，支援標準 SQL 表、Join 關聯查詢與交易機制。
+            </p>
+            <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: #10b981; font-weight: 700;">
+              🎁 免費 5 GB 儲存<br>每日讀 500 萬列 / 寫 10 萬列
+            </div>
+          </div>
+
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+            <div style="font-size: 1.3rem; margin-bottom: 0.3rem;">⚡</div>
+            <strong style="color: #38bdf8; font-size: 1.1rem;">Workers KV</strong>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0.4rem 0;">全球超高速鍵值快取庫</p>
+            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+              Key-Value 字典資料庫，讀取延遲低於 10ms，適合存放使用者權杖與設定檔。
+            </p>
+            <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: #38bdf8; font-weight: 700;">
+              🎁 免費 1 GB 儲存<br>每日讀取 10 萬次 / 寫 1 千次
+            </div>
+          </div>
+
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+            <div style="font-size: 1.3rem; margin-bottom: 0.3rem;">🧠</div>
+            <strong style="color: #818cf8; font-size: 1.1rem;">Vectorize</strong>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin: 0.4rem 0;">AI 專用向量檢索資料庫</p>
+            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+              專為 RAG 知識庫設計！用來存放 Embeddings 向量並執行毫秒級餘弦相似度搜尋。
+            </p>
+            <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: #818cf8; font-weight: 700;">
+              🎁 每月 3,000 萬維度儲存<br>每月 3,000 萬維度檢索查詢
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9-4 檔案資料庫 R2 -->
+      <section id="sec-9-4" class="content-section">
+        <h2>9-4 檔案資料庫 R2：完全免出站頻寬費（Zero Egress Fees）的 S3 相容儲存</h2>
+        <p>在雲端儲存領域，AWS S3 是最知名的物件儲存服務，但它有一項令所有企業聞風喪膽的收費陷阱——<strong>「下載流量費（Data Egress Fees）」</strong>！當你的使用者頻繁下載 PDF 或圖片時，每 GB 都要被抽取高額頻寬費。</p>
+
+        <div class="step-box" style="border-left: 4px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
+          <h4 style="color: #f59e0b;">🔥 Cloudflare R2 的革命性承諾：</h4>
+          <p>Cloudflare R2 完全相容 Amazon S3 的 API，用來存放**公司規章 PDF、圖片、備份檔或大容量文件**，並做出了顛覆業界的承諾：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
+            <li>⭐ <strong>出站下載流量費永遠為 0 元（$0 Egress Fees）</strong>：無論檔案被下載幾百萬次，頻寬費用永遠是 0 元！</li>
+            <li>🎁 <strong>免費儲存容量</strong>：**每個月 10 GB 永久免費**！</li>
+            <li>🎁 <strong>免費操作次數</strong>：每月 <strong>100 萬次上傳/寫入（Class A）</strong>，以及每月 <strong>1,000 萬次讀取/下載（Class B）</strong>！</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 9-5 企業安全門禁 Zero Trust Access -->
+      <section id="sec-9-5" class="content-section">
+        <h2>9-5 企業安全門禁：Cloudflare Zero Trust Access 前 50 人完全免費</h2>
+        <p>很多開發者自己寫網站，最怕把內部管理系統或手冊放到公開網路上被外人看光。傳統做法必須自己寫使用者帳號表、登入畫面、加密密碼與 Session 機制，既費時又容易有資安漏洞。</p>
+
+        <div class="step-box" style="border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
+          <h4 style="color: #10b981;">🛡️ 免寫一行登入程式！零信任身分防護牆：</h4>
+          <p>Cloudflare 提供了名為 <strong>Zero Trust (Access)</strong> 的頂級安全功能：</p>
           <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
-            <li><strong>免費註冊帳號</strong>：前往 <a href="https://dash.cloudflare.com/sign-up" target="_blank" style="color: #f6821f; text-decoration: underline;">Cloudflare 註冊頁面</a>，輸入 Email 與密碼完成免費開戶。</li>
-            <li><strong>建立 Pages 專案</strong>：進入控制台左側選單的 <strong>「Workers & Pages」➔「Create application」➔ 選擇「Pages」標籤頁</strong>，點擊「Connect to Git」。</li>
-            <li><strong>綁定 GitHub 儲存庫</strong>：授權 Cloudflare 存取你的 GitHub 帳號，並勾選我們之前建立的課程專案（如 <code>antigravity-course</code>）。</li>
-            <li><strong>設定建置參數（Build settings）</strong>：
-              <ul style="padding-left: 1.25rem;">
-                <li><strong>Framework preset</strong>：選擇 <code>None</code>（純 HTML 專案）。</li>
-                <li><strong>Build command</strong>：留空（無需編譯）。</li>
-                <li><strong>Build output directory</strong>：填入 <code>/</code> 或專案根目錄。</li>
-              </ul>
-            </li>
-            <li>點擊 <strong>「Save and Deploy」</strong>，系統會在 10 秒內完成全球節點派發，並給你一個專屬的 <code>*.pages.dev</code> 正式網址！</li>
+            <li>只要在後台勾選設定，就能在網頁前罩上一道安全門禁。</li>
+            <li><strong>限制企業郵件網域</strong>：設定只有 <code>@yourcompany.com</code> 的同仁輸入 Email 收到一次性 6 碼驗證 PIN 碼，或透過 Google Workspace 登入才能進入。</li>
+            <li>無授權的外部陌生訪客會直接被邊緣防火牆阻絕（403 Forbidden），完全摸不到內部網頁！</li>
+            <li>🎁 <strong>免費額度</strong>：⭐ <strong>前 50 位使用者（Seats）永久完全免費</strong>，極度適合中小企業、新創團隊與內部專案！</li>
           </ol>
         </div>
       </section>
 
-      <!-- 9-3 全球節點與自訂網域 -->
-      <section id="sec-9-3" class="content-section">
-        <h2>9-3 全球 330+ 節點、免費頂級 SSL 與自訂網域</h2>
-        <p>很多初學者買了自己的專屬網域（如 <code>www.mycompany.tw</code>）後，往往被繁雜的 DNS A 紀錄、CNAME 與 SSL 安全憑證搞得暈頭轉向。在 Cloudflare Pages 中，這些繁瑣的工序全部被自動化簡化：</p>
-
-        <div class="step-box">
-          <h4>🔒 自動化 SSL 與自訂網域優勢：</h4>
-          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
-            <li><strong>一鍵綁定自訂網域</strong>：在專案設定中點擊「Custom domains」，輸入你的網域名稱，Cloudflare 會自動幫你配置好 DNS 與自動跳轉。</li>
-            <li><strong>全自動免費 SSL 憑證</strong>：採用企業級 Let's Encrypt / DigiCert 萬用憑證，永久自動續期，瀏覽器永遠顯示綠色安全鎖頭。</li>
-            <li><strong>自帶 DDoS 防護與 WAF 防火牆</strong>：自動過濾惡意攻擊封包、爬蟲與 SQL 注入攻擊，保障網站高枕無憂。</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 9-4 預覽分支與多人協作 -->
-      <section id="sec-9-4" class="content-section">
-        <h2>9-4 預覽分支（Preview Deployments）：現代軟體團隊協作神器</h2>
-        <p>在傳統部署中，只要把程式碼 push 到 GitHub，就會直接覆蓋掉線上的正式網站。萬一程式有 Bug，所有線上顧客立刻受影響。</p>
-
-        <div class="step-box" style="border-left: 4px solid #f6821f; background: rgba(246, 130, 31, 0.05);">
-          <h4 style="color: #f6821f;">🌱 Cloudflare 的「分支即網址」黑科技：</h4>
-          <p>當你在本機建立新分支進行改版時（例如 <code>git checkout -b feature-darkmode</code>），只要 push 上去：</p>
-          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
-            <li>正式網址（<code>main</code> 分支）完全不受影響，顧客依然順暢瀏覽。</li>
-            <li>Cloudflare 會自動為該分支產生一個<strong>獨立的預覽網址</strong>（例如：<code>https://feature-darkmode.myproject.pages.dev</code>）。</li>
-            <li>你可以直接把這個預覽網址貼給主管、同事或客戶進行驗收，確認無誤後在 GitHub 合併（Merge），正式網站才會無縫更新！</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 9-5 認識 Pages Functions -->
-      <section id="sec-9-5" class="content-section">
-        <h2>9-5 認識 Pages Functions：通往邊緣後端 Workers 的大門</h2>
-        <p>這是 Cloudflare Pages 最殺手級的功能！如果你只想寫一個靜態網頁，GitHub Pages 已經夠用；但當你的網頁需要<strong>「後端運算、環境變數金鑰保護、串接 AI」</strong>時，Cloudflare Pages 原生支援 <strong>Pages Functions</strong>！</p>
-
-        <div class="step-box">
-          <h4>💡 只要在專案新增一個 <code>functions/</code> 資料夾：</h4>
-          <p>你在資料夾裡寫的 JavaScript 代碼，就會自動變成在全球邊緣節點執行的 Serverless API：</p>
-          <pre style="background: #040711; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; color: #38bdf8; font-family: monospace; font-size: 0.88rem; line-height: 1.6;">
-// 範例：functions/api/hello.js
-export async function onRequest(context) {
-  return new Response(JSON.stringify({ 
-    message: "來自 Cloudflare 全球邊緣節點的問候！",
-    colo: context.request.cf.colo // 顯示當前回應的資料中心代碼（例如 TPE 台北）
-  }), {
-    headers: { "Content-Type": "application/json" }
-  });
-}
-          </pre>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
-            這意味著你的網站**不再只是純靜態網頁**，而是具備了全端運算能力的超級平台！這也是我們在**第 10 章要串接 Supabase 與 AI 大腦的核心基石**！
-          </p>
-        </div>
-      </section>
-
-      <!-- 9-6 免費額度與部署驗收 -->
+      <!-- 9-6 免費額度總表與驗收 -->
       <section id="sec-9-6" class="content-section">
-        <h2>9-6 免費額度全解析與實戰部署驗收</h2>
-        <p>很多學員最關心的是：<em>「這項服務真的免費嗎？會不會不小心被收費？」</em></p>
+        <h2>9-6 全套免費額度總整理速查表與實戰部署驗收</h2>
+        <p>綜合以上五大核心功能，Cloudflare 構建出了一套令全美開發者驚豔的「現代雲端軍火庫」：</p>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch9_cloudflare_ecosystem_map.svg" alt="Cloudflare 全家桶現代雲端軍火庫全貌" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 9-2：Cloudflare 全家桶現代雲端軍火庫架構地圖</strong><br>
+            網頁託管 (Pages) + 邊緣運算 (Workers) + 三大資料庫 (D1/KV/Vectorize) + 零流量費檔案庫 (R2) + 企業門禁 (Zero Trust)。
+          </div>
+        </div>
 
         <div class="step-box">
-          <h4>📊 Cloudflare Pages 免費方案（Free Tier）額度標準：</h4>
+          <h4>📊 Cloudflare 核心服務永久免費方案（Free Tier）極限速查表：</h4>
           <div style="overflow-x: auto; margin-top: 0.5rem;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
               <thead>
                 <tr style="border-bottom: 2px solid var(--border-color); color: #f6821f;">
-                  <th style="padding: 0.6rem;">服務項目</th>
-                  <th style="padding: 0.6rem;">免費額度</th>
-                  <th style="padding: 0.6rem;">對個人的實質意義</th>
+                  <th style="padding: 0.6rem;">服務類型</th>
+                  <th style="padding: 0.6rem;">服務名稱</th>
+                  <th style="padding: 0.6rem;">主要用途</th>
+                  <th style="padding: 0.6rem;">永久免費額度標準</th>
+                  <th style="padding: 0.6rem;">超額後限制 / 備註</th>
                 </tr>
               </thead>
               <tbody style="color: var(--text-muted); line-height: 1.8;">
                 <tr style="border-bottom: 1px solid var(--border-color);">
-                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">每月頻寬流量</td>
-                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">無限制 (Unlimited)</td>
-                  <td style="padding: 0.6rem;">即使幾十萬人瀏覽，流量費永遠為 0 元。</td>
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">前端網頁</td>
+                  <td style="padding: 0.6rem; color: #f6821f; font-weight: 700;">Pages</td>
+                  <td style="padding: 0.6rem;">網站與前端託管</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">流量完全無限、月建置 500 次</td>
+                  <td style="padding: 0.6rem;">超額後暫停當月自動建置，網站照常運作</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border-color);">
-                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">每月自動建置次數</td>
-                  <td style="padding: 0.6rem; color: #38bdf8; font-weight: 700;">500 次 / 月</td>
-                  <td style="padding: 0.6rem;">平均每天可以 push 改版 16 次，極為充裕。</td>
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">邊緣後端</td>
+                  <td style="padding: 0.6rem; color: #38bdf8; font-weight: 700;">Workers</td>
+                  <td style="padding: 0.6rem;">Serverless API / 中繼</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">每天 100,000 次請求、10ms CPU</td>
+                  <td style="padding: 0.6rem;">超額後當日回傳 1027 錯誤，次日早 8 點重設</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border-color);">
-                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">自訂網域數量</td>
-                  <td style="padding: 0.6rem; color: #38bdf8; font-weight: 700;">無限制</td>
-                  <td style="padding: 0.6rem;">可免費綁定多個自己的專屬品牌網域名稱。</td>
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">SQL 資料庫</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">D1</td>
+                  <td style="padding: 0.6rem;">邊緣關聯 SQLite</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">5 GB 容量、日讀 500 萬列 / 寫 10 萬列</td>
+                  <td style="padding: 0.6rem;">超額後操作暫時受限</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">鍵值快取</td>
+                  <td style="padding: 0.6rem; color: #38bdf8; font-weight: 700;">Workers KV</td>
+                  <td style="padding: 0.6rem;">高頻讀取快取庫</td>
+                  <td style="padding: 0.6rem;">1 GB 容量、日讀 10 萬次 / 寫 1,000 次</td>
+                  <td style="padding: 0.6rem;">適合存放全域設定檔與 Token</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">向量資料庫</td>
+                  <td style="padding: 0.6rem; color: #818cf8; font-weight: 700;">Vectorize</td>
+                  <td style="padding: 0.6rem;">AI 向量檢索 (RAG)</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">每月 3000 萬維度儲存 & 查詢</td>
+                  <td style="padding: 0.6rem;">大約可存 3.9 萬條 768 維手冊段落</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">檔案儲存</td>
+                  <td style="padding: 0.6rem; color: #f59e0b; font-weight: 700;">R2</td>
+                  <td style="padding: 0.6rem;">PDF/圖片/文件儲存</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">每月 10 GB 儲存、下載流量費 0 元！</td>
+                  <td style="padding: 0.6rem;">每月 100 萬次寫入、1000 萬次讀取</td>
                 </tr>
                 <tr>
-                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">Functions (Workers)</td>
-                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">每天 10 萬次請求</td>
-                  <td style="padding: 0.6rem;">足夠支撐中小型內部系統或個人創業專案。</td>
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">資安門禁</td>
+                  <td style="padding: 0.6rem; color: #818cf8; font-weight: 700;">Zero Trust</td>
+                  <td style="padding: 0.6rem;">員工信箱身分驗證</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;">前 50 位使用者永久免費！</td>
+                  <td style="padding: 0.6rem;">免買商業防火牆，中小企業極度夠用</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <div class="callout callout-tip">
-          <span>🚀</span>
+        <div class="callout callout-tip" style="margin-top: 1.75rem;">
+          <span>🎯</span>
           <div>
-            <strong>恭喜完成現代雲端邊緣部署觀念升級！</strong><br>
-            掌握了 Cloudflare Pages，你已經掌握了現代科技大廠都在使用的基礎建設！接下來，我們將在**第 10 章**結合這個強大平台，聯手 **Cloudflare Workers、Supabase 向量資料庫與 AI API**，親手實戰打造一套真正企業級的「新人手冊智慧導航庫」！
+            <strong>為第 10 章的企業級 AI 知識庫做好準備！</strong><br>
+            徹底搞懂了 Cloudflare 全家桶的威力和免費額度後，我們已經擁有了頂尖的雲端基礎建設知識！在接下來的**第 10 章**中，我們將把這一切融會貫通：利用 **Cloudflare Pages 放前端 + Cloudflare Workers 當大腦 + Supabase (pgvector) 做向量檢索 + Gemini API 嚴格接地回答 + Zero Trust 員工門禁**，親手完成震撼全公司的私有化智慧手冊系統！
           </div>
         </div>
       </section>
@@ -219,7 +273,7 @@ export async function onRequest(context) {
       <!-- 章節導覽 -->
       <div class="lesson-nav">
         <a href="chapter8.html" class="btn-secondary">◀ 上一章：綠界 ECPay 金流測試實戰</a>
-        <a href="chapter10.html" class="btn-primary" style="background: linear-gradient(135deg, #f6821f, #d97706);">下一章：企業級 AI 知識庫 (RAG) ➔</a>
+        <a href="chapter10.html" class="btn-primary" style="background: linear-gradient(135deg, #f6821f, #d97706);">下一章：企業級 AI 知識庫實戰 ➔</a>
       </div>
     </main>
   </div>
