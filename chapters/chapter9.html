@@ -147,6 +147,72 @@
               「Antigravity，請使用 wrangler 幫我把目前的網頁目錄部署到 Cloudflare Pages，專案名稱叫做 my-handbook-web！」
             </div>
           </div>
+
+          <!-- 深度解析：方式 A vs 方式 B 控制內容差別 -->
+          <div style="margin-top: 1.5rem; border-top: 1px dashed rgba(246, 130, 31, 0.3); padding-top: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.25rem;">🤔</span>
+              <strong style="color: #f6821f; font-size: 0.98rem;">架構思考：方式 A 與方式 B 除了過程不同，控制的內容是一樣的嗎？</strong>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 1rem;">
+              簡短答案是：<strong>「日常操作看起來很像，但就本質而言，控制的權限範圍與安全邊界完全不同！」</strong>
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: rgba(15, 23, 42, 0.7); border-left: 3px solid #38bdf8; padding: 0.85rem; border-radius: 4px;">
+                <strong style="color: #38bdf8; font-size: 0.9rem;">方式 A（wrangler login）➔「萬能金鑰」</strong>
+                <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin: 0.3rem 0 0 0;">
+                  點擊同意後，等於將<strong>你本人的整個人格身分（Account Admin）</strong>授權給本機。它擁有你 Cloudflare 帳號的<strong>全部權限</strong>（包含修改全站 DNS、防火牆與帳單），方便但屬於「權限全開（Overprivileged）」。
+                </p>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.7); border-left: 3px solid #3ecf8e; padding: 0.85rem; border-radius: 4px;">
+                <strong style="color: #3ecf8e; font-size: 0.9rem;">方式 B（API Token）➔「特定門禁卡（最小權限原則）」</strong>
+                <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin: 0.3rem 0 0 0;">
+                  控制內容<strong>嚴格受限於你在後台勾選的權限</strong>。勾選 Workers 權限的 Token 就絕對動不了你的頂級網域 DNS 或帳單，即便 Token 外洩也無法影響整個帳號。
+                </p>
+              </div>
+            </div>
+
+            <!-- 對照表格 -->
+            <div style="overflow-x: auto; margin-top: 0.75rem;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+                <thead>
+                  <tr style="border-bottom: 1px solid var(--border-color); color: #f6821f;">
+                    <th style="padding: 0.5rem;">比較維度</th>
+                    <th style="padding: 0.5rem;">方式 A：瀏覽器登入 (wrangler login)</th>
+                    <th style="padding: 0.5rem;">方式 B：API Token 權杖 (.env)</th>
+                  </tr>
+                </thead>
+                <tbody style="color: var(--text-muted); line-height: 1.6;">
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.5rem; color: #fff; font-weight: 600;">權限範圍</td>
+                    <td style="padding: 0.5rem; color: #f59e0b;">無限制（全帳號所有權限）</td>
+                    <td style="padding: 0.5rem; color: #3ecf8e; font-weight: 600;">精確受控（最小權限原則）</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.5rem; color: #fff; font-weight: 600;">生效範圍</td>
+                    <td style="padding: 0.5rem;">全電腦所有專案共用（Global）</td>
+                    <td style="padding: 0.5rem; color: #38bdf8;">單一專案獨立隔離（Project-Isolated）</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.5rem; color: #fff; font-weight: 600;">有效期限</td>
+                    <td style="padding: 0.5rem;">長期有效（自動更新 Refresh Token）</td>
+                    <td style="padding: 0.5rem;">可自訂到期日（過期自動失效）</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.5rem; color: #fff; font-weight: 600;">來源 IP 限制</td>
+                    <td style="padding: 0.5rem;">無法限制來源 IP</td>
+                    <td style="padding: 0.5rem;">可限制只有特定公司/家中 IP 能調用</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.5rem; color: #fff; font-weight: 600;">適用情境</td>
+                    <td style="padding: 0.5rem;">個人開發快速練習</td>
+                    <td style="padding: 0.5rem; color: #3ecf8e; font-weight: 600;">讓 AI 代理自動化、正式企業上線首選</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </section>
 
