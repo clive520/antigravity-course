@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>第 10 章：企業級 AI 知識庫實戰 — Cloudflare 全家桶 + Supabase 打造新人智慧導航庫 - Antigravity 實戰教學</title>
+  <title>第 10 章：現代雲端資料庫全解 — Supabase 核心功能、pgvector 向量引擎與免費額度避坑手冊 - Antigravity 實戰教學</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
   <header class="site-header">
     <a href="../index.html" class="brand">
       <span>🚀 Antigravity 實戰學院</span>
-      <span class="brand-badge">Chapter 10</span>
+      <span class="brand-badge" style="background: rgba(62, 207, 142, 0.2); color: #3ecf8e; border: 1px solid rgba(62, 207, 142, 0.4);">Chapter 10</span>
     </a>
     <nav class="nav-links">
       <a href="../index.html">首頁</a>
@@ -40,282 +40,323 @@
         <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播通知</a></li>
         <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
         <li><a href="chapter9.html">第 9 章：Cloudflare Pages 邊緣部署</a></li>
-        <li><a href="chapter10.html" class="active">第 10 章：企業級 AI 知識庫 (RAG)</a></li>
+        <li><a href="chapter10.html" class="active" style="border-left-color: #3ecf8e; color: #3ecf8e;">第 10 章：Supabase 現代雲端資料庫</a></li>
+        <li><a href="chapter11.html">第 11 章：企業級 AI 知識庫 (RAG)</a></li>
       </ul>
       <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
       <ul class="sidebar-nav">
-        <li><a href="#sec-10-1">10-1 全端架構解析：四核聯動</a></li>
-        <li><a href="#sec-10-2">10-2 Supabase 向量資料庫建置</a></li>
-        <li><a href="#sec-10-3">10-3 Cloudflare Workers 邊緣中繼</a></li>
-        <li><a href="#sec-10-4">10-4 私有 NotebookLM 前端與防幻覺</a></li>
-        <li><a href="#sec-10-5">10-5 Zero Trust 員工登入防護牆</a></li>
-        <li><a href="#sec-10-6">10-6 免費版限制與資料隱私合規</a></li>
+        <li><a href="#sec-10-1">10-1 認識 Supabase：開源 Firebase 替代品</a></li>
+        <li><a href="#sec-10-2">10-2 Supabase 六大核心支柱功能</a></li>
+        <li><a href="#sec-10-3">10-3 AI 時代武器：pgvector 向量引擎</a></li>
+        <li><a href="#sec-10-4">10-4 免費額度表與三大致命限制避坑</a></li>
+        <li><a href="#sec-10-5">10-5 對 Antigravity 下達建表與維護指令</a></li>
+        <li><a href="#sec-10-6">10-6 本章小結與實戰預備</a></li>
       </ul>
     </aside>
 
     <!-- 右側內容 -->
     <main class="lesson-content">
       <div class="lesson-header">
-        <span class="meta-pill" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">第 10 章 · 企業級 AI 實戰巔峰</span>
-        <h1>企業級 AI 知識庫實戰：Cloudflare 全家桶 + Supabase 打造新人智慧導航庫</h1>
-        <p class="desc">告別散亂在各處的員工守則與作業 SOP！本章採用全美最具實戰公信力的現代雲端技術堆疊：<strong>「Cloudflare Pages (前端) + Cloudflare Workers (邊緣後端) + Supabase (pgvector 向量資料庫) + AI API」</strong>，全程由 Antigravity 協作引導，打造一套如同「企業私有版 Google NotebookLM」的智慧問答系統——安全、毫秒反應、精準附帶手冊章節出處，查無依據絕不瞎猜！</p>
+        <span class="meta-pill" style="background: rgba(62, 207, 142, 0.2); color: #3ecf8e; border: 1px solid rgba(62, 207, 142, 0.4);">第 10 章 · 現代資料庫與 AI 向量核心</span>
+        <h1>現代雲端資料庫全解：Supabase 核心功能、pgvector 向量引擎與免費額度避坑手冊</h1>
+        <p class="desc">在進入第 11 章打造企業新人手冊庫實戰之前，我們必須先掌握當前 AI 全端領域最炙手可熱的後端核心——<strong>Supabase</strong>！它自稱「開源的 Firebase 替代品」，但骨子裡卻是一座無比強大、標準且絕不鎖定供應商的 <strong>PostgreSQL</strong>。本章將帶你全面剖析它的六大支柱、專為 AI 語意搜尋而生的 <code>pgvector</code> 向量引擎，以及免費版必學的<strong>自動休眠保活防範密技</strong>！</p>
       </div>
 
-      <!-- 10-1 四核聯動架構 -->
+      <!-- 10-1 認識 Supabase -->
       <section id="sec-10-1" class="content-section">
-        <h2>10-1 全端架構解析：Cloudflare Pages + Workers + Supabase + AI API</h2>
-        <p>新職員進公司，面對「差勤規章、請假手續、報帳規定、資安守則」散落各處，往往手足無措。我們整合這套四大核心技術，建立完整的企業知識庫閉環：</p>
+        <h2>10-1 認識 Supabase：開源的 Firebase 替代品，真正的 PostgreSQL 核心</h2>
+        <p>過去十年間，Google Firebase 是快速搭建應用程式的首選。但 Firebase 有一個讓眾多企業與開發者頭痛的硬傷：<strong>專有的 NoSQL 規格與嚴重的廠商鎖定（Vendor Lock-in）</strong>，一旦資料量變大或需要複雜的關聯查詢，費用既昂貴又難以遷移。</p>
+        <p><strong>Supabase 的誕生徹底顛覆了這個格局！</strong>它主打三大設計哲學：</p>
 
-        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
-          <img src="../PIC/ch10_cf_supabase_rag_pipeline.svg" alt="Cloudflare 全家桶 + Supabase 智慧新人導航庫完整架構" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+          <div style="background: var(--bg-card); border: 1px solid rgba(62, 207, 142, 0.3); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🐘 真正的 PostgreSQL</div>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+              不是模仿品！每一個 Supabase 專案就是一台獨立完整的 PostgreSQL 資料庫，支援 ACID 事務、標準 SQL 語法、觸發器與所有原生外掛。
+            </p>
+          </div>
+          <div style="background: var(--bg-card); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔓 拒絕供應商綁架</div>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+              完全基於開源工具構建。未來隨時可以使用 <code>pg_dump</code> 將整座資料庫一鍵匯出，遷移至 AWS RDS、GCP Cloud SQL 或自建伺服器。
+            </p>
+          </div>
+          <div style="background: var(--bg-card); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; padding: 1.25rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡ 現代全端開箱即用</div>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+              省去自己寫 CRUD API 的繁瑣工序！建好資料表後，Supabase 會自動產出 RESTful 與 GraphQL API，並支援即時 WebSocket 同步。
+            </p>
+          </div>
+        </div>
+
+        <div style="margin: 2rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch10_supabase_ecosystem_map.svg" alt="Supabase 現代雲端資料庫全景架構圖" style="width: 100%; max-width: 860px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
           <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-            <strong>🏆 圖 10-1：企業級 RAG 現代全端四大核心架構流水線</strong><br>
-            Pages 快速載入前端門面、Workers 邊緣安全代理、Supabase 高效向量檢索、AI API 溯源生成與防幻覺。
-          </div>
-        </div>
-
-        <div class="step-box">
-          <h4>🧩 4 大組件分工職責：</h4>
-          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
-            <li><strong>Cloudflare Pages（前端入口）</strong>：放置新人智慧導航網站，極速載入、雙欄排版、提供熱門情境問題與來源查看卡片。</li>
-            <li><strong>Cloudflare Workers（邊緣安全大腦）</strong>：處理使用者的提問、將問題轉為向量、呼叫 Supabase 檢索、組合 Prompt 調用 AI API；<strong>所有 API Key 放在後端環境變數，前端完全看不到任何機密金鑰！</strong></li>
-            <li><strong>Supabase（PostgreSQL + pgvector）</strong>：存放 4 本企業手冊的切塊內文、章節出處與 768 維語意向量，負責以餘弦相似度在幾毫秒內抓出最相關段落。</li>
-            <li><strong>AI API（Gemini / LLM）</strong>：根據檢索出來的手冊內容條列具體回答，並強制標註出處手冊與章節；找不到依據時堅決回覆「目前查不到」，徹底避免模型自行瞎猜。</li>
-          </ol>
-        </div>
-
-        <!-- 深入架構問答卡片 -->
-        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-          <!-- 為什麼選 Supabase 卡片 -->
-          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 1.25rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
-              <span style="font-size: 1.3rem;">🤔</span>
-              <h4 style="margin: 0; color: #38bdf8; font-size: 1.05rem;">為什麼選 Supabase 而非 Cloudflare Vectorize？</h4>
-            </div>
-            <ul style="padding-left: 1.25rem; margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.8;">
-              <li><strong>「內文與向量一體化」 vs 「純索引分開存」</strong>：Supabase 是全功能關聯資料庫，完整文字、章節標籤與 768 維向量都存在<strong>同一筆記錄</strong>，一趟查詢直接回傳內文；而 Vectorize <strong>只存向量數值不存原始長文字</strong>，查詢後還必須二次撈取 D1 或 KV，架構相對繁瑣。</li>
-              <li><strong>混合檢索（Hybrid Search）</strong>：Supabase 支援全文關鍵字檢索 + 語意向量雙軌搜尋，處理規章中的「法規代號、數字天數」精準度最高。</li>
-              <li><strong>視覺化後台（Web GUI）</strong>：Supabase 內建如 Excel 般的資料表檢視器與 SQL 編輯器，除錯與修改手冊段落極度直觀。</li>
-            </ul>
-          </div>
-
-          <!-- 什麼是 Workers 卡片 -->
-          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 1.25rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
-              <span style="font-size: 1.3rem;">⚡</span>
-              <h4 style="margin: 0; color: #f59e0b; font-size: 1.05rem;">Workers 所指的又是什麼意思？</h4>
-            </div>
-            <ul style="padding-left: 1.25rem; margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.8;">
-              <li><strong>邊緣無伺服器計算（Serverless Edge Compute）</strong>：不同於傳統租用單一主機，Workers 程式碼直接運行在全球 330+ 城市的邊緣機房，離員工最近、<strong>0 毫秒冷啟動</strong>極速反應。</li>
-              <li><strong>安全總門衛（金鑰不落地）</strong>：Gemini API Key 與 Supabase 密鑰存放在 Workers 後端環境變數中，瀏覽器完全無法窺探，杜絕被盜用風險。</li>
-              <li><strong>RAG 管線編排大腦</strong>：負責接收問題 ➔ 轉向量 ➔ 查資料庫 ➔ 組裝防幻覺提示詞 ➔ 調用 AI ➔ 整合回傳的前後端中樞。</li>
-            </ul>
+            <strong>🏆 圖 10-1：Supabase 現代雲端資料庫全景架構</strong><br>
+            以堅不可摧的企業級 PostgreSQL 為基底，整合六大雲端支柱，並具備強大的 pgvector AI 向量引擎。
           </div>
         </div>
       </section>
 
-      <!-- 10-2 Supabase 資料庫 -->
+      <!-- 10-2 六大支柱功能 -->
       <section id="sec-10-2" class="content-section">
-        <h2>10-2 知識庫核心：Supabase 建立 pgvector 與 4 本手冊切塊向量化</h2>
-        <p>我們使用在專案目錄下 <code>handbooks/</code> 資料夾準備好的 4 本真實企業手冊（差勤管理、出差報銷、資訊安全、福委會補助）。</p>
+        <h2>10-2 Supabase 六大核心支柱功能深入剖析</h2>
+        <p>Supabase 不僅僅是放資料的地方，它提供了一整套開箱即用的現代化後端基礎設施：</p>
 
         <div class="step-box">
-          <h4>🗄️ 步驟 1：在 Supabase SQL Editor 執行一鍵建表</h4>
-          <p>登入 <a href="https://supabase.com/" target="_blank" style="color: #38bdf8; text-decoration: underline;">Supabase 後台</a>，在 SQL Editor 貼上標準 SQL 語法：</p>
-          <pre style="background: #040711; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; color: #38bdf8; font-family: monospace; font-size: 0.88rem; line-height: 1.6; overflow-x: auto;">
--- 1. 開啟向量擴充
+          <h4>1. 🖥️ Supabase Studio（網頁視覺化管理後台）</h4>
+          <p>告別黑底終端機的枯燥指令！Supabase 提供媲美 Airtable 與 Excel 的強大 Web GUI：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>Table Editor</strong>：直接在網頁上增刪改查資料、設定外鍵關聯（Foreign Keys），即使是不會寫 SQL 的主管或行政人員也能輕鬆操作。</li>
+            <li><strong>SQL Editor</strong>：內建 SQL 編輯器與豐富的官方腳本範本，還整合了 AI 輔助寫 SQL 查詢，一鍵點擊即可直接執行。</li>
+            <li><strong>Database Roles & Schema</strong>：視覺化查看資料庫架構圖、權限角色分組與效能監控。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="margin-top: 1.25rem;">
+          <h4>2. 🔐 Auth 身分驗證與 Row-Level Security (RLS)</h4>
+          <p>不用自己刻註冊、登入與加密系統！</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>多元登入管道</strong>：支援 Email/密碼、Magic Link（免密碼信件登入）、手機簡訊 OTP，以及 Google、GitHub、Apple、Azure、Discord 等 20 多種第三方 OAuth 授權。</li>
+            <li><strong>Row-Level Security (RLS 列級安全性)</strong>：PostgreSQL 的企業級殺手功能！可以在資料表上直接設定原則（Policy），例如：<em>「使用者只能讀取與修改自己 <code>auth.uid() = user_id</code> 的訂單資料」</em>。即使用戶直接向資料庫發出請求，底層資料庫也會自動過濾，絕對不會外洩其他人的隱私。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="margin-top: 1.25rem;">
+          <h4>3. 📦 Storage 物件檔案儲存</h4>
+          <p>用來儲存大容量非結構化檔案（如使用者大頭貼、產品照片、PDF 文件、錄音音訊）：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>儲存桶機制（Buckets）</strong>：可分別建立公開儲存桶（Public，所有人可直接透過 URL 讀取）或私有儲存桶（Private，需搭配 RLS 授權）。</li>
+            <li><strong>內建 CDN 與圖片即時縮放</strong>：全球 CDN 加速分發，並支援在 URL 後面帶參數即時裁切與壓縮圖片尺寸（Image Transformations）。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="margin-top: 1.25rem;">
+          <h4>4. ⚡ Realtime 即時資料流廣播</h4>
+          <p>讓你的網頁不用重新整理（F5），就能即時看到最新的資料異動：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li><strong>Database Changes</strong>：監聽資料庫的 <code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code> 事件，只要資料一變動，前端瀏覽器在幾毫秒內就能透過 WebSocket 自動收到推播！</li>
+            <li><strong>Presence & Broadcast</strong>：支援使用者線上狀態追蹤（例如誰正在線上打字）與多人房聊天訊息廣播。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="margin-top: 1.25rem;">
+          <h4>5. 🌍 Edge Functions 邊緣無伺服器計算</h4>
+          <p>基於 <strong>Deno</strong> 運行環境的全球邊緣函數：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8;">
+            <li>原生支援 TypeScript，執行在離使用者最近的全球節點，近乎零冷啟動延遲。</li>
+            <li>適合用來處理第三方 Webhook 回呼（例如綠界金流付款確認通知、Stripe 結帳）、發送簡訊、或是中繼 AI API 呼叫。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="margin-top: 1.25rem; border-color: rgba(62, 207, 142, 0.4);">
+          <h4>6. 🧠 pgvector 向量擴充引擎（AI 時代的必備技能）</h4>
+          <p>在同一個 PostgreSQL 資料庫中原生儲存與比對高維度向量，詳細解析請見 10-3 小節！</p>
+        </div>
+      </section>
+
+      <!-- 10-3 pgvector 深度剖析 -->
+      <section id="sec-10-3" class="content-section">
+        <h2>10-3 為什麼它是 AI 時代的殺手級資料庫？pgvector 深度剖析</h2>
+        <p>在 AI 與檢索增強生成（RAG）的世界中，如何從數萬筆文件段落中找出「語意最相關」的內容？這就是向量資料庫的職責。</p>
+
+        <div class="step-box">
+          <h4>🧩 啟用與宣告向量欄位：</h4>
+          <p>在 Supabase 的 SQL Editor 中，只需一行指令即可啟用向量擴充：</p>
+          <pre style="background: #040711; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.9rem; color: #3ecf8e; font-family: monospace; font-size: 0.88rem;">
+-- 啟用向量外掛
 create extension if not exists vector;
 
--- 2. 建立手冊知識庫資料表
+-- 建立包含 768 維向量欄位的資料表
 create table handbook_documents (
   id bigserial primary key,
-  content text not null,                  -- 手冊切塊文字
-  metadata jsonb not null,                -- 出處標籤（{"doc": "差勤管理", "section": "4.1 快篩陽性"}）
-  embedding vector(768) not null          -- 768 維語意向量
+  content text not null,               -- 手冊原始切塊文字
+  metadata jsonb not null,             -- 標籤（所屬手冊、章節標題）
+  embedding vector(768) not null       -- 存放 768 維語意特徵向量
 );
-
--- 3. 建立餘弦相似度檢索預存程序
-create or replace function match_handbooks (
-  query_embedding vector(768),
-  match_count int default 4
-) returns table (
-  id bigint,
-  content text,
-  metadata jsonb,
-  similarity float
-) language plpgsql as $$
-begin
-  return query
-  select
-    handbook_documents.id,
-    handbook_documents.content,
-    handbook_documents.metadata,
-    1 - (handbook_documents.embedding &lt;=&gt; query_embedding) as similarity
-  from handbook_documents
-  order by handbook_documents.embedding &lt;=&gt; query_embedding
-  limit match_count;
-end;
-$$;
           </pre>
         </div>
 
-        <div class="prompt-box">
-          <div class="prompt-header">
-            <span>💬 對 Antigravity 說的入庫提示詞（Prompt）</span>
-            <span class="prompt-badge">自動切塊與向量存庫</span>
-          </div>
-          <div class="prompt-content">
-            "Antigravity，請幫我寫一個手冊切塊入庫腳本 <code>scripts/ingest.js</code>：<br><br>
-            1. 讀取 <code>handbooks/</code> 目錄下的 4 份 Markdown 檔案。<br>
-            2. 依照章節標題進行切塊（每塊約 300~450 字，重疊 50 字保持語意連續）。<br>
-            3. 保留 metadata（包含手冊名稱、章節標題）。<br>
-            4. 呼叫 Google Gemini Embedding API (<code>text-embedding-004</code>) 取得 768 維向量。<br>
-            5. 使用 <code>@supabase/supabase-js</code> 將切塊與向量批次寫入 <code>handbook_documents</code> 資料表。<br><br>
-            請提供完整代碼，並說明如何設定 Supabase URL 與 Service Role Key！"
-          </div>
-        </div>
-      </section>
-
-      <!-- 10-3 Workers 邊緣中繼 -->
-      <section id="sec-10-3" class="content-section">
-        <h2>10-3 邊緣運算大腦：Cloudflare Workers 處理向量檢索與環境變數</h2>
-        <p>為了確保安全性，<strong>瀏覽器前端絕對不能放 Google API Key 或 Supabase 密鑰</strong>！我們讓 Cloudflare Workers 擔任最堅固的中繼站。</p>
-
-        <div class="step-box">
-          <h4>🔒 在 Cloudflare 後台設定安全環境變數（Secrets）：</h4>
-          <p>在 Workers 專案的「Settings」➔「Variables and Secrets」加入以下變數（加密儲存）：</p>
+        <div class="step-box" style="margin-top: 1.5rem;">
+          <h4>📐 3 大向量距離運算符號（Operators）：</h4>
+          <p>pgvector 提供三個專屬的數學運算子，用來衡量兩組向量之間的幾何距離：</p>
           <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
-            <li><code>SUPABASE_URL</code>：你的 Supabase 專案網址（如 <code>https://xyz.supabase.co</code>）。</li>
-            <li><code>SUPABASE_ANON_KEY</code>：Supabase 前端讀取公開金鑰。</li>
-            <li><code>GEMINI_API_KEY</code>：Google AI Studio 申請的 API Key。</li>
+            <li><code>&lt;=&gt;</code> <strong>Cosine Distance（餘弦距離，最常使用！）</strong>：
+              衡量兩個向量的方向夾角。值介於 0 到 2 之間，<strong>值越小代表語意越相近</strong>。在語意搜尋中，我們通常用 <code>1 - (embedding &lt;=&gt; query_embedding)</code> 來轉換為直觀的相似度分數（0 ~ 1 之間，1 代表完全相同）。
+            </li>
+            <li><code>&lt;-&gt;</code> <strong>L2 / Euclidean Distance（歐式幾何直線距離）</strong>：
+              計算兩點之間的直線空間距離。
+            </li>
+            <li><code>&lt;#&gt;</code> <strong>Negative Inner Product（負內積）</strong>：
+              若向量已經過正規化（Normalized），內積計算速度最快。
+            </li>
           </ul>
         </div>
 
-        <div class="prompt-box">
-          <div class="prompt-header">
-            <span>💬 對 Antigravity 說的 Workers 提示詞（Prompt）</span>
-            <span class="prompt-badge">邊緣運算核心代碼</span>
-          </div>
-          <div class="prompt-content">
-            "Antigravity，請幫我撰寫一個 Cloudflare Workers 腳本（或 Pages Function <code>functions/api/ask.js</code>）：<br><br>
-            <strong>【核心運作邏輯】：</strong><br>
-            1. 接收前端 POST 傳來的新人情境問題 <code>{ question }</code>。<br>
-            2. 使用 <code>env.GEMINI_API_KEY</code> 呼叫 Google Embedding API，將提問轉為 768 維向量。<br>
-            3. 呼叫 Supabase 的 RPC 函式 <code>match_handbooks</code>，檢索出相似度最高的 Top 3 手冊段落。<br>
-            4. 若最高相似度低於門檻（例如 &lt; 0.65），直接回傳：<em>『很抱歉，目前在內部規章中查不到相關規範，請直接洽詢人資處 (hr@example.com)！』</em>避免 AI 瞎猜。<br>
-            5. 若有相符依據，組裝 System Prompt 呼叫 Gemini 1.5 / 2.0 Flash 條列回答，並在文末附上【參考來源】清單。<br>
-            6. 回傳 JSON：<code>{ answer, sources: [{ doc, section, similarity }] }</code>。<br>
-            請提供完整、乾淨、附註解的代碼！"
-          </div>
+        <div class="step-box" style="margin-top: 1.5rem;">
+          <h4>⚡ 向量索引加速：HNSW vs IVFFlat</h4>
+          <p>當資料庫裡的手冊段落累積到數萬或數百萬筆時，逐一比對每個向量會變慢。此時可以建立<strong>向量索引</strong>：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
+            <li><strong>HNSW（Hierarchical Navigable Small World，官方強力推薦）</strong>：建立多層圖狀結構，查詢速度極快、召回率（Recall）極高，建好後即可隨意動態寫入新資料。</li>
+            <li><strong>IVFFlat（Inverted File Flat）</strong>：建立倒排聚類索引，佔用記憶體較少，但需要資料表先有一定數量的資料後再建立效果才好。</li>
+          </ul>
+          <pre style="background: #040711; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.9rem; color: #38bdf8; font-family: monospace; font-size: 0.88rem;">
+-- 建立高效 HNSW 餘弦距離索引
+create index on handbook_documents using hnsw (embedding vector_cosine_ops);
+          </pre>
         </div>
       </section>
 
-      <!-- 10-4 私有 NotebookLM 前端與防幻覺 -->
+      <!-- 10-4 免費額度表與三大致命限制 -->
       <section id="sec-10-4" class="content-section">
-        <h2>10-4 打造私有 NotebookLM 前端：新人入口、引用出處與防幻覺機制</h2>
-        <p>將網頁部署至 Cloudflare Pages，為新人提供如同 Google NotebookLM 般的雙欄安心問答體驗！</p>
+        <h2>10-4 Supabase 免費版額度總表與三大致命限制（避坑指南）</h2>
+        <p>Supabase 的免費方案（Free Tier）非常大方，足以支撐絕大多數的中小型專題、公司內部 POC 驗證與個人作品集。但有幾項<strong>至關重要的免費限制與自動休眠規則</strong>，務必在開發前徹底弄清楚！</p>
 
-        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
-          <img src="../PIC/ch9_notebooklm_ui_layout.svg" alt="私有版 NotebookLM 雙欄問答介面佈局" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
-          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-            <strong>🖥️ 圖 10-2：私有版 NotebookLM 雙欄問答前端互動設計</strong><br>
-            左欄負責自然語言提問與結構化 SOP 排版，右欄即時對應高亮顯示吻合度最高的手冊段落與相似度分數。
-          </div>
+        <!-- 免費額度清單表 -->
+        <div style="overflow-x: auto; margin: 1.5rem 0;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-color); color: #3ecf8e; background: rgba(62, 207, 142, 0.08);">
+                <th style="padding: 0.75rem 1rem;">服務功能項目</th>
+                <th style="padding: 0.75rem 1rem;">免費版配額 (Free Tier)</th>
+                <th style="padding: 0.75rem 1rem;">實務估算與說明</th>
+              </tr>
+            </thead>
+            <tbody style="color: var(--text-muted); line-height: 1.8;">
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem 1rem; color: #fff; font-weight: 600;">活躍專案數量</td>
+                <td style="padding: 0.75rem 1rem; color: #38bdf8; font-weight: 700;">最多 2 個專案</td>
+                <td style="padding: 0.75rem 1rem;">每個帳號最多同時運行 2 個免費專案。</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem 1rem; color: #fff; font-weight: 600;">資料庫儲存容量 (Database)</td>
+                <td style="padding: 0.75rem 1rem; color: #38bdf8; font-weight: 700;">500 MB</td>
+                <td style="padding: 0.75rem 1rem;">純文字與 768 維向量約可存放數萬筆手冊段落。</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem 1rem; color: #fff; font-weight: 600;">Auth 活躍使用者 (MAU)</td>
+                <td style="padding: 0.75rem 1rem; color: #38bdf8; font-weight: 700;">50,000 MAU / 月</td>
+                <td style="padding: 0.75rem 1rem;">每月五萬名獨立登入員工，中小企業完全不用擔心超標。</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem 1rem; color: #fff; font-weight: 600;">Storage 檔案庫空間</td>
+                <td style="padding: 0.75rem 1rem; color: #38bdf8; font-weight: 700;">1 GB 總儲存空間</td>
+                <td style="padding: 0.75rem 1rem;">單檔上傳上限為 50 MB。</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem 1rem; color: #fff; font-weight: 600;">出站網路流量 (Egress)</td>
+                <td style="padding: 0.75rem 1rem; color: #38bdf8; font-weight: 700;">2 GB / 月</td>
+                <td style="padding: 0.75rem 1rem;">若回傳純文字與 JSON 綽綽有餘；大檔案建議放 Cloudflare R2。</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem 1rem; color: #fff; font-weight: 600;">Edge Functions 調用</td>
+                <td style="padding: 0.75rem 1rem; color: #38bdf8; font-weight: 700;">500,000 次 / 月</td>
+                <td style="padding: 0.75rem 1rem;">每月五十萬次邊緣無伺服器計算執行額度。</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.75rem 1rem; color: #fff; font-weight: 600;">Realtime 並發與訊息</td>
+                <td style="padding: 0.75rem 1rem; color: #38bdf8; font-weight: 700;">200 個同時連線 / 200 萬則訊息</td>
+                <td style="padding: 0.75rem 1rem;">足夠支撐中型即時協作或即時儀表板需求。</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="step-box">
-          <h4>🛡️ 企業級「防幻覺（Zero Hallucination）」最高原則：</h4>
-          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
-            <li><strong>嚴格接地（Strict Grounding）</strong>：AI 只被授權依據檢索到的手冊條文說話，禁止自由發揮未經查證的外部常識。</li>
-            <li><strong>出處必標註（Citations）</strong>：回答中明確引用規章編號與章節（例如：「依據《國內外出差與費用報銷規範》第 2.1 條...」）。</li>
-            <li><strong>誠實未知原則</strong>：手冊中沒有寫的規定（例如公司可不可以帶寵物上班），系統必須直接回答<strong>「目前查不到」</strong>，杜絕因模型瞎猜給出錯誤指導。</li>
-          </ol>
+        <!-- 三大致命限制避坑說明 -->
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 1.5rem; margin-top: 2rem;">
+          <h3 style="color: #ef4444; margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🚨</span> Supabase 免費版三大致命限制與防踩雷實戰攻略
+          </h3>
+
+          <div style="margin-top: 1.25rem;">
+            <h4 style="color: #fca5a5; margin-bottom: 0.4rem;">⚠️ 致命陷阱 1：連續 7 天無活動自動進入休眠（Project Pausing）</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin: 0;">
+              <strong>【官方機制】</strong>：為了節省伺服器成本，Supabase 規定：若免費專案<strong>「連續 7 天沒有任何 API 請求或資料庫連線」</strong>，專案會被自動標記為 <code>Paused</code> 暫停狀態。休眠期間所有 API 呼叫都會回傳錯誤！雖然資料不會丟失，但你需要手動登入後台點擊「Restore project」，並等待 1~3 分鐘讓資料庫重新開機開機。
+            </p>
+            <div style="margin-top: 0.75rem; background: rgba(15, 23, 42, 0.8); border-left: 3px solid #3ecf8e; padding: 0.75rem 1rem; border-radius: 4px;">
+              <strong style="color: #3ecf8e; font-size: 0.9rem;">💡 破解秘技：定時心跳 Ping 保活腳本（Heartbeat）</strong>
+              <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;">
+                既然 7 天無連線會休眠，我們只要利用 <strong>Cloudflare Workers 的免費 Cron Trigger（排程觸發器）</strong>，或寫一段 Google Apps Script，設定<strong>每天半夜自動向 Supabase 執行一次輕量 SELECT 查詢（如 <code>select count(*) from handbook_documents limit 1;</code>）</strong>，就能讓系統判定為「始終有活動」，專案即可<strong>永久不休眠</strong>！
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; border-top: 1px solid rgba(239, 68, 68, 0.2); pt: 1rem;">
+            <h4 style="color: #fca5a5; margin-bottom: 0.4rem;">⚠️ 致命陷阱 2：免費版沒有「可下載的每日自動備份（Daily Backups）」</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin: 0;">
+              <strong>【官方機制】</strong>：付費方案（Pro 以上）享有每日常規自動備份下載與 PITR（時間點任意還原）。而免費方案後台雖然會保持資料完整，但<strong>不提供下載備份檔（.sql / .dump）的按鈕</strong>！
+            </p>
+            <div style="margin-top: 0.75rem; background: rgba(15, 23, 42, 0.8); border-left: 3px solid #38bdf8; padding: 0.75rem 1rem; border-radius: 4px;">
+              <strong style="color: #38bdf8; font-size: 0.9rem;">💡 破解秘技：本機 pg_dump 或 Supabase CLI 定期導出</strong>
+              <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;">
+                因為 Supabase 是純正的 PostgreSQL，你可以請 Antigravity 寫一個 Node.js 腳本或使用標準 <code>pg_dump</code>，每週自動把手冊內文與資料表結構匯出成 <code>backup.sql</code> 存到本地硬碟或 GitHub 私有儲存庫中，完全不用花一毛錢。
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; border-top: 1px solid rgba(239, 68, 68, 0.2); pt: 1rem;">
+            <h4 style="color: #fca5a5; margin-bottom: 0.4rem;">⚠️ 致命陷阱 3：容量超過 500 MB 限制時的處理</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin: 0;">
+              免費版資料庫上限為 500 MB。對於存放大容量檔案（如 PDF 掃描檔、大圖、影片），<strong>請絕對不要直接轉成 base64 存進資料庫欄位</strong>！正確做法是將大檔案上傳到 <strong>Cloudflare R2（免流量費）</strong> 或 Supabase Storage，資料庫資料表內只存放網址 URL，這樣 500 MB 足夠你存入數百萬字的文章與向量！
+            </p>
+          </div>
         </div>
       </section>
 
-      <!-- 10-5 Zero Trust 員工登入防護牆 -->
+      <!-- 10-5 對 Antigravity 下達指令實作 -->
       <section id="sec-10-5" class="content-section">
-        <h2>10-5 企業資安防護：Cloudflare Zero Trust (Access) 免費員工登入防護</h2>
-        <p>如果網站不設門禁，任何拿到網址的外人都能看光手冊。傳統做法要自己寫會員登入系統，而 Cloudflare 提供完全免費的企業門禁神器：<strong>Cloudflare Zero Trust (Access)</strong>！</p>
+        <h2>10-5 對 Antigravity 下達 Supabase 開發指令（Prompt 實用模板）</h2>
+        <p>在日常開發中，你完全不需要死背複雜的 PostgreSQL 與 pgvector 語法，只要把需求告訴 Antigravity 即可！</p>
 
-        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
-          <img src="../PIC/ch10_cloudflare_access_security.svg" alt="Cloudflare 企業身分驗證防護牆" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
-          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-            <strong>🛡️ 圖 10-3：Cloudflare Zero Trust Access 邊緣身分驗證架構</strong><br>
-            免寫一行登入程式！只要在後台勾選策略，未授權的訪客一律被擋在門外，僅允許具備公司信箱的在職員工存取。
+        <div class="prompt-box">
+          <div class="prompt-header">
+            <span>💬 提示詞模板 1：產生建表與向量搜尋 RPC 函數</span>
+            <span class="prompt-badge">SQL 建構</span>
+          </div>
+          <div class="prompt-content">
+            "Antigravity，請幫我寫一份 Supabase 的 PostgreSQL 遷移腳本（SQL）：<br><br>
+            1. 啟用 <code>vector</code> 擴充外掛。<br>
+            2. 建立 <code>handbook_documents</code> 資料表，包含 <code>id</code> (bigserial)、<code>content</code> (text)、<code>metadata</code> (jsonb)、以及 768 維的 <code>embedding</code> (vector(768))。<br>
+            3. 建立一個名為 <code>match_handbooks</code> 的預存程序（RPC function），接收 <code>query_embedding</code> 與 <code>match_count</code> 參數，依據餘弦相似度由高到低排序並回傳最相關段落。<br>
+            4. 幫 <code>embedding</code> 欄位建立 HNSW 向量索引以提升檢索效能！"
           </div>
         </div>
 
-        <div class="step-box" style="border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
-          <h4 style="color: #10b981;">🛠️ 3 分鐘設定零信任門禁：</h4>
-          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9; font-size: 0.92rem;">
-            <li>進入 Cloudflare 控制台的 <strong>「Zero Trust」➔「Access」➔「Applications」</strong>。</li>
-            <li>點擊「Add an application」選擇你的 Pages 網址（例如：<code>handbook.pages.dev</code>）。</li>
-            <li><strong>設定存取規則（Policy）</strong>：
-              <ul style="padding-left: 1.25rem;">
-                <li>選擇「Emails ending in」，輸入你的公司郵件網域名稱（例如：<code>@yourcompany.com</code>）。</li>
-                <li>或選擇「Email」，手動填入允許測試的同仁信箱。</li>
-              </ul>
-            </li>
-            <li>完成！當任何人打開該網址，Cloudflare 會自動彈出乾淨美觀的登入畫面，輸入 Email 收到一次性 6 碼驗證 PIN 碼即可進入，**50 人以內企業完全免費！**</li>
-          </ol>
+        <div class="prompt-box" style="margin-top: 1.5rem;">
+          <div class="prompt-header">
+            <span>💬 提示詞模板 2：自動防止 Supabase 休眠的 Cloudflare 心跳腳本</span>
+            <span class="prompt-badge">永久保活</span>
+          </div>
+          <div class="prompt-content">
+            "Antigravity，我的 Supabase 免費專案如果 7 天沒活動會自動休眠。<br>
+            請幫我寫一個輕量級的 Cloudflare Workers 腳本（搭配 Cron Trigger 排程）：<br><br>
+            1. 每天清晨 4:00 自動向 Supabase 執行一次輕量 SELECT 查詢（例如檢查手冊筆數）。<br>
+            2. 使用環境變數 <code>SUPABASE_URL</code> 與 <code>SUPABASE_ANON_KEY</code>。<br>
+            3. 若成功回傳 200 並記錄保活成功日誌；若失敗則發送警告。<br>
+            請提供 <code>wrangler.toml</code> 的 Cron 設定範例與 <code>index.js</code> 完整代碼！"
+          </div>
         </div>
       </section>
 
-      <!-- 10-6 免費額度與資料隱私合規 -->
+      <!-- 10-6 本章小結與實戰預備 -->
       <section id="sec-10-6" class="content-section">
-        <h2>10-6 免費方案限制與企業 AI 資料隱私合規決策</h2>
-        <p>在推動任何企業內部系統時，合格的軟體工程師必須具備「用量上限認知」與「法務資安隱私意識」：</p>
+        <h2>10-6 本章小結與實戰預備</h2>
+        <p>掌握了 Supabase 的核心哲學、六大支柱、pgvector 向量引擎以及免費額度的保活策略後，我們的後端與資料庫防線已經完全到位！</p>
 
         <div class="step-box">
-          <h4>📊 1. 免費方案額度限制與應對心法：</h4>
-          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
-            <li><strong>Cloudflare Workers 每日上限</strong>：免費版每日提供 <strong>100,000 次請求</strong>。內部系統每天發問幾百次綽綽有餘。若未來公司規模擴大超過上限，升級付費版每月僅需 5 美元。</li>
-            <li><strong>Supabase 7 天低活動休眠與備份</strong>：
-              <ul style="padding-left: 1.25rem;">
-                <li>免費版連續 7 天無請求會自動暫停專案；可使用 Workers 的 Cron Triggers 或 GAS 每 3 天定時 Ping 一次保持活躍。</li>
-                <li>免費版無自動定時下載備份，管理者在每次更新新手冊時，建議手動在後台匯出一份 SQL 存檔備份。</li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-
-        <div class="step-box" style="border-left: 4px solid #f43f5e; background: rgba(244, 63, 94, 0.05); margin-top: 1.5rem;">
-          <h4 style="color: #f43f5e;">⚖️ 2. 極重要！Gemini API 免費層 vs. 付費層資料隱私政策：</h4>
-          <p>這是決定系統能否在公司正式上線的關鍵法務考量：</p>
-          <div style="overflow-x: auto; margin-top: 0.5rem;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
-              <thead>
-                <tr style="border-bottom: 2px solid var(--border-color); color: #f43f5e;">
-                  <th style="padding: 0.6rem;">方案層級</th>
-                  <th style="padding: 0.6rem;">資料隱私與訓練規範 (Data Privacy)</th>
-                  <th style="padding: 0.6rem;">企業建議與適用情境</th>
-                </tr>
-              </thead>
-              <tbody style="color: var(--text-muted); line-height: 1.8;">
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">Gemini API 免費層</td>
-                  <td style="padding: 0.6rem; color: #f59e0b;">提交之內容<strong>可能由 Google 經過匿名化人工審閱並用於改善模型產品</strong>。</td>
-                  <td style="padding: 0.6rem;">適合內部 POC 概念驗證、測試非機密之一般差勤與福利手冊。</td>
-                </tr>
-                <tr>
-                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">Gemini API 付費層 (Pay-as-you-go)</td>
-                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;"><strong>零數據保留（Zero Data Retention）</strong>，明確承諾不使用客戶資料訓練模型。</td>
-                  <td style="padding: 0.6rem;">正式全公司上線首選！即使全公司每天使用，每月通常僅花費幾美元，享有完整法務保障。</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 0.75rem;">
-            💡 <strong>黃金策略</strong>：先以免費方案搭建與試行，驗證檢索品質與同仁反響；確認成效良好後，再在 Google Cloud 綁定信用卡切換至付費 API，並設定每月預算上限（例如上限 10 美元），既能兼顧荷包，又能享有企業最高規格資安保障！
-          </p>
+          <h4>🎯 本章關鍵回顧：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>真正的 PostgreSQL</strong>：開源、無廠商鎖定、強大 SQL 與關聯查詢能力。</li>
+            <li><strong>pgvector 殺手特性</strong>：在同一個資料表中兼具「文章內文、出處標籤、語意向量」，查詢一趟搞定，並支援混合搜尋。</li>
+            <li><strong>免費版避坑核心</strong>：7 天無活動自動休眠，利用 Workers 定時心跳 Ping 即可永久解鎖保活。</li>
+          </ol>
         </div>
 
         <div class="callout callout-tip" style="margin-top: 2rem;">
-          <span>🎓</span>
+          <span>🚀</span>
           <div>
-            <strong>恭喜完成全課程十大章節！全端 AI 架構師結業！</strong><br>
-            你已經完整掌握了全美矽谷大廠最熱門的「全端邊緣運算 + 向量資料庫 + LLM 落地 + 零信任資安門禁」！這套實戰專案不僅能直接應用於你的公司內部，更能成為你個人履歷上極具競爭力的高難度商業作品！
+            <strong>下一章實戰預告：企業級 AI 知識庫（私有化 NotebookLM）全面開工！</strong><br>
+            在接下來的第 11 章，我們將把前面學過的 <strong>Cloudflare Pages + Cloudflare Workers + Supabase (pgvector) + AI API</strong> 四大核心串接在一起，真正將 4 本員工守則切塊入庫，打造一套零幻覺、秒級出處標註的企業新人智慧導航庫！
           </div>
         </div>
       </section>
@@ -323,7 +364,7 @@ $$;
       <!-- 章節導覽 -->
       <div class="lesson-nav">
         <a href="chapter9.html" class="btn-secondary">◀ 上一章：Cloudflare Pages 邊緣部署</a>
-        <a href="../index.html" class="btn-primary">返回課程首頁 ➔</a>
+        <a href="chapter11.html" class="btn-primary">進入第 11 章：企業級 AI 知識庫實戰 ➔</a>
       </div>
     </main>
   </div>

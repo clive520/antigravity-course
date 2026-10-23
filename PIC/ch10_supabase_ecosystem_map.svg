@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" height="100%">
+  <defs>
+    <!-- 背景漸層 -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1329" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+
+    <!-- 卡片漸層 -->
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9" />
+    </linearGradient>
+
+    <!-- 綠色強調漸層 -->
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3ecf8e" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+
+    <!-- 陰影 -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#3ecf8e" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="960" height="520" fill="url(#bgGrad)" rx="16" />
+  <rect width="958" height="518" x="1" y="1" fill="none" stroke="#334155" stroke-width="1.5" rx="15" />
+
+  <!-- 頂部標題區 -->
+  <g transform="translate(48, 42)">
+    <rect width="40" height="40" rx="8" fill="url(#greenGrad)" />
+    <!-- Supabase Logo 象徵閃電 -->
+    <path d="M21 8 L10 24 L19 24 L17 34 L30 18 L21 18 Z" fill="#0f172a" />
+    
+    <text x="54" y="24" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" letter-spacing="0.5">Supabase 現代雲端資料庫全景架構圖</text>
+    <text x="54" y="42" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="13">開源 Firebase 替代品 · 真正的 PostgreSQL 核心 · 六大支柱與 pgvector 向量引擎</text>
+  </g>
+
+  <!-- 核心基底層：PostgreSQL -->
+  <g transform="translate(48, 110)">
+    <!-- 外框 -->
+    <rect width="864" height="105" rx="12" fill="url(#cardGrad)" stroke="#3ecf8e" stroke-width="1.8" filter="url(#glow)" />
+    <rect width="864" height="28" rx="12" fill="rgba(62, 207, 142, 0.15)" />
+    <text x="20" y="20" fill="#3ecf8e" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">🏢 堅不可摧的核心引擎：企業級 PostgreSQL 關聯資料庫（標準 SQL · ACID 事務 · 拒絕廠商鎖定）</text>
+
+    <!-- 核心擴充卡片 1：pgvector -->
+    <g transform="translate(20, 42)">
+      <rect width="260" height="50" rx="8" fill="#1e293b" stroke="#3ecf8e" stroke-width="1" />
+      <text x="14" y="22" fill="#3ecf8e" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">🧠 pgvector 向量擴充</text>
+      <text x="14" y="40" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="11">768/1536 維向量 · Cosine 相似度計算</text>
+    </g>
+
+    <!-- 核心擴充卡片 2：RLS -->
+    <g transform="translate(300, 42)">
+      <rect width="260" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+      <text x="14" y="22" fill="#38bdf8" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">🛡️ Row Level Security (RLS)</text>
+      <text x="14" y="40" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="11">資料庫列級安全 · 細緻權限隔離規則</text>
+    </g>
+
+    <!-- 核心擴充卡片 3：Extensions -->
+    <g transform="translate(580, 42)">
+      <rect width="264" height="50" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1" />
+      <text x="14" y="22" fill="#c084fc" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">🧩 豐富擴充生態 (Extensions)</text>
+      <text x="14" y="40" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="11">PostGIS 地理資訊 · pgcrypto 加密演算法</text>
+    </g>
+  </g>
+
+  <!-- 上層 6 大功能支柱 -->
+  <g transform="translate(48, 235)">
+    <!-- 支柱 1: Studio -->
+    <g transform="translate(0, 0)">
+      <rect width="134" height="150" rx="10" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.2" />
+      <rect width="134" height="6" rx="3" fill="#3ecf8e" />
+      <text x="16" y="28" font-size="20">🖥️</text>
+      <text x="16" y="52" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Studio (GUI)</text>
+      <text x="16" y="74" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="11" line-height="1.4">
+        <tspan x="16" dy="0">如 Excel 般直觀</tspan>
+        <tspan x="16" dy="16">資料表可視化編輯</tspan>
+        <tspan x="16" dy="16">內建 SQL 編輯器</tspan>
+        <tspan x="16" dy="16">即時檢視向量與標籤</tspan>
+      </text>
+    </g>
+
+    <!-- 支柱 2: Auth -->
+    <g transform="translate(146, 0)">
+      <rect width="134" height="150" rx="10" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.2" />
+      <rect width="134" height="6" rx="3" fill="#38bdf8" />
+      <text x="16" y="28" font-size="20">🔐</text>
+      <text x="16" y="52" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Auth 身分驗證</text>
+      <text x="16" y="74" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="11">
+        <tspan x="16" dy="0">Email / 密碼</tspan>
+        <tspan x="16" dy="16">Google/GitHub OAuth</tspan>
+        <tspan x="16" dy="16">Magic Link 免密碼</tspan>
+        <tspan x="16" dy="16">免費 5 萬 MAU</tspan>
+      </text>
+    </g>
+
+    <!-- 支柱 3: Storage -->
+    <g transform="translate(292, 0)">
+      <rect width="134" height="150" rx="10" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.2" />
+      <rect width="134" height="6" rx="3" fill="#f59e0b" />
+      <text x="16" y="28" font-size="20">📦</text>
+      <text x="16" y="52" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Storage 檔案庫</text>
+      <text x="16" y="74" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="11">
+        <tspan x="16" dy="0">大容量物件儲存</tspan>
+        <tspan x="16" dy="16">公開 / 私有 Bucket</tspan>
+        <tspan x="16" dy="16">內建 CDN 快取</tspan>
+        <tspan x="16" dy="16">免費 1GB 空間</tspan>
+      </text>
+    </g>
+
+    <!-- 支柱 4: Realtime -->
+    <g transform="translate(438, 0)">
+      <rect width="134" height="150" rx="10" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.2" />
+      <rect width="134" height="6" rx="3" fill="#ec4899" />
+      <text x="16" y="28" font-size="20">⚡</text>
+      <text x="16" y="52" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Realtime 即時流</text>
+      <text x="16" y="74" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="11">
+        <tspan x="16" dy="0">WebSocket 連線</tspan>
+        <tspan x="16" dy="16">DB 變更自動廣播</tspan>
+        <tspan x="16" dy="16">在線狀態 Presence</tspan>
+        <tspan x="16" dy="16">多人即時協作</tspan>
+      </text>
+    </g>
+
+    <!-- 支柱 5: Edge Functions -->
+    <g transform="translate(584, 0)">
+      <rect width="134" height="150" rx="10" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.2" />
+      <rect width="134" height="6" rx="3" fill="#a855f7" />
+      <text x="16" y="28" font-size="20">🌍</text>
+      <text x="16" y="52" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">Edge Functions</text>
+      <text x="16" y="74" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="11">
+        <tspan x="16" dy="0">Deno 邊緣運算</tspan>
+        <tspan x="16" dy="16">TypeScript 原生</tspan>
+        <tspan x="16" dy="16">自訂後端 Webhook</tspan>
+        <tspan x="16" dy="16">月免 50 萬次調用</tspan>
+      </text>
+    </g>
+
+    <!-- 支柱 6: AI Vector Engine -->
+    <g transform="translate(730, 0)">
+      <rect width="134" height="150" rx="10" fill="url(#cardGrad)" stroke="#3ecf8e" stroke-width="1.5" />
+      <rect width="134" height="6" rx="3" fill="#3ecf8e" />
+      <text x="16" y="28" font-size="20">🤖</text>
+      <text x="16" y="52" fill="#3ecf8e" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">AI 向量引擎</text>
+      <text x="16" y="74" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="11">
+        <tspan x="16" dy="0">pgvector 語意比對</tspan>
+        <tspan x="16" dy="16">內文與向量一體存</tspan>
+        <tspan x="16" dy="16">混合搜尋 (Hybrid)</tspan>
+        <tspan x="16" dy="16">RAG 應用第一首選</tspan>
+      </text>
+    </g>
+  </g>
+
+  <!-- 底部警示與限制帶 -->
+  <g transform="translate(48, 410)">
+    <rect width="864" height="78" rx="10" fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" stroke-width="1" />
+    <text x="20" y="28" fill="#f59e0b" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">⚠️ 免費方案三大關鍵限制與避坑密技：</text>
+    <text x="20" y="50" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="12">
+      1. <tspan fill="#f59e0b" font-weight="600">7 天無活動自動休眠 (Paused)</tspan>：連續一週無請求會暫停專案，可用 Workers 定時發送 SELECT 心跳 Ping 永久保活！
+    </text>
+    <text x="20" y="68" fill="#cbd5e1" font-family="system-ui, -apple-system, sans-serif" font-size="12">
+      2. <tspan fill="#f59e0b" font-weight="600">無免費自動備份下載</tspan>：建議定期用 pg_dump 備份 · 3. <tspan fill="#f59e0b" font-weight="600">最多 2 個活躍專案</tspan>，資料庫容量上限 500 MB。
+    </text>
+  </g>
+</svg>

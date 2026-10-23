@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 11 章：企業級 AI 知識庫實戰 — Cloudflare 全家桶 + Supabase 打造新人智慧導航庫 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge">Chapter 11</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">首頁</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">🌙 深色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節總覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載與安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與部署流程</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 實戰教學</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播通知</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+        <li><a href="chapter9.html">第 9 章：Cloudflare Pages 邊緣部署</a></li>
+        <li><a href="chapter10.html">第 10 章：Supabase 現代雲端資料庫</a></li>
+        <li><a href="chapter11.html" class="active">第 11 章：企業級 AI 知識庫 (RAG)</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-11-1">11-1 全端架構解析：四核聯動</a></li>
+        <li><a href="#sec-11-2">11-2 Supabase 向量資料庫建置</a></li>
+        <li><a href="#sec-11-3">11-3 Cloudflare Workers 邊緣中繼</a></li>
+        <li><a href="#sec-11-4">11-4 私有 NotebookLM 前端與防幻覺</a></li>
+        <li><a href="#sec-11-5">11-5 Zero Trust 員工登入防護牆</a></li>
+        <li><a href="#sec-11-6">11-6 免費版限制與資料隱私合規</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">第 11 章 · 企業級 AI 實戰巔峰</span>
+        <h1>企業級 AI 知識庫實戰：Cloudflare 全家桶 + Supabase 打造新人智慧導航庫</h1>
+        <p class="desc">告別散亂在各處的員工守則與作業 SOP！本章採用全美最具實戰公信力的現代雲端技術堆疊：<strong>「Cloudflare Pages (前端) + Cloudflare Workers (邊緣後端) + Supabase (pgvector 向量資料庫) + AI API」</strong>，全程由 Antigravity 協作引導，打造一套如同「企業私有版 Google NotebookLM」的智慧問答系統——安全、毫秒反應、精準附帶手冊章節出處，查無依據絕不瞎猜！</p>
+      </div>
+
+      <!-- 11-1 四核聯動架構 -->
+      <section id="sec-11-1" class="content-section">
+        <h2>11-1 全端架構解析：Cloudflare Pages + Workers + Supabase + AI API</h2>
+        <p>新職員進公司，面對「差勤規章、請假手續、報帳規定、資安守則」散落各處，往往手足無措。我們整合這套四大核心技術，建立完整的企業知識庫閉環：</p>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch10_cf_supabase_rag_pipeline.svg" alt="Cloudflare 全家桶 + Supabase 智慧新人導航庫完整架構" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 11-1：企業級 RAG 現代全端四大核心架構流水線</strong><br>
+            Pages 快速載入前端門面、Workers 邊緣安全代理、Supabase 高效向量檢索、AI API 溯源生成與防幻覺。
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>🧩 4 大組件分工職責：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>Cloudflare Pages（前端入口）</strong>：放置新人智慧導航網站，極速載入、雙欄排版、提供熱門情境問題與來源查看卡片。</li>
+            <li><strong>Cloudflare Workers（邊緣安全大腦）</strong>：處理使用者的提問、將問題轉為向量、呼叫 Supabase 檢索、組合 Prompt 調用 AI API；<strong>所有 API Key 放在後端環境變數，前端完全看不到任何機密金鑰！</strong></li>
+            <li><strong>Supabase（PostgreSQL + pgvector）</strong>：存放 4 本企業手冊的切塊內文、章節出處與 768 維語意向量，負責以餘弦相似度在幾毫秒內抓出最相關段落。</li>
+            <li><strong>AI API（Gemini / LLM）</strong>：根據檢索出來的手冊內容條列具體回答，並強制標註出處手冊與章節；找不到依據時堅決回覆「目前查不到」，徹底避免模型自行瞎猜。</li>
+          </ol>
+        </div>
+
+        <!-- 深入架構問答卡片 -->
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <!-- 為什麼選 Supabase 卡片 -->
+          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.3rem;">🤔</span>
+              <h4 style="margin: 0; color: #38bdf8; font-size: 1.05rem;">為什麼選 Supabase 而非 Cloudflare Vectorize？</h4>
+            </div>
+            <ul style="padding-left: 1.25rem; margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>「內文與向量一體化」 vs 「純索引分開存」</strong>：Supabase 是全功能關聯資料庫，完整文字、章節標籤與 768 維向量都存在<strong>同一筆記錄</strong>，一趟查詢直接回傳內文；而 Vectorize <strong>只存向量數值不存原始長文字</strong>，查詢後還必須二次撈取 D1 或 KV，架構相對繁瑣。</li>
+              <li><strong>混合檢索（Hybrid Search）</strong>：Supabase 支援全文關鍵字檢索 + 語意向量雙軌搜尋，處理規章中的「法規代號、數字天數」精準度最高。</li>
+              <li><strong>視覺化後台（Web GUI）</strong>：Supabase 內建如 Excel 般的資料表檢視器與 SQL 編輯器，除錯與修改手冊段落極度直觀。</li>
+            </ul>
+          </div>
+
+          <!-- 什麼是 Workers 卡片 -->
+          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.3rem;">⚡</span>
+              <h4 style="margin: 0; color: #f59e0b; font-size: 1.05rem;">Workers 所指的又是什麼意思？</h4>
+            </div>
+            <ul style="padding-left: 1.25rem; margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>邊緣無伺服器計算（Serverless Edge Compute）</strong>：不同於傳統租用單一主機，Workers 程式碼直接運行在全球 330+ 城市的邊緣機房，離員工最近、<strong>0 毫秒冷啟動</strong>極速反應。</li>
+              <li><strong>安全總門衛（金鑰不落地）</strong>：Gemini API Key 與 Supabase 密鑰存放在 Workers 後端環境變數中，瀏覽器完全無法窺探，杜絕被盜用風險。</li>
+              <li><strong>RAG 管線編排大腦</strong>：負責接收問題 ➔ 轉向量 ➔ 查資料庫 ➔ 組裝防幻覺提示詞 ➔ 調用 AI ➔ 整合回傳的前後端中樞。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11-2 Supabase 資料庫 -->
+      <section id="sec-11-2" class="content-section">
+        <h2>11-2 知識庫核心：Supabase 建立 pgvector 與 4 本手冊切塊向量化</h2>
+        <p>我們使用在專案目錄下 <code>handbooks/</code> 資料夾準備好的 4 本真實企業手冊（差勤管理、出差報銷、資訊安全、福委會補助）。</p>
+
+        <div class="step-box">
+          <h4>🗄️ 步驟 1：在 Supabase SQL Editor 執行一鍵建表</h4>
+          <p>登入 <a href="https://supabase.com/" target="_blank" style="color: #38bdf8; text-decoration: underline;">Supabase 後台</a>，在 SQL Editor 貼上標準 SQL 語法：</p>
+          <pre style="background: #040711; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; color: #38bdf8; font-family: monospace; font-size: 0.88rem; line-height: 1.6; overflow-x: auto;">
+-- 1. 開啟向量擴充
+create extension if not exists vector;
+
+-- 2. 建立手冊知識庫資料表
+create table handbook_documents (
+  id bigserial primary key,
+  content text not null,                  -- 手冊切塊文字
+  metadata jsonb not null,                -- 出處標籤（{"doc": "差勤管理", "section": "4.1 快篩陽性"}）
+  embedding vector(768) not null          -- 768 維語意向量
+);
+
+-- 3. 建立餘弦相似度檢索預存程序
+create or replace function match_handbooks (
+  query_embedding vector(768),
+  match_count int default 4
+) returns table (
+  id bigint,
+  content text,
+  metadata jsonb,
+  similarity float
+) language plpgsql as $$
+begin
+  return query
+  select
+    handbook_documents.id,
+    handbook_documents.content,
+    handbook_documents.metadata,
+    1 - (handbook_documents.embedding &lt;=&gt; query_embedding) as similarity
+  from handbook_documents
+  order by handbook_documents.embedding &lt;=&gt; query_embedding
+  limit match_count;
+end;
+$$;
+          </pre>
+        </div>
+
+        <div class="prompt-box">
+          <div class="prompt-header">
+            <span>💬 對 Antigravity 說的入庫提示詞（Prompt）</span>
+            <span class="prompt-badge">自動切塊與向量存庫</span>
+          </div>
+          <div class="prompt-content">
+            "Antigravity，請幫我寫一個手冊切塊入庫腳本 <code>scripts/ingest.js</code>：<br><br>
+            1. 讀取 <code>handbooks/</code> 目錄下的 4 份 Markdown 檔案。<br>
+            2. 依照章節標題進行切塊（每塊約 300~450 字，重疊 50 字保持語意連續）。<br>
+            3. 保留 metadata（包含手冊名稱、章節標題）。<br>
+            4. 呼叫 Google Gemini Embedding API (<code>text-embedding-004</code>) 取得 768 維向量。<br>
+            5. 使用 <code>@supabase/supabase-js</code> 將切塊與向量批次寫入 <code>handbook_documents</code> 資料表。<br><br>
+            請提供完整代碼，並說明如何設定 Supabase URL 與 Service Role Key！"
+          </div>
+        </div>
+      </section>
+
+      <!-- 11-3 Workers 邊緣中繼 -->
+      <section id="sec-11-3" class="content-section">
+        <h2>11-3 邊緣運算大腦：Cloudflare Workers 處理向量檢索與環境變數</h2>
+        <p>為了確保安全性，<strong>瀏覽器前端絕對不能放 Google API Key 或 Supabase 密鑰</strong>！我們讓 Cloudflare Workers 擔任最堅固的中繼站。</p>
+
+        <div class="step-box">
+          <h4>🔒 在 Cloudflare 後台設定安全環境變數（Secrets）：</h4>
+          <p>在 Workers 專案的「Settings」➔「Variables and Secrets」加入以下變數（加密儲存）：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
+            <li><code>SUPABASE_URL</code>：你的 Supabase 專案網址（如 <code>https://xyz.supabase.co</code>）。</li>
+            <li><code>SUPABASE_ANON_KEY</code>：Supabase 前端讀取公開金鑰。</li>
+            <li><code>GEMINI_API_KEY</code>：Google AI Studio 申請的 API Key。</li>
+          </ul>
+        </div>
+
+        <div class="prompt-box">
+          <div class="prompt-header">
+            <span>💬 對 Antigravity 說的 Workers 提示詞（Prompt）</span>
+            <span class="prompt-badge">邊緣運算核心代碼</span>
+          </div>
+          <div class="prompt-content">
+            "Antigravity，請幫我撰寫一個 Cloudflare Workers 腳本（或 Pages Function <code>functions/api/ask.js</code>）：<br><br>
+            <strong>【核心運作邏輯】：</strong><br>
+            1. 接收前端 POST 傳來的新人情境問題 <code>{ question }</code>。<br>
+            2. 使用 <code>env.GEMINI_API_KEY</code> 呼叫 Google Embedding API，將提問轉為 768 維向量。<br>
+            3. 呼叫 Supabase 的 RPC 函式 <code>match_handbooks</code>，檢索出相似度最高的 Top 3 手冊段落。<br>
+            4. 若最高相似度低於門檻（例如 &lt; 0.65），直接回傳：<em>『很抱歉，目前在內部規章中查不到相關規範，請直接洽詢人資處 (hr@example.com)！』</em>避免 AI 瞎猜。<br>
+            5. 若有相符依據，組裝 System Prompt 呼叫 Gemini 1.5 / 2.0 Flash 條列回答，並在文末附上【參考來源】清單。<br>
+            6. 回傳 JSON：<code>{ answer, sources: [{ doc, section, similarity }] }</code>。<br>
+            請提供完整、乾淨、附註解的代碼！"
+          </div>
+        </div>
+      </section>
+
+      <!-- 11-4 私有 NotebookLM 前端與防幻覺 -->
+      <section id="sec-11-4" class="content-section">
+        <h2>11-4 前端體驗：雙欄 NotebookLM 介面與嚴格防幻覺工程</h2>
+        <p>新人系統好不好用，前端體驗佔了一半！我們請 Antigravity 打造如同 <strong>Google NotebookLM</strong> 的雙欄式介面：</p>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch9_notebooklm_ui_layout.svg" alt="雙欄式企業新人手冊智慧導航庫介面" style="width: 100%; max-width: 820px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 11-2：私有化 NotebookLM 介面架構</strong><br>
+            左欄來源手冊清單與熱門問題捷徑，右欄即時對話並標註手冊引用標籤。
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>🛡️ 絕不幻覺！AI API 的系統提示詞（System Instruction）設計：</h4>
+          <pre style="background: #040711; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; color: #a5f3fc; font-family: monospace; font-size: 0.88rem; line-height: 1.6; overflow-x: auto;">
+你是一位嚴謹的企業內部人資與規章專員。
+你的任務是根據提供的【手冊段落依據】回答新進員工的問題。
+
+【嚴格遵守原則】：
+1. 僅能依據提供的參考段落回答，嚴禁使用未提及的外部常識或擅自揣測！
+2. 若參考段落中找不到明確規範，請堅決回答：
+   「目前在員工手冊庫中查不到相關規範，建議請直接洽詢人資部窗口（分機 #8801）或管理部。」
+3. 答案必須以繁體中文（台灣習慣用語）清晰條列說明。
+4. 每點回答結尾必須加上【引用來源標籤】，例如：[來源：差勤管理辦法 - 第4條]。
+          </pre>
+        </div>
+      </section>
+
+      <!-- 11-5 Zero Trust 門禁安全 -->
+      <section id="sec-11-5" class="content-section">
+        <h2>11-5 企業安全第一步：Cloudflare Zero Trust Access 零程式碼員工門禁</h2>
+        <p>「手冊裡有出差報銷金額與內部資安準則，如果網址外洩被外人看到怎麼辦？」傳統做法要寫登入、註冊、Token 驗證...非常複雜。但在 Cloudflare 上，<strong>完全不需要寫一行程式碼</strong>！</p>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch10_cloudflare_access_security.svg" alt="Cloudflare Zero Trust Access 免寫 Code 員工登入防護" style="width: 100%; max-width: 820px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 11-3：Cloudflare Zero Trust 邊緣身分防護牆</strong><br>
+            前 50 名員工永久免費，直接阻擋外部訪客，只有驗證過的企業信箱能進入系統。
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>🚀 3 步驟啟用企業門禁：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li>進入 <strong>Cloudflare Zero Trust 後台</strong> ➔ 點選「Access」➔「Applications」。</li>
+            <li>選擇「Add an Application」➔「Self-hosted」，輸入你的 Pages 網站網址。</li>
+            <li>設定原則（Policy）：選擇 <strong>One-time PIN（一次性 Email 驗證碼）</strong>，規則設定為 <code>Emails ending in: @yourcompany.com</code>（限公司信箱登入）。</li>
+          </ol>
+          <p style="margin-top: 0.75rem; color: #34d399; font-weight: 600;">
+            ✅ 設定完成後，任何外人連上網站都會被強制攔截在登入畫面；只有輸入公司信箱收到驗證碼後，才能進入新人手冊庫！
+          </p>
+        </div>
+      </section>
+
+      <!-- 11-6 免費版限制與資料隱私合規 -->
+      <section id="sec-11-6" class="content-section">
+        <h2>11-6 免費方案限制與企業資料隱私條款決策</h2>
+        <p>本套架構非常適合以「完全免費」開始試行 POC，但在正式推行給全公司使用前，必須知悉以下限制與資料條款：</p>
+
+        <div class="step-box">
+          <h4>⚖️ 免費版使用限制與防範策略：</h4>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>Cloudflare Workers 限制</strong>：免費版每日上限 <strong>100,000 次請求</strong>，每次運算 CPU 時間上限 10ms（等待 Supabase 與 AI 回傳的 I/O 時間不計入），對數百人的中小企業試行絕對綽綽有餘。</li>
+            <li><strong>Supabase 免費版休眠機制</strong>：專案若<strong>連續 7 天完全無任何活動</strong>，會自動進入休眠暫停（Paused）。
+              <br><span style="color: #38bdf8;">💡 解決方案：</span>利用 Cloudflare Workers 免費的 Cron Trigger（排程觸發器）或 Google Apps Script，設定每天半夜自動向 Supabase 執行一次輕量 SELECT 查詢（心跳 Ping），即可永久保持活躍！
+            </li>
+            <li><strong>Supabase 免費備份限制</strong>：免費版不提供自動日備份下載。建議利用 Antigravity 產出本機備份腳本，定時匯出手冊資料。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="margin-top: 1.5rem; border-color: rgba(245, 158, 11, 0.4);">
+          <h4>🔒 企業機密關鍵：Gemini API 免費層 vs 付費層的隱私條款</h4>
+          <div style="overflow-x: auto; margin-top: 0.75rem;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); color: #38bdf8;">
+                  <th style="padding: 0.6rem;">方案層級</th>
+                  <th style="padding: 0.6rem;">資料隱私與訓練規範 (Data Privacy)</th>
+                  <th style="padding: 0.6rem;">企業建議與適用情境</th>
+                </tr>
+              </thead>
+              <tbody style="color: var(--text-muted); line-height: 1.8;">
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">Gemini API 免費層</td>
+                  <td style="padding: 0.6rem; color: #f59e0b;">提交之內容<strong>可能由 Google 經過匿名化人工審閱並用於改善模型產品</strong>。</td>
+                  <td style="padding: 0.6rem;">適合內部 POC 概念驗證、測試非機密之一般差勤與福利手冊。</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.6rem; color: #fff; font-weight: 600;">Gemini API 付費層 (Pay-as-you-go)</td>
+                  <td style="padding: 0.6rem; color: #10b981; font-weight: 700;"><strong>零數據保留（Zero Data Retention）</strong>，明確承諾不使用客戶資料訓練模型。</td>
+                  <td style="padding: 0.6rem;">正式全公司上線首選！即使全公司每天使用，每月通常僅花費幾美元，享有完整法務保障。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 0.75rem;">
+            💡 <strong>黃金策略</strong>：先以免費方案搭建與試行，驗證檢索品質與同仁反響；確認成效良好後，再在 Google Cloud 綁定信用卡切換至付費 API，並設定每月預算上限（例如上限 10 美元），既能兼顧荷包，又能享有企業最高規格資安保障！
+          </p>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top: 2rem;">
+          <span>🎓</span>
+          <div>
+            <strong>恭喜完成全課程十一大章節！全端 AI 架構師結業！</strong><br>
+            你已經完整掌握了全美矽谷大廠最熱門的「全端邊緣運算 + 向量資料庫 + LLM 落地 + 零信任資安門禁」！這套實戰專案不僅能直接應用於你的公司內部，更能成為你個人履歷上極具競爭力的高難度商業作品！
+          </div>
+        </div>
+      </section>
+
+      <!-- 章節導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter10.html" class="btn-secondary">◀ 上一章：Supabase 現代雲端資料庫</a>
+        <a href="../index.html" class="btn-primary">返回課程首頁 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
