@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0d1927"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="185" height="30" rx="15" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.5"/>
+    <text x="92.5" y="20" fill="#10b981" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">ZERO TRUST ACCESS</text>
+    <text x="205" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">免寫程式！Cloudflare 企業身分驗證防護牆</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">在前端網頁前築起一道安全門禁，只允許公司員工信箱（@yourcompany.com）解鎖存取內部手冊</text>
+  </g>
+
+  <!-- Visual Architecture: 3 Stage Diagram -->
+  <g transform="translate(60, 130)">
+    
+    <!-- Left Stage: Visitors -->
+    <g transform="translate(0, 0)" filter="url(#shadow)">
+      <rect width="250" height="330" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+      <rect width="250" height="36" rx="12" fill="rgba(255, 255, 255, 0.05)"/>
+      <rect y="26" width="250" height="10" fill="url(#cardGrad)"/>
+      <text x="125" y="23" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700" text-anchor="middle">1. 外部訪客嘗試造訪</text>
+      
+      <g transform="translate(20, 60)">
+        <rect width="210" height="90" rx="8" fill="#1e131d" stroke="#f43f5e" stroke-width="1.2"/>
+        <text x="15" y="32" font-size="20">👤❌</text>
+        <text x="50" y="30" fill="#f43f5e" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">外部一般大眾</text>
+        <text x="15" y="58" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11">無意間拿到新人手冊網址</text>
+        <text x="15" y="76" fill="#f43f5e" font-family="'Noto Sans TC', sans-serif" font-size="10.5">未持有公司授權信箱</text>
+      </g>
+
+      <g transform="translate(20, 175)">
+        <rect width="210" height="90" rx="8" fill="#0b1b16" stroke="#10b981" stroke-width="1.2"/>
+        <text x="15" y="32" font-size="20">👨‍💼✅</text>
+        <text x="50" y="30" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">在職正式員工</text>
+        <text x="15" y="58" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11">持有公司 Google 帳號</text>
+        <text x="15" y="76" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="10.5">user@yourcompany.com</text>
+      </g>
+    </g>
+
+    <!-- Center Stage: Cloudflare Zero Trust Wall -->
+    <g transform="translate(285, 0)" filter="url(#shadow)">
+      <rect width="310" height="330" rx="12" fill="url(#cardGrad)" stroke="#f6821f" stroke-width="2"/>
+      <rect width="310" height="36" rx="12" fill="rgba(246, 130, 31, 0.2)"/>
+      <rect y="26" width="310" height="10" fill="url(#cardGrad)"/>
+      <text x="155" y="23" fill="#f6821f" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13" font-weight="800" text-anchor="middle">2. Cloudflare Zero Trust 防護牆</text>
+      
+      <!-- Shield Icon -->
+      <circle cx="155" cy="72" r="22" fill="rgba(246, 130, 31, 0.15)" stroke="#f6821f" stroke-width="1.2"/>
+      <text x="155" y="78" font-size="20" text-anchor="middle">🛡️</text>
+      
+      <text x="155" y="116" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">Zero Trust Access Policy</text>
+      <text x="155" y="134" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">邊緣層自動攔截與身分核對</text>
+      
+      <line x1="20" y1="150" x2="290" y2="150" stroke="#1e293b"/>
+      
+      <g transform="translate(20, 165)">
+        <rect width="270" height="40" rx="6" fill="#1e131d" stroke="#f43f5e" stroke-width="1"/>
+        <text x="15" y="25" fill="#f43f5e" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="700">❌ 拒絕通行：直接顯示 403 Forbidden</text>
+      </g>
+
+      <g transform="translate(20, 220)">
+        <rect width="270" height="55" rx="6" fill="#0b1b16" stroke="#10b981" stroke-width="1"/>
+        <text x="15" y="22" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="700">✓ 核身成功：免寫 Code 一鍵放行</text>
+        <text x="15" y="42" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="10">支援一次性 Email 驗證碼 (PIN) 或 Google SSO</text>
+      </g>
+      
+      <rect x="20" y="290" width="270" height="24" rx="4" fill="rgba(246, 130, 31, 0.15)"/>
+      <text x="155" y="306" fill="#f6821f" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">50 人以內企業完全免費！</text>
+    </g>
+
+    <!-- Right Stage: Protected Intranet Handbook -->
+    <g transform="translate(630, 0)" filter="url(#shadow)">
+      <rect width="250" height="330" rx="12" fill="url(#cardGrad)" stroke="#10b981" stroke-width="2"/>
+      <rect width="250" height="36" rx="12" fill="rgba(16, 185, 129, 0.2)"/>
+      <rect y="26" width="250" height="10" fill="url(#cardGrad)"/>
+      <text x="125" y="23" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="800" text-anchor="middle">3. 企業私有手冊庫</text>
+      
+      <circle cx="125" cy="72" r="22" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.2"/>
+      <text x="125" y="78" font-size="20" text-anchor="middle">🔒</text>
+      
+      <text x="125" y="116" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">內部受保護網站</text>
+      <text x="125" y="134" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">handbook.yourcompany.com</text>
+      
+      <line x1="20" y1="150" x2="230" y2="150" stroke="#1e293b"/>
+      
+      <text x="20" y="175" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 自由提問公司規範</text>
+      <text x="20" y="198" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 差勤、出差、報帳 SOP</text>
+      <text x="20" y="221" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 福委會福利與補助金</text>
+      <text x="20" y="244" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11.5" font-weight="600">▸ 商業機密 100% 不外洩</text>
+      
+      <rect x="20" y="280" width="210" height="24" rx="4" fill="rgba(16, 185, 129, 0.15)"/>
+      <text x="125" y="296" fill="#10b981" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">資安與合規性滿分</text>
+    </g>
+
+  </g>
+
+  <!-- Bottom Tip -->
+  <g transform="translate(60, 485)">
+    <rect width="880" height="42" rx="10" fill="rgba(15, 23, 42, 0.9)" stroke="#1e293b" stroke-width="1"/>
+    <text x="25" y="26" font-size="16">💡</text>
+    <text x="50" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5">
+      這就是現代企業架構的精髓：<strong>完全不用在網站裡手寫複雜的使用者資料表或登入密碼驗證</strong>，直接委託 Cloudflare Zero Trust 站在最前線守門，省時、省錢又具備最高規格資安！
+    </text>
+  </g>
+</svg>

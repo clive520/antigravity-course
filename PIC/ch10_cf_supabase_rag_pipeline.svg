@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#09152a"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 40)">
+    <rect width="185" height="30" rx="15" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="92.5" y="20" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">ENTERPRISE RAG STACK</text>
+    <text x="205" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">Cloudflare 全家桶 + Supabase 智慧新人導航庫</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">Pages 託管入口、Workers 邊緣安全轉發、Supabase pgvector 語意檢索、AI API 溯源防幻覺</text>
+  </g>
+
+  <!-- 4 Big Components Flow -->
+  <g transform="translate(50, 130)">
+    
+    <!-- Box 1: Cloudflare Pages -->
+    <g transform="translate(0, 0)" filter="url(#shadow)">
+      <rect width="205" height="325" rx="12" fill="url(#cardGrad)" stroke="#f6821f" stroke-width="1.8"/>
+      <rect width="205" height="36" rx="12" fill="rgba(246, 130, 31, 0.2)"/>
+      <rect y="26" width="205" height="10" fill="url(#cardGrad)"/>
+      <text x="102.5" y="23" fill="#f6821f" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="800" text-anchor="middle">1. 前端入口網站</text>
+      
+      <circle cx="102.5" cy="72" r="22" fill="rgba(246, 130, 31, 0.15)" stroke="#f6821f" stroke-width="1.2"/>
+      <text x="102.5" y="78" font-size="20" text-anchor="middle">🏢</text>
+      
+      <text x="102.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">Cloudflare Pages</text>
+      <text x="102.5" y="136" fill="#f6821f" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">新人智慧導航入口</text>
+      
+      <line x1="16" y1="152" x2="189" y2="152" stroke="#1e293b"/>
+      
+      <text x="20" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ NotebookLM 雙欄介面</text>
+      <text x="20" y="202" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 新人輸入任何工作情境</text>
+      <text x="20" y="226" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ Zero Trust 員工登入</text>
+      <text x="20" y="250" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ 限制 @company.com</text>
+      
+      <rect x="16" y="280" width="173" height="24" rx="4" fill="rgba(246, 130, 31, 0.15)"/>
+      <text x="102.5" y="296" fill="#f6821f" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">秒級 Anycast 載入</text>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <g transform="translate(208, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#f6821f" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#f6821f"/>
+    </g>
+
+    <!-- Box 2: Cloudflare Workers -->
+    <g transform="translate(225, 0)" filter="url(#shadow)">
+      <rect width="215" height="325" rx="12" fill="url(#cardGrad)" stroke="#38bdf8" stroke-width="2"/>
+      <rect width="215" height="36" rx="12" fill="rgba(56, 189, 248, 0.2)"/>
+      <rect y="26" width="215" height="10" fill="url(#cardGrad)"/>
+      <text x="107.5" y="23" fill="#38bdf8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="800" text-anchor="middle">2. 邊緣運算中繼大腦</text>
+      
+      <circle cx="107.5" cy="72" r="22" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.2"/>
+      <text x="107.5" y="78" font-size="20" text-anchor="middle">⚡</text>
+      
+      <text x="107.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">Cloudflare Workers</text>
+      <text x="107.5" y="136" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Serverless Edge API</text>
+      
+      <line x1="16" y1="152" x2="199" y2="152" stroke="#1e293b"/>
+      
+      <text x="20" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 接收問題轉 768 維向量</text>
+      <text x="20" y="202" fill="#38bdf8" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ 安全保管 API 金鑰環境變數</text>
+      <text x="20" y="226" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 串接 Supabase 檢索</text>
+      <text x="20" y="250" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="600">▸ 免費每日 10 萬次請求</text>
+      
+      <rect x="16" y="280" width="183" height="24" rx="4" fill="rgba(56, 189, 248, 0.15)"/>
+      <text x="107.5" y="296" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">毫秒啟動・密鑰不外洩</text>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <g transform="translate(443, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#38bdf8" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#38bdf8"/>
+    </g>
+
+    <!-- Box 3: Supabase (pgvector) -->
+    <g transform="translate(460, 0)" filter="url(#shadow)">
+      <rect width="215" height="325" rx="12" fill="url(#cardGrad)" stroke="#10b981" stroke-width="2"/>
+      <rect width="215" height="36" rx="12" fill="rgba(16, 185, 129, 0.2)"/>
+      <rect y="26" width="215" height="10" fill="url(#cardGrad)"/>
+      <text x="107.5" y="23" fill="#10b981" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="800" text-anchor="middle">3. 向量資料庫</text>
+      
+      <circle cx="107.5" cy="72" r="22" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.2"/>
+      <text x="107.5" y="78" font-size="20" text-anchor="middle">🗄️</text>
+      
+      <text x="107.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">Supabase (pgvector)</text>
+      <text x="107.5" y="136" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">PostgreSQL 語意檢索</text>
+      
+      <line x1="16" y1="152" x2="199" y2="152" stroke="#1e293b"/>
+      
+      <text x="20" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 儲存 4 本手冊切塊條文</text>
+      <text x="20" y="202" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ 餘弦相似度 match_handbooks</text>
+      <text x="20" y="226" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 管理者更新手冊即時重編</text>
+      <text x="20" y="250" fill="#f59e0b" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ 7 天定時心跳保活不休眠</text>
+      
+      <rect x="16" y="280" width="183" height="24" rx="4" fill="rgba(16, 185, 129, 0.15)"/>
+      <text x="107.5" y="296" fill="#10b981" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">免費 500MB 永久存檔</text>
+    </g>
+
+    <!-- Arrow 3 -> 4 -->
+    <g transform="translate(678, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#10b981" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#10b981"/>
+    </g>
+
+    <!-- Box 4: AI API (Gemini / LLM) -->
+    <g transform="translate(695, 0)" filter="url(#shadow)">
+      <rect width="205" height="325" rx="12" fill="url(#cardGrad)" stroke="#818cf8" stroke-width="1.8"/>
+      <rect width="205" height="36" rx="12" fill="rgba(129, 140, 248, 0.2)"/>
+      <rect y="26" width="205" height="10" fill="url(#cardGrad)"/>
+      <text x="102.5" y="23" fill="#818cf8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="800" text-anchor="middle">4. AI 生成與引用溯源</text>
+      
+      <circle cx="102.5" cy="72" r="22" fill="rgba(129, 140, 248, 0.15)" stroke="#818cf8" stroke-width="1.2"/>
+      <text x="102.5" y="78" font-size="20" text-anchor="middle">✨</text>
+      
+      <text x="102.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">Gemini / AI API</text>
+      <text x="102.5" y="136" fill="#818cf8" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">嚴格接地・拒絕幻覺</text>
+      
+      <line x1="16" y1="152" x2="189" y2="152" stroke="#1e293b"/>
+      
+      <text x="18" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 依據段落條列具體 SOP</text>
+      <text x="18" y="202" fill="#818cf8" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="700">▸ 必須附出處章節與頁碼</text>
+      <text x="18" y="226" fill="#f43f5e" font-family="'Noto Sans TC', sans-serif" font-size="11.5" font-weight="600">▸ 查無依據則誠實回「查不到」</text>
+      <text x="18" y="250" fill="#f59e0b" font-family="'Noto Sans TC', sans-serif" font-size="10.5">▸ 免費層 vs 付費層隱私考量</text>
+      
+      <rect x="16" y="280" width="173" height="24" rx="4" fill="rgba(129, 140, 248, 0.15)"/>
+      <text x="102.5" y="296" fill="#818cf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">企業級可信度滿分</text>
+    </g>
+
+  </g>
+
+  <!-- Bottom Tip Banner -->
+  <g transform="translate(50, 485)">
+    <rect width="900" height="42" rx="10" fill="rgba(15, 23, 42, 0.9)" stroke="#1e293b" stroke-width="1"/>
+    <text x="25" y="26" font-size="16">🛡️</text>
+    <text x="50" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5">
+      資安防護心法：<strong>前端網頁絕不存放 API Key</strong>，由 Workers 邊緣代理與環境變數把關，並可搭配 Cloudflare Zero Trust 進行公司員工驗證！
+    </text>
+  </g>
+</svg>

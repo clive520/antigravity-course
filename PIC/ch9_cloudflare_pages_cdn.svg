@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0b1428"/>
+    </linearGradient>
+    <linearGradient id="cfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6821f"/>
+      <stop offset="100%" stop-color="#faad3f"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="175" height="30" rx="15" fill="rgba(246, 130, 31, 0.15)" stroke="#f6821f" stroke-width="1.5"/>
+    <text x="87.5" y="20" fill="#f6821f" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">CLOUDFLARE EDGE</text>
+    <text x="195" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">現代雲端部署：GitHub Pages vs. Cloudflare Pages</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">從單一地區託管跨入全球 330+ 邊緣節點（Anycast CDN），實現毫秒級極速載入與全端擴充</text>
+  </g>
+
+  <!-- Comparison Columns -->
+  <g transform="translate(60, 130)">
+    
+    <!-- Left: GitHub Pages (Ch3, Ch4) -->
+    <g transform="translate(0, 0)" filter="url(#shadow)">
+      <rect width="420" height="340" rx="14" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+      <rect width="420" height="42" rx="14" fill="rgba(255, 255, 255, 0.05)"/>
+      <rect y="30" width="420" height="12" fill="url(#cardGrad)"/>
+      <text x="20" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">傳統託管：GitHub Pages</text>
+      <rect x="325" y="10" width="75" height="22" rx="6" fill="#1e293b"/>
+      <text x="362.5" y="25" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">靜態入門</text>
+      
+      <g transform="translate(20, 60)">
+        <text x="0" y="20" fill="#f43f5e" font-size="14">●</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">節點架構：以美國西岸為主的靜態快取</text>
+        <text x="20" y="40" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11.5">亞洲訪客初次訪問延遲較高（約 150～300ms）。</text>
+      </g>
+
+      <g transform="translate(20, 125)">
+        <text x="0" y="20" fill="#f43f5e" font-size="14">●</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">後端能力：純靜態網站，無原生後端</text>
+        <text x="20" y="40" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11.5">必須透過 GAS 或外部 API，無法直接整合邊緣運算。</text>
+      </g>
+
+      <g transform="translate(20, 190)">
+        <text x="0" y="20" fill="#f43f5e" font-size="14">●</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">自訂網域：需自行處理 DNS 設定與憑證</text>
+        <text x="20" y="40" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11.5">DNS 生效通常需等待數分鐘至數小時。</text>
+      </g>
+
+      <g transform="translate(20, 255)">
+        <text x="0" y="20" fill="#f43f5e" font-size="14">●</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">存取控管：公開網頁所有人皆可瀏覽</text>
+        <text x="20" y="40" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11.5">免費方案無法為內部員工加上登入防護牆。</text>
+      </g>
+    </g>
+
+    <!-- Right: Cloudflare Pages (Ch9 Upgrade) -->
+    <g transform="translate(460, 0)" filter="url(#shadow)">
+      <rect width="420" height="340" rx="14" fill="url(#cardGrad)" stroke="#f6821f" stroke-width="2"/>
+      <rect width="420" height="42" rx="14" fill="rgba(246, 130, 31, 0.2)"/>
+      <rect y="30" width="420" height="12" fill="url(#cardGrad)"/>
+      <text x="20" y="26" fill="#f6821f" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="800">現代邊緣：Cloudflare Pages</text>
+      <rect x="315" y="10" width="85" height="22" rx="6" fill="rgba(246, 130, 31, 0.25)"/>
+      <text x="357.5" y="25" fill="#f6821f" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle">企業級首選</text>
+
+      <g transform="translate(20, 60)">
+        <text x="0" y="20" fill="#10b981" font-size="14">✓</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">全球 Anycast CDN：330+ 城市就近回應</text>
+        <text x="20" y="40" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">台北、香港均有節點，首屏開啟僅需 10～30ms！</text>
+      </g>
+
+      <g transform="translate(20, 125)">
+        <text x="0" y="20" fill="#10b981" font-size="14">✓</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">全端邊緣運算：原生支援 Workers (Functions)</text>
+        <text x="20" y="40" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">前端與 API 後端可放在同一個專案，完美隱藏 API 金鑰。</text>
+      </g>
+
+      <g transform="translate(20, 190)">
+        <text x="0" y="20" fill="#10b981" font-size="14">✓</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">Git 整合與預覽分支 (Preview Deployments)</text>
+        <text x="20" y="40" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">每次 Git push 秒級自動建置，每個分支都有獨立專屬網址。</text>
+      </g>
+
+      <g transform="translate(20, 255)">
+        <text x="0" y="20" fill="#10b981" font-size="14">✓</text>
+        <text x="20" y="20" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700">企業防護：Zero Trust (Access) 免費員工登入</text>
+        <text x="20" y="40" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11.5" font-weight="600">免寫程式碼！一鍵限制只有公司 Google 帳號才能進入。</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Tip Banner -->
+  <g transform="translate(60, 490)">
+    <rect width="880" height="38" rx="8" fill="rgba(246, 130, 31, 0.1)" stroke="#f6821f" stroke-width="1"/>
+    <text x="25" y="24" font-size="16">🚀</text>
+    <text x="50" y="24" fill="#faad3f" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5" font-weight="600">
+      第 9 章全面升級！學會 Cloudflare Pages，等於直接掌握現代矽谷科技公司最推崇的邊緣全端部署利器！
+    </text>
+  </g>
+</svg>
