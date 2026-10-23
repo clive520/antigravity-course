@@ -83,6 +83,35 @@
             <li><strong>AI API（Gemini / LLM）</strong>：根據檢索出來的手冊內容條列具體回答，並強制標註出處手冊與章節；找不到依據時堅決回覆「目前查不到」，徹底避免模型自行瞎猜。</li>
           </ol>
         </div>
+
+        <!-- 深入架構問答卡片 -->
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <!-- 為什麼選 Supabase 卡片 -->
+          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.3rem;">🤔</span>
+              <h4 style="margin: 0; color: #38bdf8; font-size: 1.05rem;">為什麼選 Supabase 而非 Cloudflare Vectorize？</h4>
+            </div>
+            <ul style="padding-left: 1.25rem; margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>「內文與向量一體化」 vs 「純索引分開存」</strong>：Supabase 是全功能關聯資料庫，完整文字、章節標籤與 768 維向量都存在<strong>同一筆記錄</strong>，一趟查詢直接回傳內文；而 Vectorize <strong>只存向量數值不存原始長文字</strong>，查詢後還必須二次撈取 D1 或 KV，架構相對繁瑣。</li>
+              <li><strong>混合檢索（Hybrid Search）</strong>：Supabase 支援全文關鍵字檢索 + 語意向量雙軌搜尋，處理規章中的「法規代號、數字天數」精準度最高。</li>
+              <li><strong>視覺化後台（Web GUI）</strong>：Supabase 內建如 Excel 般的資料表檢視器與 SQL 編輯器，除錯與修改手冊段落極度直觀。</li>
+            </ul>
+          </div>
+
+          <!-- 什麼是 Workers 卡片 -->
+          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.3rem;">⚡</span>
+              <h4 style="margin: 0; color: #f59e0b; font-size: 1.05rem;">Workers 所指的又是什麼意思？</h4>
+            </div>
+            <ul style="padding-left: 1.25rem; margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>邊緣無伺服器計算（Serverless Edge Compute）</strong>：不同於傳統租用單一主機，Workers 程式碼直接運行在全球 330+ 城市的邊緣機房，離員工最近、<strong>0 毫秒冷啟動</strong>極速反應。</li>
+              <li><strong>安全總門衛（金鑰不落地）</strong>：Gemini API Key 與 Supabase 密鑰存放在 Workers 後端環境變數中，瀏覽器完全無法窺探，杜絕被盜用風險。</li>
+              <li><strong>RAG 管線編排大腦</strong>：負責接收問題 ➔ 轉向量 ➔ 查資料庫 ➔ 組裝防幻覺提示詞 ➔ 調用 AI ➔ 整合回傳的前後端中樞。</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <!-- 10-2 Supabase 資料庫 -->
