@@ -106,11 +106,59 @@
         <!-- CLI 授權教學專區 -->
         <div class="step-box" style="margin-top: 1.5rem; border-color: rgba(246, 130, 31, 0.4); background: rgba(246, 130, 31, 0.05);">
           <h4 style="color: #f6821f; display: flex; align-items: center; gap: 0.5rem;">
-            <span>🤖</span> 實戰必學：如何授權讓 Antigravity 以 CLI（Wrangler）執行 Cloudflare 任務？
+            <span>🤠</span> 什麼是 Wrangler？Cloudflare 官方開發者核心司令官
           </h4>
           <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.7;">
-            就像我們在第四章使用 <code>gh</code> 控制 GitHub 一樣，Cloudflare 官方也提供了一款強大的命令列工具——<strong>Wrangler</strong>。只要完成授權，你就可以直接動口叫 Antigravity 幫你部署網站、建立資料庫或設定金鑰！
+            <strong>Wrangler</strong> 是 Cloudflare 官方專為開發者打造的<strong>核心命令列工具（CLI，Command-Line Interface）</strong>。<br>
+            如果 Cloudflare 網頁後台（Dashboard）是「汽車儀表板上的觸控螢幕」，那麼 <strong>Wrangler</strong> 就是<strong>「工程師手上的專業遙控手把與自動駕駛程式碼」</strong>！就像我們在第四章使用 <code>gh</code> 控制 GitHub 一樣，在 Cloudflare 世界裡，控制所有邊緣運算與雲端資料庫的司令官就是 <code>wrangler</code>。
           </p>
+
+          <div style="background: rgba(15, 23, 42, 0.7); border-left: 3px solid #f6821f; padding: 0.75rem 1rem; border-radius: 4px; margin: 0.75rem 0; font-size: 0.84rem; color: #cbd5e1; line-height: 1.6;">
+            💡 <strong>有趣的命名由來</strong>："Wrangler" 在英文中原意是指<strong>「牛仔、馴馬師」</strong>（專門馴服並管理狂奔的野馬群）。Cloudflare 用這個名字象徵：<strong>「用這一套工具，幫你輕鬆馴服並駕馭分散在全球 330 多座城市的邊緣伺服器與微服務！」</strong>
+          </div>
+
+          <!-- 6 大超能力網格 -->
+          <div style="margin-top: 1.25rem;">
+            <strong style="color: #fff; font-size: 0.95rem;">🛠️ Wrangler 的 6 大主要超能力：</strong>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; margin-top: 0.75rem;">
+              <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
+                <div style="color: #f6821f; font-weight: 700; font-size: 0.85rem;">1. 🚀 一鍵發布與全球部署</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;"><code>wrangler pages deploy</code> 或 <code>wrangler deploy</code> 秒級同步分發到全球 330+ 節點。</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
+                <div style="color: #38bdf8; font-weight: 700; font-size: 0.85rem;">2. 💻 本地極速模擬環境</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;"><code>wrangler dev</code> 在本機模擬完整邊緣環境，支援熱重載（Hot Reload）秒看成果。</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
+                <div style="color: #10b981; font-weight: 700; font-size: 0.85rem;">3. 🗄️ 邊緣資料庫全生命週期</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">建立 D1 關聯資料庫、執行 SQL 腳本建表、管理 KV 快取與 Vectorize 向量庫。</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
+                <div style="color: #f59e0b; font-weight: 700; font-size: 0.85rem;">4. 📦 R2 零流量費檔案儲存</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">建立儲存桶（Bucket）、直接上傳與下載手冊 PDF 與圖片等靜態資產。</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
+                <div style="color: #ec4899; font-weight: 700; font-size: 0.85rem;">5. 🔒 安全加密環境變數</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;"><code>wrangler secret put</code> 將 Gemini API Key 加密上傳至雲端，代碼絕不洩漏金鑰。</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
+                <div style="color: #a855f7; font-weight: 700; font-size: 0.85rem;">6. 📡 即時線上日誌監聽</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;"><code>wrangler tail</code> 在終端機即時串流使用者造訪日誌與錯誤代碼，線上抓 Bug 神器！</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 為什麼交給 AntiGravity -->
+          <div style="margin-top: 1.25rem; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 0.85rem 1rem;">
+            <strong style="color: #38bdf8; font-size: 0.92rem;">🤖 為什麼讓 AntiGravity 掌握 Wrangler 如此重要？</strong>
+            <p style="margin: 0.3rem 0 0 0; font-size: 0.84rem; color: var(--text-muted); line-height: 1.6;">
+              過去搭建雲端應用，需要在後台手動點擊建 Pages、建 Workers、建 D1、填 Secrets...繁瑣容易出錯。現在有了 Wrangler，你只要動口吩咐：<em>「AntiGravity，請用 wrangler 幫我建立一個名為 handbook-db 的 D1 資料庫，並把寫好的後端部署上去！」</em>——AntiGravity 就能自動在命令列代勞秒級完成！
+            </p>
+          </div>
+
+          <h4 style="color: #38bdf8; margin: 1.5rem 0 0.5rem 0; font-size: 0.95rem;">
+            🔑 授權方式：如何讓 Antigravity 取得 Wrangler 控制權？
+          </h4>
 
           <div style="margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <!-- 方式 A -->
