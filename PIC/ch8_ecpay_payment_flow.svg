@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0b1528"/>
+    </linearGradient>
+    <linearGradient id="ecpayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="165" height="30" rx="15" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.5"/>
+    <text x="82.5" y="20" fill="#10b981" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">PAYMENT FLOW</text>
+    <text x="185" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">綠界金流 (ECPay) 5 步跳轉結帳資料流</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">前端發起結帳、後端防偽驗證、跳轉銀行級收銀台與交易回傳全流程</text>
+  </g>
+
+  <!-- Flow 5 Steps -->
+  <g transform="translate(50, 135)">
+    
+    <!-- Step 1: Client Checkout -->
+    <g transform="translate(0, 0)" filter="url(#shadow)">
+      <rect width="164" height="320" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+      <rect width="164" height="36" rx="12" fill="rgba(56, 189, 248, 0.15)"/>
+      <rect y="26" width="164" height="10" fill="url(#cardGrad)"/>
+      <text x="82" y="23" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEP 01</text>
+      
+      <circle cx="82" cy="72" r="22" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.2"/>
+      <text x="82" y="78" font-size="20" text-anchor="middle">🛒</text>
+      
+      <text x="82" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">前端發起結帳</text>
+      <text x="82" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">耳機產品展示頁</text>
+      
+      <line x1="15" y1="152" x2="149" y2="152" stroke="#1e293b"/>
+      
+      <text x="18" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 挑選方案規格</text>
+      <text x="18" y="202" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 輸入訂購人資訊</text>
+      <text x="18" y="226" fill="#38bdf8" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ 點擊線上刷卡</text>
+      <text x="18" y="250" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ 送出訂單參數</text>
+      
+      <rect x="15" y="280" width="134" height="24" rx="4" fill="rgba(56, 189, 248, 0.1)"/>
+      <text x="82" y="296" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">NT$ 5,990</text>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <g transform="translate(167, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#38bdf8" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#38bdf8"/>
+    </g>
+
+    <!-- Step 2: GAS Backend Sign -->
+    <g transform="translate(186, 0)" filter="url(#shadow)">
+      <rect width="168" height="320" rx="12" fill="url(#cardGrad)" stroke="#818cf8" stroke-width="1.8"/>
+      <rect width="168" height="36" rx="12" fill="rgba(129, 140, 248, 0.18)"/>
+      <rect y="26" width="168" height="10" fill="url(#cardGrad)"/>
+      <text x="84" y="23" fill="#818cf8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEP 02 (安全核心)</text>
+      
+      <circle cx="84" cy="72" r="22" fill="rgba(129, 140, 248, 0.1)" stroke="#818cf8" stroke-width="1.2"/>
+      <text x="84" y="78" font-size="20" text-anchor="middle">🔐</text>
+      
+      <text x="84" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">GAS 加密運算</text>
+      <text x="84" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">CheckMacValue</text>
+      
+      <line x1="15" y1="152" x2="153" y2="152" stroke="#1e293b"/>
+      
+      <text x="18" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 封裝商品與金額</text>
+      <text x="18" y="202" fill="#818cf8" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ 注入特店雙密鑰</text>
+      <text x="18" y="226" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ SHA-256 壓碼</text>
+      <text x="18" y="250" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="600">▸ 產出防偽檢查碼</text>
+      
+      <rect x="15" y="280" width="138" height="24" rx="4" fill="rgba(129, 140, 248, 0.15)"/>
+      <text x="84" y="296" fill="#818cf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">安全防竄改保證</text>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <g transform="translate(357, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#818cf8" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#818cf8"/>
+    </g>
+
+    <!-- Step 3: Auto Submit Form -->
+    <g transform="translate(376, 0)" filter="url(#shadow)">
+      <rect width="164" height="320" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+      <rect width="164" height="36" rx="12" fill="rgba(245, 158, 11, 0.15)"/>
+      <rect y="26" width="164" height="10" fill="url(#cardGrad)"/>
+      <text x="82" y="23" fill="#f59e0b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEP 03</text>
+      
+      <circle cx="82" cy="72" r="22" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="82" y="78" font-size="20" text-anchor="middle">⚡</text>
+      
+      <text x="82" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">自動跳轉導向</text>
+      <text x="82" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Auto Submit Form</text>
+      
+      <line x1="15" y1="152" x2="149" y2="152" stroke="#1e293b"/>
+      
+      <text x="18" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 生成隱藏表單</text>
+      <text x="18" y="202" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 包含所有金流參數</text>
+      <text x="18" y="226" fill="#f59e0b" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ JS form.submit()</text>
+      <text x="18" y="250" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ 秒轉綠界收銀台</text>
+      
+      <rect x="15" y="280" width="134" height="24" rx="4" fill="rgba(245, 158, 11, 0.1)"/>
+      <text x="82" y="296" fill="#f59e0b" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">零等待自動送出</text>
+    </g>
+
+    <!-- Arrow 3 -> 4 -->
+    <g transform="translate(543, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#f59e0b" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#f59e0b"/>
+    </g>
+
+    <!-- Step 4: ECPay Cashier -->
+    <g transform="translate(562, 0)" filter="url(#shadow)">
+      <rect width="170" height="320" rx="12" fill="url(#cardGrad)" stroke="#10b981" stroke-width="2"/>
+      <rect width="170" height="36" rx="12" fill="rgba(16, 185, 129, 0.22)"/>
+      <rect y="26" width="170" height="10" fill="url(#cardGrad)"/>
+      <text x="85" y="23" fill="#10b981" font-family="'Inter', sans-serif" font-size="12" font-weight="800" text-anchor="middle">STEP 04 (綠界收銀)</text>
+      
+      <circle cx="85" cy="72" r="22" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.2"/>
+      <text x="85" y="78" font-size="20" text-anchor="middle">💳</text>
+      
+      <text x="85" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">綠界官方收銀台</text>
+      <text x="85" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">PCI-DSS 銀行級資安</text>
+      
+      <line x1="15" y1="152" x2="155" y2="152" stroke="#1e293b"/>
+      
+      <text x="18" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 測試特店 2000132</text>
+      <text x="18" y="202" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ 測試卡號 4311-...</text>
+      <text x="18" y="226" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 3D 簡訊驗證模擬</text>
+      <text x="18" y="250" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="600">▸ 授權成功扣款完成</text>
+      
+      <rect x="15" y="280" width="140" height="24" rx="4" fill="rgba(16, 185, 129, 0.18)"/>
+      <text x="85" y="296" fill="#10b981" font-family="'Inter', sans-serif" font-size="10.5" font-weight="800" text-anchor="middle">合規安全不碰卡號</text>
+    </g>
+
+    <!-- Arrow 4 -> 5 -->
+    <g transform="translate(735, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#10b981" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#10b981"/>
+    </g>
+
+    <!-- Step 5: Callback & Sync -->
+    <g transform="translate(754, 0)" filter="url(#shadow)">
+      <rect width="146" height="320" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+      <rect width="146" height="36" rx="12" fill="rgba(52, 211, 153, 0.15)"/>
+      <rect y="26" width="146" height="10" fill="url(#cardGrad)"/>
+      <text x="73" y="23" fill="#34d399" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEP 05</text>
+      
+      <circle cx="73" cy="72" r="22" fill="rgba(52, 211, 153, 0.1)" stroke="#34d399" stroke-width="1.2"/>
+      <text x="73" y="78" font-size="20" text-anchor="middle">🎉</text>
+      
+      <text x="73" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">成功回傳跳轉</text>
+      <text x="73" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">OrderResultURL</text>
+      
+      <line x1="15" y1="152" x2="131" y2="152" stroke="#1e293b"/>
+      
+      <text x="16" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 跳回感謝頁面</text>
+      <text x="16" y="202" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 試算表改已付款</text>
+      <text x="16" y="226" fill="#06c755" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="700">▸ LINE 推播入帳</text>
+      <text x="16" y="250" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ 閉環圓滿達成</text>
+      
+      <rect x="15" y="280" width="116" height="24" rx="4" fill="rgba(52, 211, 153, 0.12)"/>
+      <text x="73" y="296" fill="#34d399" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">交易圓滿成功</text>
+    </g>
+
+  </g>
+
+  <!-- Bottom Tip Banner -->
+  <g transform="translate(50, 485)">
+    <rect width="900" height="42" rx="10" fill="rgba(15, 23, 42, 0.9)" stroke="#1e293b" stroke-width="1"/>
+    <text x="25" y="26" font-size="16">💡</text>
+    <text x="50" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5">核心原則：前端官網<strong>絕不經手或暫存使用者卡號</strong>，全權交由取得 PCI-DSS 認證的綠界收銀台處理，合法、安全、零資安負擔！</text>
+  </g>
+</svg>

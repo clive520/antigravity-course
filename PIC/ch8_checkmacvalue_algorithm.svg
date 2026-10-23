@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0c162c"/>
+    </linearGradient>
+    <linearGradient id="cardGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow2" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad2)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="185" height="30" rx="15" fill="rgba(129, 140, 248, 0.15)" stroke="#818cf8" stroke-width="1.5"/>
+    <text x="92.5" y="20" fill="#818cf8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">SECURITY ALGORITHM</text>
+    <text x="205" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">檢查碼 (CheckMacValue) 4 步防竄改演算法</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">黑客就算在瀏覽器偷改金額，也會因為缺乏 HashKey 雜湊失敗而遭到綠界直接拒絕！</text>
+  </g>
+
+  <!-- 4 Step Cards -->
+  <g transform="translate(60, 135)">
+    
+    <!-- Step 1: Dictionary Sort -->
+    <g transform="translate(0, 0)" filter="url(#shadow2)">
+      <rect width="205" height="320" rx="12" fill="url(#cardGrad2)" stroke="#334155" stroke-width="1.5"/>
+      <rect width="205" height="38" rx="12" fill="rgba(56, 189, 248, 0.15)"/>
+      <rect y="28" width="205" height="10" fill="url(#cardGrad2)"/>
+      <text x="102.5" y="24" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEP 01 • 參數排序</text>
+      
+      <circle cx="102.5" cy="74" r="22" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.2"/>
+      <text x="102.5" y="80" font-size="20" text-anchor="middle">🔤</text>
+      
+      <text x="102.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">A-Z 字典排序</text>
+      <text x="102.5" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Natural Sort Order</text>
+      
+      <line x1="16" y1="152" x2="189" y2="152" stroke="#1e293b"/>
+      
+      <text x="20" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 排除 CheckMacValue</text>
+      <text x="20" y="202" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 依參數名稱開頭排序</text>
+      <text x="20" y="226" fill="#38bdf8" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ ItemName、MerchantID</text>
+      <text x="20" y="250" fill="#38bdf8" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ TotalAmount、TradeDate</text>
+      
+      <rect x="16" y="280" width="173" height="24" rx="4" fill="rgba(56, 189, 248, 0.1)"/>
+      <text x="102.5" y="296" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">確保比對順序 100% 一致</text>
+    </g>
+
+    <!-- Arrow 1 -> 2 -->
+    <g transform="translate(208, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#38bdf8" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#38bdf8"/>
+    </g>
+
+    <!-- Step 2: Inject HashKey & HashIV -->
+    <g transform="translate(225, 0)" filter="url(#shadow2)">
+      <rect width="205" height="320" rx="12" fill="url(#cardGrad2)" stroke="#818cf8" stroke-width="1.8"/>
+      <rect width="205" height="38" rx="12" fill="rgba(129, 140, 248, 0.18)"/>
+      <rect y="28" width="205" height="10" fill="url(#cardGrad2)"/>
+      <text x="102.5" y="24" fill="#818cf8" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEP 02 • 注入雙密鑰</text>
+      
+      <circle cx="102.5" cy="74" r="22" fill="rgba(129, 140, 248, 0.1)" stroke="#818cf8" stroke-width="1.2"/>
+      <text x="102.5" y="80" font-size="20" text-anchor="middle">🔑</text>
+      
+      <text x="102.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">頭尾夾帶密鑰</text>
+      <text x="102.5" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Wrap Secret Keys</text>
+      
+      <line x1="16" y1="152" x2="189" y2="152" stroke="#1e293b"/>
+      
+      <text x="20" y="178" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="11.5" font-weight="700">HashKey=5294...&amp;</text>
+      <text x="20" y="202" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 串接排序後的所有參數</text>
+      <text x="20" y="226" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="11.5" font-weight="700">&amp;HashIV=v77h...</text>
+      <text x="20" y="250" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ 只有特店與綠界知曉</text>
+      
+      <rect x="16" y="280" width="173" height="24" rx="4" fill="rgba(129, 140, 248, 0.15)"/>
+      <text x="102.5" y="296" fill="#818cf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">防偽的最高機密核心</text>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <g transform="translate(433, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#818cf8" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#818cf8"/>
+    </g>
+
+    <!-- Step 3: URL Encode -->
+    <g transform="translate(450, 0)" filter="url(#shadow2)">
+      <rect width="205" height="320" rx="12" fill="url(#cardGrad2)" stroke="#334155" stroke-width="1.5"/>
+      <rect width="205" height="38" rx="12" fill="rgba(245, 158, 11, 0.15)"/>
+      <rect y="28" width="205" height="10" fill="url(#cardGrad2)"/>
+      <text x="102.5" y="24" fill="#f59e0b" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEP 03 • URL 編碼</text>
+      
+      <circle cx="102.5" cy="74" r="22" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="102.5" y="80" font-size="20" text-anchor="middle">⚙️</text>
+      
+      <text x="102.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">特殊字元轉義</text>
+      <text x="102.5" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">ECPay .NET Encode</text>
+      
+      <line x1="16" y1="152" x2="189" y2="152" stroke="#1e293b"/>
+      
+      <text x="20" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 轉為小寫 URL 編碼</text>
+      <text x="20" y="202" fill="#f59e0b" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ 空白轉 '+'（非 %20）</text>
+      <text x="20" y="226" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ ! ➔ %21、* ➔ %2a</text>
+      <text x="20" y="250" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11">▸ ( ➔ %28、) ➔ %29</text>
+      
+      <rect x="16" y="280" width="173" height="24" rx="4" fill="rgba(245, 158, 11, 0.1)"/>
+      <text x="102.5" y="296" fill="#f59e0b" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">嚴格相容 .NET 規範</text>
+    </g>
+
+    <!-- Arrow 3 -> 4 -->
+    <g transform="translate(658, 150)">
+      <line x1="0" y1="0" x2="14" y2="0" stroke="#f59e0b" stroke-width="2"/>
+      <polygon points="14,-4 20,0 14,4" fill="#f59e0b"/>
+    </g>
+
+    <!-- Step 4: SHA-256 & Uppercase -->
+    <g transform="translate(675, 0)" filter="url(#shadow2)">
+      <rect width="205" height="320" rx="12" fill="url(#cardGrad2)" stroke="#10b981" stroke-width="2"/>
+      <rect width="205" height="38" rx="12" fill="rgba(16, 185, 129, 0.22)"/>
+      <rect y="28" width="205" height="10" fill="url(#cardGrad2)"/>
+      <text x="102.5" y="24" fill="#10b981" font-family="'Inter', sans-serif" font-size="12" font-weight="800" text-anchor="middle">STEP 04 • 壓碼轉大寫</text>
+      
+      <circle cx="102.5" cy="74" r="22" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.2"/>
+      <text x="102.5" y="80" font-size="20" text-anchor="middle">🛡️</text>
+      
+      <text x="102.5" y="118" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="15" font-weight="700" text-anchor="middle">SHA-256 雜湊</text>
+      <text x="102.5" y="136" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Output Uppercase</text>
+      
+      <line x1="16" y1="152" x2="189" y2="152" stroke="#1e293b"/>
+      
+      <text x="20" y="178" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 進行單向不可逆雜湊</text>
+      <text x="20" y="202" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="700">▸ 產出 64 碼英數字串</text>
+      <text x="20" y="226" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="12">▸ 全數轉為【英文字大寫】</text>
+      <text x="20" y="250" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="10.5">8B3F9A2C0D...6E1A</text>
+      
+      <rect x="16" y="280" width="173" height="24" rx="4" fill="rgba(16, 185, 129, 0.18)"/>
+      <text x="102.5" y="296" fill="#10b981" font-family="'Inter', sans-serif" font-size="10.5" font-weight="800" text-anchor="middle">金流防偽數位指紋</text>
+    </g>
+
+  </g>
+
+  <!-- Bottom Comparison -->
+  <g transform="translate(60, 485)">
+    <rect width="880" height="42" rx="10" fill="rgba(15, 23, 42, 0.9)" stroke="#1e293b" stroke-width="1"/>
+    <text x="25" y="26" font-size="16">🎯</text>
+    <text x="50" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5">
+      防黑客範例：若不肖人士在前端將 5,990 元改成 1 元，綠界後端重算檢查碼發現與送來的 CheckMacValue 不合，<strong>立刻中斷交易並報錯「CheckMacValue verify fail」</strong>！
+    </text>
+  </g>
+</svg>

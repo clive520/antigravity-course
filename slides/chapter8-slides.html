@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 8 章 上課簡報：綠界科技 ECPay 測試環境實戰 - Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(16, 185, 129, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #10b981;
+      --accent-gold: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #10b981);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Top Quick Header */
+    .deck-header {
+      position: fixed;
+      top: 10px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .deck-header * {
+      pointer-events: auto;
+    }
+
+    .deck-title {
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deck-title span {
+      color: var(--accent-emerald);
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .timer-pill {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Slide Deck Viewport */
+    .deck-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px 70px;
+      position: relative;
+    }
+
+    /* Individual Slide */
+    .slide {
+      position: absolute;
+      width: calc(100% - 80px);
+      max-width: 1500px;
+      height: calc(100% - 100px);
+      max-height: 840px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      padding: 40px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.97) translateY(12px);
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 20px;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent-emerald);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .slide-title {
+      font-size: clamp(2.4rem, 2.8vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    /* Slide Body Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      margin: 10px 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      height: 100%;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      height: 100%;
+      align-items: center;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      height: 100%;
+      align-items: center;
+    }
+
+    /* Slide Content Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--border-highlight);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-badge {
+      align-self: flex-start;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--accent-emerald);
+      font-family: var(--font-mono);
+    }
+
+    .card h3 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card p, .card ul {
+      color: #cbd5e1;
+      font-size: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .grid-4 .card h3 {
+      font-size: 1.3rem;
+    }
+
+    .grid-4 .card p, .grid-4 .card ul {
+      font-size: 1.15rem;
+      line-height: 1.45;
+    }
+
+    .card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card ul li {
+      position: relative;
+      padding-left: 22px;
+    }
+
+    .card ul li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--accent-emerald);
+      font-weight: bold;
+    }
+
+    /* Image Container in Slide */
+    .img-box {
+      width: 100%;
+      height: 100%;
+      max-height: 480px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: zoom-in;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .img-box:hover {
+      border-color: var(--accent-emerald);
+    }
+
+    .img-box img {
+      max-width: 95%;
+      max-height: 95%;
+      object-fit: contain;
+    }
+
+    .zoom-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Code block inside slide */
+    .code-preview {
+      background: #040711;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #38bdf8;
+      overflow-x: auto;
+    }
+
+    .code-preview .keyword { color: #f43f5e; }
+    .code-preview .fn { color: #818cf8; }
+    .code-preview .str { color: #34d399; }
+    .code-preview .comment { color: #64748b; font-style: italic; }
+
+    /* Bottom Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-chapter-pill {
+      font-size: 0.85rem;
+      color: var(--accent-emerald);
+      font-weight: 600;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 10px;
+      border-radius: 9999px;
+    }
+
+    /* Bottom Deck Floating Navigation */
+    .deck-nav {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      padding: 8px 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .nav-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dot.active {
+      width: 22px;
+      border-radius: 9999px;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Overview Modal Grid */
+    .overview-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 9, 19, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .overview-modal.active {
+      display: flex;
+    }
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      max-width: 1400px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .overview-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .thumb-card {
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .thumb-card:hover {
+      border-color: var(--accent-emerald);
+      transform: translateY(-4px);
+    }
+
+    .thumb-card.active {
+      border-color: var(--accent-emerald);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .thumb-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-emerald);
+      font-weight: 700;
+    }
+
+    .thumb-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .thumb-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Image Zoom Modal */
+    .zoom-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      cursor: zoom-out;
+    }
+
+    .zoom-modal.active {
+      display: flex;
+    }
+
+    .zoom-modal img {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--border-color);
+      background: #0b1120;
+    }
+
+    .zoom-close {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      font-size: 1.8rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Slide Hero Title */
+    .hero-title {
+      font-size: clamp(3rem, 4vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 30%, #10b981 70%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .hero-desc {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 950px;
+    }
+
+    .kbd-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-emerald);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Deck Top Controls -->
+  <header class="deck-header">
+    <div class="deck-title">
+      <span>第 08 章</span> 綠界科技 ECPay 測試環境實戰
+    </div>
+    <div class="deck-controls">
+      <div class="timer-pill" id="timerBtn" title="點擊重設計時器">
+        ⏱️ <span id="timerDisplay">00:00</span>
+      </div>
+      <button class="btn-icon" id="overviewBtn" title="幻燈片總覽 [O]">
+        📑
+      </button>
+      <button class="btn-icon" id="fullscreenBtn" title="切換全螢幕 [F]">
+        ⛶
+      </button>
+      <a href="../chapters/chapter8.html" class="btn-icon" title="返回講義手冊" style="text-decoration:none;">
+        📖
+      </a>
+    </div>
+  </header>
+
+  <!-- Deck Viewport -->
+  <main class="deck-viewport">
+
+    <!-- Slide 1: 封面 -->
+    <div class="slide active" data-slide="1">
+      <div class="slide-header">
+        <div class="slide-tag">CHAPTER 08 • FINTECH CHECKOUT</div>
+        <h1 class="hero-title">綠界科技 (ECPay) 測試環境實戰<br>打造黑客級真實結帳金流</h1>
+        <p class="hero-desc">不用開公司、不用統編審核、不花一毛錢！接通全台灣市佔率最高的第三方金流收銀台，讓你的官網真正具備線上刷卡付費變現力！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">STEP 1</span>
+            <h3>🏦 綠界公開測試環境</h3>
+            <p>免審核、免登記，直接使用官方公開特店密鑰進行安全串接。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">STEP 2</span>
+            <h3>🔐 CheckMacValue 演算法</h3>
+            <p>SHA-256 不可逆雜湊數位指紋，黑客偷改金額立刻識破攔截！</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">STEP 3</span>
+            <h3>💳 真實信用卡刷卡體驗</h3>
+            <p>輸入測試卡號與 3D 簡訊驗證，完成電商系統最後一塊拼圖！</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">Google Antigravity 實戰教學</span>
+          <span>按 <kbd class="kbd-hint">→</kbd> 或 <kbd class="kbd-hint">Space</kbd> 翻頁</span>
+        </div>
+        <div class="slide-counter">01 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 2: 本章學習目標 -->
+    <div class="slide" data-slide="2">
+      <div class="slide-header">
+        <div class="slide-tag">ROADMAP</div>
+        <h2 class="slide-title">本章 4 大核心成果</h2>
+        <p class="slide-subtitle">跨越現代軟體工程師最高門檻：銀行級第三方支付金流整合</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="card">
+            <span class="card-badge">01</span>
+            <h3>💳 金流運作原理</h3>
+            <ul>
+              <li>為什麼金流是身價分水嶺？</li>
+              <li>PCI-DSS 銀行級資安法規</li>
+              <li>商店與收銀台跳轉架構</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="card-badge">02</span>
+            <h3>🧪 綠界 Sandbox</h3>
+            <ul>
+              <li>公開測試特店 2000132</li>
+              <li>HashKey 與 HashIV 密鑰</li>
+              <li>AioCheckOut/V5 測試網址</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="card-badge">03</span>
+            <h3>🛡️ 檢查碼演算法</h3>
+            <ul>
+              <li>參數 A-Z 字典排序</li>
+              <li>.NET 特殊 URL Encode 規則</li>
+              <li>SHA-256 壓碼轉大寫</li>
+            </ul>
+          </div>
+          <div class="card">
+            <span class="card-badge">04</span>
+            <h3>🎉 全閉環實測</h3>
+            <ul>
+              <li>測試卡號扣款實測</li>
+              <li>試算表標記「已付款」</li>
+              <li>LINE 機器人秒推播入帳</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-0 本章架構</span>
+        </div>
+        <div class="slide-counter">02 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 3: 8-1 為什麼金流是身價分水嶺？ -->
+    <div class="slide" data-slide="3">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-1</div>
+        <h2 class="slide-title">為什麼「金流」是身價分水嶺？</h2>
+        <p class="slide-subtitle">只收名單容易跑單，能線上刷卡立刻變現才是完整商業平台</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">PILLAR 1</span>
+            <h3>📈 棄單率大幅降低</h3>
+            <p>純預購填表容易冷卻跑單；趁顧客衝動最高點完成刷卡付費，轉化率暴增！</p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.6);">
+            <span class="card-badge" style="color: var(--accent-emerald);">PILLAR 2 (關鍵)</span>
+            <h3>🛡️ PCI-DSS 資安合規</h3>
+            <p><strong>我們網站絕不碰使用者卡號！</strong> 跳轉綠界官方收銀台，免除賠償資安責任。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">PILLAR 3</span>
+            <h3>💰 商業身價翻倍</h3>
+            <p>擁有串接第三方金流能力的工程師，在就業市場與接案報價上具有壓倒性優勢。</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-1 金流商業價值</span>
+        </div>
+        <div class="slide-counter">03 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 4: 8-1 綠界金流 5 步跳轉結帳資料流 -->
+    <div class="slide" data-slide="4">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-1</div>
+        <h2 class="slide-title">綠界金流 (ECPay) 5 步結帳資料流</h2>
+        <p class="slide-subtitle">前端發起、GAS 加密算碼、自動跳轉收銀台、測試刷卡與成功回傳</p>
+      </div>
+      <div class="slide-body">
+        <div class="img-box" onclick="openZoomModal('../PIC/ch8_ecpay_payment_flow.svg')">
+          <img src="../PIC/ch8_ecpay_payment_flow.svg" alt="綠界金流 5 步跳轉結帳資料流">
+          <span class="zoom-hint">🔍 點擊放大查看</span>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-1 結帳資料流</span>
+        </div>
+        <div class="slide-counter">04 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 5: 8-2 綠界公開測試環境 Sandbox -->
+    <div class="slide" data-slide="5">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-2</div>
+        <h2 class="slide-title">零審核！綠界公開測試環境 (Sandbox)</h2>
+        <p class="slide-subtitle">官方為全台灣開發者提供的公開沙盒，人人皆可立即免費實作</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">PARAM 1</span>
+            <h3>特店編號 (MerchantID)</h3>
+            <p style="font-family: var(--font-mono); color: var(--accent-emerald); font-size: 1.4rem;">2000132</p>
+            <p style="font-size: 1.1rem; color: var(--text-muted);">綠界官方公開的共用測試特店身分代碼。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">PARAM 2</span>
+            <h3>HashKey 密鑰</h3>
+            <p style="font-family: var(--font-mono); color: var(--accent-cyan); font-size: 1.25rem;">5294y06JbISpM5x9</p>
+            <p style="font-size: 1.1rem; color: var(--text-muted);">檢查碼雜湊計算必備的特店私密金鑰。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">PARAM 3</span>
+            <h3>HashIV 向量</h3>
+            <p style="font-family: var(--font-mono); color: var(--accent-gold); font-size: 1.25rem;">v77hoKGq4kWxNNIS</p>
+            <p style="font-size: 1.1rem; color: var(--text-muted);">加鹽混淆的初始向量，確保防偽不可破解。</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-2 測試環境配置</span>
+        </div>
+        <div class="slide-counter">05 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 6: 8-3 金流核心安全守門員：CheckMacValue -->
+    <div class="slide" data-slide="6">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-3</div>
+        <h2 class="slide-title">金流核心安全守門員：檢查碼</h2>
+        <p class="slide-subtitle">黑客就算在瀏覽器偷改金額，也會遭到綠界直接阻絕！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.6); height: 100%; justify-content: center;">
+            <span class="card-badge" style="color: var(--accent-rose);">ATTACK SCENARIO</span>
+            <h3 style="color: #f43f5e;">⚠️ 若沒有檢查碼的下場</h3>
+            <ul>
+              <li>黑客按 F12 打開開發者工具。</li>
+              <li>把預購方案金額 <code>5990</code> 改成 <code>1</code> 元送出。</li>
+              <li>銀行只扣 1 元就發出商品，店家損失慘重！</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.6); height: 100%; justify-content: center;">
+            <span class="card-badge" style="color: var(--accent-emerald);">SECURE DEFENSE</span>
+            <h3 style="color: #10b981;">🛡️ 綠界檢查碼的防禦機制</h3>
+            <ul>
+              <li>金額被改動，綠界後端重算 SHA-256 數位指紋。</li>
+              <li>重算結果與送來的 <code>CheckMacValue</code> 不符。</li>
+              <li>立刻拒絕交易，跳出 <code>CheckMacValue verify fail</code>！</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-3 安全防竄改</span>
+        </div>
+        <div class="slide-counter">06 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 7: 8-3 檢查碼 4 步防竄改演算法 -->
+    <div class="slide" data-slide="7">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-3</div>
+        <h2 class="slide-title">檢查碼 (CheckMacValue) 4 步演算法</h2>
+        <p class="slide-subtitle">參數字典排序 ➔ 注入雙密鑰 ➔ .NET URL Encode ➔ SHA-256 轉大寫</p>
+      </div>
+      <div class="slide-body">
+        <div class="img-box" onclick="openZoomModal('../PIC/ch8_checkmacvalue_algorithm.svg')">
+          <img src="../PIC/ch8_checkmacvalue_algorithm.svg" alt="檢查碼 4 步防竄改演算法">
+          <span class="zoom-hint">🔍 點擊放大查看</span>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-3 雜湊演算</span>
+        </div>
+        <div class="slide-counter">07 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 8: 8-4 請 AI 寫出綠界跳轉結帳程式 -->
+    <div class="slide" data-slide="8">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-4</div>
+        <h2 class="slide-title">向 AI 索取綠界結帳跳轉腳本</h2>
+        <p class="slide-subtitle">精準提示詞引導 Antigravity 產出具備防偽檢查碼的自動提交 Form</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="code-preview">
+<span class="keyword">function</span> <span class="fn">createEcpayOrder</span>(data) {
+  <span class="keyword">const</span> params = {
+    MerchantID: <span class="str">'2000132'</span>,
+    MerchantTradeNo: <span class="str">'NOVA'</span> + Date.now(),
+    MerchantTradeDate: <span class="fn">formatDate</span>(<span class="keyword">new</span> Date()),
+    PaymentType: <span class="str">'aio'</span>,
+    TotalAmount: data.amount,
+    TradeDesc: <span class="str">'NovaWave 耳機預購'</span>,
+    ItemName: data.plan,
+    ReturnURL: GAS_WEBHOOK_URL,
+    ChoosePayment: <span class="str">'Credit'</span>,
+    EncryptType: <span class="str">'1'</span>
+  };
+
+  <span class="comment">// 計算 CheckMacValue 檢查碼</span>
+  params.CheckMacValue = <span class="fn">genCheckMac</span>(params);
+
+  <span class="comment">// 產生自動 submit 的 HTML 表單</span>
+  <span class="keyword">return</span> <span class="fn">renderAutoSubmitForm</span>(params);
+}
+          </div>
+          <div class="card" style="height: 100%; justify-content: center;">
+            <span class="card-badge">PROMPT ESSENTIALS</span>
+            <h3>提示詞 3 大關鍵要素</h3>
+            <ul>
+              <li><strong>指定測試特店參數</strong>：MerchantID <code>2000132</code>、HashKey 與 HashIV。</li>
+              <li><strong>要求遵循 ECPay 規範</strong>：包含特殊字元 <code>%21</code>, <code>%2a</code>, <code>+</code> 等編碼處理。</li>
+              <li><strong>自動提交跳轉</strong>：在載入完成時使用 <code>document.forms[0].submit()</code> 秒轉收銀台！</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-4 程式實作</span>
+        </div>
+        <div class="slide-counter">08 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 9: 8-4 前後端部署分工 -->
+    <div class="slide" data-slide="9">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-4</div>
+        <h2 class="slide-title">前後端雙軌部署分工黃金法則</h2>
+        <p class="slide-subtitle">後端 GAS 必須開新版本；前端網頁透過 Git CLI 一鍵全自動發布</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(129, 140, 248, 0.6); height: 100%; justify-content: center;">
+            <span class="card-badge" style="color: var(--accent-indigo);">BACKEND • GAS 雲端</span>
+            <h3>⚙️ 後端：管理部署發布新版本</h3>
+            <ul>
+              <li>在 Google Apps Script 貼上新產生的金流代碼。</li>
+              <li>點擊磁碟圖示「儲存」。</li>
+              <li><strong>點選「部署」➔「管理部署」➔ 編輯 ➔ 版本選「新版本」➔ 儲存！</strong></li>
+              <li>這一步是金流外部呼叫生效的關鍵！</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.6); height: 100%; justify-content: center;">
+            <span class="card-badge" style="color: var(--accent-cyan);">FRONTEND • GitHub Pages</span>
+            <h3>🚀 前端：對 AI 下指令一鍵發布</h3>
+            <ul>
+              <li>在展示頁加入「前往線上刷卡結帳」按鈕。</li>
+              <li>對 Antigravity 說：<br><em>「幫我 git commit 並 push 到 GitHub 更新官網！」</em></li>
+              <li>幾秒鐘內 GitHub Actions 自動完成全球 CDN 發布。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-4 雙軌部署</span>
+        </div>
+        <div class="slide-counter">09 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 10: 8-5 實測體驗：真實信用卡刷卡完成 -->
+    <div class="slide" data-slide="10">
+      <div class="slide-header">
+        <div class="slide-tag">SECTION 8-5</div>
+        <h2 class="slide-title">見證奇蹟：真實信用卡刷卡實測</h2>
+        <p class="slide-subtitle">親手使用官方測試卡號，體驗銀行級 3D 簡訊驗證與授權成功</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">STEP 1</span>
+            <h3>跳轉綠界官方頁面</h3>
+            <p>點選結帳後，自動跳出綠界收銀台，金額正確顯示 <strong>NT$ 5,990</strong>。</p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.6);">
+            <span class="card-badge" style="color: var(--accent-emerald);">STEP 2</span>
+            <h3>輸入官方測試卡號</h3>
+            <p style="font-family: var(--font-mono); color: var(--accent-emerald); font-size: 1.15rem;">4311-9522-2222-2222</p>
+            <p style="font-size: 1.05rem; color: var(--text-muted);">有效年月任填（如 12/30），末三碼填 <code>222</code>，OTP 驗證碼任意填。</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">STEP 3</span>
+            <h3>授權成功 ➔ 雙軌通知</h3>
+            <p>畫面顯示「交易成功」！試算表更新為「已付款」，手機 LINE 即刻叮咚！</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-5 刷卡驗收</span>
+        </div>
+        <div class="slide-counter">10 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 11: 8-5 全端電商黃金大閉環 -->
+    <div class="slide" data-slide="11">
+      <div class="slide-header">
+        <div class="slide-tag">THE GRAND FINALE</div>
+        <h2 class="slide-title">全端電商黃金大閉環 (Grand Finale)</h2>
+        <p class="slide-subtitle">官網門面 ➔ 雲端大腦 ➔ 資料庫存檔 ➔ 綠界收銀 ➔ 顧客 Email ➔ 老闆 LINE 叮咚</p>
+      </div>
+      <div class="slide-body">
+        <div class="img-box" onclick="openZoomModal('../PIC/ch8_ecommerce_complete_loop.svg')">
+          <img src="../PIC/ch8_ecommerce_complete_loop.svg" alt="全端電商黃金大閉環">
+          <span class="zoom-hint">🔍 點擊放大查看</span>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">8-5 電商閉環</span>
+        </div>
+        <div class="slide-counter">11 / 12</div>
+      </div>
+    </div>
+
+    <!-- Slide 12: 結業榮耀與全書完 -->
+    <div class="slide" data-slide="12">
+      <div class="slide-header">
+        <div class="slide-tag">GRADUATION</div>
+        <h1 class="hero-title">恭喜結業！全端商業力達成 🎓</h1>
+        <p class="hero-desc">從零程式經驗到獨立建構「產品官網 + 雲端後端 + 資料庫 + 綠界金流 + 即時推播」！你已經是一位貨真價實的全端自動化開發者！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="card-badge">SUPERPOWER 1</span>
+            <h3>⚡ AI 軟體工程思維</h3>
+            <p>用自然語言指揮 AI，懂架構、懂除錯、懂串接，開發效率提升 10 倍！</p>
+          </div>
+          <div class="card">
+            <span class="card-badge">SUPERPOWER 2</span>
+            <h3>💼 完整電商產品力</h3>
+            <p>擁有一套隨時能寫入履歷或投入實際接案營運的企業級作品！</p>
+          </div>
+          <div class="card" style="border-color: rgba(245, 158, 11, 0.6);">
+            <span class="card-badge" style="color: var(--accent-gold);">FUTURE HORIZON</span>
+            <h3>🌟 探索更多可能性</h3>
+            <p>歡迎前往課程願望池（Wishlist），探索更多多人在線與 AI 智慧知識庫專案！</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="footer-left">
+          <span class="footer-chapter-pill">全課程圓滿結業</span>
+        </div>
+        <div class="slide-counter">12 / 12</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Floating Navigation -->
+  <nav class="deck-nav">
+    <button class="nav-btn" id="prevBtn" title="上一頁 [←]">
+      ❮ 上一頁
+    </button>
+    <div class="nav-dots" id="dotsContainer"></div>
+    <button class="nav-btn" id="nextBtn" title="下一頁 [→]">
+      下一頁 ❯
+    </button>
+  </nav>
+
+  <!-- Overview Modal -->
+  <div class="overview-modal" id="overviewModal">
+    <div class="overview-header">
+      <div class="overview-title">📑 投影片總覽 (Slide Overview)</div>
+      <button class="btn-icon" id="closeOverviewBtn" style="font-size: 1.5rem;">✕</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <!-- Image Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <button class="zoom-close" onclick="closeZoomModal()">✕</button>
+    <img id="zoomImg" src="" alt="Zoomed view">
+  </div>
+
+  <script>
+    // State management
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    // Elements
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('dotsContainer');
+    const overviewModal = document.getElementById('overviewModal');
+    const overviewBtn = document.getElementById('overviewBtn');
+    const closeOverviewBtn = document.getElementById('closeOverviewBtn');
+    const overviewGrid = document.getElementById('overviewGrid');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerBtn = document.getElementById('timerBtn');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    // Create navigation dots & overview items
+    slides.forEach((slide, index) => {
+      const slideNum = index + 1;
+      
+      // Dot
+      const dot = document.createElement('div');
+      dot.className = `dot ${slideNum === 1 ? 'active' : ''}`;
+      dot.title = `切換至第 ${slideNum} 頁`;
+      dot.addEventListener('click', () => goToSlide(slideNum));
+      dotsContainer.appendChild(dot);
+
+      // Overview Card
+      const titleEl = slide.querySelector('.slide-title, .hero-title');
+      const title = titleEl ? titleEl.innerText.replace(/\\n/g, ' ') : `投影片 ${slideNum}`;
+      const subtitleEl = slide.querySelector('.slide-subtitle, .hero-desc');
+      const desc = subtitleEl ? subtitleEl.innerText : '';
+
+      const thumb = document.createElement('div');
+      thumb.className = `thumb-card ${slideNum === 1 ? 'active' : ''}`;
+      thumb.innerHTML = `
+        <div class="thumb-num">SLIDE ${String(slideNum).padStart(2, '0')}</div>
+        <div class="thumb-title">${title}</div>
+        <div class="thumb-desc">${desc.substring(0, 55)}${desc.length > 55 ? '...' : ''}</div>
+      `;
+      thumb.addEventListener('click', () => {
+        goToSlide(slideNum);
+        closeOverview();
+      });
+      overviewGrid.appendChild(thumb);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+    const thumbs = document.querySelectorAll('.thumb-card');
+
+    function updateSlide() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx + 1 === currentSlide);
+      });
+      dots.forEach((d, idx) => {
+        d.classList.toggle('active', idx + 1 === currentSlide);
+      });
+      thumbs.forEach((t, idx) => {
+        t.classList.toggle('active', idx + 1 === currentSlide);
+      });
+
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+
+      const progress = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    // Event listeners for navigation
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+      if (overviewModal.classList.contains('active')) {
+        if (e.key === 'Escape' || e.key.toLowerCase() === 'o') closeOverview();
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case 'o':
+        case 'O':
+          e.preventDefault();
+          toggleOverview();
+          break;
+        case 'Escape':
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          }
+          break;
+      }
+    });
+
+    // Overview modal controls
+    function toggleOverview() {
+      overviewModal.classList.toggle('active');
+    }
+    function closeOverview() {
+      overviewModal.classList.remove('active');
+    }
+    overviewBtn.addEventListener('click', toggleOverview);
+    closeOverviewBtn.addEventListener('click', closeOverview);
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>

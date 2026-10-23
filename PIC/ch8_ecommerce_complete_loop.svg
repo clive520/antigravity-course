@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#091428"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="30%" stop-color="#818cf8"/>
+      <stop offset="60%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="cardGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow3" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad3)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="185" height="30" rx="15" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.5"/>
+    <text x="92.5" y="20" fill="#10b981" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">FULL-LOOP COMMERCE</text>
+    <text x="205" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">全端電商黃金完整全閉環 (The Grand Finale)</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">官網展示 ➔ 試算表存檔 ➔ 綠界線上收銀 ➔ 顧客 Email 確認 ➔ 老闆 LINE 叮咚入帳</text>
+  </g>
+
+  <!-- Central Ring / 5 Node Ecosystem -->
+  
+  <!-- Center Core Hub -->
+  <g transform="translate(500, 310)" filter="url(#shadow3)">
+    <circle cx="0" cy="0" r="76" fill="#0b1325" stroke="url(#ringGrad)" stroke-width="3"/>
+    <circle cx="0" cy="0" r="64" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+    <text x="0" y="-12" font-size="26" text-anchor="middle">⚡</text>
+    <text x="0" y="16" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13.5" font-weight="800" text-anchor="middle">Google Apps Script</text>
+    <text x="0" y="32" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">全端中央運算大腦</text>
+  </g>
+
+  <!-- Node 1: Top-Left: Frontend Website (Ch2, Ch3, Ch4) -->
+  <g transform="translate(90, 140)" filter="url(#shadow3)">
+    <rect width="210" height="135" rx="12" fill="url(#cardGrad3)" stroke="#38bdf8" stroke-width="1.8"/>
+    <rect width="210" height="32" rx="12" fill="rgba(56, 189, 248, 0.18)"/>
+    <rect y="22" width="210" height="10" fill="url(#cardGrad3)"/>
+    <text x="105" y="21" fill="#38bdf8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="700" text-anchor="middle">1. 前端官網展示 (門面)</text>
+    
+    <text x="25" y="55" font-size="18">🌐</text>
+    <text x="50" y="55" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">GitHub Pages 官網</text>
+    
+    <text x="20" y="80" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 高質感耳機介紹頁</text>
+    <text x="20" y="100" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 顧客填單 / 選擇刷卡結帳</text>
+    <text x="20" y="120" fill="#38bdf8" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="600">▸ 發起非同步 Fetch API</text>
+  </g>
+
+  <!-- Connect 1 -> Hub -->
+  <path d="M 300 220 Q 380 260 430 280" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- Node 2: Top-Right: ECPay Cashier (Ch8) -->
+  <g transform="translate(700, 140)" filter="url(#shadow3)">
+    <rect width="210" height="135" rx="12" fill="url(#cardGrad3)" stroke="#10b981" stroke-width="2"/>
+    <rect width="210" height="32" rx="12" fill="rgba(16, 185, 129, 0.22)"/>
+    <rect y="22" width="210" height="10" fill="url(#cardGrad3)"/>
+    <text x="105" y="21" fill="#10b981" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="800" text-anchor="middle">2. 綠界線上收銀 (變現)</text>
+    
+    <text x="25" y="55" font-size="18">💳</text>
+    <text x="50" y="55" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">綠界 ECPay 測試環境</text>
+    
+    <text x="20" y="80" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ CheckMacValue 防竄改</text>
+    <text x="20" y="100" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 測試信用卡線上刷卡</text>
+    <text x="20" y="120" fill="#10b981" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="700">▸ 銀行級 3D 驗證扣款</text>
+  </g>
+
+  <!-- Connect Hub -> 2 -->
+  <path d="M 570 280 Q 620 260 700 220" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- Node 3: Bottom-Left: Google Sheets Database (Ch6) -->
+  <g transform="translate(60, 340)" filter="url(#shadow3)">
+    <rect width="220" height="130" rx="12" fill="url(#cardGrad3)" stroke="#34d399" stroke-width="1.5"/>
+    <rect width="220" height="32" rx="12" fill="rgba(52, 211, 153, 0.15)"/>
+    <rect y="22" width="220" height="10" fill="url(#cardGrad3)"/>
+    <text x="110" y="21" fill="#34d399" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="700" text-anchor="middle">3. 雲端資料庫 (存檔)</text>
+    
+    <text x="25" y="55" font-size="18">📊</text>
+    <text x="50" y="55" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">Google 試算表</text>
+    
+    <text x="20" y="80" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 6 大標準預購欄位</text>
+    <text x="20" y="100" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ appendRow 原子性寫入</text>
+    <text x="20" y="120" fill="#34d399" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="600">▸ 更新「已付款」狀態標記</text>
+  </g>
+
+  <!-- Connect Hub -> 3 -->
+  <path d="M 430 340 Q 360 370 280 390" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- Node 4: Bottom-Center: Gmail Confirmation (Ch6) -->
+  <g transform="translate(390, 420)" filter="url(#shadow3)">
+    <rect width="220" height="105" rx="12" fill="url(#cardGrad3)" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect width="220" height="30" rx="12" fill="rgba(245, 158, 11, 0.15)"/>
+    <rect y="20" width="220" height="10" fill="url(#cardGrad3)"/>
+    <text x="110" y="20" fill="#f59e0b" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="700" text-anchor="middle">4. 顧客專屬憑證 (通知)</text>
+    
+    <text x="25" y="52" font-size="16">✉️</text>
+    <text x="48" y="52" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13.5" font-weight="700">Gmail 自動確認信</text>
+    <text x="20" y="74" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 美編 HTML 訂單明細信</text>
+    <text x="20" y="93" fill="#f59e0b" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="600">▸ 專屬訂單編號與購買保障</text>
+  </g>
+
+  <!-- Connect Hub -> 4 -->
+  <line x1="500" y1="386" x2="500" y2="420" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- Node 5: Bottom-Right: LINE Bot Instant Alert (Ch7) -->
+  <g transform="translate(720, 340)" filter="url(#shadow3)">
+    <rect width="220" height="130" rx="12" fill="url(#cardGrad3)" stroke="#06c755" stroke-width="2"/>
+    <rect width="220" height="32" rx="12" fill="rgba(6, 199, 85, 0.22)"/>
+    <rect y="22" width="220" height="10" fill="url(#cardGrad3)"/>
+    <text x="110" y="21" fill="#06c755" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="800" text-anchor="middle">5. 店長即時快報 (推播)</text>
+    
+    <text x="25" y="55" font-size="18">🔔</text>
+    <text x="50" y="55" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">LINE 機器人叮咚！</text>
+    
+    <text x="20" y="80" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ Messaging API Push</text>
+    <text x="20" y="100" fill="#cbd5e1" font-family="'Noto Sans TC', sans-serif" font-size="11.5">▸ 1 秒收到刷卡入帳金額</text>
+    <text x="20" y="120" fill="#06c755" font-family="'Noto Sans TC', sans-serif" font-size="11" font-weight="800">▸ 躺著掌握全天業績</text>
+  </g>
+
+  <!-- Connect Hub -> 5 -->
+  <path d="M 570 340 Q 640 370 720 390" fill="none" stroke="#06c755" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- Top Badge Ribbon -->
+  <g transform="translate(80, 500)">
+    <rect width="840" height="38" rx="8" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1"/>
+    <text x="420" y="24" fill="#10b981" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13" font-weight="800" text-anchor="middle">
+      🎉 恭喜結業！你已經具備獨立架構企業級「官網門面 + 雲端後端 + 金流收銀 + 雙軌即時通知」的頂尖全端實戰力！
+    </text>
+  </g>
+</svg>

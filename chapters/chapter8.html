@@ -56,11 +56,24 @@
         <span class="meta-pill">第 8 章 · 第三方金流實戰</span>
         <h1>綠界科技 (ECPay) 測試金流：讓學生親身體驗真實網頁刷卡收款！</h1>
         <p class="desc">不用開公司、不用上傳身分證、不用花一毛錢！本章將帶你串接全台灣普及度最高的第三方金流「綠界科技 ECPay」公開測試沙盒（Sandbox），讓你的 SmartSound Pro 耳機網頁真正具備信用卡刷卡與結帳跳轉功能！</p>
+        <div style="margin-top: 1rem;">
+          <a href="../slides/chapter8-slides.html" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.92rem; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669);">
+            <span>📽️ 開啟本章簡報 (Slides 模式) ↗</span>
+          </a>
+        </div>
       </div>
 
       <!-- 8-1 為什麼需要金流 -->
       <section id="sec-8-1" class="content-section">
         <h2>8-1 為什麼「金流」是現代網頁開發者的身價分水嶺？</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch8_ecpay_payment_flow.svg" alt="綠界金流 5 步跳轉結帳資料流" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>💳 圖 8-1：綠界金流 (ECPay) 5 步跳轉結帳資料流</strong><br>
+            前端發起 ➔ GAS 運算防偽檢查碼 ➔ 自動跳轉收銀台 ➔ 測試信用卡 3D 扣款 ➔ 成功跳轉回傳。
+          </div>
+        </div>
         <p>在前面的章節中，我們已經完成了漂亮的網頁展示、試算表登記、自動寄確認信與 LINE 即時通知。然而，在真實商業場景中：</p>
         <div class="step-box">
           <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.9;">
@@ -125,6 +138,14 @@
       <!-- 8-3 金流運作原理 -->
       <section id="sec-8-3" class="content-section">
         <h2>8-3 金流運作原理：為什麼需要「檢查碼 (CheckMacValue)」？</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch8_checkmacvalue_algorithm.svg" alt="檢查碼 4 步防竄改演算法" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🛡️ 圖 8-2：檢查碼 (CheckMacValue) 4 步防竄改雜湊演算法</strong><br>
+            A-Z 字典排序 ➔ 頭尾注入 HashKey/HashIV ➔ ECPay .NET URL Encode ➔ SHA-256 雜湊轉英文字大寫。
+          </div>
+        </div>
         <p>很多初學者問：「<em>為什麼不能在網頁直接寫一個按鈕跳轉到綠界？</em>」</p>
         <p>因為如果任何人都能隨便跳轉，駭客就能偷偷把金額從 <code>$5,990</code> 改成 <code>$1 元</code>！</p>
         
@@ -182,6 +203,14 @@
       <!-- 8-5 實測驗收 -->
       <section id="sec-8-5" class="content-section">
         <h2>8-5 奇蹟時刻：免花一毛錢，體驗真實信用卡刷卡完成！</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch8_ecommerce_complete_loop.svg" alt="全端電商黃金大閉環" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 8-3：全端電商黃金完整全閉環 (The Grand Finale)</strong><br>
+            官網展示門面 ➔ 雲端後端大腦 ➔ 試算表資料庫 ➔ 綠界收銀台 ➔ 顧客 Email ➔ 老闆 LINE 即時入帳推播。
+          </div>
+        </div>
         <p>程式串接完成後，讓我們在瀏覽器親身體驗結帳的震撼過程：</p>
 
         <div class="step-box" style="border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
