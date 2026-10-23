@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0b1329"/>
+    </linearGradient>
+    <linearGradient id="cardGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow2" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad2)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="175" height="30" rx="15" fill="rgba(6, 199, 85, 0.15)" stroke="#06c755" stroke-width="1.5"/>
+    <text x="87.5" y="20" fill="#06c755" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">LINE DEVELOPERS MAP</text>
+    <text x="195" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">LINE 開發者後台：取得 2 大關鍵憑證地圖</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">搞懂 Provider 與 Channel 層級關係，順利取得機器人通行證與管理者身分</text>
+  </g>
+
+  <!-- Left Column: Step 1 Provider & Channel Creation -->
+  <g transform="translate(60, 130)" filter="url(#shadow2)">
+    <rect width="420" height="340" rx="14" fill="url(#cardGrad2)" stroke="#334155" stroke-width="1.5"/>
+    
+    <!-- Header -->
+    <rect width="420" height="42" rx="14" fill="rgba(56, 189, 248, 0.12)"/>
+    <rect y="30" width="420" height="12" fill="url(#cardGrad2)"/>
+    <text x="20" y="26" fill="#38bdf8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">階段一：建立 Provider 與 Messaging API Channel</text>
+    <rect x="330" y="10" width="70" height="22" rx="6" fill="rgba(56, 189, 248, 0.2)"/>
+    <text x="365" y="25" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">STEP 1</text>
+    
+    <!-- Item 1: Provider -->
+    <g transform="translate(20, 60)">
+      <rect width="380" height="70" rx="10" fill="#0b1120" stroke="#1e293b" stroke-width="1"/>
+      <circle cx="35" cy="35" r="18" fill="rgba(56, 189, 248, 0.15)"/>
+      <text x="35" y="41" font-size="16" text-anchor="middle">🏢</text>
+      <text x="65" y="30" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">1. 建立提供者 (Provider)</text>
+      <text x="65" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">代表你的品牌或公司名稱（例如：NovaWave 官方工作室）</text>
+    </g>
+
+    <!-- Item 2: Channel -->
+    <g transform="translate(20, 145)">
+      <rect width="380" height="75" rx="10" fill="#0b1120" stroke="#06c755" stroke-width="1.5"/>
+      <circle cx="35" cy="37.5" r="18" fill="rgba(6, 199, 85, 0.15)"/>
+      <text x="35" y="44" font-size="16" text-anchor="middle">🤖</text>
+      <text x="65" y="30" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">2. 建立 Messaging API Channel</text>
+      <text x="65" y="50" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">類型務必選擇「Messaging API」（具備收發訊息能力）</text>
+      <text x="65" y="68" fill="#06c755" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11" font-weight="600">完成後會自動產生該機器人的 LINE 官方帳號！</text>
+    </g>
+
+    <!-- Item 3: Add Bot as Friend -->
+    <g transform="translate(20, 235)">
+      <rect width="380" height="80" rx="10" fill="#0b1120" stroke="#1e293b" stroke-width="1"/>
+      <circle cx="35" cy="40" r="18" fill="rgba(245, 158, 11, 0.15)"/>
+      <text x="35" y="47" font-size="16" text-anchor="middle">📲</text>
+      <text x="65" y="32" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">3. 手機掃描 QR Code 加機器人為好友</text>
+      <text x="65" y="54" fill="#f59e0b" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="700">重要關鍵！若未加好友，機器人將無法推播訊息給你</text>
+      <text x="65" y="70" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11">切換到 Messaging API 分頁即可看到專屬行動條碼</text>
+    </g>
+  </g>
+
+  <!-- Right Column: Step 2 Extract 2 Keys -->
+  <g transform="translate(520, 130)" filter="url(#shadow2)">
+    <rect width="420" height="340" rx="14" fill="url(#cardGrad2)" stroke="#06c755" stroke-width="1.8"/>
+    
+    <!-- Header -->
+    <rect width="420" height="42" rx="14" fill="rgba(6, 199, 85, 0.18)"/>
+    <rect y="30" width="420" height="12" fill="url(#cardGrad2)"/>
+    <text x="20" y="26" fill="#06c755" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700">階段二：索取 2 大核心憑證（密鑰）</text>
+    <rect x="330" y="10" width="70" height="22" rx="6" fill="rgba(6, 199, 85, 0.25)"/>
+    <text x="365" y="25" fill="#06c755" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">STEP 2</text>
+
+    <!-- Key 1: Channel Access Token -->
+    <g transform="translate(20, 60)">
+      <rect width="380" height="115" rx="10" fill="#05150c" stroke="#06c755" stroke-width="1.2"/>
+      <circle cx="35" cy="35" r="18" fill="rgba(6, 199, 85, 0.2)"/>
+      <text x="35" y="42" font-size="16" text-anchor="middle">🔑</text>
+      <text x="65" y="30" fill="#06c755" font-family="'Inter', sans-serif" font-size="14" font-weight="800">鑰匙 1：Channel Access Token (長期權杖)</text>
+      <text x="65" y="52" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">位置：<strong>Messaging API 標籤頁</strong> 最下方</text>
+      <text x="65" y="72" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">點擊「Issue」按鈕生成長字串權杖（通行通行證）</text>
+      
+      <rect x="65" y="82" width="300" height="24" rx="4" fill="#060913" stroke="#1e293b" stroke-width="1"/>
+      <text x="75" y="98" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10.5">eyJhbGciOiJIUzI1Ni... (不可外洩給陌生人)</text>
+    </g>
+
+    <!-- Key 2: User ID -->
+    <g transform="translate(20, 195)">
+      <rect width="380" height="115" rx="10" fill="#081024" stroke="#818cf8" stroke-width="1.2"/>
+      <circle cx="35" cy="35" r="18" fill="rgba(129, 140, 248, 0.2)"/>
+      <text x="35" y="42" font-size="16" text-anchor="middle">👤</text>
+      <text x="65" y="30" fill="#818cf8" font-family="'Inter', sans-serif" font-size="14" font-weight="800">鑰匙 2：Your User ID (老闆個人唯一 ID)</text>
+      <text x="65" y="52" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">位置：<strong>Basic settings 標籤頁</strong> 最下方「Your user ID」</text>
+      <text x="65" y="72" fill="#f43f5e" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5" font-weight="600">⚠️ 絕不是你平日登入 LINE 搜尋的好友 ID！</text>
+      
+      <rect x="65" y="82" width="300" height="24" rx="4" fill="#060913" stroke="#1e293b" stroke-width="1"/>
+      <text x="75" y="98" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="10.5">U1a2b3c4d5e6f7g8h9i0jklmnopq... (以 U 開頭)</text>
+    </g>
+  </g>
+
+  <!-- Bottom Tip -->
+  <g transform="translate(60, 490)">
+    <rect width="880" height="38" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" stroke-width="1"/>
+    <text x="25" y="24" font-size="16">💡</text>
+    <text x="50" y="24" fill="#fbbf24" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5" font-weight="600">有了這兩把鑰匙，GAS 就能代表你專屬的 LINE 機器人，精準把新訂單私訊推播到你的個人手機！</text>
+  </g>
+</svg>

@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0a1226"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <filter id="shadow3" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad3)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="185" height="30" rx="15" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="92.5" y="20" fill="#fbbf24" font-family="'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle" letter-spacing="1">FULLSTACK ECOSYSTEM</text>
+    <text x="205" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">全端自動化商業生態系總覽 (Ch1 - Ch7)</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">從零程式基礎到坐擁「前端展示 ➔ 雲端運算 ➔ 資料庫留存 ➔ 雙軌自動通知」的商業級閉環</text>
+  </g>
+
+  <!-- 6 Pillars Architecture -->
+  <g transform="translate(60, 135)">
+    
+    <!-- Pillar 1: AI Tooling (Ch1) -->
+    <g transform="translate(0, 0)" filter="url(#shadow3)">
+      <rect width="132" height="315" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <rect width="132" height="34" rx="12" fill="rgba(56, 189, 248, 0.15)"/>
+      <rect y="24" width="132" height="10" fill="#0f172a"/>
+      <text x="66" y="22" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle">CH 01 • 工具</text>
+      <text x="66" y="65" font-size="24" text-anchor="middle">🤖</text>
+      <text x="66" y="98" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">Antigravity</text>
+      <text x="66" y="116" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">AI 協作編輯器</text>
+      <line x1="12" y1="130" x2="120" y2="130" stroke="#1e293b"/>
+      <text x="14" y="155" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 自然語言指揮</text>
+      <text x="14" y="180" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ Agent 工作區</text>
+      <text x="14" y="205" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 零死記語法</text>
+      <text x="14" y="230" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 全程 AI 助攻</text>
+      <rect x="12" y="275" width="108" height="26" rx="6" fill="rgba(56, 189, 248, 0.1)"/>
+      <text x="66" y="292" fill="#38bdf8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">開發加速 10x</text>
+    </g>
+
+    <!-- Pillar 2: Frontend Design (Ch2) -->
+    <g transform="translate(148, 0)" filter="url(#shadow3)">
+      <rect width="132" height="315" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <rect width="132" height="34" rx="12" fill="rgba(129, 140, 248, 0.15)"/>
+      <rect y="24" width="132" height="10" fill="#0f172a"/>
+      <text x="66" y="22" fill="#818cf8" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle">CH 02 • 產品頁</text>
+      <text x="66" y="65" font-size="24" text-anchor="middle">🎨</text>
+      <text x="66" y="98" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">現代 RWD 官網</text>
+      <text x="66" y="116" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">HTML / CSS / JS</text>
+      <line x1="12" y1="130" x2="120" y2="130" stroke="#1e293b"/>
+      <text x="14" y="155" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 響應式佈局</text>
+      <text x="14" y="180" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 預購訂單表單</text>
+      <text x="14" y="205" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 顧客體驗 UX</text>
+      <text x="14" y="230" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 防呆與防連點</text>
+      <rect x="12" y="275" width="108" height="26" rx="6" fill="rgba(129, 140, 248, 0.1)"/>
+      <text x="66" y="292" fill="#818cf8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">高轉換率門面</text>
+    </g>
+
+    <!-- Pillar 3: Hosting (Ch3, Ch4) -->
+    <g transform="translate(296, 0)" filter="url(#shadow3)">
+      <rect width="132" height="315" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <rect width="132" height="34" rx="12" fill="rgba(244, 63, 94, 0.15)"/>
+      <rect y="24" width="132" height="10" fill="#0f172a"/>
+      <text x="66" y="22" fill="#f43f5e" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle">CH 03-04 • 託管</text>
+      <text x="66" y="65" font-size="24" text-anchor="middle">🚀</text>
+      <text x="66" y="98" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">GitHub Pages</text>
+      <text x="66" y="116" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">Git & GitHub CLI</text>
+      <line x1="12" y1="130" x2="120" y2="130" stroke="#1e293b"/>
+      <text x="14" y="155" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 終身免費託管</text>
+      <text x="14" y="180" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 自帶 SSL 憑證</text>
+      <text x="14" y="205" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ gh auth 授權</text>
+      <text x="14" y="230" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 一鍵全球上線</text>
+      <rect x="12" y="275" width="108" height="26" rx="6" fill="rgba(244, 63, 94, 0.1)"/>
+      <text x="66" y="292" fill="#f43f5e" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">穩定高效發布</text>
+    </g>
+
+    <!-- Pillar 4: Backend (Ch5) -->
+    <g transform="translate(444, 0)" filter="url(#shadow3)">
+      <rect width="132" height="315" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <rect width="132" height="34" rx="12" fill="rgba(245, 158, 11, 0.15)"/>
+      <rect y="24" width="132" height="10" fill="#0f172a"/>
+      <text x="66" y="22" fill="#f59e0b" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle">CH 05 • 雲大腦</text>
+      <text x="66" y="65" font-size="24" text-anchor="middle">⚡</text>
+      <text x="66" y="98" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">Google Apps Script</text>
+      <text x="66" y="116" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">GAS 無伺服器</text>
+      <line x1="12" y1="130" x2="120" y2="130" stroke="#1e293b"/>
+      <text x="14" y="155" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ doPost 監聽</text>
+      <text x="14" y="180" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ JSON 資料解析</text>
+      <text x="14" y="205" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ Web App 部署</text>
+      <text x="14" y="230" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 免月租主機費</text>
+      <rect x="12" y="275" width="108" height="26" rx="6" fill="rgba(245, 158, 11, 0.1)"/>
+      <text x="66" y="292" fill="#f59e0b" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">運算核心中繼</text>
+    </g>
+
+    <!-- Pillar 5: Database & Email (Ch6) -->
+    <g transform="translate(592, 0)" filter="url(#shadow3)">
+      <rect width="140" height="315" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <rect width="140" height="34" rx="12" fill="rgba(52, 211, 153, 0.15)"/>
+      <rect y="24" width="140" height="10" fill="#0f172a"/>
+      <text x="70" y="22" fill="#34d399" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle">CH 06 • 資料庫與信</text>
+      <text x="70" y="65" font-size="24" text-anchor="middle">📊</text>
+      <text x="70" y="98" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">試算表 & Gmail</text>
+      <text x="70" y="116" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11" text-anchor="middle">自動化存檔回信</text>
+      <line x1="12" y1="130" x2="128" y2="130" stroke="#1e293b"/>
+      <text x="14" y="155" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 6 大欄位規範</text>
+      <text x="14" y="180" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ appendRow 存檔</text>
+      <text x="14" y="205" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 客製 HTML 信</text>
+      <text x="14" y="230" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 專屬訂單編號</text>
+      <rect x="14" y="275" width="112" height="26" rx="6" fill="rgba(52, 211, 153, 0.1)"/>
+      <text x="70" y="292" fill="#34d399" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">顧客信任度滿分</text>
+    </g>
+
+    <!-- Pillar 6: LINE Bot Push (Ch7) -->
+    <g transform="translate(748, 0)" filter="url(#shadow3)">
+      <rect width="132" height="315" rx="12" fill="#0c1e13" stroke="#06c755" stroke-width="2"/>
+      <rect width="132" height="34" rx="12" fill="rgba(6, 199, 85, 0.25)"/>
+      <rect y="24" width="132" height="10" fill="#0c1e13"/>
+      <text x="66" y="22" fill="#06c755" font-family="'Inter', sans-serif" font-size="11" font-weight="800" text-anchor="middle">CH 07 • LINE 推播</text>
+      <text x="66" y="65" font-size="24" text-anchor="middle">🔔</text>
+      <text x="66" y="98" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14" font-weight="700" text-anchor="middle">LINE 機器人</text>
+      <text x="66" y="116" fill="#06c755" font-family="'Inter', sans-serif" font-size="11" font-weight="600" text-anchor="middle">Messaging API</text>
+      <line x1="12" y1="130" x2="120" y2="130" stroke="#163820"/>
+      <text x="14" y="155" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 店長手機叮咚</text>
+      <text x="14" y="180" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 1 秒訂單快報</text>
+      <text x="14" y="205" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 零漏單不卡關</text>
+      <text x="14" y="230" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="11.5">▸ 全端閉環達成</text>
+      <rect x="12" y="275" width="108" height="26" rx="6" fill="rgba(6, 199, 85, 0.2)"/>
+      <text x="66" y="292" fill="#06c755" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="10.5" font-weight="800" text-anchor="middle">商業營運極致</text>
+    </g>
+
+  </g>
+
+  <!-- Bottom Banner -->
+  <g transform="translate(60, 480)">
+    <rect width="880" height="48" rx="10" fill="rgba(15, 23, 42, 0.9)" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="29" font-size="18">🏆</text>
+    <text x="60" y="29" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13.5" font-weight="700">成就解鎖：你已完整掌握現代軟體工程必備的「全端自動化思維」與「無伺服器整合力」！</text>
+  </g>
+</svg>

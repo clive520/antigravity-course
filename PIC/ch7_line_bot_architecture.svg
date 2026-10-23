@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060913"/>
+      <stop offset="100%" stop-color="#0b1329"/>
+    </linearGradient>
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06c755"/>
+      <stop offset="100%" stop-color="#05b04a"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#131e36"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="560" rx="16" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(60, 45)">
+    <rect width="165" height="30" rx="15" fill="rgba(6, 199, 85, 0.15)" stroke="#06c755" stroke-width="1.5"/>
+    <text x="82.5" y="20" fill="#06c755" font-family="'Inter', -apple-system, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">LINE BOT PIPELINE</text>
+    <text x="185" y="22" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="24" font-weight="800">LINE 機器人即時推播 4 步運作架構</text>
+    <text x="0" y="52" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="14">從顧客瀏覽器填單到店長手機 1 秒內叮咚作響的完整資料流</text>
+  </g>
+
+  <!-- Flow Steps (4 nodes) -->
+  
+  <!-- Step 1: Client Browser -->
+  <g transform="translate(60, 140)" filter="url(#shadow)">
+    <rect width="195" height="320" rx="14" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+    <rect width="195" height="42" rx="14" fill="rgba(56, 189, 248, 0.15)"/>
+    <rect y="30" width="195" height="12" fill="url(#cardGrad)"/>
+    <text x="97.5" y="26" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">STEP 01 • 觸發端</text>
+    
+    <!-- Icon -->
+    <circle cx="97.5" cy="80" r="26" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="97.5" y="87" font-size="24" text-anchor="middle">🌐</text>
+    
+    <text x="97.5" y="128" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="17" font-weight="700" text-anchor="middle">前端顧客網頁</text>
+    <text x="97.5" y="148" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="12" text-anchor="middle">GitHub Pages 官網</text>
+    
+    <line x1="20" y1="168" x2="175" y2="168" stroke="#1e293b" stroke-width="1.5"/>
+    
+    <text x="24" y="195" fill="#e2e8f0" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13" font-weight="600">▸ 顧客點擊送出預購</text>
+    <text x="24" y="222" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">▸ 收集姓名、電話、方案</text>
+    <text x="24" y="249" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">▸ Fetch 非同步發送</text>
+    <text x="24" y="276" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="12" font-weight="600">▸ HTTP POST (JSON)</text>
+    
+    <rect x="20" y="292" width="155" height="18" rx="4" fill="rgba(56, 189, 248, 0.1)"/>
+    <text x="97.5" y="305" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">⏱️ 0.1 秒 送出請求</text>
+  </g>
+
+  <!-- Connection Arrow 1-2 -->
+  <g transform="translate(262, 280)">
+    <line x1="0" y1="0" x2="32" y2="0" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
+    <polygon points="32,-5 42,0 32,5" fill="#38bdf8"/>
+    <text x="20" y="-12" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">doPost</text>
+  </g>
+
+  <!-- Step 2: Google Apps Script Backend -->
+  <g transform="translate(310, 140)" filter="url(#shadow)">
+    <rect width="200" height="320" rx="14" fill="url(#cardGrad)" stroke="#818cf8" stroke-width="2"/>
+    <rect width="200" height="42" rx="14" fill="rgba(129, 140, 248, 0.18)"/>
+    <rect y="30" width="200" height="12" fill="url(#cardGrad)"/>
+    <text x="100" y="26" fill="#818cf8" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">STEP 02 • 大腦核心</text>
+    
+    <!-- Icon -->
+    <circle cx="100" cy="80" r="26" fill="rgba(129, 140, 248, 0.1)" stroke="#818cf8" stroke-width="1.5"/>
+    <text x="100" y="87" font-size="24" text-anchor="middle">⚡</text>
+    
+    <text x="100" y="128" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="17" font-weight="700" text-anchor="middle">Google 雲端 GAS</text>
+    <text x="100" y="148" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="12" text-anchor="middle">Web App 無伺服器運算</text>
+    
+    <line x1="20" y1="168" x2="180" y2="168" stroke="#1e293b" stroke-width="1.5"/>
+    
+    <text x="24" y="195" fill="#34d399" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5" font-weight="600">1. 試算表 appendRow 存檔</text>
+    <text x="24" y="222" fill="#38bdf8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12.5" font-weight="600">2. GmailApp 寄給顧客</text>
+    <text x="24" y="254" fill="#06c755" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13" font-weight="700">3. UrlFetchApp.fetch()</text>
+    <text x="24" y="276" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="11.5">   發出 LINE Push API 請求</text>
+    
+    <rect x="20" y="292" width="160" height="18" rx="4" fill="rgba(129, 140, 248, 0.15)"/>
+    <text x="100" y="305" fill="#818cf8" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">中繼彙整 ➔ 一箭三雕</text>
+  </g>
+
+  <!-- Connection Arrow 2-3 -->
+  <g transform="translate(517, 280)">
+    <line x1="0" y1="0" x2="32" y2="0" stroke="#06c755" stroke-width="2" stroke-dasharray="4 3"/>
+    <polygon points="32,-5 42,0 32,5" fill="#06c755"/>
+    <text x="20" y="-12" fill="#06c755" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Bearer</text>
+  </g>
+
+  <!-- Step 3: LINE Messaging API Gateway -->
+  <g transform="translate(565, 140)" filter="url(#shadow)">
+    <rect width="185" height="320" rx="14" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+    <rect width="185" height="42" rx="14" fill="rgba(6, 199, 85, 0.15)"/>
+    <rect y="30" width="185" height="12" fill="url(#cardGrad)"/>
+    <text x="92.5" y="26" fill="#06c755" font-family="'Inter', sans-serif" font-size="13" font-weight="700" text-anchor="middle">STEP 03 • 授權網關</text>
+    
+    <!-- Icon -->
+    <circle cx="92.5" cy="80" r="26" fill="rgba(6, 199, 85, 0.12)" stroke="#06c755" stroke-width="1.5"/>
+    <text x="92.5" y="87" font-size="24" text-anchor="middle">🛡️</text>
+    
+    <text x="92.5" y="128" fill="#ffffff" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="17" font-weight="700" text-anchor="middle">LINE 官方伺服器</text>
+    <text x="92.5" y="148" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="12" text-anchor="middle">Messaging API Cloud</text>
+    
+    <line x1="20" y1="168" x2="165" y2="168" stroke="#1e293b" stroke-width="1.5"/>
+    
+    <text x="20" y="195" fill="#e2e8f0" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="13" font-weight="600">▸ 驗證 Channel Token</text>
+    <text x="20" y="222" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">▸ 鎖定管理員 User ID</text>
+    <text x="20" y="249" fill="#94a3b8" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">▸ 格式化訂單通知樣板</text>
+    <text x="20" y="276" fill="#06c755" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12" font-weight="600">▸ Push Message 轉發</text>
+    
+    <rect x="18" y="292" width="150" height="18" rx="4" fill="rgba(6, 199, 85, 0.1)"/>
+    <text x="92.5" y="305" fill="#06c755" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">API 嚴格資安審核</text>
+  </g>
+
+  <!-- Connection Arrow 3-4 -->
+  <g transform="translate(757, 280)">
+    <line x1="0" y1="0" x2="30" y2="0" stroke="#06c755" stroke-width="2" stroke-dasharray="4 3"/>
+    <polygon points="30,-5 40,0 30,5" fill="#06c755"/>
+    <text x="20" y="-12" fill="#06c755" font-family="'Inter', sans-serif" font-size="11" font-weight="700" text-anchor="middle">Push</text>
+  </g>
+
+  <!-- Step 4: Shop Owner Smartphone -->
+  <g transform="translate(803, 140)" filter="url(#shadow)">
+    <rect width="140" height="320" rx="14" fill="url(#cardGrad)" stroke="#06c755" stroke-width="2"/>
+    <rect width="140" height="42" rx="14" fill="rgba(6, 199, 85, 0.22)"/>
+    <rect y="30" width="140" height="12" fill="url(#cardGrad)"/>
+    <text x="70" y="26" fill="#06c755" font-family="'Inter', sans-serif" font-size="13" font-weight="800" text-anchor="middle">STEP 04 • 終端</text>
+    
+    <!-- Phone Mockup Frame -->
+    <rect x="25" y="60" width="90" height="180" rx="10" fill="#050a14" stroke="#06c755" stroke-width="1.5"/>
+    <circle cx="70" cy="72" r="2.5" fill="#334155"/>
+    
+    <!-- LINE Notification Bubble -->
+    <rect x="32" y="88" width="76" height="65" rx="6" fill="#06c755" filter="url(#glow)"/>
+    <text x="40" y="104" fill="#ffffff" font-family="'Inter', sans-serif" font-size="9" font-weight="800">LINE • 剛剛</text>
+    <text x="40" y="118" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="8.5" font-weight="700">新訂單快報！</text>
+    <text x="40" y="130" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="7.5">客戶：陳大天</text>
+    <text x="40" y="141" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="7.5">金額：$5,990</text>
+    
+    <!-- Sound Waves Icon -->
+    <text x="70" y="185" font-size="20" text-anchor="middle">🔔</text>
+    <text x="70" y="210" fill="#06c755" font-family="'Noto Sans TC', sans-serif" font-size="12" font-weight="800" text-anchor="middle">立刻叮咚！</text>
+    <circle cx="70" cy="228" r="6" fill="#06c755" opacity="0.3"/>
+    
+    <line x1="15" y1="250" x2="125" y2="250" stroke="#1e293b" stroke-width="1.5"/>
+    <text x="70" y="272" fill="#ffffff" font-family="'Noto Sans TC', sans-serif" font-size="13" font-weight="700" text-anchor="middle">店長手機</text>
+    <text x="70" y="292" fill="#94a3b8" font-family="'Noto Sans TC', sans-serif" font-size="11" text-anchor="middle">零時差掌握業績</text>
+    <rect x="15" y="300" width="110" height="14" rx="3" fill="rgba(6, 199, 85, 0.15)"/>
+    <text x="70" y="310" fill="#06c755" font-family="'Inter', sans-serif" font-size="9" font-weight="700" text-anchor="middle">⚡ 全程不到 1 秒</text>
+  </g>
+
+  <!-- Bottom Legend Bar -->
+  <g transform="translate(60, 485)">
+    <rect width="883" height="42" rx="10" fill="rgba(15, 23, 42, 0.85)" stroke="#1e293b" stroke-width="1"/>
+    <circle cx="30" cy="21" r="5" fill="#38bdf8"/>
+    <text x="45" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">前端 Fetch (非同步)</text>
+    <circle cx="215" cy="21" r="5" fill="#818cf8"/>
+    <text x="230" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">Google Apps Script doPost()</text>
+    <circle cx="450" cy="21" r="5" fill="#06c755"/>
+    <text x="465" y="26" fill="#cbd5e1" font-family="'Inter', 'Noto Sans TC', sans-serif" font-size="12">LINE Push API (https://api.line.me/v2/bot/message/push)</text>
+    <text x="860" y="26" fill="#06c755" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="end">免主機月租費 🚀</text>
+  </g>
+</svg>

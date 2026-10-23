@@ -56,11 +56,24 @@
         <span class="meta-pill">第 7 章 · 行動端自動化推播</span>
         <h1>串接 LINE 機器人：即時通知老闆有人預購耳機！</h1>
         <p class="desc">在第 6 章中，客人填完單已經會自動寫入試算表並收到感謝信。但身為店長/老闆的你，總不能 24 小時盯著 Google 試算表格子看！本章將帶你串接 LINE 機器人，只要有新訂單進來，你的手機 LINE 立刻「叮咚！」收到老闆專屬推播！</p>
+        <div style="margin-top: 1rem;">
+          <a href="../slides/chapter7-slides.html" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.92rem; border-radius: 8px;">
+            <span>📽️ 開啟本章簡報 (Slides 模式) ↗</span>
+          </a>
+        </div>
       </div>
 
       <!-- 7-1 原理剖析 -->
       <section id="sec-7-1" class="content-section">
         <h2>7-1 作動原理剖析：LINE 機器人是如何在背後運作的？</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch7_line_bot_architecture.svg" alt="LINE 機器人即時推播 4 步運作架構" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>📲 圖 7-1：LINE 機器人即時推播 4 步運作架構</strong><br>
+            前端送單 ➔ Google GAS 中繼處理 ➔ LINE Messaging API 授權轉發 ➔ 店長手機 1 秒內叮咚作響。
+          </div>
+        </div>
         <p>很多學員會好奇：「<em>我只是在網頁上點一下送出，為什麼我的手機 LINE 能夠在 1 秒內收到訊息？這中間的訊號是怎麼傳遞的？</em>」</p>
         <p>在寫程式前，我們先用一張白話架構圖搞懂<strong>「網頁 ➔ Google 雲端 ➔ LINE 伺服器 ➔ 老闆手機」</strong>的四步推播骨牌效應：</p>
 
@@ -103,6 +116,14 @@
       <!-- 7-2 取得憑證 -->
       <section id="sec-7-2" class="content-section">
         <h2>7-2 三分鐘快速取得 LINE 機器人憑證（Channel Access Token）</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch7_line_developer_console.svg" alt="LINE 開發者後台：取得 2 大關鍵憑證地圖" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🗺️ 圖 7-2：LINE 開發者後台：取得 2 大關鍵憑證地圖</strong><br>
+            Provider 組織名稱 ➔ Messaging API Channel ➔ 長期權杖 (Access Token) 與個人身分 (Your User ID)。
+          </div>
+        </div>
         <p>要讓程式能夠代替機器人傳訊息給你，我們需要從 LINE 開發者後台取得兩樣鑰匙：<strong>權杖（Token）</strong> 與 <strong>你的個人 ID</strong>。</p>
 
         <div class="step-box">
@@ -209,6 +230,14 @@
       <!-- 7-5 全端生態系總結 -->
       <section id="sec-7-5" class="content-section">
         <h2>7-5 榮耀總結：你親手打造的全端自動化商業生態系</h2>
+
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch7_fullstack_ecosystem.svg" alt="全端自動化商業生態系總覽 (Ch1 - Ch7)" style="width: 100%; max-width: 840px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 7-3：全端自動化商業生態系總覽（Ch1 - Ch7 六大核心支柱）</strong><br>
+            由 AI 工具、響應式官網、GitHub 免費託管、GAS 運算大腦、試算表資料庫與 LINE 即時推播組成的完整商業閉環。
+          </div>
+        </div>
         <p>回顧從第 1 章一路走來，你已經掌握了現代 AI 開發者最強悍的武器庫：</p>
 
         <div class="step-box">
