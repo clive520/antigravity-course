@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroPulse Pro · 藍牙耳機市場情報戰情室 (War Room)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #0f172a;
+      --border: rgba(148, 163, 184, 0.15);
+      --primary: #38bdf8;
+      --accent: #818cf8;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 4rem;
+    }
+    .header {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-title span.badge {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .agent-status-bar {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .agent-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      display: inline-block;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      transition: transform 0.2s;
+    }
+    .back-btn:hover { transform: translateX(-4px); }
+
+    /* Grid Layout */
+    .grid-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .grid-top { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Radar Canvas Container */
+    .radar-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+    }
+    canvas#radarCanvas {
+      max-width: 100%;
+      height: auto;
+    }
+    .radar-legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+    .legend-color { width: 12px; height: 12px; border-radius: 3px; }
+
+    /* Tabs for Personas */
+    .persona-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+    .persona-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .persona-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+    }
+    .persona-content { display: none; }
+    .persona-content.active { display: block; animation: fadeIn 0.3s; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .persona-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+    }
+    .persona-row .label { color: var(--text-muted); }
+    .persona-row .val { font-weight: 600; text-align: right; }
+
+    /* Breakthrough Strategy Banner */
+    .breakthrough-box {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1.5px solid var(--accent);
+      border-radius: 14px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (max-width: 800px) {
+      .breakthrough-box { grid-template-columns: 1fr; }
+    }
+    .pricing-tag {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px dashed var(--primary);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .pricing-tag .price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="brand-title">
+      <span>🎧 AeroPulse Pro 市場戰情室</span>
+      <span class="badge">AI 多代理人調研實時彙編</span>
+    </div>
+    <div class="agent-status-bar">
+      <span><span class="agent-dot"></span> 3 位特工已完成協同調查</span>
+      <span>•</span>
+      <span>更新時間：今日即時</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <a href="chapters/chapter12.html" class="back-btn">← 返回第 12 章教學課程</a>
+
+    <!-- Top Grid: Radar vs Personas -->
+    <div class="grid-top">
+      <!-- Radar Chart -->
+      <div class="card">
+        <h3>📊 四大品牌五角戰力評估對照</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          由【特工 1：競品分析官】爬取與權重評分，揭示萬元旗艦的優劣防線。
+        </p>
+        <div class="radar-box">
+          <canvas id="radarCanvas" width="420" height="300"></canvas>
+          <div class="radar-legend">
+            <div class="legend-item"><div class="legend-color" style="background: #38bdf8;"></div><span>自研 AeroPulse Pro</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: #ef4444;"></div><span>Sony XM5</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: #e2e8f0;"></div><span>AirPods Pro 2</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: #a855f7;"></div><span>Bose QC Ultra</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personas Tab -->
+      <div class="card">
+        <h3>🎯 核心受眾心理與死穴矩陣</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          由【特工 2：客群畫像分析師】深度剖析買家真正的痛點與購買動機。
+        </p>
+
+        <div class="persona-tabs">
+          <button class="persona-tab active" onclick="switchPersona('commuter')">🚇 捷運通勤族</button>
+          <button class="persona-tab" onclick="switchPersona('business')">💼 商務視訊族</button>
+          <button class="persona-tab" onclick="switchPersona('sports')">🏃 運動健身族</button>
+        </div>
+
+        <div id="p-commuter" class="persona-content active">
+          <div class="persona-row"><span class="label">族群核心場景</span><span class="val">每日捷運/公車/高鐵長途通勤</span></div>
+          <div class="persona-row"><span class="label">最無法忍受痛點</span><span class="val" style="color: #ef4444;">強烈耳壓感、捷運報站聽不到</span></div>
+          <div class="persona-row"><span class="label">心理預算上限</span><span class="val">NT$ 3,000 ~ 5,000</span></div>
+          <div class="persona-row"><span class="label">購買觸發關鍵</span><span class="val" style="color: var(--success);">「無感智慧動態調壓 + 一鍵通透」</span></div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.6;">
+            💡 <strong>洞察精華</strong>：多數通勤族並非發燒友，他們不需要極致解析度，而是在捷運嘈雜時能安靜聽 Podcast，且下車時不會頭暈耳鳴。
+          </p>
+        </div>
+
+        <div id="p-business" class="persona-content">
+          <div class="persona-row"><span class="label">族群核心場景</span><span class="val">星巴克/高鐵/辦公室隨時開 Zoom</span></div>
+          <div class="persona-row"><span class="label">最無法忍受痛點</span><span class="val" style="color: #ef4444;">環境噪音收進麥克風、風切聲大</span></div>
+          <div class="persona-row"><span class="label">心理預算上限</span><span class="val">NT$ 4,000 ~ 7,000（可報帳）</span></div>
+          <div class="persona-row"><span class="label">購買觸發關鍵</span><span class="val" style="color: var(--success);">「AI 骨傳導通話麥克風 + 雙設備切換」</span></div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.6;">
+            💡 <strong>洞察精華</strong>：這群人的「被動收入」很高，他們買耳機是為了「開會不要被老闆罵聲音聽不清楚」，願意為了頂級通話降噪掏錢！
+          </p>
+        </div>
+
+        <div id="p-sports" class="persona-content">
+          <div class="persona-row"><span class="label">族群核心場景</span><span class="val">夜跑、健身房重訓、戶外騎行</span></div>
+          <div class="persona-row"><span class="label">最無法忍受痛點</span><span class="val" style="color: #ef4444;">汗水浸濕滑落、聽不到後方來車</span></div>
+          <div class="persona-row"><span class="label">心理預算上限</span><span class="val">NT$ 2,500 ~ 4,000</span></div>
+          <div class="persona-row"><span class="label">購買觸發關鍵</span><span class="val" style="color: var(--success);">「IPX5 防水 + 人體工學穩固防滑」</span></div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.6;">
+            💡 <strong>洞察精華</strong>：重訓深蹲時耳塞移位是最大痛點，重視單耳輕盈與防汗耐用度。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trend Radar -->
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <h3>🌊 2026 年藍牙耳機前瞻技術溢價風向標</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        由【特工 3：潮流趨勢雷達員】回報，未來 24 個月最具行銷溢價與傳播力的硬核功能：
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;">
+          <h4 style="color: #38bdf8; font-size: 1rem; margin-bottom: 0.5rem;">🎙️ AI 骨傳導 ENC 降噪</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            利用頜骨震動分離人聲，即使在開著吸塵器的房間通話，對方依然只能聽到清晰人聲，溢價力 ★★★★★
+          </p>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;">
+          <h4 style="color: #818cf8; font-size: 1rem; margin-bottom: 0.5rem;">🎧 頭部追蹤空間音訊</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            內建高精度陀螺儀，追蹤頭部轉動實時調整虛擬聲場，觀看 Netflix 與玩手遊沉浸感拉滿，溢價力 ★★★★☆
+          </p>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem;">
+          <h4 style="color: #34d399; font-size: 1rem; margin-bottom: 0.5rem;">🔋 42 小時全天候續航</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            超低功耗藍牙 5.4 晶片，單次充電聽 9 小時，配合充電艙達到 42 小時，快充 10 分鐘聽 2 小時，實用度 ★★★★★
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakthrough Strategy Banner -->
+    <div class="breakthrough-box">
+      <div>
+        <span style="background: rgba(129, 140, 248, 0.2); color: #818cf8; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 4px; text-transform: uppercase;">Strategic Recommendation</span>
+        <h2 style="font-size: 1.5rem; margin: 0.5rem 0 1rem; color: #fff;">🏆 品牌總監破局決策：避開萬元紅海，直攻三千元甜點區！</h2>
+        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.7;">
+          三大巨頭（Sony / Apple / Bose）定價均落在 NT$ 7,490 ~ 12,900，價格門檻極高；而市面平價耳機通話品質極差。  
+          我們的自研產品 <strong>AeroPulse Pro</strong> 應主打 <strong>「萬元級 AI 通話降噪 + 42 小時長續航」</strong>，徹底鎖定通勤與商務族群，一舉打出爆款！
+        </p>
+      </div>
+      <div class="pricing-tag">
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">建議最優發售價</div>
+        <div class="price">NT$ 3,880</div>
+        <div style="font-size: 0.75rem; color: var(--success); margin-top: 0.5rem;">預估毛利率：62% · 極高轉化優勢</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchPersona(type) {
+      document.querySelectorAll('.persona-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.persona-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('p-' + type).classList.add('active');
+    }
+
+    // Draw Radar Chart with Canvas
+    const canvas = document.getElementById('radarCanvas');
+    const ctx = canvas.getContext('2d');
+    const labels = ['降噪深度', '通話抗風', '舒適輕量', '電池續航', '性價比'];
+    const numAxes = labels.length;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 100;
+
+    // Draw background polygon grids
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+    ctx.lineWidth = 1;
+    for (let level = 1; level <= 5; level++) {
+      const r = (radius / 5) * level;
+      ctx.beginPath();
+      for (let i = 0; i < numAxes; i++) {
+        const angle = (Math.PI * 2 / numAxes) * i - Math.PI / 2;
+        const x = centerX + r * Math.cos(angle);
+        const y = centerY + r * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    // Draw Axis lines and Labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (let i = 0; i < numAxes; i++) {
+      const angle = (Math.PI * 2 / numAxes) * i - Math.PI / 2;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+
+      const labelX = centerX + (radius + 22) * Math.cos(angle);
+      const labelY = centerY + (radius + 16) * Math.sin(angle);
+      ctx.fillText(labels[i], labelX, labelY);
+    }
+
+    // Function to draw a dataset
+    function drawDataset(data, strokeColor, fillColor) {
+      ctx.beginPath();
+      for (let i = 0; i < numAxes; i++) {
+        const val = data[i] / 100;
+        const angle = (Math.PI * 2 / numAxes) * i - Math.PI / 2;
+        const x = centerX + radius * val * Math.cos(angle);
+        const y = centerY + radius * val * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Data: [降噪, 通話, 舒適, 續航, 性價比]
+    drawDataset([95, 65, 75, 70, 45], '#ef4444', 'rgba(239, 68, 68, 0.1)'); // Sony
+    drawDataset([92, 85, 90, 60, 50], '#e2e8f0', 'rgba(226, 232, 240, 0.1)'); // Apple
+    drawDataset([98, 70, 88, 65, 40], '#a855f7', 'rgba(168, 85, 247, 0.1)'); // Bose
+    drawDataset([88, 96, 92, 95, 96], '#38bdf8', 'rgba(56, 189, 248, 0.3)'); // AeroPulse Pro
+  </script>
+</body>
+</html>

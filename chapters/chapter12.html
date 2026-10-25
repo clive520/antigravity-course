@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 12 章：多代理人團隊作戰 — 調動 AI 虛擬軍團，打造 24 小時藍牙耳機市場戰情室 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge" style="background: rgba(129, 140, 248, 0.2); color: #818cf8; border-color: rgba(129, 140, 248, 0.4);">Chapter 12</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">首頁</a>
+      <a href="../index.html#future-chapters">未來拓展計畫</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">🌙 深色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節總覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載與安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與部署流程</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 實戰教學</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播通知</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+        <li><a href="chapter9.html">第 9 章：Cloudflare Pages 邊緣部署</a></li>
+        <li><a href="chapter10.html">第 10 章：Supabase 現代雲端資料庫</a></li>
+        <li><a href="chapter11.html">第 11 章：企業級 AI 知識庫 (RAG)</a></li>
+        <li><a href="chapter12.html" class="active">第 12 章：多代理人團隊作戰 (Subagents)</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-12-1">12-1 觀念破冰：從聊天者變指揮官</a></li>
+        <li><a href="#sec-12-2">12-2 核心機制：調度 Subagents 三大基石</a></li>
+        <li><a href="#sec-12-3">12-3 深度實戰：藍牙耳機市場戰情室</a></li>
+        <li><a href="#sec-12-4">12-4 拓展寶庫：跨領域兩大黃金軍團</a></li>
+        <li><a href="#sec-12-5">12-5 成果驗收：商業破局與常見 Q&A</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill" style="background: rgba(129, 140, 248, 0.2); color: #818cf8;">第 12 章 · 次世代 Agentic 協同作戰</span>
+        <h1>多代理人團隊作戰：調動 AI 虛擬軍團，打造 24 小時藍牙耳機市場戰情室</h1>
+        <p class="desc">告別單一對話視窗的記憶錯亂與回答截斷！本章解鎖 AntiGravity 最強核心王牌——<strong>多代理人（Subagents）並行調度系統</strong>。你不再是自己苦思每個步驟的執行者，而是化身「專案最高指揮官」，一句話派出專門的特工團隊非同步調查競品、拆解買家心理、捕捉前瞻趨勢，並在幾分鐘內自動交付具備高度商業決策價值的互動戰情室！</p>
+        <div style="margin-top: 1rem; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="../earphone-warroom.html" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.92rem; border-radius: 8px; background: linear-gradient(135deg, #38bdf8, #6366f1); color: #fff; font-weight: 700;">
+            <span>🎧 立即體驗本章產出：耳機市場戰情室 ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 12-1 觀念破冰 -->
+      <section id="sec-12-1" class="content-section">
+        <h2>12-1 觀念破冰：為什麼單兵會崩潰？從「聊天者」升級「專案指揮官」</h2>
+        <p>在過去學習 AI 的過程中，很多人習慣把所有任務一股腦丟給同一個對話視窗：「請幫我爬 3 家耳機競品、分析 3 個客群、調查最新趨勢，然後寫一份報告再寫出網頁代碼」。這種<strong>「單兵對話模式」</strong>往往會引發三大災難：</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+          <div class="step-box" style="margin: 0; border-color: rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">❌ 上下文塞車（Token 膨脹）</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              爬蟲抓取回來的長篇網頁文字塞滿了記憶體，導致 AI 後繼無力，開始胡言亂語或截斷。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0; border-color: rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">❌ 注意力渙散（前面說的後面忘）</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              AI 在寫後端代碼時，已經忘記了前面第一段設定的客群預算限制，前後矛盾。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0; border-color: rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">❌ 職責衝突（角色人格打架）</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              同一個 AI 無法一邊扮演吹毛求疵的資安審計員，又一邊扮演天馬行空的行銷文案設計師。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin: 1.5rem 0;">
+          <span>💡</span>
+          <div>
+            <strong>思維躍遷的心智模型：開一家高效率的虛擬公司！</strong><br>
+            現實生活中，一家公司的執行長（CEO）絕不可能自己管財務、跑業務又親自寫代碼。優秀的領導者懂得<strong>「定義組織職能、指派專項任務、驗收匯流成果」</strong>。這正是 AntiGravity 多代理人架構的精髓所在！
+          </div>
+        </div>
+      </section>
+
+      <!-- 12-2 核心機制解密 -->
+      <section id="sec-12-2" class="content-section">
+        <h2>12-2 核心機制解密：AntiGravity 調度 Subagents 的 3 大基石</h2>
+        <p>AntiGravity 賦予了主代理人（Orchestrator）調動專屬子代理（Subagent）的底層協議。這不是單純的多開分頁，而是具備嚴格工程架構的協同系統：</p>
+
+        <!-- 架構 SVG 圖表 -->
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch12_subagent_orchestration.svg" alt="AntiGravity 多代理人團隊作戰架構流水線" style="width: 100%; max-width: 860px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 12-1：AntiGravity 多代理人團隊協同作戰全景管線</strong><br>
+            總指揮官接收自然語言任務 ➔ 3 位特工在獨立沙盒非同步並行 ➔ 交叉匯流提煉破局點 ➔ 自動交付互動戰情室。
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>🧩 Subagents 運作的三大支柱：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>獨立沙盒與上下文隔離（Context Isolation）</strong>：每位子代理都在乾淨、專屬的記憶環境中作業。競品情報官看了一百頁技術規格，這些雜訊絕不會污染到前端工程師的代碼畫布。</li>
+            <li><strong>專用權限最小化（Specialized Tooling）</strong>：市場調研員只給予搜尋與網頁閱讀權限，不給檔案修改權限；前端工程師只給予代碼產出權限。權限邊界清晰，系統既安全又穩定。</li>
+            <li><strong>非同步並行加速（Parallel Execution）</strong>：過去串列執行要花 10 分鐘的繁雜調研，在多代理人並行下，3 位特工同時在背景發動，2 分鐘內全數回傳完畢！</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 12-3 深度實戰拆解 -->
+      <section id="sec-12-3" class="content-section">
+        <h2>12-3 深度實戰拆解：藍牙耳機市場戰情室（三大特工調度）</h2>
+        <p>延續我們在第 2 章製作過的<strong>「藍牙耳機」</strong>主題，現在我們自研了一款旗艦耳機（代號 <code>AeroPulse Pro</code>），準備推向市場。我們不再盲目瞎猜，而是派出三位特工摸清市場底牌！</p>
+
+        <div class="step-box" style="border-color: rgba(56, 189, 248, 0.4);">
+          <span class="step-number" style="background: #0284c7;">STEP 1</span>
+          <h4>三大王牌特工的角色職責手冊（Persona Blueprint）</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #818cf8; margin-bottom: 0.35rem;">🕵️ 特工 1：競品分析官</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">鎖定 Sony WH-1000XM5、AirPods Pro 2、Bose QC Ultra，整理價格帶與負評死穴。</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #34d399; margin-bottom: 0.35rem;">🎯 特工 2：客群畫像分析師</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">鎖定捷運通勤族、商務視訊族、運動健身發燒友，挖出心理預算與真正痛點。</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #e879f9; margin-bottom: 0.35rem;">🌊 特工 3：潮流趨勢雷達員</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">鎖定 AI 骨傳導 ENC 降噪、頭部追蹤空間音訊與開放式 OWS 溢價賣點。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-box" style="border-color: rgba(129, 140, 248, 0.4);">
+          <span class="step-number" style="background: #6366f1;">STEP 2</span>
+          <h4>下達作戰密碼：一鍵啟動軍團的黃金指令</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">只需將以下指令複製貼入 AntiGravity 對話框，便能瞬間觸發多代理人非同步調度：</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt（複製即可執行）</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>我要推出我們的自研旗艦降噪耳機（代號 AeroPulse Pro）。請幫我啟動市場研究軍團，兵分三路同步進行深度調查：
+
+1. 競品分析官（Competitor Spy）：鎖定市面三大熱銷競品（Sony WH-1000XM5、AirPods Pro 2、Bose QC Ultra），剖析其通路價格帶、核心技術優勢，以及各大論壇使用者抱怨最多的 3 大痛點缺點。
+2. 客群畫像分析師（Audience Persona）：深度拆解三大核心族群（捷運高鐵通勤族、商務遠距會議族、運動健身發燒友）的心理預算上限、最在意的死穴與購買觸發點。
+3. 潮流趨勢雷達員（Trend Radar）：調研未來兩年藍牙耳機最具溢價空間的新黑科技（如空間音訊、AI 骨傳導通話降噪、開放式 OWS、超低延遲）。
+
+三路調查完畢後，請主指揮官交叉比對情報，提煉出『我們耳機的必勝破局點（定價與主打賣點）』，並自動建立一個高質感的視覺化網頁檔案『earphone-warroom.html』，包含競品戰力五角雷達圖與客群需求卡片！</code></pre>
+          </div>
+        </div>
+
+        <div class="step-box" style="border-color: rgba(52, 211, 153, 0.4);">
+          <span class="step-number" style="background: #10b981;">STEP 3</span>
+          <h4>成果驗收：可即時互動的耳機市場戰情室</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">任務完成後，資料夾內會自動生成 <code>earphone-warroom.html</code>。點開瀏覽器，你會看到令人驚豔的現代暗黑科技儀表板：</p>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2; margin-top: 0.5rem;">
+            <li>📊 <strong>HTML5 Canvas 動態五角雷達圖</strong>：直觀對照四大品牌在降噪、通話、舒適、續航與性價比上的分佈。</li>
+            <li>👥 <strong>受眾心理標籤牆</strong>：點擊切換通勤族、商務族與運動族，查看不同人群願意掏錢的「殺手級關鍵詞」。</li>
+            <li>💡 <strong>破局定價建議</strong>：AI 算出萬元市場紅海競爭過於激烈，建議定價 <strong>NT$ 3,880</strong>，主打「萬元級 AI 通話降噪 + 42 小時長續航」，以極高性價比擊穿市場！</li>
+          </ul>
+          <div style="margin-top: 1rem;">
+            <a href="../earphone-warroom.html" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 0.95rem;">👉 點擊開啟耳機市場戰情室實際成果頁面 ↗</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12-4 拓展實戰寶庫 -->
+      <section id="sec-12-4" class="content-section">
+        <h2>12-4 拓展實戰寶庫：跨領域兩大黃金軍團（提示詞與成果解析）</h2>
+        <p>多代理人協同的威力絕不僅限於硬體耳機！以下提供業界最搶手的兩大跨領域真實場景，學員可依自己的工作或創業需求直接套用：</p>
+
+        <!-- 場景二 -->
+        <div class="step-box" style="margin-top: 1.5rem; border-color: rgba(56, 189, 248, 0.3);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #38bdf8; margin: 0; font-size: 1.2rem;">💻 場景二：【一人軟體公司】全自動全端系統開發與測試驗收軍團</h3>
+            <span style="font-size: 0.78rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 0.2rem 0.6rem; border-radius: 4px;">適用：獨立開發者 / 工程研發</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>商業痛點</strong>：想開發一個「客戶線上預約諮詢 SaaS 系統」，但只有自己一個人。既要切前端版面、寫後端 API 資料清洗、還要寫自動化測試，往往寫完前端就筋疲力盡，功能漏洞百出。
+          </p>
+
+          <div class="code-block" style="margin: 1rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：軟體研發軍團</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請啟動一人軟體開發團隊，為我打造一套『現代化客戶預約排程系統』：
+
+1. 產品規格經理（PM Subagent）：定義預約流程所需的資料格式（姓名、電話、預約時段、需求項目、防呆驗證規則），產出標準 schema.json 契約。
+2. 前端介面設計師（Frontend Subagent）：根據 PM 的規格，使用 Tailwind CSS 與現代玻璃擬態風格，打造出高轉換率的預約表單頁面『booking.html』，具備即時日期選擇與欄位驗證動畫。
+3. 後端 API 工程師（Backend Subagent）：以 Node.js 寫出接收預約資料的 API 處理模組『api/booking.js』，確保防止 SQL 注入與 XSS 攻擊。
+4. QA 測試審計員（QA Tester Subagent）：針對前後端資料契約，撰寫 5 組邊界情境自動化測試案例（例如重複預約、惡意腳本輸入、電話號碼格式錯誤），並確保全數綠燈通過。
+
+全部完成後，輸出完整的專案目錄與驗收總覽文件！</code></pre>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; color: #cbd5e1;">
+            🎁 <strong>最後產生的具體成果</strong>：
+            <ul style="padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+              <li><code>booking.html</code>：高轉換率、支援手機響應式的高質感預約前台。</li>
+              <li><code>api/booking.js</code>：具備防禦性程式碼與輸入驗證的後端 API。</li>
+              <li><code>tests/booking.test.js</code>：QA 特工自動執行並確保「5 passed, 0 failed」的綠燈測試報告。</li>
+              <li>前後端資料欄位完全依照 <code>schema.json</code> 規範，零格式衝突！</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 場景三 -->
+        <div class="step-box" style="margin-top: 1.75rem; border-color: rgba(232, 121, 249, 0.3);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #e879f9; margin: 0; font-size: 1.2rem;">🌍 場景三：【跨境電商出海】跨國品牌「多語系社群爆款與文化避雷軍團」</h3>
+            <span style="font-size: 0.78rem; background: rgba(232, 121, 249, 0.15); color: #e879f9; padding: 0.2rem 0.6rem; border-radius: 4px;">適用：品牌行銷 / 跨境電商</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>商業痛點</strong>：自家的「台灣精品高山冷泡茶禮盒」要賣到日本、美國與德國。如果只用 Google 翻譯，文字僵硬且充滿機翻感，甚至容易踩到當地文化禁忌（例如日本送禮對顏色緞帶有極端講究、德國人看重客觀有機檢驗而非感性修辭）。
+          </p>
+
+          <div class="code-block" style="margin: 1rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：出海行銷軍團</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>我們正在將『台灣高山精品冷泡茶禮盒』推向跨國市場。請啟動出海多國行銷軍團，兵分四路針對美、日、德三地展開深度在地化文案與合規企劃：
+
+1. 日本文化行銷特工（Japan Specialist）：以日本高標準禮品文化（お中元/お歳暮）、日式極致審美語氣撰寫 IG/X 宣傳文案，並嚴格檢查包裝色調與敬語用法，列出文化避雷清單。
+2. 北美社群爆款特工（US TikTok/IG Specialist）：以美國年輕族群重視的『無糖健康（Zero Sugar）、辦公室提神、永續環保包裝』為切角，產出高節奏、吸引點擊的短影音腳本與廣告文案。
+3. 德國品質與法規特工（Germany Specialist）：以德國人嚴謹理性的特點，著重產地履歷（Traceability）、無農藥殘留歐盟檢驗標準，撰寫正式的商品型錄介紹。
+4. 視覺化通訊總監（Art Director）：將三位特工的成果整合成一個多語系行銷戰情頁面『global-marketing.html』，讓我可以一鍵切換國家預覽各國社群卡片與視覺配色！</code></pre>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; color: #cbd5e1;">
+            🎁 <strong>最後產生的具體成果</strong>：
+            <ul style="padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+              <li><code>global-marketing.html</code>：內建美、日、德三國旗標籤切換按鈕的行銷戰情頁面。</li>
+              <li><strong>日本專頁</strong>：文字優雅富有禪意，特別標註「包裝避免純白緞帶，應採用金銀水引結繩以示吉慶」。</li>
+              <li><strong>美國專頁</strong>：節奏明快幽默（"Ditch your 3rd coffee! Meet crisp alpine cold brew"）。</li>
+              <li><strong>德國專頁</strong>：條列清晰的 SGS 檢驗條目與歐盟有機食品認證標示建議，直球對決理性質詢。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12-5 成果驗收與常見 Q&A -->
+      <section id="sec-12-5" class="content-section">
+        <h2>12-5 成果驗收與進階思考：常見疑惑 Q&A</h2>
+        <p>在開始調動多代理人之前，初學者常見以下問題：</p>
+
+        <div class="step-box">
+          <h4>❓ Q1：子代理（Subagents）在背後跑，會不會偷偷把我的 API 額度燒光？</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            <strong>答：完全不用擔心！</strong> AntiGravity 的子代理機制採用「嚴格任務邊界與自律結束條件」。每個子代理只有明確的一到兩項任務，完成產出後立即自動關閉並回報結論給主指揮官，絕不會像無頭蒼蠅一樣無窮迴圈耗費 Token。
+          </p>
+        </div>
+
+        <div class="step-box">
+          <h4>❓ Q2：如果其中一個子代理抓取失敗或網路卡住，整個任務會死當嗎？</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            <strong>答：不會！</strong> 這正是「非同步隔離」的最大優勢。主指揮官具備異常監控能力，當特工 A 遭遇阻礙時，指揮官會嘗試重試或直接依據特工 B、C 的已有數據先行彙編，並在總結報告中誠實標明備註，不會拖垮整體流程。
+          </p>
+        </div>
+
+        <div class="step-box">
+          <h4>❓ Q3：我可以為自己的業務自訂更多專業角色嗎？</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            <strong>答：當然可以！</strong> 只要在提示詞中明確寫出「角色職稱、關注領域、限制不要碰的範圍、以及期待交付的格式」，AntiGravity 就會自動為你量身塑造任何職位的虛擬專家。
+          </p>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top: 2rem;">
+          <span>🎖️</span>
+          <div>
+            <strong>恭喜掌握多代理人協同思維！</strong><br>
+            你已經跨越了 99% 的一般 AI 使用者，正式晉升為能夠指揮 AI 團隊的高階工程指揮官！在接下來的第 13 章中，我們將更進一步解鎖**「自我修復迴圈（Self-Healing Loop）」**——讓 AI 不僅能寫代碼，還能自己看終端機報錯、自己修 bug，全綠燈才向你交付！
+          </div>
+        </div>
+      </section>
+
+      <!-- 章節導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter11.html" class="btn-secondary">◀ 上一章：企業級 AI 知識庫 (RAG)</a>
+        <a href="../index.html#future-chapters" class="btn-primary">探索後續章節規劃 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

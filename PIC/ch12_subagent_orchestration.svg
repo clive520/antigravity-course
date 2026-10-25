@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="cmdGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="cardGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="cardGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="cardGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#701a75"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="outputGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="620" rx="16" fill="url(#bgGrad)" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title Badge and Header -->
+  <g transform="translate(50, 35)">
+    <rect width="170" height="28" rx="6" fill="#6366f1" fill-opacity="0.2" stroke="#818cf8" stroke-width="1"/>
+    <text x="85" y="18" font-family="'Inter', -apple-system, sans-serif" font-size="12" font-weight="700" fill="#a5b4fc" text-anchor="middle">CHAPTER 12 ARCHITECTURE</text>
+    <text x="0" y="60" font-family="'Inter', -apple-system, sans-serif" font-size="22" font-weight="800" fill="#f8fafc">AntiGravity 多代理人團隊作戰架構流水線</text>
+    <text x="0" y="82" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#94a3b8">總指揮官指派任務 ➔ 三大子特工獨立沙盒非同步並行 ➔ 主代理人匯流提煉 ➔ 交付市場戰情室</text>
+  </g>
+
+  <!-- Top Orchestrator Box -->
+  <g transform="translate(250, 135)" filter="url(#shadow)">
+    <rect width="500" height="68" rx="12" fill="#1e293b" stroke="url(#cmdGrad)" stroke-width="2"/>
+    <circle cx="35" cy="34" r="18" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="35" y="39" font-family="'Inter', sans-serif" font-size="16" text-anchor="middle" fill="#38bdf8">🎖️</text>
+    <text x=\"68\" y=\"28\" font-family=\"'Inter', sans-serif\" font-size=\"15\" font-weight=\"700\" fill=\"#f8fafc\">作戰總指揮（Orchestrator）</text>
+    <text x="68" y="50" font-family="'Inter', sans-serif" font-size="12" fill="#94a3b8">收到指令：拆解任務、同時啟動 3 位專業子代理人（Subagents）並行運作</text>
+  </g>
+
+  <!-- Connecting Lines from Orchestrator to Subagents -->
+  <path d="M 330 203 L 330 240 L 190 240 L 190 270" fill="none" stroke="#818cf8" stroke-width="2" stroke-dasharray="4 4"/>
+  <polygon points="190,274 186,266 194,266" fill="#818cf8"/>
+
+  <path d="M 500 203 L 500 270" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="4 4"/>
+  <polygon points="500,274 496,266 504,266" fill="#34d399"/>
+
+  <path d="M 670 203 L 670 240 L 810 240 L 810 270" fill="none" stroke="#e879f9" stroke-width="2" stroke-dasharray="4 4"/>
+  <polygon points="810,274 806,266 814,266" fill="#e879f9"/>
+
+  <!-- Parallel Badge -->
+  <g transform="translate(440, 230)">
+    <rect width="120" height="22" rx="11" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+    <text x="60" y="15" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#7dd3fc" text-anchor="middle">⚡ 3 路非同步並行</text>
+  </g>
+
+  <!-- Subagent 1: Competitor Spy -->
+  <g transform="translate(50, 275)" filter="url(#shadow)">
+    <rect width="280" height="165" rx="12" fill="url(#cardGrad1)" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="34" rx="8" fill="#4338ca" fill-opacity="0.4" stroke="#818cf8" stroke-width="1"/>
+    <text x="33" y="37" font-family="'Inter', sans-serif" font-size="18" text-anchor="middle">🕵️</text>
+    <text x="58" y="28" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#e0e7ff">特工 1：競品分析官</text>
+    <text x="58" y="44" font-family="'Inter', sans-serif" font-size="11" fill="#a5b4fc">獨立沙盒 · 專注規格與價格</text>
+    <line x1="16" y1="56" x2="264" y2="56" stroke="#312e81" stroke-width="1"/>
+    <text x="16" y="76" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 剖析 Sony, Apple, Bose 三大旗艦</text>
+    <text x="16" y="96" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 定位價格帶：NT$ 7,490 ~ 12,900</text>
+    <text x="16" y="116" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 抓出痛點：Sony 悶熱、Apple 封閉</text>
+    <rect x="16" y="132" width="248" height="20" rx="4" fill="#1e1b4b"/>
+    <text x="140" y="146" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#a5b4fc" text-anchor="middle">✔ 回報結構化競品指標</text>
+  </g>
+
+  <!-- Subagent 2: Audience Persona -->
+  <g transform="translate(360, 275)" filter="url(#shadow)">
+    <rect width="280" height="165" rx="12" fill="url(#cardGrad2)" stroke="#34d399" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="34" rx="8" fill="#065f46" fill-opacity="0.4" stroke="#34d399" stroke-width="1"/>
+    <text x="33" y="37" font-family="'Inter', sans-serif" font-size="18" text-anchor="middle">🎯</text>
+    <text x="58" y="28" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#d1fae5">特工 2：客群畫像分析師</text>
+    <text x="58" y="44" font-family="'Inter', sans-serif" font-size="11" fill="#6ee7b7">獨立沙盒 · 專注購買心理學</text>
+    <line x1="16" y1="56" x2="264" y2="56" stroke="#064e3b" stroke-width="1"/>
+    <text x="16" y="76" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 捷運通勤族：在乎無感動態降噪</text>
+    <text x="16" y="96" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 商務視訊族：最痛通話雜音與風切</text>
+    <text x="16" y="116" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 運動健身族：在意穩固防水與排汗</text>
+    <rect x="16" y="132" width="248" height="20" rx="4" fill="#022c22"/>
+    <text x="140" y="146" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#6ee7b7" text-anchor="middle">✔ 回報客群預算與觸發點</text>
+  </g>
+
+  <!-- Subagent 3: Trend Radar -->
+  <g transform="translate(670, 275)" filter="url(#shadow)">
+    <rect width="280" height="165" rx="12" fill="url(#cardGrad3)" stroke="#e879f9" stroke-width="1.5"/>
+    <rect x="16" y="14" width="34" height="34" rx="8" fill="#86198f" fill-opacity="0.4" stroke="#e879f9" stroke-width="1"/>
+    <text x="33" y="37" font-family="'Inter', sans-serif" font-size="18" text-anchor="middle">🌊</text>
+    <text x="58" y="28" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#fae8ff">特工 3：潮流趨勢雷達員</text>
+    <text x="58" y="44" font-family="'Inter', sans-serif" font-size="11" fill="#f0abfc">獨立沙盒 · 專注前瞻黑科技</text>
+    <line x1="16" y1="56" x2="264" y2="56" stroke="#701a75" stroke-width="1"/>
+    <text x="16" y="76" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• AI 骨傳導通話麥克風（ENC）普及</text>
+    <text x="16" y="96" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 空間音訊（頭部追蹤）成高階標配</text>
+    <text x="16" y="116" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 開放式氣傳導（OWS）異軍突起</text>
+    <rect x="16" y="132" width="248" height="20" rx="4" fill="#4a044e"/>
+    <text x="140" y="146" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#f0abfc" text-anchor="middle">✔ 回報 2026 技術溢價亮點</text>
+  </g>
+
+  <!-- Converging Lines to Synthesis and Final Deliverable -->
+  <path d="M 190 440 L 190 475 L 430 475 L 430 500" fill="none" stroke="#818cf8" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M 500 440 L 500 500" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M 810 440 L 810 475 L 570 475 L 570 500" fill="none" stroke="#e879f9" stroke-width="2" stroke-dasharray="4 4"/>
+
+  <polygon points="500,505 495,497 505,497" fill="#38bdf8"/>
+
+  <!-- Final Deliverable Card -->
+  <g transform="translate(150, 508)" filter="url(#shadow)">
+    <rect width="700" height="82" rx="14" fill="url(#outputGrad)" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="45" cy="41" r="22" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="45" y="47" font-family="'Inter', sans-serif" font-size="20" text-anchor="middle">🏆</text>
+    <text x="85" y="34" font-family="'Inter', sans-serif" font-size="15" font-weight="700" fill="#f8fafc">最終交付：耳機市場情報戰情室（earphone-warroom.html）</text>
+    <text x="85" y="56" font-family="'Inter', sans-serif" font-size="12" fill="#cbd5e1">🎯 核心破局點：定價 NT$ 3,880（避開萬元紅海），以「商務級 AI 通話降噪 + 42 小時超長續航」精準擊穿市場！</text>
+  </g>
+</svg>
