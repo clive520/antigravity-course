@@ -837,6 +837,7 @@ footer.site-footer {
   max-height: 78vh;
   width: auto;
   height: auto;
+  min-width: 280px;
   display: block;
   object-fit: contain;
   border-radius: 8px;

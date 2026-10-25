@@ -264,6 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
     lightboxStage.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const openLightbox = (src, alt) => {
+      lightboxImg.style.width = '';
+      lightboxImg.style.height = '';
       lightboxImg.src = src;
       lightboxImg.alt = alt || '';
       resetZoom(false);
@@ -273,6 +275,22 @@ document.addEventListener('DOMContentLoaded', () => {
         : '<span class="hint">（💡 按住滑鼠左鍵「框選」任一區域立即放大至全螢幕，按「還原全圖」復原）</span>';
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+
+      const ensureVisible = () => {
+        // 保底機制：若遇到無固有尺寸的向量圖導致寬高坍縮
+        if (lightboxImg.offsetWidth < 50 || lightboxImg.offsetHeight < 50) {
+          const stageRect = lightboxStage.getBoundingClientRect();
+          const targetW = Math.min(stageRect.width * 0.92, 1200);
+          lightboxImg.style.width = `${targetW}px`;
+          lightboxImg.style.height = 'auto';
+        }
+      };
+
+      if (lightboxImg.complete) {
+        ensureVisible();
+      } else {
+        lightboxImg.onload = ensureVisible;
+      }
     };
 
     const closeLightbox = () => {
