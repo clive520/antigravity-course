@@ -188,8 +188,8 @@
 
       <!-- 12-4 拓展實戰寶庫 -->
       <section id="sec-12-4" class="content-section">
-        <h2>12-4 拓展實戰寶庫：跨領域兩大黃金軍團（提示詞與成果解析）</h2>
-        <p>多代理人協同的威力絕不僅限於硬體耳機！以下提供業界最搶手的兩大跨領域真實場景，學員可依自己的工作或創業需求直接套用：</p>
+        <h2>12-4 拓展實戰寶庫：跨領域三大黃金軍團（含無人值守雙軌影音產製）</h2>
+        <p>多代理人協同的威力絕不僅限於硬體耳機！以下提供業界最搶手的三大跨領域真實場景，特別是融合 <strong>NotebookLM 雙產物提取與 CLI 全自動發布</strong> 的極限自媒體流水線，學員可依自己的業務直接套用：</p>
 
         <!-- 場景二 -->
         <div class="step-box" style="margin-top: 1.5rem; border-color: rgba(56, 189, 248, 0.3);">
@@ -257,6 +257,72 @@
               <li><strong>日本專頁</strong>：文字優雅富有禪意，特別標註「包裝避免純白緞帶，應採用金銀水引結繩以示吉慶」。</li>
               <li><strong>美國專頁</strong>：節奏明快幽默（"Ditch your 3rd coffee! Meet crisp alpine cold brew"）。</li>
               <li><strong>德國專頁</strong>：條列清晰的 SGS 檢驗條目與歐盟有機食品認證標示建議，直球對決理性質詢。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 場景四：壓軸王牌 -->
+        <div class="step-box" style="margin-top: 1.75rem; border-color: rgba(251, 191, 36, 0.4); background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(45, 30, 10, 0.3) 100%);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #fbbf24; margin: 0; font-size: 1.25rem;">🎥 場景四（壓軸王牌）：【自媒體與影音雙軌無人值守軍團】NotebookLM 雙產物提取 + CLI 後製 + YouTube 自動雙影片發布</h3>
+            <span style="font-size: 0.78rem; background: rgba(251, 191, 36, 0.15); color: #fbbf24; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 700;">終極全自動 · 零人工搬運</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>商業痛點與戰略思維</strong>：自媒體創作最大的痛點是「製作成本高、平台格式單一、人工手動剪輯與上傳耗時」。頂級 MCN 機構採用<strong>「一魚兩吃（One Topic, Dual Formats）」</strong>策略：同一個轟動新聞，同時產出「5 分鐘明快解說片（吃搜尋與推薦流量）」與「25 分鐘雙人深度 Podcast 漫談（吃超長觀看時長與粉絲黏著度）」。更關鍵的是——<strong>從 NotebookLM 生成、下載、FFmpeg 剪輯到 YouTube 上架，全程由本機 CLI 與自動化特工接管，拒絕人工搬運！</strong>
+          </p>
+
+          <!-- 雙軌流水線圖解卡片 -->
+          <div style="margin: 1rem 0; padding: 1.25rem; background: rgba(0, 0, 0, 0.3); border: 1px dashed rgba(251, 191, 36, 0.3); border-radius: 10px;">
+            <div style="font-weight: 700; color: #f8fafc; font-size: 0.95rem; margin-bottom: 0.5rem;">⚡ 雙軌影音全自動作戰管線（Dual-Track Pipeline）：</div>
+            <div style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.8;">
+              • <strong>情資大腦</strong>：爬取熱門新聞 ➔ 挖掘各方論點 ➔ 產出全景情資白皮書 <code>01_notebooklm_source.md</code>。<br>
+              • <strong>NotebookLM CLI 特工</strong>：以無頭瀏覽器自動上傳資料 ➔ 自動觸發並下載<strong>【簡報解說影片】</strong>與<strong>【雙人對談 Podcast 音訊】</strong>。<br>
+              • <strong>視覺與排版特工</strong>：呼叫繪圖 API 與本機 Python Pillow，自動壓上高對比立體標題，輸出 16:9 解說封面與 Podcast 封面。<br>
+              • <strong>FFmpeg 影音重整特工</strong>：解說影片壓製外掛字幕；Podcast 音訊結合動態波形圖與演播室背景，合成 1080p 影片。<br>
+              • <strong>YouTube CLI 發布特工</strong>：調用 YouTube Data API，自動上傳兩部影片，綁定對應縮圖、填入時間軸與 SEO 說明欄！
+            </div>
+          </div>
+
+          <div class="code-block" style="margin: 1rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：雙軌影音自媒體無人值守軍團</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>我們要啟動『雙軌影音自媒體無人值守生產軍團』。請由主指揮官調動特工團隊，全程透過本機 CLI 與自動化腳本協同交付：
+
+【第一階段：情資研調與全景白皮書】
+1. 情報與觀點特工：爬取當前討論度最轟動的新聞，進行正反深度剖析，整理成結構化文件『01_notebooklm_source.md』。
+
+【第二階段：NotebookLM CLI 雙產物提取】
+2. NotebookLM 自動化特工：
+   • 自動啟動瀏覽器腳本將『01_notebooklm_source.md』導入 NotebookLM。
+   • 自動觸發並下載【說明簡報影片】至『assets/raw_briefing.mp4』。
+   • 自動觸發並下載【雙人對談音訊】至『assets/raw_podcast.mp3』。
+
+【第三階段：雙風格縮圖 CLI 渲染】
+3. 視覺排版特工：
+   • 調用繪圖與排版腳本，自動產出解說片縮圖『assets/thumb_briefing.jpg』。
+   • 自動產出 Podcast 漫談片縮圖『assets/thumb_podcast.jpg』。
+
+【第四階段：FFmpeg 雙影片後製重整】
+4. 影音工程特工：
+   • 將說明影片壓製高畫質字幕與音量平衡，輸出『assets/final_briefing.mp4』。
+   • 將 Podcast 音訊結合動態波形圖與背景，合成 1080p 漫談影片『assets/final_podcast.mp4』。
+
+【第五階段：YouTube CLI 雙影片自動發布】
+5. 發行上傳特工：
+   • 透過 YouTube CLI 上傳『final_briefing.mp4』，掛載解說縮圖、標題與 SEO 標籤。
+   • 透過 YouTube CLI 上傳『final_podcast.mp4』，掛載 Podcast 縮圖、章節時間軸與收聽引導。
+   • 任務完成後，在終端機打印出兩部影片的 YouTube 公開觀看連結！</code></pre>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; color: #cbd5e1;">
+            🎁 <strong>最後產生的具體成果清單</strong>：
+            <ul style="padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+              <li><code>assets/final_briefing.mp4</code>：5~8 分鐘節奏明快的新聞事件全解析影片。</li>
+              <li><code>assets/final_podcast.mp4</code>：20~30 分鐘雙人觀點交鋒、帶有動態波形動畫的沉浸式 Podcast 影片。</li>
+              <li><code>assets/thumb_briefing.jpg</code> & <code>assets/thumb_podcast.jpg</code>：兩張風格截然不同、高點擊率的爆款縮圖。</li>
+              <li>🚀 <strong>終端機直接回傳兩組 YouTube 公開播放連結</strong>（一鍵點擊即可於全球觀看，零手動上傳介入！）。</li>
             </ul>
           </div>
         </div>
