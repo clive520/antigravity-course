@@ -804,9 +804,9 @@ footer.site-footer {
 
 .image-lightbox-stage {
   position: relative;
-  width: 95vw;
-  height: 82vh;
-  max-width: 1700px;
+  width: 96vw;
+  height: 84vh;
+  max-width: 1800px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -833,11 +833,10 @@ footer.site-footer {
 }
 
 .image-lightbox-img {
-  max-width: 90vw;
-  max-height: 78vh;
+  max-width: 95vw;
+  max-height: 84vh;
   width: auto;
   height: auto;
-  min-width: 280px;
   display: block;
   object-fit: contain;
   border-radius: 8px;

@@ -131,11 +131,67 @@ document.addEventListener('DOMContentLoaded', () => {
       applyTransform(animate);
     };
 
-    lightboxResetBtn.addEventListener('click', () => resetZoom(true));
+    const fitImageToStage = () => {
+      const stageRect = lightboxStage.getBoundingClientRect();
+      if (!stageRect.width || !stageRect.height) return;
+      // 依使用者期望：初始呈現佔版面 90%~94% 左右大畫面
+      const maxW = stageRect.width * 0.94;
+      const maxH = stageRect.height * 0.92;
 
-    lightboxZoomIn.addEventListener('click', () => {
-      scale = Math.min(scale * 1.35, 16);
-      applyTransform(true);
+      const nw = lightboxImg.naturalWidth || 1200;
+      const nh = lightboxImg.naturalHeight || 675;
+      const imgRatio = nw / nh;
+      const stageRatio = maxW / maxH;
+
+      let targetW, targetH;
+      if (imgRatio > stageRatio) {
+        targetW = maxW;
+        targetH = maxW / imgRatio;
+      } else {
+        targetH = maxH;
+        targetW = maxH * imgRatio;
+      }
+
+      lightboxImg.style.width = `${Math.round(targetW)}px`;
+      lightboxImg.style.height = `${Math.round(targetH)}px`;
+    };
+
+    lightboxResetBtn.addEventListener('click', () => {
+      resetZoom(true);
+      fitImageToStage();
+    });
+
+    const openLightbox = (src, alt) => {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      resetZoom(false);
+      setMode('box');
+      lightboxCaption.innerHTML = alt 
+        ? `${alt} <span class="hint">（💡 按住滑鼠左鍵「框選」任一區域立即放大至全螢幕，按「還原全圖」復原）</span>` 
+        : '<span class="hint">（💡 按住滑鼠左鍵「框選」任一區域立即放大至全螢幕，按「還原全圖」復原）</span>';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // 載入完成後立即自適應放大至 90% 舞台空間
+      if (lightboxImg.complete && lightboxImg.naturalWidth > 0) {
+        fitImageToStage();
+      } else {
+        lightboxImg.onload = fitImageToStage;
+      }
+    };
+
+    const closeLightbox = () => {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      lightboxImg.style.width = '';
+      lightboxImg.style.height = '';
+      resetZoom(false);
+    };
+
+    window.addEventListener('resize', () => {
+      if (overlay.classList.contains('active') && scale === 1) {
+        fitImageToStage();
+      }
     });
 
     lightboxZoomOut.addEventListener('click', () => {
@@ -262,42 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Context menu prevent so right click pan feels smooth
     lightboxStage.addEventListener('contextmenu', (e) => e.preventDefault());
-
-    const openLightbox = (src, alt) => {
-      lightboxImg.style.width = '';
-      lightboxImg.style.height = '';
-      lightboxImg.src = src;
-      lightboxImg.alt = alt || '';
-      resetZoom(false);
-      setMode('box');
-      lightboxCaption.innerHTML = alt 
-        ? `${alt} <span class="hint">（💡 按住滑鼠左鍵「框選」任一區域立即放大至全螢幕，按「還原全圖」復原）</span>` 
-        : '<span class="hint">（💡 按住滑鼠左鍵「框選」任一區域立即放大至全螢幕，按「還原全圖」復原）</span>';
-      overlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-
-      const ensureVisible = () => {
-        // 保底機制：若遇到無固有尺寸的向量圖導致寬高坍縮
-        if (lightboxImg.offsetWidth < 50 || lightboxImg.offsetHeight < 50) {
-          const stageRect = lightboxStage.getBoundingClientRect();
-          const targetW = Math.min(stageRect.width * 0.92, 1200);
-          lightboxImg.style.width = `${targetW}px`;
-          lightboxImg.style.height = 'auto';
-        }
-      };
-
-      if (lightboxImg.complete) {
-        ensureVisible();
-      } else {
-        lightboxImg.onload = ensureVisible;
-      }
-    };
-
-    const closeLightbox = () => {
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-      resetZoom(false);
-    };
 
     lightboxCloseBtn.addEventListener('click', closeLightbox);
 
