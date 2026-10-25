@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 10 章 上課簡報：Supabase 現代雲端資料庫與向量引擎全解 - Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(62, 207, 142, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-sb: #3ecf8e;
+      --accent-sb-light: #6ee7b7;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #10b981;
+      --accent-gold: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3ecf8e, #10b981, #38bdf8);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Floating Header Controls */
+    .slide-controls-top {
+      position: fixed;
+      top: 14px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(11, 17, 32, 0.85);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .timer-pill {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-sb);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Slide Deck Viewport */
+    .deck-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 35px 50px 65px;
+      position: relative;
+    }
+
+    /* Individual Slide */
+    .slide {
+      position: absolute;
+      width: calc(100% - 70px);
+      max-width: 1520px;
+      height: calc(100% - 95px);
+      max-height: 860px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      padding: 36px 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.97) translateY(12px);
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 16px;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(62, 207, 142, 0.15);
+      color: var(--accent-sb);
+      border: 1px solid rgba(62, 207, 142, 0.35);
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-sb-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Slide Body */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 14px;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      transition: all 0.25s;
+      position: relative;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .card-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .badge-pill {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .badge-green { background: rgba(62, 207, 142, 0.2); color: #3ecf8e; border: 1px solid rgba(62, 207, 142, 0.4); }
+    .badge-cyan { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+    .badge-gold { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-rose { background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.4); }
+
+    /* SVG Image Viewport */
+    .img-box {
+      width: 100%;
+      height: 100%;
+      max-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      padding: 12px;
+      cursor: zoom-in;
+    }
+
+    .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+
+    .img-box:hover img {
+      transform: scale(1.01);
+    }
+
+    /* Comparison Table */
+    .table-container {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+    }
+
+    .slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    .slide-table th {
+      background: rgba(62, 207, 142, 0.12);
+      color: #3ecf8e;
+      padding: 12px 16px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .slide-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .slide-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .slide-table strong {
+      color: var(--text-main);
+    }
+
+    /* Code Box */
+    .code-box {
+      background: #030712;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #3ecf8e;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    /* Bottom Navigation Bar */
+    .slide-nav-bottom {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(11, 17, 32, 0.85);
+      padding: 6px 18px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-sb);
+      color: #030712;
+      border-color: var(--accent-sb);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Modal for Image Zoom */
+    .zoom-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 18, 0.94);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .zoom-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .zoom-modal img {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .zoom-close {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .zoom-close:hover {
+      background: rgba(244, 63, 94, 0.8);
+    }
+
+    /* Modal for Slide Overview */
+    .overview-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 18, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 9998;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      overflow-y: auto;
+    }
+
+    .overview-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .overview-card {
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .overview-card:hover {
+      border-color: var(--accent-sb);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(62, 207, 142, 0.15);
+    }
+
+    .overview-card.current {
+      border-color: var(--accent-sb);
+      background: rgba(62, 207, 142, 0.1);
+    }
+
+    .overview-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-sb);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .overview-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Floating Controls -->
+  <div class="slide-controls-top">
+    <div class="timer-pill" id="timerBtn" title="點擊重設簡報計時器">
+      ⏱️ <span id="timerDisplay">00:00</span>
+    </div>
+    <button class="btn-icon" id="overviewBtn" title="開啟投影片大綱總覽 (按 O)">
+      📑 大綱
+    </button>
+    <button class="btn-icon" id="fullscreenBtn" title="全螢幕投影 (按 F)">
+      ⛶ 全螢幕
+    </button>
+    <a href="../chapters/chapter10.html" class="btn-icon" title="返回講義網頁" style="text-decoration: none;">
+      📖 回講義
+    </a>
+  </div>
+
+  <!-- Deck Viewport -->
+  <div class="deck-viewport">
+
+    <!-- Slide 1: 封面 -->
+    <div class="slide active" data-slide="1">
+      <div class="slide-header">
+        <div class="slide-tag">Chapter 10 · 雲端資料庫與向量核心</div>
+        <h1 class="slide-title" style="font-size: 2.7rem;">Supabase 現代雲端資料庫全解</h1>
+        <p class="slide-subtitle">開源 Firebase 替代品 · 真正的 PostgreSQL 核心 · pgvector 向量引擎與免費保活密技</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="margin-top: 10px;">
+          <div class="card" style="border-left: 4px solid var(--accent-sb);">
+            <div class="card-header">
+              <div class="card-icon">🐘</div>
+              <div class="card-title">純正 PostgreSQL</div>
+            </div>
+            <p class="card-desc">不是模仿品！每個專案都是一座獨立完整的企業級 PostgreSQL，支援標準 SQL、ACID 事務與龐大開源生態，拒絕廠商綁架。</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <div class="card-icon">🧠</div>
+              <div class="card-title">pgvector 向量引擎</div>
+            </div>
+            <p class="card-desc">AI 時代必備！支援 768 / 1536 維向量儲存，手冊內文與向量存於同一張表，一趟查詢直接回傳文章，支援混合檢索。</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-gold);">
+            <div class="card-header">
+              <div class="card-icon">💡</div>
+              <div class="card-title">永久保活防休眠</div>
+            </div>
+            <p class="card-desc">破解免費版 7 天無活動自動休眠限制！利用 Cloudflare Workers Cron 定時心跳 Ping，讓專案永久活躍、永不暫停。</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>按 <strong>→</strong> 或 <strong>空白鍵</strong> 翻下一頁 · 按 <strong>F</strong> 進入全螢幕</span>
+        <span class="slide-counter">01 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 2: Firebase 痛點 vs Supabase 哲學 -->
+    <div class="slide" data-slide="2">
+      <div class="slide-header">
+        <div class="slide-tag">10-1 核心哲學</div>
+        <h2 class="slide-title">為什麼要換掉 Firebase？Supabase 的三大設計哲學</h2>
+        <p class="slide-subtitle">從專有封閉走向開源標準，徹底擺脫雲端大廠供應商鎖定（Vendor Lock-in）</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #f43f5e;">🔒</div>
+              <div class="card-title" style="color: #f43f5e;">傳統 Google Firebase 的痛點</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 2; font-size: 0.95rem; color: var(--text-muted);">
+              <li><strong>專有 NoSQL 規格</strong>：查詢邏輯受限，想做複雜多表 JOIN 幾乎不可能。</li>
+              <li><strong>嚴重廠商鎖定</strong>：資料只能存在 Google 上，未來難以平滑遷移。</li>
+              <li><strong>擴展費用昂貴</strong>：依讀寫次數計費，一旦遇到大數據查詢，費用直線上升。</li>
+              <li><strong>缺乏原生 AI 向量支援</strong>：無法原生支援語意向量索引與相似度比對。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(62, 207, 142, 0.5); background: rgba(62, 207, 142, 0.05);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #3ecf8e;">🐘</div>
+              <div class="card-title" style="color: #3ecf8e;">Supabase 的三大破局哲學</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 2; font-size: 0.95rem; color: var(--text-muted);">
+              <li><strong>真正的 PostgreSQL</strong>：世界上最成熟強大的開源關聯資料庫，支援完整 SQL。</li>
+              <li><strong>100% 自由遷移</strong>：隨時使用 <code>pg_dump</code> 導出備份，隨意搬到 AWS、GCP 或本地。</li>
+              <li><strong>全端現代開箱即用</strong>：建好資料表自動產生 REST/GraphQL API，自帶 WebSocket 即時推播。</li>
+              <li><strong>AI 原生支援</strong>：內建 <code>pgvector</code> 擴充，天然就是最強大的企業知識庫後盾！</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>真正的開源標準帶來長遠的架構自由度</span>
+        <span class="slide-counter">02 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 3: 全景架構圖 -->
+    <div class="slide" data-slide="3">
+      <div class="slide-header">
+        <div class="slide-tag">10-1 架構視覺化</div>
+        <h2 class="slide-title">圖解：Supabase 現代雲端資料庫全景架構</h2>
+        <p class="slide-subtitle">點擊圖片可進入滿版放大檢視</p>
+      </div>
+      <div class="slide-body">
+        <div class="img-box" onclick="openZoomModal('../PIC/ch10_supabase_ecosystem_map.svg')">
+          <img src="../PIC/ch10_supabase_ecosystem_map.svg" alt="Supabase 現代雲端資料庫全景架構圖">
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PostgreSQL 核心 · 六大雲端支柱 · pgvector 向量引擎</span>
+        <span class="slide-counter">03 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 4: 六大支柱 (上) -->
+    <div class="slide" data-slide="4">
+      <div class="slide-header">
+        <div class="slide-tag">10-2 六大支柱 (1 ~ 3)</div>
+        <h2 class="slide-title">核心功能解析：Studio 視覺化後台、Auth 身分安全與 Storage</h2>
+        <p class="slide-subtitle">不再需要黑底終端機敲指令，現代全端開發享受如 Excel 般的直覺體驗</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card" style="border-top: 4px solid var(--accent-sb);">
+            <div class="card-header">
+              <div class="card-icon">🖥️</div>
+              <div class="card-title">1. Supabase Studio</div>
+            </div>
+            <p class="card-desc">
+              <strong>網頁視覺化管理後台</strong><br>
+              媲美 Airtable 與 Excel 的資料表編輯器（Table Editor），直接點選修改資料、設定外鍵關聯。內建 AI 輔助 SQL 編輯器，一鍵執行複雜腳本！
+            </p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <div class="card-icon">🔐</div>
+              <div class="card-title">2. Auth & RLS 列級安全</div>
+            </div>
+            <p class="card-desc">
+              <strong>開箱即用身分驗證</strong><br>
+              支援 Email、Magic Link 免密碼信件，以及 Google、GitHub 等 20+ 種 OAuth。搭配 <strong>Row-Level Security (RLS)</strong>，在資料庫底層直接防範越權存取！
+            </p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--accent-gold);">
+            <div class="card-header">
+              <div class="card-icon">📦</div>
+              <div class="card-title">3. Storage 物件檔案庫</div>
+            </div>
+            <p class="card-desc">
+              <strong>大容量檔案與圖片儲存</strong><br>
+              提供 Public（公開）與 Private（私有授權）儲存桶（Buckets），內建全球 CDN 快取分發，並支援在 URL 帶參數即時裁切壓縮圖片。
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>省去從零編寫使用者系統與檔案伺服器的繁瑣工序</span>
+        <span class="slide-counter">04 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 5: 六大支柱 (下) -->
+    <div class="slide" data-slide="5">
+      <div class="slide-header">
+        <div class="slide-tag">10-2 六大支柱 (4 ~ 6)</div>
+        <h2 class="slide-title">核心功能解析：Realtime 即時流、Edge Functions 與 pgvector</h2>
+        <p class="slide-subtitle">打造毫秒推播、邊緣中繼與 AI 知識庫的核心動力</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card" style="border-top: 4px solid #ec4899;">
+            <div class="card-header">
+              <div class="card-icon">⚡</div>
+              <div class="card-title">4. Realtime 即時資料流</div>
+            </div>
+            <p class="card-desc">
+              <strong>免重新整理 WebSocket 推播</strong><br>
+              即時監聽資料庫的 <code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code> 事件！前端網頁在幾毫秒內自動收到廣播，支援在線狀態（Presence）與多人即時聊天。
+            </p>
+          </div>
+          <div class="card" style="border-top: 4px solid #a855f7;">
+            <div class="card-header">
+              <div class="card-icon">🌍</div>
+              <div class="card-title">5. Edge Functions</div>
+            </div>
+            <p class="card-desc">
+              <strong>基於 Deno 的邊緣無伺服器計算</strong><br>
+              使用 TypeScript 原生編寫，運行在全球邊緣節點。近乎零冷啟動延遲，非常適合處理第三方金流 Webhook、寄信或中繼 AI API 呼叫。
+            </p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--accent-sb);">
+            <div class="card-header">
+              <div class="card-icon">🤖</div>
+              <div class="card-title">6. pgvector 向量引擎</div>
+            </div>
+            <p class="card-desc">
+              <strong>AI 時代核心武器</strong><br>
+              在同一個關聯資料庫中原生儲存與比對高維度語意向量，手冊原文、標籤與向量存於同張表，為第 11 章 RAG 實戰奠定基礎！
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>現代化後端基礎建設全部到位</span>
+        <span class="slide-counter">05 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 6: 什麼是 pgvector -->
+    <div class="slide" data-slide="6">
+      <div class="slide-header">
+        <div class="slide-tag">10-3 AI 向量引擎</div>
+        <h2 class="slide-title">AI 時代的必備技能：什麼是 pgvector 向量擴充？</h2>
+        <p class="slide-subtitle">如何讓傳統的關聯資料庫，擁有「理解語意相似度」的超能力？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🧩</div>
+              <div class="card-title">啟用與宣告向量欄位</div>
+            </div>
+            <p class="card-desc">
+              在 Supabase SQL 編輯器中只需一行指令即可開啟：<br>
+              <code>create extension if not exists vector;</code><br><br>
+              宣告 <code>vector(768)</code> 欄位，即可在每一筆手冊紀錄旁，存放 Google Gemini Embedding 產生的 768 維浮點數陣列。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🎯</div>
+              <div class="card-title">語意相似度檢索的本質</div>
+            </div>
+            <p class="card-desc">
+              當新人提問：<em>「確診可以請假幾天？」</em><br>
+              系統將問題轉成 768 維向量，資料庫透過幾何數學計算<strong>「兩個向量在高維空間中的距離」</strong>，即便文字沒有完全重疊，也能在毫秒內抓出「4.1 傷病假與快篩陽性通報」！
+            </p>
+          </div>
+        </div>
+        <div class="code-box" style="margin-top: 14px;">
+          <span style="color: #64748b;">-- 建立包含 768 維向量欄位的手冊資料表</span><br>
+          <span style="color: #fb923c;">create table</span> handbook_documents (<br>
+          &nbsp;&nbsp;id <span style="color: #38bdf8;">bigserial primary key</span>,<br>
+          &nbsp;&nbsp;content <span style="color: #38bdf8;">text not null</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #64748b;">-- 手冊原始切塊文字</span><br>
+          &nbsp;&nbsp;metadata <span style="color: #38bdf8;">jsonb not null</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #64748b;">-- 出處標籤（手冊名、章節標題）</span><br>
+          &nbsp;&nbsp;embedding <span style="color: #10b981; font-weight: 700;">vector(768) not null</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #64748b;">-- 768 維語意特徵向量</span><br>
+          );
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>文字與向量並存於同一資料表中</span>
+        <span class="slide-counter">06 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 7: 3 大運算符號與 HNSW 索引 -->
+    <div class="slide" data-slide="7">
+      <div class="slide-header">
+        <div class="slide-tag">10-3 向量運算原理</div>
+        <h2 class="slide-title">pgvector 3 大距離運算符號與 HNSW 索引加速</h2>
+        <p class="slide-subtitle">數學幾何距離決定最相似段落，多層圖狀索引實現毫秒級海量檢索</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card" style="border-left: 4px solid var(--accent-sb);">
+            <div class="card-header">
+              <span class="badge-pill badge-green">最常用 ⭐</span>
+              <div class="card-title" style="font-size: 1.05rem;">餘弦距離 <code>&lt;=&gt;</code></div>
+            </div>
+            <p class="card-desc">
+              <strong>Cosine Distance</strong><br>
+              衡量兩向量的方向夾角。值介於 0 到 2 之間，<strong>值越小代表語意越相近</strong>！<br><br>
+              相似度轉換公式：<br>
+              <code style="color: #3ecf8e;">相似度 = 1 - (A &lt;=&gt; B)</code>
+            </p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <span class="badge-pill badge-cyan">空間幾何</span>
+              <div class="card-title" style="font-size: 1.05rem;">歐式距離 <code>&lt;-&gt;</code></div>
+            </div>
+            <p class="card-desc">
+              <strong>L2 / Euclidean Distance</strong><br>
+              計算空間兩點之間的直線幾何距離。適合在點座標空間中衡量物理長度差異。
+            </p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-indigo);">
+            <div class="card-header">
+              <span class="badge-pill badge-indigo">極速運算</span>
+              <div class="card-title" style="font-size: 1.05rem;">負內積 <code>&lt;#&gt;</code></div>
+            </div>
+            <p class="card-desc">
+              <strong>Negative Inner Product</strong><br>
+              若輸入的向量已經過正規化（長度為 1），內積計算速度最快，常在超高效能場景使用。
+            </p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 14px; background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3);">
+          <strong style="color: #38bdf8;">⚡ 向量索引加速：為什麼官方首推 HNSW 索引？</strong>
+          <p style="margin-top: 4px; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+            當手冊段落達數萬筆時，逐一比對會變慢。<strong>HNSW（分層可導航小世界）</strong>建立多層高維導航圖，查詢速度極快且召回率（Recall）極高，一建好後即可動態寫入新資料：<br>
+            <code style="color: #10b981;">create index on handbook_documents using hnsw (embedding vector_cosine_ops);</code>
+          </p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>餘弦距離是文字語意比對的黃金標準</span>
+        <span class="slide-counter">07 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 8: 為什麼選 Supabase 而非純向量資料庫 -->
+    <div class="slide" data-slide="8">
+      <div class="slide-header">
+        <div class="slide-tag">技術選型深入對決</div>
+        <h2 class="slide-title">為什麼選 Supabase 而非 Cloudflare Vectorize 或 Pinecone？</h2>
+        <p class="slide-subtitle">在全端企業知識庫中，純向量庫與全功能關聯資料庫有著本質差異！</p>
+      </div>
+      <div class="slide-body">
+        <div class="table-container">
+          <table class="slide-table">
+            <thead>
+              <tr>
+                <th>評比項目</th>
+                <th>Supabase (PostgreSQL + pgvector)</th>
+                <th>Cloudflare Vectorize / Pinecone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>資料庫本質</strong></td>
+                <td><strong style="color: #3ecf8e;">全功能關聯式資料庫</strong>（PostgreSQL）</td>
+                <td><strong>純向量索引引擎</strong>（Vector Index）</td>
+              </tr>
+              <tr>
+                <td><strong>原始長文字儲存</strong></td>
+                <td><strong style="color: #3ecf8e;">完美支援</strong>！Markdown 完整手冊與向量存同表</td>
+                <td><strong style="color: #f43f5e;">不支援存長文</strong>！只存 ID 與簡短 metadata</td>
+              </tr>
+              <tr>
+                <td><strong>查詢步驟 (Roundtrips)</strong></td>
+                <td><strong>1 趟搞定</strong>（查相似度時直接回傳手冊文字）</td>
+                <td><strong>2 階段查詢</strong>（先查出 ID ➔ 再到 D1/KV 撈文章）</td>
+              </tr>
+              <tr>
+                <td><strong>混合搜尋 (Hybrid)</strong></td>
+                <td><strong style="color: #3ecf8e;">原生支援</strong>！全文關鍵字檢索 + 向量雙軌融合</td>
+                <td>僅支援純向量相似度與簡易標籤過濾</td>
+              </tr>
+              <tr>
+                <td><strong>可視化除錯後台</strong></td>
+                <td>內建如 Excel 般的直觀網頁編輯器</td>
+                <td>主要依賴指令列（CLI）或簡易儀表板</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>手冊內文與向量一體化存儲，是企業知識庫最穩健架構</span>
+        <span class="slide-counter">08 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 9: 免費方案額度總表 -->
+    <div class="slide" data-slide="9">
+      <div class="slide-header">
+        <div class="slide-tag">10-4 成本規劃</div>
+        <h2 class="slide-title">Supabase 免費版配額總表 (Free Tier)</h2>
+        <p class="slide-subtitle">足夠支撐中小型專案、企業內部 POC 試行與個人作品集</p>
+      </div>
+      <div class="slide-body">
+        <div class="table-container">
+          <table class="slide-table">
+            <thead>
+              <tr>
+                <th>服務功能項目</th>
+                <th>免費方案配額 (Free Tier)</th>
+                <th>實務估算與說明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>活躍專案數量</strong></td>
+                <td><strong style="color: #3ecf8e;">最多 2 個專案</strong></td>
+                <td>每個帳號同時最多維護 2 個活躍專案。</td>
+              </tr>
+              <tr>
+                <td><strong>資料庫儲存容量 (Database)</strong></td>
+                <td><strong style="color: #38bdf8;">500 MB</strong></td>
+                <td>純文字與 768 維向量可存數萬筆手冊段落。</td>
+              </tr>
+              <tr>
+                <td><strong>Auth 活躍使用者 (MAU)</strong></td>
+                <td><strong style="color: #38bdf8;">50,000 MAU / 月</strong></td>
+                <td>每月 5 萬名獨立登入同仁，中小企業完全不用擔心超標。</td>
+              </tr>
+              <tr>
+                <td><strong>Storage 檔案庫空間</strong></td>
+                <td><strong>1 GB</strong>（單檔上限 50 MB）</td>
+                <td>大容量檔案（如大圖、影片）建議搭配 Cloudflare R2。</td>
+              </tr>
+              <tr>
+                <td><strong>出站網路流量 (Egress)</strong></td>
+                <td><strong>2 GB / 月</strong></td>
+                <td>純文字與 JSON 回傳綽綽有餘。</td>
+              </tr>
+              <tr>
+                <td><strong>Edge Functions 調用</strong></td>
+                <td><strong>500,000 次 / 月</strong></td>
+                <td>每月 50 萬次邊緣無伺服器計算執行額度。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>免費方案非常慷慨，但需留意後續三大限制！</span>
+        <span class="slide-counter">09 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 10: 致命陷阱 1 — 7 天無活動休眠 -->
+    <div class="slide" data-slide="10">
+      <div class="slide-header">
+        <div class="slide-tag">10-4 避坑重點 · 致命陷阱 1</div>
+        <h2 class="slide-title">⚠️ 致命陷阱 1：連續 7 天無活動自動休眠 (Project Pausing)</h2>
+        <p class="slide-subtitle">專案突然連不上、API 報錯？原來是觸發了官方的伺服器節能休眠機制！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-rose);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #f43f5e;">🚨</div>
+              <div class="card-title" style="color: #f43f5e;">休眠觸發機制與症狀</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 1.9; font-size: 0.92rem; color: var(--text-muted);">
+              <li><strong>規則</strong>：免費專案若<strong>「連續 7 天完全沒有任何 API 請求或資料庫連線」</strong>。</li>
+              <li><strong>後果</strong>：專案狀態自動變更為 <code>Paused</code> 暫停狀態。</li>
+              <li><strong>症狀</strong>：新人打開手冊系統，所有查詢皆回報 <code>Database connection error</code>。</li>
+              <li><strong>資料安全</strong>：放心，資料表與手冊向量<strong>完全不會遺失</strong>！</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-gold);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #f59e0b;">⏳</div>
+              <div class="card-title" style="color: #f59e0b;">手動恢復有多麻煩？</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 1.9; font-size: 0.92rem; color: var(--text-muted);">
+              <li>你必須手動登入 Supabase 網頁後台。</li>
+              <li>點擊專案旁的 <strong>「Restore project」</strong> 按鈕。</li>
+              <li>後端需要 <strong>1 ~ 3 分鐘</strong> 重新初始化容器與啟動資料庫服務。</li>
+              <li>如果是主管或客戶臨時上線測試遇到休眠，使用者體驗極差！</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>下一頁立即揭曉：如何一行代碼自動破解休眠！</span>
+        <span class="slide-counter">10 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 11: 永久保活破解密技 -->
+    <div class="slide" data-slide="11">
+      <div class="slide-header">
+        <div class="slide-tag">10-4 實戰密技</div>
+        <h2 class="slide-title">💡 永久保活密技：Cloudflare Workers 定時心跳 Ping (Heartbeat)</h2>
+        <p class="slide-subtitle">既然 7 天無活動會休眠，我們就讓邊緣機器人每天定時幫它「把脈」一次！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-sb);">
+            <div class="card-header">
+              <div class="card-icon">💓</div>
+              <div class="card-title">運作原理（四兩撥千斤）</div>
+            </div>
+            <p class="card-desc">
+              利用 <strong>Cloudflare Workers 免費的 Cron Trigger（排程觸發器）</strong>，或 Google Apps Script：<br><br>
+              設定<strong>每天清晨 4:00</strong> 自動向 Supabase 執行一次極輕量的查詢（如 <code>SELECT 1;</code> 或檢查手冊筆數）。<br><br>
+              系統判定「始終有活動」，專案即可<strong>永久保持活躍、永不休眠！</strong>
+            </p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <div class="card-icon">🤖</div>
+              <div class="card-title">對 AntiGravity 說的提示詞</div>
+            </div>
+            <p class="card-desc" style="font-size: 0.88rem; line-height: 1.7;">
+              <em>「AntiGravity，請幫我寫一個輕量級的 Cloudflare Workers 心跳腳本，設定 Cron Trigger 每天清晨向 Supabase 執行一次輕量 SELECT 查詢，並提供 wrangler.toml 設定與 index.js 完整代碼！」</em>
+            </p>
+          </div>
+        </div>
+        <div class="code-box" style="margin-top: 14px;">
+          <span style="color: #64748b;">// wrangler.toml 配置排程（每天清晨 4:00 觸發心跳）</span><br>
+          [triggers]<br>
+          crons = [<span style="color: #10b981;">"0 4 * * *"</span>]
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>善用雲端邊緣排程，零成本實現企業級高可用性</span>
+        <span class="slide-counter">11 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 12: 陷阱 2 & 3 -->
+    <div class="slide" data-slide="12">
+      <div class="slide-header">
+        <div class="slide-tag">10-4 避坑重點 · 陷阱 2 & 3</div>
+        <h2 class="slide-title">⚠️ 另外兩大限制：無自動備份下載 & 500 MB 容量管理</h2>
+        <p class="slide-subtitle">防患於未然！學會純正 PostgreSQL 的備份外掛與檔案分流策略</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-gold);">
+            <div class="card-header">
+              <div class="card-icon">💾</div>
+              <div class="card-title">陷阱 2：免費版沒有「可下載的每日自動備份」</div>
+            </div>
+            <p class="card-desc">
+              <strong>【官方機制】</strong>：付費方案享有每日常規自動備份下載與 PITR（時間點還原）；免費方案雖然資料完整，但<strong>後台不提供下載 <code>.dump</code> 備份檔的按鈕</strong>！<br><br>
+              <strong>💡 破解秘技</strong>：因為它是標準 PostgreSQL，請 AntiGravity 寫一個排程腳本使用 <code>pg_dump</code>，每週自動把手冊內文與資料表結構匯出成 <code>backup.sql</code> 存到本地硬碟或 GitHub 私有庫。
+            </p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-rose);">
+            <div class="card-header">
+              <div class="card-icon">🛑</div>
+              <div class="card-title">陷阱 3：500 MB 容量避免被大檔案塞爆</div>
+            </div>
+            <p class="card-desc">
+              <strong>【官方機制】</strong>：免費資料庫磁碟上限為 500 MB。<br><br>
+              <strong>💡 破解秘技</strong>：對於 PDF 掃描檔、大圖或影片，<strong>絕對不要轉成 Base64 字串直接塞進資料庫欄位</strong>！<br>
+              正確做法是將大檔案上傳到 <strong>Cloudflare R2（免流量費）</strong> 或 Supabase Storage，資料表內只存放網址 URL，500 MB 足夠存入數百萬字的文章與向量！
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>資料庫只存文字與向量，大檔案分流至 R2</span>
+        <span class="slide-counter">12 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 13: 授權 AntiGravity 操作 Supabase -->
+    <div class="slide" data-slide="13">
+      <div class="slide-header">
+        <div class="slide-tag">10-5 CLI 授權實戰</div>
+        <h2 class="slide-title">如何授權 AntiGravity 以 CLI 或腳本操作 Supabase？</h2>
+        <p class="slide-subtitle">自動建表、執行 Migration 遷移、產生 TypeScript 型別與手冊入庫</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-sb);">
+            <div class="card-header">
+              <div class="card-icon">🔑</div>
+              <div class="card-title">途徑一：Supabase CLI (專案管理首選)</div>
+            </div>
+            <ol style="padding-left: 1.25rem; line-height: 1.8; font-size: 0.88rem; color: var(--text-muted);">
+              <li>在後台 Account Settings 產生 <strong>Access Token (<code>sbp_...</code>)</strong>。</li>
+              <li>執行 <code>npx supabase login --token 你的Token</code>。</li>
+              <li>執行 <code>npx supabase link --project-ref 專案ID</code> 綁定專案。</li>
+              <li><strong>超強功能</strong>：<code>npx supabase gen types typescript</code> 自動產生全端 100% 精確的 TypeScript 資料表型別！</li>
+            </ol>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <div class="card-icon">⚡</div>
+              <div class="card-title">途徑二：Service Role Key (手冊入庫最快)</div>
+            </div>
+            <ol style="padding-left: 1.25rem; line-height: 1.8; font-size: 0.88rem; color: var(--text-muted);">
+              <li>進入專案「Project Settings」➔「API」。</li>
+              <li>複製 <strong>Project URL</strong> 與 <strong>service_role secret</strong>。</li>
+              <li>寫入專案根目錄 <code>.env</code>：<br>
+                <code>SUPABASE_URL=https://xyz.supabase.co</code><br>
+                <code>SUPABASE_SERVICE_ROLE_KEY=eyJh...</code>
+              </li>
+              <li>AntiGravity 寫入庫腳本 <code>scripts/ingest.js</code>，以最高權限批次將手冊切塊向量寫入資料表！</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>專案管理用 CLI · 手冊切塊入庫用 Service Role Key</span>
+        <span class="slide-counter">13 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 14: 總結與通往第 11 章 -->
+    <div class="slide" data-slide="14">
+      <div class="slide-header">
+        <div class="slide-tag">課程總結 · 實戰開工</div>
+        <h2 class="slide-title">第十章結業：雲端運算與資料庫雙翼齊飛！</h2>
+        <p class="slide-subtitle">第 9 章邊緣平台 + 第 10 章向量資料庫已就緒，下一章迎戰私有 NotebookLM！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-sb);">
+            <div class="card-header">
+              <div class="card-icon">🎓</div>
+              <div class="card-title">本章核心掌握清單</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 1.9; font-size: 0.92rem; color: var(--text-muted);">
+              <li>理解 Supabase 的 PostgreSQL 核心與六大雲端支柱。</li>
+              <li>掌握 pgvector 向量欄位、餘弦距離 <code>&lt;=&gt;</code> 與 HNSW 索引。</li>
+              <li>徹底弄懂「內文與向量一體化」勝過純向量庫的優勢。</li>
+              <li>學會使用 Workers Cron 定時心跳 Ping 破解 7 天休眠。</li>
+              <li>掌握 Service Role Key 與 Supabase CLI 自動化授權。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan); background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(56, 189, 248, 0.1));">
+            <div class="card-header">
+              <div class="card-icon">🏆</div>
+              <div class="card-title" style="color: #38bdf8;">第 11 章巔峰實戰即將展開！</div>
+            </div>
+            <p class="card-desc" style="line-height: 1.8;">
+              <strong>企業內部智慧新人導航庫（私有化 NotebookLM）</strong><br>
+              四核聯動重磅登場：<br>
+              🌐 <strong>Cloudflare Pages</strong> 雙欄現代前端門面<br>
+              ⚡ <strong>Cloudflare Workers</strong> 邊緣大腦與金鑰保險庫<br>
+              🐘 <strong>Supabase (pgvector)</strong> 4 本員工守則向量庫<br>
+              🤖 <strong>Google Gemini API</strong> 嚴格接地、附帶章節出處、絕不幻覺！
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>恭喜完成第十章簡報！可按 Home 鍵回首頁或返回講義</span>
+        <span class="slide-counter">14 / 14</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="slide-nav-bottom">
+    <button class="nav-btn" id="prevBtn" title="上一頁 (← / PageUp)">◀ 上一頁</button>
+    <button class="nav-btn" id="nextBtn" title="下一頁 (→ / 空白鍵)">下一頁 ▶</button>
+  </div>
+
+  <!-- Image Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <button class="zoom-close" title="關閉放大圖 (ESC)">✕</button>
+    <img id="zoomImg" src="" alt="放大檢視圖" onclick="event.stopPropagation()">
+  </div>
+
+  <!-- Slide Overview Modal -->
+  <div class="overview-modal" id="overviewModal">
+    <div class="overview-header">
+      <h2 style="font-size: 1.5rem; color: #fff;">📑 投影片大綱總覽 (Chapter 10)</h2>
+      <button class="zoom-close" id="closeOverviewBtn" style="position: static;">✕</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerBtn = document.getElementById('timerBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const overviewBtn = document.getElementById('overviewBtn');
+    const closeOverviewBtn = document.getElementById('closeOverviewBtn');
+    const overviewModal = document.getElementById('overviewModal');
+    const overviewGrid = document.getElementById('overviewGrid');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    // Build overview cards dynamically
+    slides.forEach((slide, idx) => {
+      const num = idx + 1;
+      const titleElem = slide.querySelector('.slide-title');
+      const title = titleElem ? titleElem.textContent : `Slide ${num}`;
+
+      const card = document.createElement('div');
+      card.className = `overview-card ${num === currentSlide ? 'current' : ''}`;
+      card.innerHTML = `
+        <div class="overview-num">SLIDE ${String(num).padStart(2, '0')}</div>
+        <div class="overview-title">${title}</div>
+      `;
+      card.addEventListener('click', () => {
+        goToSlide(num);
+        closeOverview();
+      });
+      overviewGrid.appendChild(card);
+    });
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', (idx + 1) === currentSlide);
+      });
+
+      // Update Progress Bar
+      const progress = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      // Update Nav Buttons
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+
+      // Update overview active card
+      document.querySelectorAll('.overview-card').forEach((card, idx) => {
+        card.classList.toggle('current', (idx + 1) === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    // Button event listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (overviewModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeOverview();
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case 'PageDown':
+        case ' ': // Space
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'o':
+        case 'O':
+          toggleOverview();
+          break;
+        case 'Escape':
+          closeOverview();
+          closeZoomModal();
+          break;
+      }
+    });
+
+    // Overview modal controls
+    function toggleOverview() {
+      overviewModal.classList.toggle('active');
+    }
+    function closeOverview() {
+      overviewModal.classList.remove('active');
+    }
+    overviewBtn.addEventListener('click', toggleOverview);
+    closeOverviewBtn.addEventListener('click', closeOverview);
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>
