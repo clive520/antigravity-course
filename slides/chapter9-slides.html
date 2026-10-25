@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 9 章 上課簡報：Cloudflare Pages 邊緣部署與全家桶生態 - Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(246, 130, 31, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cf: #f6821f;
+      --accent-cf-light: #fb923c;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #10b981;
+      --accent-gold: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f6821f, #fb923c, #38bdf8);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Floating Header Controls */
+    .slide-controls-top {
+      position: fixed;
+      top: 14px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(11, 17, 32, 0.85);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .timer-pill {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-cf-light);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Slide Deck Viewport */
+    .deck-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 35px 50px 65px;
+      position: relative;
+    }
+
+    /* Individual Slide */
+    .slide {
+      position: absolute;
+      width: calc(100% - 70px);
+      max-width: 1520px;
+      height: calc(100% - 95px);
+      max-height: 860px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      padding: 36px 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.97) translateY(12px);
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 16px;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(246, 130, 31, 0.15);
+      color: var(--accent-cf-light);
+      border: 1px solid rgba(246, 130, 31, 0.35);
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-cf-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Slide Body */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 14px;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Interactive Cards Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      transition: all 0.25s;
+      position: relative;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .card-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .badge-pill {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .badge-orange { background: rgba(246, 130, 31, 0.2); color: #fb923c; border: 1px solid rgba(246, 130, 31, 0.4); }
+    .badge-cyan { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-indigo { background: rgba(129, 140, 248, 0.2); color: #818cf8; border: 1px solid rgba(129, 140, 248, 0.4); }
+
+    /* SVG Image Viewport */
+    .img-box {
+      width: 100%;
+      height: 100%;
+      max-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      padding: 12px;
+      cursor: zoom-in;
+    }
+
+    .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+
+    .img-box:hover img {
+      transform: scale(1.01);
+    }
+
+    /* Comparison Table */
+    .table-container {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+    }
+
+    .slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    .slide-table th {
+      background: rgba(246, 130, 31, 0.12);
+      color: #fb923c;
+      padding: 12px 16px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .slide-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .slide-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .slide-table strong {
+      color: var(--text-main);
+    }
+
+    /* Code Box */
+    .code-box {
+      background: #030712;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #38bdf8;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    /* Bottom Navigation Bar */
+    .slide-nav-bottom {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(11, 17, 32, 0.85);
+      padding: 6px 18px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-cf);
+      color: #fff;
+      border-color: var(--accent-cf);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Modal for Image Zoom */
+    .zoom-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 18, 0.94);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .zoom-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .zoom-modal img {
+      max-width: 95vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .zoom-close {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .zoom-close:hover {
+      background: rgba(244, 63, 94, 0.8);
+    }
+
+    /* Modal for Slide Overview */
+    .overview-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 18, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 9998;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      overflow-y: auto;
+    }
+
+    .overview-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .overview-card {
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .overview-card:hover {
+      border-color: var(--accent-cf);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(246, 130, 31, 0.15);
+    }
+
+    .overview-card.current {
+      border-color: var(--accent-cf);
+      background: rgba(246, 130, 31, 0.1);
+    }
+
+    .overview-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cf-light);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .overview-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Floating Controls -->
+  <div class="slide-controls-top">
+    <div class="timer-pill" id="timerBtn" title="點擊重設簡報計時器">
+      ⏱️ <span id="timerDisplay">00:00</span>
+    </div>
+    <button class="btn-icon" id="overviewBtn" title="開啟投影片大綱總覽 (按 O)">
+      📑 大綱
+    </button>
+    <button class="btn-icon" id="fullscreenBtn" title="全螢幕投影 (按 F)">
+      ⛶ 全螢幕
+    </button>
+    <a href="../chapters/chapter9.html" class="btn-icon" title="返回講義網頁" style="text-decoration: none;">
+      📖 回講義
+    </a>
+  </div>
+
+  <!-- Deck Viewport -->
+  <div class="deck-viewport">
+
+    <!-- Slide 1: 封面 -->
+    <div class="slide active" data-slide="1">
+      <div class="slide-header">
+        <div class="slide-tag">Chapter 09 · 邊緣運算與雲端生態</div>
+        <h1 class="slide-title" style="font-size: 2.7rem;">Cloudflare Pages 邊緣部署與全家桶生態系</h1>
+        <p class="slide-subtitle">告別單點主機！跨入全球 330+ 節點 Anycast CDN、無限制頻寬與現代全端邊緣架構</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="margin-top: 10px;">
+          <div class="card" style="border-left: 4px solid var(--accent-cf);">
+            <div class="card-header">
+              <div class="card-icon">⚡</div>
+              <div class="card-title">秒級極速 CDN</div>
+            </div>
+            <p class="card-desc">部署在全球 330+ 城市（含台北、高雄節點），訪客 5ms 瞬間載入，免設定自帶全球頂級 DDoS 防禦與免費萬用 SSL。</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <div class="card-icon">🎁</div>
+              <div class="card-title">極致大方免費額度</div>
+            </div>
+            <p class="card-desc">Pages 享有<strong>永遠無上限的出站頻寬（Unlimited Bandwidth）</strong>！Workers 每天提供 10 萬次免費請求，完全零成本起步。</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-emerald);">
+            <div class="card-header">
+              <div class="card-icon">🤠</div>
+              <div class="card-title">Wrangler CLI 自動化</div>
+            </div>
+            <p class="card-desc">掌握官方馴馬師工具，授權 AntiGravity 一句話替你在命令列發布網站、建立 D1 資料庫、配置加密密鑰，動口不動手！</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>按 <strong>→</strong> 或 <strong>空白鍵</strong> 翻下一頁 · 按 <strong>F</strong> 進入全螢幕</span>
+        <span class="slide-counter">01 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 2: 傳統主機 vs Anycast 邊緣 -->
+    <div class="slide" data-slide="2">
+      <div class="slide-header">
+        <div class="slide-tag">9-1 邊緣加速原理</div>
+        <h2 class="slide-title">傳統單點主機 vs. Anycast 全球邊緣就近路由</h2>
+        <p class="slide-subtitle">為什麼把網站從 GitHub Pages 升級到 Cloudflare Pages 會快上好幾倍？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div class="card-header">
+              <div class="card-icon" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e;">🐌</div>
+              <div class="card-title" style="color: #f43f5e;">傳統單點主機（含一般 GitHub Pages）</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 2; font-size: 0.95rem; color: var(--text-muted);">
+              <li><strong>地理距離限制</strong>：主機通常架設在美國西岸（如奧勒岡）或東京。</li>
+              <li><strong>高跨海延遲</strong>：台灣使用者請求必須跨太平洋光纖，單程延遲 150ms ~ 250ms。</li>
+              <li><strong>單點故障風險</strong>：如果該機房進行維護或線路被挖斷，全球網站同時癱瘓。</li>
+              <li><strong>流量計費昂貴</strong>：傳統雲端大廠（如 AWS、GCP）依出站 GB 計費，爆流量就是爆帳單。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(246, 130, 31, 0.5); background: rgba(246, 130, 31, 0.05);">
+            <div class="card-header">
+              <div class="card-icon" style="background: rgba(246, 130, 31, 0.2); color: #fb923c;">🚀</div>
+              <div class="card-title" style="color: #fb923c;">Cloudflare 全球 Anycast 邊緣網路</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 2; font-size: 0.95rem; color: var(--text-muted);">
+              <li><strong>同一個 IP，全球 330+ 城市同時接聽</strong>：所有機房共用同一個 IP 位址。</li>
+              <li><strong>毫秒就近抵達</strong>：台灣訪客由台北或高雄內湖機房直接回應，延遲僅 <strong>5ms ~ 10ms</strong>！</li>
+              <li><strong>強大容錯與自動轉向</strong>：任一機房異常，流量於 1 秒內自動繞道至最近節點。</li>
+              <li><strong>無限頻寬免費保障</strong>：完全免收靜態檔案的出站下載流量費，安心上線。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>理解 CDN 邊緣快取原理</span>
+        <span class="slide-counter">02 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 3: 圖解架構對照圖 -->
+    <div class="slide" data-slide="3">
+      <div class="slide-header">
+        <div class="slide-tag">9-1 架構視覺化</div>
+        <h2 class="slide-title">圖解：全球 Anycast 智慧就近路由 CDN 機制</h2>
+        <p class="slide-subtitle">點擊圖片可進入滿版放大檢視</p>
+      </div>
+      <div class="slide-body">
+        <div class="img-box" onclick="openZoomModal('../PIC/ch9_cloudflare_pages_cdn.svg')">
+          <img src="../PIC/ch9_cloudflare_pages_cdn.svg" alt="GitHub Pages vs Cloudflare Pages Anycast CDN 對照圖">
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>💡 跨海傳輸 vs. 邊緣節點本地就近命中</span>
+        <span class="slide-counter">03 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 4: 五大支柱生態全景地圖 -->
+    <div class="slide" data-slide="4">
+      <div class="slide-header">
+        <div class="slide-tag">9-2 ~ 9-5 生態全景</div>
+        <h2 class="slide-title">Cloudflare 全家桶 5 大核心支柱生態地圖</h2>
+        <p class="slide-subtitle">點擊圖片可進入滿版放大檢視</p>
+      </div>
+      <div class="slide-body">
+        <div class="img-box" onclick="openZoomModal('../PIC/ch9_cloudflare_ecosystem_map.svg')">
+          <img src="../PIC/ch9_cloudflare_ecosystem_map.svg" alt="Cloudflare 全家桶 5 大支柱生態地圖">
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>前端 Pages · 運算 Workers · 三大資料庫 · 檔案庫 R2 · 門禁 Zero Trust</span>
+        <span class="slide-counter">04 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 5: 核心支柱 1 — Pages -->
+    <div class="slide" data-slide="5">
+      <div class="slide-header">
+        <div class="slide-tag">支柱 1 · 前端託管</div>
+        <h2 class="slide-title">Cloudflare Pages：現代前端靜態網站託管門面</h2>
+        <p class="slide-subtitle">讓網頁擁有全球極速載入、版本自動化與團隊預覽功能</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🔄</div>
+              <div class="card-title">Git 原生整合自動化 CI/CD</div>
+            </div>
+            <p class="card-desc">
+              只需將 Cloudflare 綁定你的 GitHub 儲存庫，每次本機執行 <code>git push</code>，Cloudflare 就會在雲端邊緣自動拉取並發布，<strong>10 ~ 15 秒內全球上線</strong>！
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🌿</div>
+              <div class="card-title">分支獨立預覽（Preview Deployments）</div>
+            </div>
+            <p class="card-desc">
+              當團隊開啟新的 Feature Branch 時，Pages 會自動為該分支產生一組獨一無二的臨時測試網址（如 <code>test.my-web.pages.dev</code>），方便客戶與主管驗收，完全不干擾線上正式機！
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🌐</div>
+              <div class="card-title">自訂專屬品牌網域 + 免費 SSL</div>
+            </div>
+            <p class="card-desc">
+              支援一鍵綁定自己的 <code>.com</code> 或 <code>.tw</code> 網域名稱，全球邊緣機房自動派發免費 HTTPS 綠色安全鎖頭憑證，並自動終生續約。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #10b981;">🎁</div>
+              <div class="card-title" style="color: #10b981;">免費版配額亮點</div>
+            </div>
+            <p class="card-desc">
+              ⭐ <strong>出站流量永遠完全無限制（Unlimited Bandwidth）</strong>！<br>
+              ⭐ 每月提供 <strong>500 次自動建置（Builds）</strong>。<br>
+              ⭐ 支援無上限的自訂網域綁定。
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Pages 是整個系統的前端門面</span>
+        <span class="slide-counter">05 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 6: 核心支柱 2 — Workers -->
+    <div class="slide" data-slide="6">
+      <div class="slide-header">
+        <div class="slide-tag">支柱 2 · 運算大腦</div>
+        <h2 class="slide-title">Cloudflare Workers：邊緣無伺服器計算（Serverless）</h2>
+        <p class="slide-subtitle">不用租用主機，直接在全球 330+ 邊緣機房執行輕量後端程式碼</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">⚡</div>
+              <div class="card-title">0 毫秒冷啟動</div>
+            </div>
+            <p class="card-desc">
+              傳統 AWS Lambda 使用 Docker 容器，啟動需等 200ms ~ 2 秒。Workers 採用 Google Chrome <strong>V8 Isolates 沙盒隔離技術</strong>，啟動時間近乎 <strong>0 毫秒</strong>，反應極速！
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🔒</div>
+              <div class="card-title">安全環境變數（Secrets）</div>
+            </div>
+            <p class="card-desc">
+              所有機密金鑰（Google Gemini API Key、Supabase Service Role Key）存放在 Workers 加密環境變數中，<strong>金鑰不落地，瀏覽器前端完全窺探不到</strong>！
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🎁</div>
+              <div class="card-title">免費 10 萬次 / 天</div>
+            </div>
+            <p class="card-desc">
+              免費方案每日享有 <strong>100,000 次執行額度</strong>！每次請求提供 10ms CPU 執行時間（等待 AI API 或資料庫連線的網路 I/O 時間完全不計入）。
+            </p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 16px; background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3);">
+          <strong style="color: #38bdf8;">🧠 Workers 在我們 AI 知識庫系統中做什麼？</strong>
+          <p style="margin-top: 4px; font-size: 0.9rem; color: var(--text-muted);">
+            它是整個系統的「大腦總指揮」：接收新人問題 ➔ 呼叫 Embedding API 轉向量 ➔ 去 Supabase 撈取相關章節 ➔ 組裝防幻覺提示詞 ➔ 調用 LLM 生成答案並回傳前端！
+          </p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Workers 是安全把關與 API 中繼大腦</span>
+        <span class="slide-counter">06 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 7: 什麼是 Wrangler -->
+    <div class="slide" data-slide="7">
+      <div class="slide-header">
+        <div class="slide-tag">開發者核心工具</div>
+        <h2 class="slide-title">Wrangler 是什麼？掌控 Cloudflare 艦隊的總司令</h2>
+        <p class="slide-subtitle">不用開網頁點滑鼠，直接在終端機操控全球所有邊緣運算與資料庫！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-cf);">
+            <div class="card-header">
+              <div class="card-icon">🤠</div>
+              <div class="card-title">有趣的命名由來：「牛仔 / 馴馬師」</div>
+            </div>
+            <p class="card-desc">
+              "Wrangler" 在英文原意是<strong>「牛仔、牧馬人 / 馴馬師」</strong>（專門馴服並管理狂奔的野馬群）。<br><br>
+              Cloudflare 取這個名字的深刻寓意是：<strong>「用這套命令列工具，幫你輕鬆馴服並駕馭分散在全球 330 多個城市的邊緣伺服器與龐大微服務！」</strong>
+            </p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <div class="card-icon">🤖</div>
+              <div class="card-title">為什麼讓 AntiGravity 掌握 Wrangler？</div>
+            </div>
+            <p class="card-desc">
+              如果沒有 Wrangler，建立一個 AI 專案必須手動在後台開網頁、點擊建 Pages、建 Workers、建 D1、填寫密鑰...點擊數十次容易出錯。<br><br>
+              有了 Wrangler，你只要動口吩咐：<em>「AntiGravity，請幫我把當前目錄發布到 Pages，並設定好 Gemini 金鑰！」</em>——AI 就能在命令列秒級全自動搞定！
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>對標第四章的 GitHub CLI (gh)，Wrangler 是邊緣司令官</span>
+        <span class="slide-counter">07 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 8: Wrangler 6 大超能力 -->
+    <div class="slide" data-slide="8">
+      <div class="slide-header">
+        <div class="slide-tag">Wrangler CLI 全功能</div>
+        <h2 class="slide-title">Wrangler 的 6 大核心超能力與指令清單</h2>
+        <p class="slide-subtitle">涵蓋本地開發 ➔ 資料庫操作 ➔ 雲端部署 ➔ 監控除錯全流程</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <span class="badge-pill badge-orange">部署</span>
+              <div class="card-title" style="font-size: 1rem;">1. 一鍵全球發布</div>
+            </div>
+            <p class="card-desc" style="font-size: 0.85rem;"><code>wrangler pages deploy ./dist</code><br>一行指令將前端推送到全球 CDN，秒級派發公開網址。</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="badge-pill badge-cyan">模擬</span>
+              <div class="card-title" style="font-size: 1rem;">2. 本地極速模擬環境</div>
+            </div>
+            <p class="card-desc" style="font-size: 0.85rem;"><code>wrangler dev</code><br>在本機電腦模擬整套邊緣機房與 D1 資料庫，存檔即熱重載。</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="badge-pill badge-emerald">資料庫</span>
+              <div class="card-title" style="font-size: 1rem;">3. 邊緣資料庫管理</div>
+            </div>
+            <p class="card-desc" style="font-size: 0.85rem;"><code>wrangler d1 create my-db</code><br>在命令列直接建庫、執行 SQL 腳本建表、管理 KV 與 Vectorize。</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="badge-pill badge-indigo">檔案</span>
+              <div class="card-title" style="font-size: 1rem;">4. R2 儲存庫管理</div>
+            </div>
+            <p class="card-desc" style="font-size: 0.85rem;"><code>wrangler r2 bucket create</code><br>建立零流量費檔案儲存桶，上傳與同步企業 PDF 手冊與大圖。</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="badge-pill badge-orange">資安</span>
+              <div class="card-title" style="font-size: 1rem;">5. 安全加密環境變數</div>
+            </div>
+            <p class="card-desc" style="font-size: 0.85rem;"><code>wrangler secret put KEY</code><br>將機密 API Key 加密上傳至雲端保險庫，原始碼絕不外洩。</p>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="badge-pill badge-cyan">抓 Bug</span>
+              <div class="card-title" style="font-size: 1rem;">6. 即時線上日誌監聽</div>
+            </div>
+            <p class="card-desc" style="font-size: 0.85rem;"><code>wrangler tail</code><br>像雷達般在終端機即時串流使用者造訪日誌與錯誤代碼，線上抓 Bug 神器！</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>全流程命令列自動化實戰</span>
+        <span class="slide-counter">08 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 9: 方式 A vs 方式 B 控制內容差別 -->
+    <div class="slide" data-slide="9">
+      <div class="slide-header">
+        <div class="slide-tag">架構思考 · 資安選型</div>
+        <h2 class="slide-title">方式 A 瀏覽器登入 vs. 方式 B API Token：控制內容一樣嗎？</h2>
+        <p class="slide-subtitle">日常操作看似相同，但在「權限大小、生效範圍與安全邊界」上有重大差別！</p>
+      </div>
+      <div class="slide-body">
+        <div class="table-container">
+          <table class="slide-table">
+            <thead>
+              <tr>
+                <th>比較維度</th>
+                <th>方式 A：瀏覽器登入 (wrangler login)</th>
+                <th>方式 B：API Token 權杖 (.env)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>比喻與概念</strong></td>
+                <td><strong style="color: #fb923c;">萬能金鑰</strong>（代理你整個帳號人格）</td>
+                <td><strong style="color: #10b981;">特定門禁卡</strong>（最小權限原則）</td>
+              </tr>
+              <tr>
+                <td><strong>權限範圍</strong></td>
+                <td>全開！擁有全帳號所有權限（含改 DNS、防火牆與帳單）</td>
+                <td>精確受控！只賦予被勾選的 Workers/Pages 權限</td>
+              </tr>
+              <tr>
+                <td><strong>生效範圍</strong></td>
+                <td>全域生效（儲存於電腦本機目錄，整台電腦專案共用）</td>
+                <td>單一專案隔離（存於該專案 <code>.env</code>，專案間互不污染）</td>
+              </tr>
+              <tr>
+                <td><strong>生命週期與安全</strong></td>
+                <td>長期有效，透過 Refresh Token 自動續期</td>
+                <td>可自訂到期日（如 30 天失效），可限定來源 IP，隨時單獨刪除</td>
+              </tr>
+              <tr>
+                <td><strong>最佳適用場景</strong></td>
+                <td>個人本機日常開發快速上手</td>
+                <td><strong>交給 AI 代理自動化、團隊協同開發、CI/CD 正式上線</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>個人練習選方式 A · 正式專案與 AI 自動化堅決選方式 B</span>
+        <span class="slide-counter">09 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 10: 邊緣資料庫三劍客 -->
+    <div class="slide" data-slide="10">
+      <div class="slide-header">
+        <div class="slide-tag">支柱 3 · 邊緣儲存</div>
+        <h2 class="slide-title">邊緣資料庫三劍客：D1 (SQL) / KV (快取) / Vectorize (向量庫)</h2>
+        <p class="slide-subtitle">讓資料直接駐留在運算節點旁邊，終結「運算在台北、資料庫在美西」的跨洋延遲</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card" style="border-top: 4px solid var(--accent-emerald);">
+            <div class="card-header">
+              <div class="card-icon">🗃️</div>
+              <div class="card-title">Cloudflare D1</div>
+            </div>
+            <p class="card-desc">
+              <strong>邊緣關聯式 SQL 資料庫</strong><br>
+              基於 SQLite 標準，支援交易（Transactions）、JOIN 多表關聯查詢。資料庫跟著 Workers 跑，查詢只需幾毫秒。<br><br>
+              🎁 <strong>免費 5 GB 儲存</strong><br>
+              每日免費讀取 500 萬列 / 寫入 10 萬列。
+            </p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+            <div class="card-header">
+              <div class="card-icon">⚡</div>
+              <div class="card-title">Workers KV</div>
+            </div>
+            <p class="card-desc">
+              <strong>全球超高速鍵值快取庫</strong><br>
+              Key-Value 字典資料庫，讀取延遲低於 10ms，全球數百節點自動複製快取，適合存放 Token、組態與快取。<br><br>
+              🎁 <strong>免費 1 GB 儲存</strong><br>
+              每日免費讀取 10 萬次 / 寫入 1 千次。
+            </p>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--accent-indigo);">
+            <div class="card-header">
+              <div class="card-icon">🧠</div>
+              <div class="card-title">Vectorize</div>
+            </div>
+            <p class="card-desc">
+              <strong>AI 專用向量檢索資料庫</strong><br>
+              專為 RAG 知識庫設計！用來存放 Embeddings 向量數值，並執行毫秒級餘弦相似度（Cosine）檢索。<br><br>
+              🎁 <strong>免費 3,000 萬維度儲存</strong><br>
+              每月提供 3,000 萬維度檢索查詢額度。
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>依據資料特性選擇合適的邊緣資料庫</span>
+        <span class="slide-counter">10 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 11: 檔案庫 R2 -->
+    <div class="slide" data-slide="11">
+      <div class="slide-header">
+        <div class="slide-tag">支柱 4 · 物件儲存</div>
+        <h2 class="slide-title">Cloudflare R2：終結雲端天價帳單的「零流量費」檔案庫</h2>
+        <p class="slide-subtitle">全面相容 AWS S3 API，大容量手冊 PDF、商品圖片與影片串流的最佳歸宿</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-rose);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #f43f5e;">💸</div>
+              <div class="card-title" style="color: #f43f5e;">傳統 AWS S3 的隱形陷阱：出站流量費</div>
+            </div>
+            <p class="card-desc">
+              AWS S3 雖然放檔案便宜，但只要有人下載，<strong>每 GB 都要收取高昂的出站傳輸費（Egress Fee）</strong>！若網站被爬蟲狂抓或忽然爆紅，月底常會收到數千甚至數萬元的恐怖帳單。
+            </p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-emerald);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #10b981;">🛡️</div>
+              <div class="card-title" style="color: #10b981;">Cloudflare R2：出站流量永遠 $0 元</div>
+            </div>
+            <p class="card-desc">
+              R2 最大特色就是<strong>「永久零出站流量費（Zero Egress Fees）」</strong>！無論你的檔案被下載 1 次還是 100 萬次，出站流量費通通都是 0 元！
+            </p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 18px; border-color: rgba(246, 130, 31, 0.4);">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <strong style="color: #fb923c; font-size: 1.05rem;">🎁 R2 免費方案配額：</strong>
+              <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
+                每月提供 <strong>10 GB 儲存空間</strong> · 100 萬次 Class A 寫入請求 · 1000 萬次 Class B 讀取請求！
+              </div>
+            </div>
+            <span class="badge-pill badge-orange" style="font-size: 0.85rem; padding: 4px 12px;">AWS S3 完美替代方案</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>手冊大檔案、PDF 掃描檔放在 R2 最安心</span>
+        <span class="slide-counter">11 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 12: 企業門禁 Zero Trust Access -->
+    <div class="slide" data-slide="12">
+      <div class="slide-header">
+        <div class="slide-tag">支柱 5 · 企業資安</div>
+        <h2 class="slide-title">Cloudflare Zero Trust Access：免寫程式碼的員工登入防護牆</h2>
+        <p class="slide-subtitle">手冊含有內部差勤與報銷機密，如何不寫 Code 就能阻擋外人窺探？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-icon">🛑</div>
+              <div class="card-title">傳統痛點</div>
+            </div>
+            <p class="card-desc">
+              過去要限制員工存取，必須架設 VPN、或是自己寫整套會員登入、Session、Token 驗證...耗費數週，且容易有資安漏洞。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #38bdf8;">✨</div>
+              <div class="card-title" style="color: #38bdf8;">Cloudflare 做法</div>
+            </div>
+            <p class="card-desc">
+              在 Cloudflare 後台點幾下，為 Pages 網站掛上一道<strong>邊緣身分防護牆（Zero Trust Access）</strong>，完全不需改動任何前端 HTML 程式碼！
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div class="card-header">
+              <div class="card-icon" style="color: #10b981;">🎁</div>
+              <div class="card-title" style="color: #10b981;">前 50 人永久免費</div>
+            </div>
+            <p class="card-desc">
+              支援 <strong>Email OTP（拋棄式驗證碼）</strong>或 Google Workspace / Microsoft 365 企業網域登入，中小企業團隊免費享有頂級資安。
+            </p>
+          </div>
+        </div>
+        <div class="code-box" style="margin-top: 16px;">
+          <span style="color: #10b981;">// 防護效果展示</span><br>
+          任何未授權訪客連入 ➔ <span style="color: #f43f5e;">直接被邊緣攔截在登入畫面</span> ➔ 只有輸入 <code>@yourcompany.com</code> 收到驗證碼者才能進入！
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>零程式碼企業級資安防護</span>
+        <span class="slide-counter">12 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 13: 免費額度總表與避坑指南 -->
+    <div class="slide" data-slide="13">
+      <div class="slide-header">
+        <div class="slide-tag">9-6 成本規劃 · 避坑指南</div>
+        <h2 class="slide-title">Cloudflare 全套免費額度總表與核心限制指南</h2>
+        <p class="slide-subtitle">弄懂規則，中小企業與個人專題即可完全零成本長期穩定運作</p>
+      </div>
+      <div class="slide-body">
+        <div class="table-container">
+          <table class="slide-table">
+            <thead>
+              <tr>
+                <th>服務項目</th>
+                <th>免費方案額度 (Free Tier)</th>
+                <th>避坑關鍵與實務估算</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Pages（前端託管）</strong></td>
+                <td><strong style="color: #10b981;">無限頻寬</strong> · 500 次構建/月</td>
+                <td>出站流量永遠不收錢；純靜態網站無流量上限。</td>
+              </tr>
+              <tr>
+                <td><strong>Workers（邊緣計算）</strong></td>
+                <td><strong style="color: #38bdf8;">100,000 次請求 / 天</strong></td>
+                <td>10ms CPU 時間上限（<strong>等待 AI API 與資料庫的 I/O 時間完全不計入</strong>）。</td>
+              </tr>
+              <tr>
+                <td><strong>D1（邊緣 SQL）</strong></td>
+                <td><strong>5 GB 儲存</strong> · 每日讀 500 萬列</td>
+                <td>純文字與關聯資料庫足夠支撐中型業務。</td>
+              </tr>
+              <tr>
+                <td><strong>R2（物件檔案庫）</strong></td>
+                <td><strong>10 GB 儲存</strong> · <strong style="color: #10b981;">零出站流量費</strong></td>
+                <td>手冊 PDF 與圖片存放首選，大流量不用怕爆帳單。</td>
+              </tr>
+              <tr>
+                <td><strong>Zero Trust Access</strong></td>
+                <td><strong style="color: #38bdf8;">前 50 位使用者永久免費</strong></td>
+                <td>超過 50 人才需付費（每人每月 $7 美元）。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>完全掌握免費用量邊界</span>
+        <span class="slide-counter">13 / 14</span>
+      </div>
+    </div>
+
+    <!-- Slide 14: 總結與銜接第 10 章 -->
+    <div class="slide" data-slide="14">
+      <div class="slide-header">
+        <div class="slide-tag">課程總結 · 下一步</div>
+        <h2 class="slide-title">第九章學習驗收：你已經具備現代雲端邊緣架構能力！</h2>
+        <p class="slide-subtitle">基礎建設已經全部就緒，下一站：深入現代資料庫與企業 AI 知識庫實戰</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid var(--accent-cf);">
+            <div class="card-header">
+              <div class="card-icon">🎓</div>
+              <div class="card-title">本章核心收穫回顧</div>
+            </div>
+            <ul style="padding-left: 1.25rem; line-height: 1.9; font-size: 0.92rem; color: var(--text-muted);">
+              <li>搞懂 Anycast CDN 全球 330+ 節點就近路由原理。</li>
+              <li>掌握 Pages 前端無限制頻寬與 Git 自動化部署。</li>
+              <li>理解 Workers 0 毫秒冷啟動與 Secrets 機密保護。</li>
+              <li>學會 Wrangler CLI 牛仔馴馬師授權與全套超能力。</li>
+              <li>熟悉 D1、KV、Vectorize、R2 與 Zero Trust 門禁。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-emerald);">
+            <div class="card-header">
+              <div class="card-icon">🚀</div>
+              <div class="card-title">後續精彩篇章預告</div>
+            </div>
+            <div style="line-height: 1.8; font-size: 0.92rem; color: var(--text-muted);">
+              <p><strong>第 10 章：Supabase 現代雲端資料庫全解</strong><br>
+              深入開源 Firebase 替代品、PostgreSQL 核心、pgvector 向量引擎與免費 7 天休眠防範心跳保活密技！</p>
+              <p style="margin-top: 8px;"><strong>第 11 章：企業級 AI 知識庫實戰</strong><br>
+              四核聯動（Pages + Workers + Supabase + Gemini API），打造私有化 NotebookLM！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>恭喜完成第九章簡報！可按 Home 鍵回首頁或返回講義</span>
+        <span class="slide-counter">14 / 14</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="slide-nav-bottom">
+    <button class="nav-btn" id="prevBtn" title="上一頁 (← / PageUp)">◀ 上一頁</button>
+    <button class="nav-btn" id="nextBtn" title="下一頁 (→ / 空白鍵)">下一頁 ▶</button>
+  </div>
+
+  <!-- Image Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <button class="zoom-close" title="關閉放大圖 (ESC)">✕</button>
+    <img id="zoomImg" src="" alt="放大檢視圖" onclick="event.stopPropagation()">
+  </div>
+
+  <!-- Slide Overview Modal -->
+  <div class="overview-modal" id="overviewModal">
+    <div class="overview-header">
+      <h2 style="font-size: 1.5rem; color: #fff;">📑 投影片大綱總覽 (Chapter 09)</h2>
+      <button class="zoom-close" id="closeOverviewBtn" style="position: static;">✕</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerBtn = document.getElementById('timerBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const overviewBtn = document.getElementById('overviewBtn');
+    const closeOverviewBtn = document.getElementById('closeOverviewBtn');
+    const overviewModal = document.getElementById('overviewModal');
+    const overviewGrid = document.getElementById('overviewGrid');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    // Build overview cards dynamically
+    slides.forEach((slide, idx) => {
+      const num = idx + 1;
+      const titleElem = slide.querySelector('.slide-title');
+      const title = titleElem ? titleElem.textContent : `Slide ${num}`;
+
+      const card = document.createElement('div');
+      card.className = `overview-card ${num === currentSlide ? 'current' : ''}`;
+      card.innerHTML = `
+        <div class="overview-num">SLIDE ${String(num).padStart(2, '0')}</div>
+        <div class="overview-title">${title}</div>
+      `;
+      card.addEventListener('click', () => {
+        goToSlide(num);
+        closeOverview();
+      });
+      overviewGrid.appendChild(card);
+    });
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', (idx + 1) === currentSlide);
+      });
+
+      // Update Progress Bar
+      const progress = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      // Update Nav Buttons
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+
+      // Update overview active card
+      document.querySelectorAll('.overview-card').forEach((card, idx) => {
+        card.classList.toggle('current', (idx + 1) === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    // Button event listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (overviewModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeOverview();
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case 'PageDown':
+        case ' ': // Space
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'o':
+        case 'O':
+          toggleOverview();
+          break;
+        case 'Escape':
+          closeOverview();
+          closeZoomModal();
+          break;
+      }
+    });
+
+    // Overview modal controls
+    function toggleOverview() {
+      overviewModal.classList.toggle('active');
+    }
+    function closeOverview() {
+      overviewModal.classList.remove('active');
+    }
+    overviewBtn.addEventListener('click', toggleOverview);
+    closeOverviewBtn.addEventListener('click', closeOverview);
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>
