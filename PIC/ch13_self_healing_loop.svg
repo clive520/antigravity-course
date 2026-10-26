@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620">
+  <defs>
+    <linearGradient id="bgGrad13" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="cardGrad13" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="failGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#991b1b"/>
+      <stop offset="100%" stop-color="#450a0a"/>
+    </linearGradient>
+    <linearGradient id="passGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+    <filter id="shadow13" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="620" rx="16" fill="url(#bgGrad13)" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(50, 30)">
+    <rect width="210" height="26" rx="6" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1"/>
+    <text x="105" y="17" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#34d399" text-anchor="middle">CHAPTER 13 ARCHITECTURE</text>
+    <text x="0" y="55" font-family="'Inter', sans-serif" font-size="20" font-weight="800" fill="#f8fafc">AntiGravity 自我修復迴圈（Self-Healing Loop）架構</text>
+    <text x="0" y="75" font-family="'Inter', sans-serif" font-size="12" fill="#94a3b8">測試先行 (TDD) ➔ 終端機自主運行 ➔ 捕獲紅字報錯 ➔ 根因分析與精準修補 ➔ 閉環重測至全綠燈交付</text>
+  </g>
+
+  <!-- Step 1: Write Tests First (TDD) -->
+  <g transform="translate(50, 115)" filter="url(#shadow13)">
+    <rect width="260" height="150" rx="12" fill="url(#cardGrad13)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect x="14" y="14" width="32" height="32" rx="8" fill="#0284c7" fill-opacity="0.3"/>
+    <text x="30" y="36" font-family="'Inter', sans-serif" font-size="16" text-anchor="middle">🧪</text>
+    <text x="56" y="27" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#f8fafc">1. 測試先行 (TDD)</text>
+    <text x="56" y="42" font-family="'Inter', sans-serif" font-size="10.5" fill="#7dd3fc">制定魔鬼驗收邊界</text>
+    <line x1="14" y1="54" x2="246" y2="54" stroke="#334155" stroke-width="1"/>
+    <text x="14" y="74" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 設計 4~5 組刁鑽測試案例</text>
+    <text x="14" y="94" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 涵蓋浮點數、過期、全形格式</text>
+    <text x="14" y="114" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 設定明確的期望回傳值</text>
+    <rect x="14" y="124" width="232" height="18" rx="4" fill="#0c4a6e"/>
+    <text x="130" y="137" font-family="'Inter', sans-serif" font-size="9.5" font-weight="700" fill="#38bdf8" text-anchor="middle">✔ 建立不可妥協的品質門檻</text>
+  </g>
+
+  <!-- Arrow 1 to 2 -->
+  <path d="M 310 190 L 360 190" fill="none" stroke="#38bdf8" stroke-width="2"/>
+  <polygon points="365,190 357,186 357,194" fill="#38bdf8"/>
+
+  <!-- Step 2: Terminal Perception (Red Fail) -->
+  <g transform="translate(370, 115)" filter="url(#shadow13)">
+    <rect width="260" height="150" rx="12" fill="url(#failGrad)" stroke="#ef4444" stroke-width="1.5"/>
+    <rect x="14" y="14" width="32" height="32" rx="8" fill="#7f1d1d" fill-opacity="0.5"/>
+    <text x="30" y="36" font-family="'Inter', sans-serif" font-size="16" text-anchor="middle">🔴</text>
+    <text x="56" y="27" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#fecaca">2. 終端機即時感知</text>
+    <text x="56" y="42" font-family="'Inter', sans-serif" font-size="10.5" fill="#f87171">捕獲 Error Stack Trace</text>
+    <line x1="14" y1="54" x2="246" y2="54" stroke="#7f1d1d" stroke-width="1"/>
+    <text x="14" y="74" font-family="'Inter', sans-serif" font-size="11" fill="#fef2f2">• AI 自主執行 npm test / pytest</text>
+    <text x="14" y="94" font-family="'Inter', sans-serif" font-size="11" fill="#fef2f2">• 讀取報錯行號與錯誤型別</text>
+    <text x="14" y="114" font-family="'Inter', sans-serif" font-size="11" fill="#fef2f2">• 捕捉失敗案例：3 failed, 1 passed</text>
+    <rect x="14" y="124" width="232" height="18" rx="4" fill="#450a0a"/>
+    <text x="130" y="137" font-family="'Inter', sans-serif" font-size="9.5" font-weight="700" fill="#fca5a5" text-anchor="middle">❌ 拒絕手動搬運！AI 自己讀報錯</text>
+  </g>
+
+  <!-- Arrow 2 to 3 -->
+  <path d="M 630 190 L 680 190" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  <polygon points="685,190 677,186 677,194" fill="#fbbf24"/>
+
+  <!-- Step 3: Root Cause & Minimal Patch -->
+  <g transform="translate(690, 115)" filter="url(#shadow13)">
+    <rect width="260" height="150" rx="12" fill="url(#cardGrad13)" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="14" y="14" width="32" height="32" rx="8" fill="#78350f" fill-opacity="0.4"/>
+    <text x="30" y="36" font-family="'Inter', sans-serif" font-size="16" text-anchor="middle">🔧</text>
+    <text x="56" y="27" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#fef3c7">3. 根因定位與精準修補</text>
+    <text x="56" y="42" font-family="'Inter', sans-serif" font-size="10.5" fill="#fde68a">最小破壞原則 (Minimal Patch)</text>
+    <line x1="14" y1="54" x2="246" y2="54" stroke="#334155" stroke-width="1"/>
+    <text x="14" y="74" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 分析報錯根因（如負數或小數）</text>
+    <text x="14" y="94" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 僅使用 edit_file 局部微調程式碼</text>
+    <text x="14" y="114" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">• 堅決不整檔覆寫，防止越修越爛</text>
+    <rect x="14" y="124" width="232" height="18" rx="4" fill="#451a03"/>
+    <text x="130" y="137" font-family="'Inter', sans-serif" font-size="9.5" font-weight="700" fill="#fcd34d" text-anchor="middle">⚡ 精準手術刀式微修</text>
+  </g>
+
+  <!-- Big Healing Loop Arrow (Back to Step 2) -->
+  <path d="M 820 265 L 820 310 L 500 310 L 500 270" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="6 6"/>
+  <polygon points="500,265 496,273 504,273" fill="#fbbf24"/>
+  <rect x="610" y="298" width="130" height="24" rx="12" fill="#78350f" stroke="#fbbf24" stroke-width="1"/>
+  <text x="675" y="314" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#fef3c7" text-anchor="middle">🔄 自癒迴圈 (Iteration)</text>
+
+  <!-- Step 4: Full Green PASS Delivery -->
+  <g transform="translate(150, 360)" filter="url(#shadow13)">
+    <rect width="700" height="135" rx="14" fill="url(#passGrad)" stroke="#10b981" stroke-width="2"/>
+    <circle cx="48" cy="48" r="24" fill="#047857" fill-opacity="0.6"/>
+    <text x="48" y="55" font-family="'Inter', sans-serif" font-size="22" text-anchor="middle">🟢</text>
+    <text x="90" y="38" font-family="'Inter', sans-serif" font-size="16" font-weight="800" fill="#d1fae5">4. 回歸測試通過 · 100% 全綠燈交付 (PASS)</text>
+    <text x="90" y="60" font-family="'Inter', sans-serif" font-size="12" fill="#a7f3d0">重新執行全量測試套件，確認原有功能未被破壞，且所有極端邊界案例全數成功！</text>
+    <line x1="90" y1="74" x2="670" y2="74" stroke="#065f46" stroke-width="1"/>
+    
+    <g transform="translate(90, 88)">
+      <text x="0" y="16" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#34d399">✔ Tests: 5 passed, 0 failed</text>
+      <text x="260" y="16" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#34d399">✔ Coverage: 100%</text>
+      <text x="450" y="16" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#34d399">✔ Time: 1.28s</text>
+      <text x="0" y="36" font-family="'Inter', sans-serif" font-size="11" fill="#6ee7b7">自動產出視覺化驗收報告：cart-test-report.html ➔ 信心滿滿直接上線！</text>
+    </g>
+  </g>
+
+  <!-- Bottom Comparison Banner -->
+  <g transform="translate(50, 525)" filter="url(#shadow13)">
+    <rect width="900" height="65" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="30" y="28" font-family="'Inter', sans-serif" font-size="12.5" font-weight="700" fill="#f87171">❌ 傳統人工除錯：</text>
+    <text x="140" y="28" font-family="'Inter', sans-serif" font-size="12" fill="#94a3b8">看報錯 ➔ 複製貼給 AI ➔ 手動改檔 ➔ 又噴錯 ➔ 越修越爛（人類淪為搬運工）</text>
+    <text x="30" y="50" font-family="'Inter', sans-serif" font-size="12.5" font-weight="700" fill="#34d399">✔ 自我修復迴圈：</text>
+    <text x="140" y="50" font-family="'Inter', sans-serif" font-size="12" fill="#cbd5e1">AI 自己下指令跑測試 ➔ 自己看終端報錯 ➔ 最小補丁迴圈修正 ➔ 全綠燈直接交付！</text>
+  </g>
+</svg>

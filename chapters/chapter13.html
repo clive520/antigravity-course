@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 13 章：自我修復迴圈 (Self-Healing Loop) — 讓 AntiGravity 自己寫測試、自己抓蟲，全綠燈才交付！ - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border-color: rgba(16, 185, 129, 0.4);">Chapter 13</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">首頁</a>
+      <a href="../index.html#future-chapters">未來拓展計畫</a>
+      <a href="../index.html#wishlist">願望清單</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">🌙 深色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節總覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載與安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與部署流程</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 實戰教學</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播通知</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+        <li><a href="chapter9.html">第 9 章：Cloudflare Pages 邊緣部署</a></li>
+        <li><a href="chapter10.html">第 10 章：Supabase 現代雲端資料庫</a></li>
+        <li><a href="chapter11.html">第 11 章：企業級 AI 知識庫 (RAG)</a></li>
+        <li><a href="chapter12.html">第 12 章：多代理人團隊作戰 (Subagents)</a></li>
+        <li><a href="chapter13.html" class="active">第 13 章：自我修復迴圈 (Self-Healing Loop)</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-13-1">13-1 觀念破冰：告別手動錯誤搬運工</a></li>
+        <li><a href="#sec-13-2">13-2 自癒核心：TDD 與最小補丁</a></li>
+        <li><a href="#sec-13-3">13-3 核心動手做：耳機購物車結算引擎</a></li>
+        <li><a href="#sec-13-4">13-4 初學者寶庫：三大生活化自癒案例</a></li>
+        <li><a href="#sec-13-5">13-5 成果驗收：防回歸心法與 Q&A</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">第 13 章 · 自動化品質工程</span>
+        <h1>自我修復迴圈：讓 AntiGravity 自己寫測試、自己抓蟲，全綠燈才交付！</h1>
+        <p class="desc">告別痛苦的「終端機錯誤搬運工」！初學者寫程式最害怕的不是寫出代碼，而是執行時代碼崩潰噴出一整片紅字（Error Stack Trace）。本章帶你掌握矽谷頂尖工程師的<strong>「自我修復迴圈（Self-Healing Loop）」</strong>心法：測試先行（TDD）➔ 終端機報錯自感知 ➔ 根因分析 ➔ 手術刀式最小修補 ➔ 閉環迭代，看著 AI 自己將紅燈修成全綠燈才向你交付！</p>
+        <div style="margin-top: 1rem; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="../cart-test-report.html" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.92rem; border-radius: 8px; background: linear-gradient(135deg, #10b981, #0284c7); color: #fff; font-weight: 700;">
+            <span>🟢 立即預覽成果：結帳引擎綠燈驗收報告 ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 13-1 觀念破冰 -->
+      <section id="sec-13-1" class="content-section">
+        <h2>13-1 觀念破冰：告別手動錯誤搬運工，擁抱閉環自動化</h2>
+        <p>很多學員在用 AI 輔助開發時，最常陷入以下這種精疲力竭的惡性循環：</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+          <div class="step-box" style="margin: 0; border-color: rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">❌ 人肉報錯搬運工</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              看到終端機噴紅字 ➔ 複製錯誤訊息 ➔ 貼回對話框問 AI ➔ 複製修正代碼 ➔ 貼回檔案 ➔ 又噴新錯誤... 疲於奔命。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0; border-color: rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">❌ 越修越爛（Regression）</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              好不容易修好了「商品按鈕點擊」，結果卻把剛才做好的「會員折扣」給改壞了，拆東牆補西牆。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0; border-color: rgba(239, 68, 68, 0.3);">
+            <h4 style="color: #ef4444;">❌ 不敢上線的恐懼</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              AI 說「已經寫好囉！」，但遇到極端輸入會不會當機？使用者輸入負數會不會倒貼錢？心裡完全沒底。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin: 1.5rem 0;">
+          <span>💡</span>
+          <div>
+            <strong>思維躍遷：紅色報錯不是壞事，是 AI 最精準的自動導航訊號！</strong><br>
+            在 AntiGravity 中，AI 擁有執行命令列的權限。我們不需要當「搬運工」，只要立好「驗收測試的規矩」，AI 自己在終端機跑測試、自己讀懂紅字、自己改到全綠燈！
+          </div>
+        </div>
+      </section>
+
+      <!-- 13-2 自癒核心解密 -->
+      <section id="sec-13-2" class="content-section">
+        <h2>13-2 自癒核心解密：TDD、Stack Trace 與最小補丁</h2>
+        <p>自我修復迴圈（Self-Healing Loop）絕非憑空亂猜，而是基於嚴格的軟體工程三大原則：</p>
+
+        <!-- 圖 13-1 SVG 圖表 -->
+        <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
+          <img src="../PIC/ch13_self_healing_loop.svg" alt="AntiGravity 自我修復迴圈架構流水線" style="width: 100%; max-width: 860px; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto 0.75rem;">
+          <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>🏆 圖 13-1：AntiGravity 自我修復迴圈（Self-Healing Loop）工程管線</strong><br>
+            測試先行 (TDD) ➔ 終端機自主感測 ➔ 捕獲紅字報錯 ➔ 根因分析與精準微調 ➔ 閉環迭代驗證 ➔ 100% 全綠燈交付。
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>🧩 自癒三大支柱：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>測試驅動（Test-Driven Development）</strong>：在實作核心邏輯前，先寫好「魔鬼驗收測試」。明確定義期望回傳值，測試未全數通過之前絕不宣布收工。</li>
+            <li><strong>終端機報錯自感知（Terminal Perception）</strong>：AI 自動調用 shell 運行測試套件，解析 Error Stack Trace 報錯堆疊（包含檔案路徑、出錯行號、期望值 vs 實際值差距）。</li>
+            <li><strong>最小破壞原則（Minimal Patching）</strong>：透過精準替換工具（如 <code>edit_file</code>）進行局部手術刀修補，嚴禁全檔盲目覆寫，徹底避免「修好 A 卻改壞 B」。</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 13-3 核心動手做 -->
+      <section id="sec-13-3" class="content-section">
+        <h2>13-3 核心動手做：耳機購物車促銷結帳引擎（邊界陷阱與實錄）</h2>
+        <p>延續耳機專案，我們需要為官網編寫一個計價函數 <code>calculateTotal()</code>。看似簡單的「算錢功能」，其實埋設了 4 個初學者必踩的暗坑：</p>
+
+        <div class="step-box" style="border-color: rgba(251, 191, 36, 0.4);">
+          <span class="step-number" style="background: #d97706;">STEP 1</span>
+          <h4>業務規格與 4 大隱藏暗坑</h4>
+          <ul style="padding-left: 1.5rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.5rem;">
+            <li>耳機原價 NT$ 3,880，買 2 支享 9 折，買 3 支（含）以上享 85 折。</li>
+            <li>滿額 NT$ 5,000 免運費，未滿額加收運費 NT$ 100。</li>
+            <li>可輸入優惠折扣碼 <code>VIP888</code> 再現折 NT$ 888。</li>
+            <li>🚨 <strong>暗坑 1（浮點數精度）</strong>：打 9 折後出現 <code>3492.0000000000005</code> 醜陋小數。</li>
+            <li>🚨 <strong>暗坑 2（負數結算倒貼）</strong>：購買單價低於 888 元時套用 VIP 券，總金額變成負數！</li>
+            <li>🚨 <strong>暗坑 3（惡意負數數量）</strong>：使用者在數量輸入 <code>-2</code>，系統未防呆導致崩潰。</li>
+          </ul>
+        </div>
+
+        <div class="step-box" style="border-color: rgba(56, 189, 248, 0.4);">
+          <span class="step-number" style="background: #0284c7;">STEP 2</span>
+          <h4>下達作戰指令：一鍵啟動自我修復迴圈</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：結帳引擎自癒指令</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請啟動自我修復迴圈，為我的耳機商城打造一個『高防禦結帳計算模組（checkout.js）』：
+
+1. 測試先行（TDD）：在『checkout.test.js』中設計 5 組魔鬼驗收測試：
+   • 單品計價與浮點數四捨五入（絕不能出現 .00000005 這種精度誤差）。
+   • 批量階梯折扣（買 2 支 9 折、買 3 支 85 折）。
+   • 滿 NT$ 5,000 免運費邊界臨界點。
+   • VIP888 折價券「負數金額防呆」（折抵大於總金額時，底線鎖定 NT$ 0，絕不倒貼）。
+   • 惡意輸入防呆（傳入負數或文字時自動安全矯正，系統零崩潰）。
+2. 自主修復閉環：
+   • 自動運行測試命令（npm test 或 node 測試腳本）。
+   • 讀取終端機報錯，自主定位是浮點數未 round 還是負數未做 Math.max 防呆。
+   • 使用最小補丁精準修復代碼，反覆迭代直到 5 組測試「全數綠燈通過」才交付！
+3. 交付驗收報告：生成視覺化網頁『cart-test-report.html』供我親自驗證！</code></pre>
+          </div>
+        </div>
+
+        <div class="step-box" style="border-color: rgba(16, 185, 129, 0.4);">
+          <span class="step-number" style="background: #059669;">STEP 3</span>
+          <h4>成果驗收：全綠燈測試儀表板實測</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            AI 歷經 2 次自癒迭代，終端機從「3 failed」自主修復為「5 passed, 0 failed」！
+          </p>
+          <div style="margin-top: 1rem;">
+            <a href="../cart-test-report.html" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 0.95rem;">👉 點擊開啟購物車結算引擎動態測試報告 ↗</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13-4 初學者實戰寶庫 -->
+      <section id="sec-13-4" class="content-section">
+        <h2>13-4 初學者實戰寶庫：三大生活化自癒案例（情境、暗坑與提示詞）</h2>
+        <p>不用生硬高深的資安名詞，以下提供初學者在日常生活與網頁開發中<strong>天天會遇到、手寫最容易踩雷</strong>的三大實戰場景：</p>
+
+        <!-- 案例一 -->
+        <div class="step-box" style="margin-top: 1.5rem; border-color: rgba(56, 189, 248, 0.3);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #38bdf8; margin: 0; font-size: 1.2rem;">⏰ 案例一：【日常功能】限時特賣「24 小時倒數計時器」與過期防呆</h3>
+            <span style="font-size: 0.78rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 0.2rem 0.6rem; border-radius: 4px;">適用：電商行銷 / 活動頁面</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>生活痛點</strong>：在網頁上做倒數計時器（例如「剩餘 03 小時 15 分 20 秒」）。活動結束後，手寫的計時器沒有停下來，居然繼續倒數變成負數：「剩餘 -1 天 -3 小時」！或是遇到跨月天數計算出錯。
+          </p>
+
+          <div class="code-block" style="margin: 1rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：倒數計時自癒模組</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請啟動自我修復迴圈，為我的耳機特賣網頁寫一個『限時活動倒數計時計算模組（countdown.js）』：
+
+1. 測試先行（TDD）：在『countdown.test.js』中設計 4 個測試情境：
+   • 正常倒數：輸入未來 2 小時，正確輸出「剩餘 02 小時 00 分 00 秒」（不足兩位數自動補 0）。
+   • 過期防呆：若輸入過去的時間，必須回傳「活動已結束」，時分秒全部為 0，絕不能出現負數。
+   • 邊界臨界點：活動剛好剩下 0 秒的瞬間，正確切換為結束狀態。
+   • 防呆機制：若傳入空值或無效日期，安全回傳提示，不得引發程式中斷。
+2. 自主修復閉環：
+   • 運行測試，讀取終端機報錯。
+   • 自主找出負數時間與補零格式化的 bug 並修復。
+   • 迭代重測，直到 4 個測試全部呈現綠燈 PASS 才向我交付！</code></pre>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; color: #cbd5e1;">
+            🎁 <strong>自癒驗收成果</strong>：第一次執行時因過期時間產生 `-3600 秒` 報錯；AI 自主讀取終端紅字，補上 <code>Math.max(0, diff)</code>，第二次測試 4/4 全綠燈！
+          </div>
+        </div>
+
+        <!-- 案例二 -->
+        <div class="step-box" style="margin-top: 1.75rem; border-color: rgba(52, 211, 153, 0.3);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #34d399; margin: 0; font-size: 1.2rem;">📱 案例二：【表單防呆】超商宅配「收件人手機號碼與姓名自動清洗器」</h3>
+            <span style="font-size: 0.78rem; background: rgba(52, 211, 153, 0.15); color: #34d399; padding: 0.2rem 0.6rem; border-radius: 4px;">適用：結帳表單 / 會員註冊</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>生活痛點</strong>：顧客複製手機時常帶有看不見的空白鍵，或長輩不小心按到全形數字（如 <code>０９１２３４５６７８</code>）或橫線（<code>0912-345-678</code>）。傳統表單直接報錯拒收，白白流失訂單！
+          </p>
+
+          <div class="code-block" style="margin: 1rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：手機號碼清洗自癒模組</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請啟動自我修復迴圈，為我寫一個貼心的『台灣手機與收件人姓名格式清洗器（cleanContact.js）』：
+
+1. 測試先行（TDD）：在『cleanContact.test.js』中設計 4 個真實顧客的亂輸入情境：
+   • 複製帶有前後空白（例如 "  0912345678 "）➔ 自動去除空格通過驗證。
+   • 中間帶有橫線或括號（例如 "0912-345-678"）➔ 自動清除符號還原為純數字。
+   • 長輩誤按全形數字（例如 "０９１２３４５６７８"）➔ 自動轉換為標準半形數字。
+   • 真正打錯號碼（只打了 9 碼或開頭不是 09）➔ 正確回傳錯誤提示理由。
+2. 自主修復閉環：
+   • 自動跑測試，抓出終端機紅字。
+   • 自主補齊 .trim() 與全形轉半形替換邏輯。
+   • 測試直到全部綠燈通過才向我回報！</code></pre>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; color: #cbd5e1;">
+            🎁 <strong>自癒驗收成果</strong>：AI 第一次未處理全形數字導致測試失敗；AI 看到報錯自主補上一行 Unicode 全半形轉換公式，再次運行立即呈現滿滿綠字 <code>4 passed, 0 failed</code>！
+          </div>
+        </div>
+
+        <!-- 案例三 -->
+        <div class="step-box" style="margin-top: 1.75rem; border-color: rgba(232, 121, 249, 0.3);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #e879f9; margin: 0; font-size: 1.2rem;">📝 案例三：【網頁排版】商品評價「長文字摘要與『...看更多』截斷器」</h3>
+            <span style="font-size: 0.78rem; background: rgba(232, 121, 249, 0.15); color: #e879f9; padding: 0.2rem 0.6rem; border-radius: 4px;">適用：卡片排版 / 最新消息</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>生活痛點</strong>：在商品評價卡片中只顯示前 50 個字，後面接「...看更多」。但初學者常踩雷：文字明明只有 10 個字，系統也硬在後面加「...看更多」；或是留言含有 <code>&lt;b&gt;</code> 標籤被切斷，導致全網頁變成粗體破版！
+          </p>
+
+          <div class="code-block" style="margin: 1rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：排版截斷自癒模組</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請啟動自我修復迴圈，為商品評論區寫一個『安全長文字摘要截斷器（truncateText.js）』：
+
+1. 測試先行（TDD）：在『truncateText.test.js』中設計 4 個排版測試情境：
+   • 超長文字（100 字）：截取前 50 個字，並在結尾加上「... (閱讀更多)」。
+   • 短文字（20 字）：完整保留原文，絕對不能出現「... (閱讀更多)」。
+   • 邊界測試：文字長度剛好等於限制長度時，不截斷也不加省略符號。
+   • 安全排版防呆：若文字包含 &lt;b&gt; 或 &lt;p&gt; 等 HTML 標籤，先剔除標籤再計算長度，避免切碎標籤導致整個網頁破版。
+2. 自主修復閉環：
+   • 自動執行測試，查看終端機失敗項目。
+   • 修復字串長度判斷與 HTML 標籤清洗邏輯。
+   • 驗證直到 4 個排版邊界測試全數 PASS 綠燈！</code></pre>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; color: #cbd5e1;">
+            🎁 <strong>自癒驗收成果</strong>：短文字被誤加省略號導致測試報錯；AI 自主修改為 <code>if (text.length &lt;= limit) return text;</code> 並剝離 HTML 標籤，全數綠燈通過！
+          </div>
+        </div>
+      </section>
+
+      <!-- 13-5 成果驗收與常見 Q&A -->
+      <section id="sec-13-5" class="content-section">
+        <h2>13-5 成果驗收與防回歸心法：常見疑惑 Q&A</h2>
+        <p>在享受 AI 自主修復的快感之餘，初學者常有以下疑惑：</p>
+
+        <div class="step-box">
+          <h4>❓ Q1：AI 會不會在自我修復時陷入無窮迴圈？</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            <strong>答：不會！</strong> 我們在指令中可以約定「上限修復次數（如最多重試 3~5 次）」。若第 3 次仍未通過，AI 會停下來誠實向你回報：「已修復 A 與 B，但 C 邊界條件可能存在規格矛盾，請指揮官確認業務規則」。
+          </p>
+        </div>
+
+        <div class="step-box">
+          <h4>❓ Q2：什麼是「防回歸測試（Regression Testing）」？</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            <strong>答：這就是全綠燈的最高價值！</strong> 每次修補完 bug 後，AI 不只驗證剛才壞掉的那一項，而是將「所有歷史測試案例全部重跑一次」。唯有新案例通過、且舊案例沒有被改壞，才是真正合格的自癒交付！
+          </p>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top: 2rem;">
+          <span>🎖️</span>
+          <div>
+            <strong>恭喜掌握自我修復工程心法！</strong><br>
+            從現在開始，終端機的紅字不再是挫折，而是你調教 AI 最精準的指南針！在接下來的第 14 章中，我們將跨出本機沙盒，解鎖**「MCP 協議跨界實戰（Model Context Protocol）」**——讓 AI 直接連接 Obsidian 筆記庫與本機工具，打造你的第二大腦知識提煉系統！
+          </div>
+        </div>
+      </section>
+
+      <!-- 章節導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter12.html" class="btn-secondary">◀ 上一章：多代理人團隊作戰 (Subagents)</a>
+        <a href="../index.html#future-chapters" class="btn-primary">探索後續章節規劃 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

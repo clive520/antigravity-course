@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroPulse Pro · 購物車結算引擎自動化測試驗收報告 (PASS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #0f172a;
+      --border: rgba(148, 163, 184, 0.15);
+      --primary: #38bdf8;
+      --success: #10b981;
+      --warning: #fbbf24;
+      --danger: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 4rem;
+    }
+    .header {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .status-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 0.8rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      transition: transform 0.2s;
+    }
+    .back-btn:hover { transform: translateX(-4px); }
+
+    /* Summary Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .metric-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 0.25rem;
+    }
+
+    /* Test Cases Table */
+    .test-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .test-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.92rem;
+    }
+    .test-item:last-child { border-bottom: none; }
+    .test-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+    .tag-pass { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+
+    /* Interactive Calculator Demo */
+    .demo-box {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.5px solid var(--primary);
+      border-radius: 14px;
+      padding: 2rem;
+    }
+    .calc-input-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin: 1.5rem 0;
+      align-items: center;
+    }
+    .calc-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    input[type="number"], input[type="text"] {
+      background: #090d16;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      width: 160px;
+    }
+    .result-display {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px dashed var(--primary);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .result-price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="brand-title">
+      <span>🎧 AeroPulse Pro · 結帳引擎自動化測試報告</span>
+    </div>
+    <div class="status-badge">
+      <span>●</span> 5 / 5 全數通過 · 100% 綠燈交付 (PASS)
+    </div>
+  </header>
+
+  <div class="container">
+    <a href="chapters/chapter13.html" class="back-btn">← 返回第 13 章教學課程</a>
+
+    <!-- Top Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div style="font-size: 0.85rem; color: var(--text-muted);">測試覆蓋率 (Coverage)</div>
+        <div class="metric-val" style="color: var(--success);">100%</div>
+      </div>
+      <div class="metric-card">
+        <div style="font-size: 0.85rem; color: var(--text-muted);">自癒迴圈迭代次數</div>
+        <div class="metric-val" style="color: var(--primary);">2 次修復</div>
+      </div>
+      <div class="metric-card">
+        <div style="font-size: 0.85rem; color: var(--text-muted);">執行總耗時 (Runtime)</div>
+        <div class="metric-val" style="color: #cbd5e1;">1.28s</div>
+      </div>
+      <div class="metric-card">
+        <div style="font-size: 0.85rem; color: var(--text-muted);">邊界漏洞防禦</div>
+        <div class="metric-val" style="color: var(--warning);">0 逃逸</div>
+      </div>
+    </div>
+
+    <!-- Test Suite List -->
+    <div class="test-box">
+      <h3 style="font-size: 1.15rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+        <span>🧪</span> 結帳折扣引擎魔鬼邊界測試套件 (checkout.test.js)
+      </h3>
+
+      <div class="test-item">
+        <div>
+          <span class="test-tag tag-pass">PASS</span>
+          <strong style="margin-left: 0.5rem;">TEST 01 · 浮點數精度與四捨五入防呆</strong>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">驗證打折後絕不出現 3492.0000000000005，自動精確進位為整數 NT$ 3,492。</p>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--success);">✔ 0.12ms</div>
+      </div>
+
+      <div class="test-item">
+        <div>
+          <span class="test-tag tag-pass">PASS</span>
+          <strong style="margin-left: 0.5rem;">TEST 02 · 階梯式批量折扣 (Tiered Discount)</strong>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">買 2 支打 9 折、買 3 支（含）以上打 85 折，計算無誤。</p>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--success);">✔ 0.08ms</div>
+      </div>
+
+      <div class="test-item">
+        <div>
+          <span class="test-tag tag-pass">PASS</span>
+          <strong style="margin-left: 0.5rem;">TEST 03 · 滿額 NT$ 5,000 免運費臨界點</strong>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">消費達 5,000 免運（運費 0），未滿額加收運費 NT$ 100。</p>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--success);">✔ 0.05ms</div>
+      </div>
+
+      <div class="test-item">
+        <div>
+          <span class="test-tag tag-pass">PASS</span>
+          <strong style="margin-left: 0.5rem;">TEST 04 · VIP 優惠券折抵「負數金額防呆」</strong>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">折抵 NT$ 888 超過總金額時，底線自動鎖定 NT$ 0，絕不倒貼顧客。</p>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--success);">✔ 0.09ms</div>
+      </div>
+
+      <div class="test-item">
+        <div>
+          <span class="test-tag tag-pass">PASS</span>
+          <strong style="margin-left: 0.5rem;">TEST 05 · 惡意負數數量防呆</strong>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">輸入負數數量（例如 -2）自動矯正為 0 或安全回傳提示，系統零崩潰。</p>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--success);">✔ 0.07ms</div>
+      </div>
+    </div>
+
+    <!-- Live Interactive Calculator Demo -->
+    <div class="demo-box">
+      <h3 style="color: var(--primary); font-size: 1.25rem;">🎛️ 親自驗證：已修復合格的 calculateTotal() 運算模組</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">
+        以下欄位直接調用修復後的演算法，你可以故意輸入「負數」或「大額優惠碼」測試防呆效果：
+      </p>
+
+      <div class="calc-input-group">
+        <div class="calc-field">
+          <label>耳機購買數量 (單價 $3,880)</label>
+          <input type="number" id="qtyInput" value="2" min="-5" max="10" oninput="runCalc()">
+        </div>
+        <div class="calc-field">
+          <label>優惠折扣碼 (輸入 VIP888 折 $888)</label>
+          <input type="text" id="couponInput" value="VIP888" oninput="runCalc()">
+        </div>
+      </div>
+
+      <div class="result-display">
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);" id="ruleNotes">2 支打 9 折 · 滿 $5,000 免運 · 已折抵 VIP $888</div>
+          <div style="font-size: 0.78rem; color: var(--success); margin-top: 0.25rem;">✔ 經過 TDD 自我修復迴圈驗證，數據完全精準安全</div>
+        </div>
+        <div class="result-price" id="totalPrice">NT$ 6,096</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateTotal(qty, coupon) {
+      qty = Math.max(0, parseInt(qty) || 0);
+      const unitPrice = 3880;
+      let rawSubtotal = qty * unitPrice;
+
+      // Tiered discount
+      let discountRate = 1.0;
+      if (qty >= 3) discountRate = 0.85;
+      else if (qty === 2) discountRate = 0.90;
+
+      let discountedSubtotal = Math.round(rawSubtotal * discountRate);
+
+      // Shipping
+      let shipping = (discountedSubtotal >= 5000 || qty === 0) ? 0 : 100;
+
+      // Coupon
+      let couponDiscount = (coupon && coupon.trim().toUpperCase() === 'VIP888') ? 888 : 0;
+
+      // Final total with negative prevention
+      let finalTotal = Math.max(0, discountedSubtotal + shipping - couponDiscount);
+      return { finalTotal, shipping, discountRate, couponDiscount };
+    }
+
+    function runCalc() {
+      const qty = document.getElementById('qtyInput').value;
+      const coupon = document.getElementById('couponInput').value;
+      const res = calculateTotal(qty, coupon);
+
+      document.getElementById('totalPrice').textContent = `NT$ ${res.finalTotal.toLocaleString()}`;
+      let rateText = res.discountRate < 1 ? `享 ${(res.discountRate * 10).toFixed(1)} 折` : '無折扣';
+      let shipText = res.shipping === 0 ? '免運費' : '運費 $100';
+      let cpText = res.couponDiscount > 0 ? '已折抵 VIP $888' : '無折扣碼';
+      document.getElementById('ruleNotes').textContent = `${rateText} · ${shipText} · ${cpText}`;
+    }
+    runCalc();
+  </script>
+</body>
+</html>
