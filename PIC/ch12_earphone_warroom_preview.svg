@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="breakGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow2" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="600" rx="16" fill="url(#bgGrad2)" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Header Banner -->
+  <g transform="translate(40, 30)">
+    <rect width="920" height="56" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow2)"/>
+    <text x="24" y="35" font-family="'Inter', sans-serif" font-size="18" font-weight="800" fill="#f8fafc">🎧 AeroPulse Pro · 藍牙耳機市場情報戰情室 (War Room)</text>
+    <rect x="680" y="16" width="220" height="24" rx="12" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1"/>
+    <circle cx="695" cy="28" r="4" fill="#34d399"/>
+    <text x="708" y="32" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#7dd3fc">3 位特工已完成協同調查 · 即時</text>
+  </g>
+
+  <!-- Left: Radar Chart Box -->
+  <g transform="translate(40, 105)" filter="url(#shadow2)">
+    <rect width="450" height="465" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+    <text x="24" y="34" font-family="'Inter', sans-serif" font-size="15" font-weight="700" fill="#f8fafc">📊 四大品牌五角戰力評估對照</text>
+    <text x="24" y="52" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">由【特工 1：競品分析官】精準權重評分，揭示巨頭防線</text>
+
+    <!-- Radar Grids (Center at 225, 230) -->
+    <g transform="translate(0, 10)">
+      <!-- Level 5 -->
+      <polygon points="225,120 330,195 290,320 160,320 120,195" fill="none" stroke="#334155" stroke-width="1"/>
+      <!-- Level 4 -->
+      <polygon points="225,142 309,202 277,302 173,302 141,202" fill="none" stroke="#334155" stroke-width="1"/>
+      <!-- Level 3 -->
+      <polygon points="225,164 288,209 264,284 186,284 162,209" fill="none" stroke="#334155" stroke-width="1"/>
+      <!-- Level 2 -->
+      <polygon points="225,186 267,216 251,266 199,266 183,216" fill="none" stroke="#334155" stroke-width="1"/>
+      
+      <!-- Axis Lines -->
+      <line x1="225" y1="220" x2="225" y2="120" stroke="#475569" stroke-width="1"/>
+      <line x1="225" y1="220" x2="330" y2="195" stroke="#475569" stroke-width="1"/>
+      <line x1="225" y1="220" x2="290" y2="320" stroke="#475569" stroke-width="1"/>
+      <line x1="225" y1="220" x2="160" y2="320" stroke="#475569" stroke-width="1"/>
+      <line x1="225" y1="220" x2="120" y2="195" stroke="#475569" stroke-width="1"/>
+
+      <!-- Labels -->
+      <text x="225" y="105" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">降噪深度</text>
+      <text x="350" y="195" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#94a3b8">通話抗風</text>
+      <text x="305" y="340" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#94a3b8">舒適輕量</text>
+      <text x="145" y="340" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#94a3b8">電池續航</text>
+      <text x="100" y="195" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="end">性價比</text>
+
+      <!-- Competitor 1: Sony (Red) -->
+      <polygon points="225,125 293,204 274,295 180,290 178,209" fill="#ef4444" fill-opacity="0.15" stroke="#ef4444" stroke-width="1.5"/>
+      <!-- Competitor 2: Apple (White) -->
+      <polygon points="225,133 314,199 284,310 183,280 173,205" fill="#e2e8f0" fill-opacity="0.1" stroke="#e2e8f0" stroke-width="1.5"/>
+      <!-- Ours: AeroPulse Pro (Cyan Highlight) -->
+      <polygon points="225,137 325,196 285,312 163,315 124,196" fill="#38bdf8" fill-opacity="0.35" stroke="#38bdf8" stroke-width="2.5"/>
+    </g>
+
+    <!-- Legend -->
+    <g transform="translate(45, 415)">
+      <rect x="0" y="0" width="10" height="10" rx="2" fill="#38bdf8"/>
+      <text x="16" y="9" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#38bdf8">自研 AeroPulse Pro</text>
+
+      <rect x="150" y="0" width="10" height="10" rx="2" fill="#ef4444"/>
+      <text x="166" y="9" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">Sony XM5</text>
+
+      <rect x="250" y="0" width="10" height="10" rx="2" fill="#e2e8f0"/>
+      <text x="266" y="9" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">AirPods Pro 2</text>
+    </g>
+  </g>
+
+  <!-- Right Top: Audience Personas Box -->
+  <g transform="translate(510, 105)" filter="url(#shadow2)">
+    <rect width="450" height="240" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5"/>
+    <text x="24" y="34" font-family="'Inter', sans-serif" font-size="15" font-weight="700" fill="#f8fafc">🎯 核心受眾心理與死穴矩陣</text>
+    <text x="24" y="52" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">由【特工 2：客群畫像分析師】深度剖析買家真正的痛點與購買動機</text>
+
+    <!-- 3 Persona Cards -->
+    <g transform="translate(20, 70)">
+      <!-- Card 1 -->
+      <rect width="410" height="46" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+      <text x="14" y="28" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#38bdf8">🚇 捷運通勤族</text>
+      <text x="120" y="28" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">痛點：強烈耳壓感 / 報站聽不到</text>
+      <text x="325" y="28" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#34d399">買點：無感動態降噪</text>
+
+      <!-- Card 2 -->
+      <rect y="54" width="410" height="46" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+      <text x="14" y="82" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#818cf8">💼 商務視訊族</text>
+      <text x="120" y="82" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">痛點：咖啡廳背景雜音 / 風切聲</text>
+      <text x="325" y="82" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#34d399">買點：AI 骨傳導 ENC</text>
+
+      <!-- Card 3 -->
+      <rect y="108" width="410" height="46" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+      <text x="14" y="136" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#e879f9">🏃 運動健身族</text>
+      <text x="120" y="136" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">痛點：重訓流汗滑落 / 耳塞移位</text>
+      <text x="325" y="136" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#34d399">買點：穩固防汗防水</text>
+    </g>
+  </g>
+
+  <!-- Right Bottom: Breakthrough Recommendation Box -->
+  <g transform="translate(510, 360)" filter="url(#shadow2)">
+    <rect width="450" height="210" rx="12" fill="url(#breakGrad)" stroke="#818cf8" stroke-width="1.5"/>
+    <text x="24" y="32" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#818cf8" letter-spacing="1">STRATEGIC BREAKTHROUGH</text>
+    <text x="24" y="58" font-family="'Inter', sans-serif" font-size="15" font-weight="800" fill="#f8fafc">🏆 破局決策：避開萬元紅海，直攻三千元甜點區！</text>
+    <text x="24" y="82" font-family="'Inter', sans-serif" font-size="11.5" fill="#cbd5e1" width="300">
+      Sony/Apple 均落在 NT$ 7,490 ~ 12,900；平價耳機通話極差。
+    </text>
+    <text x="24" y="102" font-family="'Inter', sans-serif" font-size="11.5" fill="#cbd5e1">
+      自研產品主打「萬元級 AI 通話降噪 + 42 小時長續航」，定價：
+    </text>
+
+    <!-- Pricing Tag -->
+    <rect x="24" y="125" width="230" height="60" rx="8" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="40" y="150" font-family="'Inter', sans-serif" font-size="10" fill="#94a3b8">建議最優發售價</text>
+    <text x="40" y="174" font-family="'JetBrains Mono', monospace" font-size="22" font-weight="800" fill="#38bdf8">NT$ 3,880</text>
+
+    <rect x="270" y="125" width="156" height="60" rx="8" fill="#065f46" fill-opacity="0.2" stroke="#34d399" stroke-width="1"/>
+    <text x="285" y="150" font-family="'Inter', sans-serif" font-size="10" fill="#a7f3d0">預估毛利率 / 優勢</text>
+    <text x="285" y="174" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#34d399">62% · 極高轉化</text>
+  </g>
+</svg>

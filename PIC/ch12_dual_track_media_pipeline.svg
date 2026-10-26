@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="cardGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="trackAGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="trackBGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#701a75"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow3" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="620" rx="16" fill="url(#bgGrad3)" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(50, 30)">
+    <rect width="210" height="26" rx="6" fill="#fbbf24" fill-opacity="0.15" stroke="#fbbf24" stroke-width="1"/>
+    <text x="105" y="17" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#fbbf24" text-anchor="middle">DUAL-TRACK PIPELINE</text>
+    <text x="0" y="55" font-family="'Inter', sans-serif" font-size="20" font-weight="800" fill="#f8fafc">無人值守雙軌影音自媒體工廠（NotebookLM + CLI）</text>
+    <text x="0" y="75" font-family="'Inter', sans-serif" font-size="12" fill="#94a3b8">單一轟動新聞 ➔ 全景情資白皮書 ➔ NotebookLM 提取雙產物 ➔ FFmpeg 後製 ➔ 自動上傳雙 YouTube 影片</text>
+  </g>
+
+  <!-- Step 1: Brain Dossier -->
+  <g transform="translate(50, 120)" filter="url(#shadow3)">
+    <rect width="900" height="64" rx="10" fill="url(#cardGrad3)" stroke="#38bdf8" stroke-width="1.5"/>
+    <circle cx="36" cy="32" r="16" fill="#0284c7" fill-opacity="0.3"/>
+    <text x="36" y="37" font-family="'Inter', sans-serif" font-size="16" text-anchor="middle">📝</text>
+    <text x="68" y="27" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#f8fafc">階段一：AntiGravity 情資總編劇 ➔ 全景白皮書 (01_notebooklm_source.md)</text>
+    <text x="68" y="47" font-family="'Inter', sans-serif" font-size="11.5" fill="#94a3b8">自動爬取全網爆款新聞，整理事件時間軸、官方回應、各方爭議與正反交鋒論點，消除幻覺。</text>
+  </g>
+
+  <!-- Flow Arrows down -->
+  <path d="M 300 184 L 300 215" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4"/>
+  <polygon points="300,220 296,212 304,212" fill="#38bdf8"/>
+
+  <path d="M 700 184 L 700 215" fill="none" stroke="#e879f9" stroke-width="2" stroke-dasharray="4 4"/>
+  <polygon points="700,220 696,212 704,212" fill="#e879f9"/>
+
+  <!-- Left Track: Briefing Video -->
+  <g transform="translate(50, 225)" filter="url(#shadow3)">
+    <rect width="430" height="265" rx="12" fill="url(#trackAGrad)" stroke="#0284c7" stroke-width="1.5"/>
+    <text x="20" y="30" font-family="'Inter', sans-serif" font-size="14" font-weight="800" fill="#7dd3fc">🎥 軌道 A：核心事件解說影片 (5~8 分鐘)</text>
+    <text x="20" y="48" font-family="'Inter', sans-serif" font-size="11" fill="#bae6fd">定位：節奏明快、破百萬大眾推薦流量、快速搞懂真相</text>
+    <line x1="20" y1="58" x2="410" y2="58" stroke="#0369a1" stroke-width="1"/>
+
+    <!-- Process A1 -->
+    <text x="20" y="80" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">1. NotebookLM CLI 自動提取：</text>
+    <text x="36" y="98" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">自動觸發簡報導讀影片 ➔ 下載至 raw_briefing.mp4</text>
+
+    <!-- Process A2 -->
+    <text x="20" y="126" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">2. AI 繪圖 + Pillow 縮圖排版：</text>
+    <text x="36" y="144" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">壓入黃紅新聞感標題大字 ➔ 產出 thumb_briefing.jpg</text>
+
+    <!-- Process A3 -->
+    <text x="20" y="172" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">3. FFmpeg 影音重整與壓字幕：</text>
+    <text x="36" y="190" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">自動校音、壓製外掛字幕 ➔ 輸出 final_briefing.mp4</text>
+
+    <!-- Output Box A -->
+    <rect x="20" y="210" width="390" height="40" rx="6" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1"/>
+    <text x="30" y="234" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#38bdf8">🚀 YouTube CLI 自動上傳 ➔ 回傳播放網址 1</text>
+  </g>
+
+  <!-- Right Track: Podcast Dialogue -->
+  <g transform="translate(520, 225)" filter="url(#shadow3)">
+    <rect width="430" height="265" rx="12" fill="url(#trackBGrad)" stroke="#a21caf" stroke-width="1.5"/>
+    <text x="20" y="30" font-family="'Inter', sans-serif" font-size="14" font-weight="800" fill="#f5d0fe">🎙️ 軌道 B：雙人對談漫談 Podcast (20~30 分鐘)</text>
+    <text x="20" y="48" font-family="'Inter', sans-serif" font-size="11" fill="#f5d0fe">定位：觀點交鋒、超長停留時長、鐵粉高黏著陪伴</text>
+    <line x1="20" y1="58" x2="410" y2="58" stroke="#86198f" stroke-width="1"/>
+
+    <!-- Process B1 -->
+    <text x="20" y="80" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">1. NotebookLM CLI 自動提取：</text>
+    <text x="36" y="98" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">自動觸發 Audio Overview ➔ 下載至 raw_podcast.mp3</text>
+
+    <!-- Process B2 -->
+    <text x="20" y="126" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">2. AI 繪圖 + 演播室縮圖排版：</text>
+    <text x="36" y="144" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">雙人引號衝突對抗感 ➔ 產出 thumb_podcast.jpg</text>
+
+    <!-- Process B3 -->
+    <text x="20" y="172" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">3. FFmpeg 動態音波影音合成：</text>
+    <text x="36" y="190" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">音波動畫 + 演播室背景 ➔ 合成 final_podcast.mp4</text>
+
+    <!-- Output Box B -->
+    <rect x="20" y="210" width="390" height="40" rx="6" fill="#4a044e" stroke="#e879f9" stroke-width="1"/>
+    <text x="30" y="234" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#f0abfc">🚀 YouTube CLI 自動上傳 ➔ 回傳播放網址 2</text>
+  </g>
+
+  <!-- Bottom Result Banner -->
+  <g transform="translate(50, 510)" filter="url(#shadow3)">
+    <rect width="900" height="75" rx="12" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5"/>
+    <circle cx="40" cy="37" r="18" fill="#fbbf24" fill-opacity="0.2"/>
+    <text x="40" y="43" font-family="'Inter', sans-serif" font-size="18" text-anchor="middle">🏆</text>
+    <text x="75" y="30" font-family="'Inter', sans-serif" font-size="14" font-weight="800" fill="#f8fafc">零人工干預！終端機自動回報雙影片上架成果：</text>
+    <text x="75" y="52" font-family="'JetBrains Mono', monospace" font-size="11" fill="#38bdf8">✔ 影片 1 (解說版)：https://youtu.be/briefing_xxx (吃百萬推薦流量)</text>
+    <text x="500" y="52" font-family="'JetBrains Mono', monospace" font-size="11" fill="#e879f9">✔ 影片 2 (漫談版)：https://youtu.be/podcast_yyy (吃超長觀看停留)</text>
+  </g>
+</svg>
