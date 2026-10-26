@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 12 章 上課簡報：多代理人團隊作戰 (Subagents) — Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(129, 140, 248, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-cyan-light: #7dd3fc;
+      --accent-indigo: #818cf8;
+      --accent-purple: #c084fc;
+      --accent-emerald: #10b981;
+      --accent-gold: #fbbf24;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Floating Header Controls */
+    .slide-controls-top {
+      position: fixed;
+      top: 14px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(11, 17, 32, 0.85);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .slide-controls-top a,
+    .slide-controls-top button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .slide-controls-top a:hover,
+    .slide-controls-top button:hover {
+      color: var(--text-main);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-indigo);
+      font-weight: 700;
+      padding: 0 4px;
+    }
+
+    /* Presenter Timer */
+    .slide-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-emerald);
+      cursor: pointer;
+      border-left: 1px solid var(--border-color);
+      padding-left: 10px;
+    }
+
+    /* Main Slide Stage */
+    .slide-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1320px;
+      height: 86vh;
+      max-height: 840px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px 50px;
+      position: relative;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .slide-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .pill-cyan { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .pill-indigo { background: rgba(129, 140, 248, 0.15); color: var(--accent-indigo); border: 1px solid rgba(129, 140, 248, 0.3); }
+    .pill-gold { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .pill-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
+
+    .slide-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    /* Highlight Banner */
+    .banner {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.5px solid var(--accent-indigo);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 10px 0;
+    }
+
+    /* Interactive Code/Prompt Box */
+    .code-box {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+      max-height: 380px;
+    }
+
+    /* Image Display with Zoom Modal Trigger */
+    .slide-image-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px;
+      cursor: zoom-in;
+      position: relative;
+    }
+
+    .slide-image-box img {
+      max-width: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+
+    .slide-image-box:hover img {
+      transform: scale(1.015);
+    }
+
+    .slide-image-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    /* Navigation Floating Buttons */
+    .nav-btn-prev, .nav-btn-next {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 90;
+      transition: all 0.2s;
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-btn-prev:hover, .nav-btn-next:hover {
+      background: var(--accent-indigo);
+      border-color: var(--accent-indigo);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .nav-btn-prev { left: 16px; }
+    .nav-btn-next { right: 16px; }
+
+    /* Zoom Modal */
+    .zoom-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(3, 7, 18, 0.94);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+      backdrop-filter: blur(10px);
+    }
+
+    .zoom-modal.active {
+      display: flex;
+    }
+
+    .zoom-modal img {
+      max-width: 95vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Top Controls -->
+  <div class="slide-controls-top">
+    <a href="../chapters/chapter12.html" title="返回第 12 章講義">📖 完整講義</a>
+    <a href="../earphone-warroom.html" target="_blank" style="color: var(--accent-cyan);" title="開啟戰情室">🎧 實戰網頁</a>
+    <span class="slide-counter" id="slideCounter">01 / 15</span>
+    <button id="fullscreenBtn" title="全螢幕切換 (F)">⛶</button>
+    <div class="slide-timer" id="timerBtn" title="點擊重設計時器">
+      <span>⏱️</span>
+      <span id="timerDisplay">00:00</span>
+    </div>
+  </div>
+
+  <!-- Nav Buttons -->
+  <button class="nav-btn-prev" id="prevBtn" title="上一頁 (←)">‹</button>
+  <button class="nav-btn-next" id="nextBtn" title="下一頁 (→)">›</button>
+
+  <div class="slide-container">
+
+    <!-- ================= Slide 1: 封面 ================= -->
+    <div class="slide active">
+      <div class="slide-body" style="text-align: center; justify-content: center; align-items: center;">
+        <span class="slide-pill pill-indigo" style="font-size: 0.9rem; padding: 6px 16px; margin-bottom: 20px;">
+          🚀 CHAPTER 12 · 次世代 AGENTIC 協同作戰
+        </span>
+        <h1 style="font-size: 3.4rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 20px;">
+          多代理人團隊作戰<br>
+          <span style="background: linear-gradient(135deg, #38bdf8, #818cf8, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            調動 AI 虛擬軍團，打造 24 小時戰情室
+          </span>
+        </h1>
+        <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 820px; line-height: 1.7; margin-bottom: 35px;">
+          告別單一對話的記憶錯亂與截斷！學會組織專屬 AI 軍團，掌握「職能委派、獨立記憶體、非同步加速」，從藍牙耳機市場戰情室到全自動雙軌影音工廠，一鍵調兵遣將！
+        </p>
+        <div style="display: flex; gap: 16px;">
+          <button onclick="nextSlide()" style="background: linear-gradient(135deg, #38bdf8, #6366f1); border: none; color: #fff; padding: 12px 28px; border-radius: 999px; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);">
+            開始上課 ➔
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 2: 痛點震撼教育 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-rose">PROBLEM & BOTTLENECK</span>
+        <h2 class="slide-title">⚠️ 為什麼「單兵對話模式」一定會崩潰？</h2>
+        <p class="slide-subtitle">很多人習慣在同一個對話框要求 AI 做所有事情，結果往往引發三大災難：</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <div style="font-size: 2.2rem; margin-bottom: 12px;">💥</div>
+            <h3 style="color: #fb7185;">上下文塞車 (Token 膨脹)</h3>
+            <p>要 AI 爬取 3 家競品規格，長篇資料直接塞爆 Memory 視窗，導致 AI 後繼無力、回答截斷或開始瞎掰胡謅。</p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <div style="font-size: 2.2rem; margin-bottom: 12px;">🧠</div>
+            <h3 style="color: #fb7185;">注意力渙散 (Lost in Middle)</h3>
+            <p>AI 在寫後端程式碼時，已經完全忘記了第一段提過的客群預算限制。前言不對後語，格式頻繁衝突。</p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <div style="font-size: 2.2rem; margin-bottom: 12px;">⚔️</div>
+            <h3 style="color: #fb7185;">職責人格衝突 (Role Conflict)</h3>
+            <p>同一個大腦無法同時扮演「吹毛求疵的資安審查員」與「天馬行空的社群文案總監」，思維彼此打架。</p>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 24px;">
+          <div style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px;">💡 殘酷現實：</div>
+          <p style="color: #cbd5e1; font-size: 0.95rem; margin: 0;">
+            要求單一 AI 做完「調研 + 分析 + 寫 code + 剪影片 + 算定價」，就像要求一間公司的總經理自己跑業務、管零用金又兼任大樓水電工！
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 3: 心智模型躍遷 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">MENTAL MODEL SHIFT</span>
+        <h2 class="slide-title">👔 開一家虛擬公司：從「打工仔」變身「指揮官」</h2>
+        <p class="slide-subtitle">掌握 Agentic 架構的第一步：思維方式的徹底躍遷</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(148, 163, 184, 0.3);">
+            <h3 style="color: #94a3b8;">❌ 過去：初階 AI 聊天思維</h3>
+            <ul>
+              <li><strong>心態</strong>：自己當工人，一個指令一個動作。</li>
+              <li><strong>瓶頸</strong>：整天盯著游標看打字，串列等待效率極低。</li>
+              <li><strong>產出</strong>：只能得到長篇文字碎片，還要自己複製整理。</li>
+              <li><strong>局限</strong>：被限制在單一對話視窗的記憶體極限。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: var(--accent-cyan); background: rgba(15, 23, 42, 0.9);">
+            <h3 style="color: var(--accent-cyan);">🚀 現在：多代理人專案指揮官 (CEO)</h3>
+            <ul>
+              <li><strong>心態</strong>：設計組織架構、定義崗位手冊、派發專門任務。</li>
+              <li><strong>效率</strong>：背景多特工並行狂飆，時間直接縮短 70%。</li>
+              <li><strong>產出</strong>：自動交付可互動戰情室、高畫質影片與程式碼。</li>
+              <li><strong>極限</strong>：突破 Token 上限，每位特工擁有獨立乾淨記憶！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px; border-color: var(--accent-cyan);">
+          <strong style="color: var(--accent-cyan);">🏆 指揮官核心法則：</strong>
+          <span style="color: #cbd5e1;">「精確定義任務邊界，最小化給予工具權限，非同步派發任務，最後驗收成果！」</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 4: 底層三大基石 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-indigo">CORE MECHANISM</span>
+        <h2 class="slide-title">🧩 AntiGravity 調度 Subagents 的三大基石</h2>
+        <p class="slide-subtitle">為什麼多代理人架構能做到又快又穩？底層原理拆解：</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🛡️</div>
+            <h3 style="color: #38bdf8;">1. 獨立記憶沙盒 (Context Isolation)</h3>
+            <p>每位子代理都在專屬的乾淨記憶中作業。情報員看了一百篇競品規格，這些海量雜訊絕不會污染到前端工程師的代碼畫布。</p>
+          </div>
+          <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🔐</div>
+            <h3 style="color: #818cf8;">2. 專用工具最小化 (Specialized Tools)</h3>
+            <p>調研員只給搜尋與網頁閱讀工具；寫 code 的才給檔案修改權限。權限邊界清晰，既杜絕胡亂改檔，又確保最高資安規格。</p>
+          </div>
+          <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 10px;">⚡</div>
+            <h3 style="color: #fbbf24;">3. 非同步平行加速 (Parallel Execution)</h3>
+            <p>以往需要一個一個慢慢做的 3 份報告，指揮官一聲令下，背景開出 3 個特工同步狂飆，原本 15 分鐘的任務 2 分鐘完成！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 5: 全景架構圖 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">ARCHITECTURE BLUEPRINT</span>
+        <h2 class="slide-title">🗺️ AntiGravity 多代理人團隊作戰全景管線</h2>
+        <p class="slide-subtitle">總指揮官接收指令 ➔ 3 路非同步並行 ➔ 交叉匯流 ➔ 交付市場情報戰情室</p>
+      </div>
+      <div class="slide-body">
+        <div class="slide-image-box" onclick="openZoomModal('../PIC/ch12_subagent_orchestration.svg')">
+          <img src="../PIC/ch12_subagent_orchestration.svg" alt="AntiGravity 多代理人團隊作戰架構流水線">
+          <div class="slide-image-hint">🔍 點擊全螢幕放大檢視</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 6: 案例一：耳機戰情室背景 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-indigo">PRACTICAL CASE 1</span>
+        <h2 class="slide-title">🎧 經典案例：自研藍牙耳機市場攻防戰</h2>
+        <p class="slide-subtitle">延續第 2 章專案！我們自研了旗艦降噪耳機 AeroPulse Pro，如何摸清巨頭底牌？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h3 style="color: #38bdf8;">🎯 我們的戰略難題</h3>
+            <ul>
+              <li>市場已被 Sony、Apple、Bose 三大巨頭盤踞。</li>
+              <li>到底該賣多少錢才能避開紅海？</li>
+              <li>該主打什麼殺手級功能，才能一擊擊中消費者痛點？</li>
+              <li>如何把調研成果轉化為直觀的互動網頁儀表板？</li>
+            </ul>
+          </div>
+          <div class="card" style="background: rgba(30, 27, 75, 0.6); border-color: var(--accent-indigo);">
+            <h3 style="color: #a5b4fc;">🎖️ 指揮官的作戰策略</h3>
+            <p style="margin-bottom: 12px;"><strong>不盲目瞎猜！派出三支專業部隊同步摸底：</strong></p>
+            <ul>
+              <li><strong>部隊 1（競品分析官）</strong>：挖出三大熱門旗艦定價與負評。</li>
+              <li><strong>部隊 2（客群分析師）</strong>：挖掘三大族群心理預算與死穴。</li>
+              <li><strong>部隊 3（潮流雷達員）</strong>：掃描 2026 前瞻高溢價黑科技。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 7: 特工檔案規格書 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">AGENT PERSONA</span>
+        <h2 class="slide-title">📋 耳機調研軍團：三大王牌特工檔案手冊</h2>
+        <p class="slide-subtitle">給予子代理明確的角色設定與邊界，回傳的情報才足夠鋒利！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🕵️</div>
+            <h3 style="color: #818cf8;">特工 1：競品分析官</h3>
+            <ul style="font-size: 0.85rem;">
+              <li><strong>鎖定對象</strong>：Sony XM5、AirPods Pro 2、Bose QC Ultra。</li>
+              <li><strong>價格區間</strong>：NT$ 7,490 ~ 12,900。</li>
+              <li><strong>抓出負評</strong>：Sony 悶熱風切大、Apple 生態閉鎖、Bose App 連線不穩。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🎯</div>
+            <h3 style="color: #34d399;">特工 2：客群分析師</h3>
+            <ul style="font-size: 0.85rem;">
+              <li><strong>通勤族</strong>：最怕耳壓感與漏聽廣播（預算 3~5k）。</li>
+              <li><strong>商務會議族</strong>：痛恨開會收進環境雜音（預算 4~7k）。</li>
+              <li><strong>運動發燒友</strong>：重訓深蹲怕滑落（預算 2.5~4k）。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🌊</div>
+            <h3 style="color: #e879f9;">特工 3：潮流雷達員</h3>
+            <ul style="font-size: 0.85rem;">
+              <li><strong>AI 骨傳導 ENC</strong>：人聲分離，嘈雜環境通話神器。</li>
+              <li><strong>頭部追蹤空間音訊</strong>：影音娛樂必備沉浸感。</li>
+              <li><strong>42 小時長續航</strong>：快充 10 分鐘聽 2 小時。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 8: 黃金指揮官指令 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">COMMAND PROMPT</span>
+        <h2 class="slide-title">💬 作戰密碼：一鍵啟動耳機軍團的黃金指令</h2>
+        <p class="slide-subtitle">將這段指令貼入對話框，AntiGravity 便會自動派發並行子代理：</p>
+      </div>
+      <div class="slide-body">
+        <div class="code-box">
+我要推出我們的自研旗艦降噪耳機（代號 AeroPulse Pro）。請幫我啟動市場研究軍團，兵分三路同步進行深度調查：
+
+1. 競品分析官（Competitor Spy）：鎖定市面三大熱銷競品（Sony WH-1000XM5、AirPods Pro 2、Bose QC Ultra），剖析其通路價格帶、核心技術優勢，以及各大論壇使用者抱怨最多的 3 大痛點缺點。
+2. 客群畫像分析師（Audience Persona）：深度拆解三大核心族群（捷運高鐵通勤族、商務遠距會議族、運動健身發燒友）的心理預算上限、最在意的死穴與購買觸發點。
+3. 潮流趨勢雷達員（Trend Radar）：調研未來兩年藍牙耳機最具溢價空間的新黑科技（如空間音訊、AI 骨傳導通話降噪、開放式 OWS、超低延遲）。
+
+三路調查完畢後，請主指揮官交叉比對情報，提煉出『我們耳機的必勝破局點（定價與主打賣點）』，並自動建立一個高質感的視覺化網頁檔案『earphone-warroom.html』，包含競品戰力五角雷達圖與客群需求卡片！
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 9: 成果驗收戰情室 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">DELIVERABLE 1</span>
+        <h2 class="slide-title">🏆 成果驗收：耳機市場情報戰情室 (War Room)</h2>
+        <p class="slide-subtitle">產出 earphone-warroom.html：五角戰力雷達圖 + 客群矩陣 + NT$ 3,880 破局定價</p>
+      </div>
+      <div class="slide-body">
+        <div class="slide-image-box" onclick="openZoomModal('../PIC/ch12_earphone_warroom_preview.svg')">
+          <img src="../PIC/ch12_earphone_warroom_preview.svg" alt="AeroPulse Pro 藍牙耳機市場情報戰情室與雷達圖">
+          <div class="slide-image-hint">🔍 點擊全螢幕放大檢視</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 10: 拓展案例二：軟體公司 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">PRACTICAL CASE 2</span>
+        <h2 class="slide-title">💻 拓展案例二：【一人軟體公司】全端開發與測試軍團</h2>
+        <p class="slide-subtitle">想做 SaaS 線上預約系統？派出 4 位特工分工完成，前後端契約 100% 吻合！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="card">
+            <h4 style="color: #38bdf8; margin-bottom: 8px;">1. 產品經理 PM</h4>
+            <p style="font-size: 0.85rem;">定義預約表單欄位、防呆規則，產出標準 <code>schema.json</code> 規範。</p>
+          </div>
+          <div class="card">
+            <h4 style="color: #818cf8; margin-bottom: 8px;">2. 前端介面設計師</h4>
+            <p style="font-size: 0.85rem;">依 PM 規格使用 Tailwind 打造現代玻璃擬態預約頁面 <code>booking.html</code>。</p>
+          </div>
+          <div class="card">
+            <h4 style="color: #34d399; margin-bottom: 8px;">3. 後端 API 工程師</h4>
+            <p style="font-size: 0.85rem;">撰寫防 SQLi / XSS 的資料接收處理模組 <code>api/booking.js</code>。</p>
+          </div>
+          <div class="card">
+            <h4 style="color: #fbbf24; margin-bottom: 8px;">4. QA 自動化測試員</h4>
+            <p style="font-size: 0.85rem;">撰寫 5 組邊界測試，終端機回傳「5 passed, 0 failed」綠燈交付！</p>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px;">
+          <strong style="color: #38bdf8;">🎁 交付亮點：</strong>
+          <span style="color: #cbd5e1;">前後端欄位完全遵照 PM 契約，測試全數自動通過，宛如擁有一組資深工程部隊為你打工！</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 11: 拓展案例三：出海品牌 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-rose">PRACTICAL CASE 3</span>
+        <h2 class="slide-title">🌍 拓展案例三：【跨境出海】多語系爆款與在地文化避雷</h2>
+        <p class="slide-subtitle">台灣精品高山茶賣向美、日、德！告別僵硬機翻與文化禁忌：</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h3 style="color: #f43f5e;">🇯🇵 日本文化行銷特工</h3>
+            <p style="font-size: 0.85rem;">以「贈答の作法」寫出禪意文案。特別提醒：<strong>包裝切忌純白緞帶</strong>，應採用金銀水引結繩。</p>
+          </div>
+          <div class="card">
+            <h3 style="color: #38bdf8;">🇺🇸 北美社群短影音特工</h3>
+            <p style="font-size: 0.85rem;">主打「Ditch your 3rd coffee! Zero Sugar」，節奏明快、直擊白領下午提神與環保痛點。</p>
+          </div>
+          <div class="card">
+            <h3 style="color: #fbbf24;">🇩🇪 德國品質與法規特工</h3>
+            <p style="font-size: 0.85rem;">以理性務實著稱，列出清晰的 SGS 檢驗條目與歐盟有機食品認證標示，直球對決理性質詢。</p>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px;">
+          <strong style="color: #f43f5e;">🎁 交付物：</strong>
+          <span style="color: #cbd5e1;">自動產出 <code>global-marketing.html</code>，一鍵切換三國旗標籤預覽專屬在地化社群卡片！</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 12: 案例四：自媒體雙軌 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">MASTERPIECE CASE 4</span>
+        <h2 class="slide-title">🎥 壓軸王牌：無人值守雙軌影音自媒體工廠</h2>
+        <p class="slide-subtitle">自媒體最高境界：「一魚兩吃（One Topic, Dual Formats）」流量密碼！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: #0284c7; background: rgba(3, 105, 161, 0.15);">
+            <h3 style="color: #7dd3fc;">🎥 軌道 A：核心事件解說影片 (5~8 分鐘)</h3>
+            <ul>
+              <li><strong>受眾與定位</strong>：大眾泛流量、搜尋推薦、快節奏。</li>
+              <li><strong>核心價值</strong>：5 分鐘搞懂事件核心爭議與官方最新回應。</li>
+              <li><strong>流量目標</strong>：爭取破百萬大眾推薦與快速轉發。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: #a21caf; background: rgba(112, 26, 117, 0.15);">
+            <h3 style="color: #f5d0fe;">🎙️ 軌道 B：雙人對談漫談 Podcast (20~30 分鐘)</h3>
+            <ul>
+              <li><strong>受眾與定位</strong>：死忠鐵粉、觀點激辯、聽覺沉浸陪伴。</li>
+              <li><strong>核心價值</strong>：正反立場尖銳對抗，挖掘事件背後的深層思維。</li>
+              <li><strong>流量目標</strong>：創造極致超長觀看停留時長（Watch Time）。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px; border-color: var(--accent-gold);">
+          <strong style="color: var(--accent-gold);">💡 顛覆性突破：</strong>
+          <span style="color: #cbd5e1;">從 NotebookLM 雙產物生成、下載、精準字幕校正、FFmpeg 剪輯到 YouTube 上架，全程本機 CLI 接管，<strong>零人工搬運！</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 13: 雙軌六階段架構圖 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">SIX-STAGE PIPELINE</span>
+        <h2 class="slide-title">⚡ 雙軌自媒體六階段無人值守管線圖</h2>
+        <p class="slide-subtitle">單一新聞 ➔ 白皮書 ➔ NotebookLM 雙產物 ➔ 精準字幕 ➔ 雙縮圖 ➔ FFmpeg 重整 ➔ YouTube 雙上傳</p>
+      </div>
+      <div class="slide-body">
+        <div class="slide-image-box" onclick="openZoomModal('../PIC/ch12_dual_track_media_pipeline.svg')">
+          <img src="../PIC/ch12_dual_track_media_pipeline.svg" alt="無人值守雙軌影音自媒體工廠全景管線圖">
+          <div class="slide-image-hint">🔍 點擊全螢幕放大檢視</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 14: 核心亮點：精準字幕 ================= -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">CRITICAL ENHANCEMENT</span>
+        <h2 class="slide-title">✨ 核心亮點：為什麼需要「精準字幕產生員」？</h2>
+        <p class="slide-subtitle">語音轉文字（ASR）常見的兩大災難，由專屬特工徹底解決！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <h3 style="color: #fb7185;">❌ 常見一般字幕的缺點</h3>
+            <ul>
+              <li><strong>一行太長（25~30 字）</strong>：字幕橫跨整個畫面，手機直立觀看時遮擋畫面核心主體。</li>
+              <li><strong>生硬機械斷句</strong>：在名詞與動詞中間被硬生生切開，讀起來極度彆扭。</li>
+              <li><strong>同音錯字多</strong>：專有名詞（如 ANC 降噪、OWS）常被辨識成不知所云的中文。</li>
+              <li><strong>缺乏講者區隔</strong>：雙人對談時分不清這句話是誰說的。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: #38bdf8; background: rgba(15, 23, 42, 0.9);">
+            <h3 style="color: #38bdf8;">✔ 第三階段：精準字幕產生員的解法</h3>
+            <ul>
+              <li><strong>嚴格限長 14~18 字</strong>：每句約 1.5~2.5 秒，最適合眼睛掃讀與手機觀看。</li>
+              <li><strong>語意呼吸自然斷句</strong>：依照人類語義完整度換行，告別機器人感。</li>
+              <li><strong>專有名詞校正</strong>：修正錯字，過濾「那個、就是說」等口頭贅詞。</li>
+              <li><strong>雙人標記</strong>：自動加上 <code>[主持人]</code> 與 <code>[嘉賓]</code>，觀點對立清晰！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px; border-color: var(--accent-cyan);">
+          <strong style="color: var(--accent-cyan);">🚀 無縫銜接：</strong>
+          <span style="color: #cbd5e1;">產出的 <code>briefing.srt</code> 與 <code>podcast.srt</code> 直接交由第五階段 FFmpeg 壓製，音訊與字幕毫秒級精確同步！</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Slide 15: 總結與展望 ================= -->
+    <div class="slide">
+      <div class="slide-body" style="text-align: center; justify-content: center; align-items: center;">
+        <span class="slide-pill pill-indigo" style="font-size: 0.9rem; padding: 6px 16px; margin-bottom: 20px;">
+          🎉 CHAPTER 12 COMPLETED
+        </span>
+        <h2 style="font-size: 2.8rem; font-weight: 900; line-height: 1.3; margin-bottom: 20px;">
+          恭喜掌握次世代<br>
+          <span style="color: var(--accent-cyan);">多代理人團隊作戰思維！</span>
+        </h2>
+        <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 780px; line-height: 1.7; margin-bottom: 30px;">
+          你已經不再是單一對話視窗的打工仔，而是能夠指揮多個特工調度、沙盒隔離、CLI 自動發布的高階專案總指揮！
+        </p>
+
+        <div class="banner" style="max-width: 820px; text-align: left; margin-bottom: 30px; border-color: var(--accent-indigo);">
+          <h4 style="color: #818cf8; margin-bottom: 6px;">🔮 下一站預告：Chapter 13 · 自我修復迴圈 (Self-Healing Loop)</h4>
+          <p style="font-size: 0.92rem; color: #cbd5e1; margin: 0;">
+            不僅能讓 AI 寫代碼，更讓 AI 自己跑測試、即時感測終端機報錯（Stack Trace）、自動定位 bug 並自我迴圈修復，全綠燈才交付！
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+          <a href="../chapters/chapter12.html" class="slide-pill pill-indigo" style="text-decoration: none; font-size: 0.95rem; padding: 10px 22px;">
+            📖 複習第 12 章完整講義
+          </a>
+          <a href="../earphone-warroom.html" target="_blank" class="slide-pill pill-cyan" style="text-decoration: none; font-size: 0.95rem; padding: 10px 22px;">
+            🎧 開啟耳機市場戰情室 ↗
+          </a>
+          <a href="../index.html" class="slide-pill pill-gold" style="text-decoration: none; font-size: 0.95rem; padding: 10px 22px;">
+            🏠 返回課程首頁
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <img id="zoomImg" src="" alt="Zoomed view">
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerBtn = document.getElementById('timerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Progress bar
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      // Counter
+      const padCurrent = String(currentSlide + 1).padStart(2, '0');
+      const padTotal = String(totalSlides).padStart(2, '0');
+      slideCounter.textContent = `${padCurrent} / ${padTotal}`;
+
+      // Disable/Enable Nav buttons
+      prevBtn.style.opacity = currentSlide === 0 ? '0.3' : '1';
+      prevBtn.style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
+      nextBtn.style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+      nextBtn.style.pointerEvents = currentSlide === totalSlides - 1 ? 'none' : 'auto';
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetTimer();
+      }
+    });
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>
