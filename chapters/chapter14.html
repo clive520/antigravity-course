@@ -53,7 +53,8 @@
         <li><a href="#sec-14-2">14-2 工具就緒：安裝、雲端整合與基本使用</a></li>
         <li><a href="#sec-14-3">14-3 核心動手做：耳機專案的「第二大腦」</a></li>
         <li><a href="#sec-14-4">14-4 初學者寶庫：三大生活化 MCP 實戰</a></li>
-        <li><a href="#sec-14-5">14-5 成果驗收：生態展望與常見 Q&A</a></li>
+        <li><a href="#sec-14-5">14-5 旗艦生活拓展：Google 全家桶與網頁自動訂票</a></li>
+        <li><a href="#sec-14-6">14-6 成果驗收：生態展望與常見 Q&A</a></li>
       </ul>
     </aside>
 
@@ -315,9 +316,146 @@
         </div>
       </section>
 
-      <!-- 14-5 成果驗收與常見 Q&A -->
+      <!-- 14-5 旗艦生活拓展：Google 全家桶與網頁自動化 -->
       <section id="sec-14-5" class="content-section">
-        <h2>14-5 成果驗收與生態展望：常見疑惑 Q&A</h2>
+        <h2>14-5 旗艦生活拓展：利用 MCP 操控 Google 全家桶與網頁自動化（人機協同實戰）</h2>
+        <p>學會了讓 AI 整理本地筆記後，很多學員會問：「<strong>MCP 還能幫我做什麼更貼近日常生活的神奇任務？</strong>」答案是：<strong>掌控你每天都在用的 Google 雲端生態與真實網頁操作！</strong></p>
+        
+        <p>過去你需要在十幾個瀏覽器分頁切來切去：複製客戶信件、貼到 Excel 計算報價、開日曆查檔期、開 Word 起草合約，或者在各大機票網站被複雜的航班資訊搞得頭昏眼花。現在，透過 MCP 協議，AntiGravity 可以像一位<strong>「長了雙眼與雙手的全能秘書」</strong>，把這一切自動串接起來！</p>
+
+        <!-- 板塊一：Google 全家桶 MCP 實戰 -->
+        <div class="step-box" style="margin-top: 2rem; border-color: rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.03);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #facc15; margin: 0; font-size: 1.25rem;">🌐 旗艦應用一：Google 全家桶 MCP 實戰 — 一人工作室的「全自動 VIP 商務秘書」</h3>
+            <span style="font-size: 0.8rem; background: rgba(234, 179, 8, 0.15); color: #facc15; padding: 0.25rem 0.65rem; border-radius: 4px; font-weight: 700;">Gmail / 日曆 / 試算表 / 文件 / 簡報 / 雲端硬碟</span>
+          </div>
+
+          <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.7;">
+            <strong>生活 / 商業痛點</strong>：身為自由接案者、個人工作室老闆或專案經理，每天收到潛在客戶的合作信件後，需要手動經歷整整 6 道繁瑣工序：登入 Gmail 閱讀需求 ➔ 打開 Google Sheets 登錄商機並試算報價 ➔ 查看 Google Calendar 尋找會議空檔 ➔ 複製 Google Docs 範本起草合作協議 ➔ 製作 Google Slides 提案簡報初稿 ➔ 最後再寫信回覆客戶。全套流程往往耗去 1~2 個小時。
+          </p>
+
+          <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.1rem; margin: 1.25rem 0;">
+            <div style="font-weight: 700; color: #facc15; font-size: 0.95rem; margin-bottom: 0.6rem;">🧩 Google Workspace MCP 工具插槽協同地圖：</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; font-size: 0.86rem; color: #cbd5e1;">
+              <div>📧 <strong>Gmail MCP</strong>：抓取未讀合作郵件、提煉需求重點、起草回覆信草稿</div>
+              <div>📊 <strong>Google Sheets MCP</strong>：自動新增潛在客戶行、輸入工時並自動計算總報價</div>
+              <div>📅 <strong>Calendar MCP</strong>：比對行事曆既有排程、找出下週 3 個 30 分鐘諮詢空檔</div>
+              <div>📝 <strong>Google Docs MCP</strong>：呼叫制式合約模板、動態填入客戶名稱與項目規範</div>
+              <div>📽️ <strong>Google Slides MCP</strong>：根據專案架構自動生成 5 頁極簡專業 Pitch 簡報</div>
+              <div>📁 <strong>Google Drive MCP</strong>：在指定專案資料夾自動歸檔並設定客戶檢閱分享連結</div>
+            </div>
+          </div>
+
+          <div class="code-block" style="margin: 1.25rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：Google 全家桶全自動接案秘書</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請啟動 Google Workspace 綜合秘書流程，透過 MCP 協議依序執行以下任務：
+
+1.【讀取郵件 (Gmail)】：
+  搜尋今天主旨包含「合作洽詢」或「專案報價」的最新 1 封未讀郵件，萃取：發信人、公司名稱、需求摘要、預算範圍。
+
+2.【登錄商機與試算 (Google Sheets)】：
+  打開我 Google 雲端硬碟中的「2026_業務商機追蹤表.xlsx」：
+  - 在「潛在客戶」工作表最下方追加一筆記錄（記錄發信人、公司名稱、日期與需求項目）。
+  - 根據需求項目，自動填入對應工時與費率公式，計算出建議報價金額。
+
+3.【排定諮詢時段 (Google Calendar)】：
+  檢查我下週一至週三的行事曆，找出 3 個沒有任何會議衝突的 30 分鐘下午時段（例如 14:00~14:30、15:30~16:00）。
+
+4.【起草意向書與簡報 (Google Docs & Slides & Drive)】：
+  - 在 Google Drive 的「專案提案區/」下，以 Docs 建立一份「合作意向備忘錄_草案.docx」，填入剛才試算的報價與工作項目。
+  - 以 Slides 建立 5 頁簡報草稿：封面、客戶痛點、解決方案、時程規劃、報價方案。
+  - 將這兩個檔案設定為「擁有連結者可檢閱」，並取得分享網址。
+
+5.【起草回信草稿 (Gmail)】：
+  在 Gmail 中針對該信件起草一封親切有禮的繁體中文回信草稿（絕對不要直接寄出！）：
+  - 感謝對方的合作意向並條列簡述我們能提供的解決方案。
+  - 附上下週可進行線上會議的 3 個建議時段供對方選擇。
+  - 附上 Google Docs 意向書與 Google Slides 簡報的預覽連結。
+  - 提示對方：「回覆確定時段後，我將為您發送 Google Meet 會議邀請。」
+
+完成後，請在對話框彙報執行進度，讓我直接前往 Gmail 檢查草稿！</code></pre>
+          </div>
+
+          <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 0.9rem; font-size: 0.88rem; color: #a7f3d0;">
+            🛡️ <strong>關鍵安全防呆心法（Draft First 原則）</strong>：<br>
+            涉及外部客戶溝通時，<strong>一律要求 AI「起草為草稿（Draft）」，嚴禁直接自動點擊寄出！</strong> 人類花 30 秒在 Gmail 檢查確認文字語氣與附件連結無誤後，親手按下一鍵發送，既節省 90% 的重複工作，又保證 100% 的商業信譽安全！
+          </div>
+        </div>
+
+        <!-- 板塊二：網頁自動操控與人機協同實戰 -->
+        <div class="step-box" style="margin-top: 2rem; border-color: rgba(99, 102, 241, 0.4); background: rgba(99, 102, 241, 0.03);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="color: #818cf8; margin: 0; font-size: 1.25rem;">✈️ 旗艦應用二：真實網頁自動化操控 — 東京賞櫻機票比價、自動填單與信用卡安全接棒（HITL）</h3>
+            <span style="font-size: 0.8rem; background: rgba(99, 102, 241, 0.15); color: #818cf8; padding: 0.25rem 0.65rem; border-radius: 4px; font-weight: 700;">Browser MCP + Human-in-the-Loop</span>
+          </div>
+
+          <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.7;">
+            <strong>生活情境</strong>：你想規劃一趟台北直飛東京的 5 天 4 夜賞櫻自由行。訂機票最讓人心力交瘁的，不是花錢，而是<strong>繁瑣至極的機械性手續</strong>：在 Skyscanner / 航空公司官網輸入日期、切換比較不同航班、篩選含 23kg 托運行李的直飛票價，選定後還要手忙腳亂拿出護照，一個字母一個字母核對英文姓名拼音、護照號碼、有效期限、出生年月日、聯絡手機。稍不留神打錯一個英文字母，改票費用就要花上數千元！
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem;">🖥️ 1. 本機可視化操作 (Headless: False)</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+                透過 Browser MCP（例如 Playwright / Puppeteer），AI 會在你的螢幕上<strong>真實彈出一個看得見的 Chrome 瀏覽器視窗</strong>。你可以親眼看著它自動點擊輸入框、選擇日期選單、滾動比價列表。
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #f43f5e; margin-bottom: 0.35rem;">🛑 2. 人機協同安全剎車點 (HITL)</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+                <strong>金流交易絕對不交給 AI！</strong> 當所有繁重的航班比價與旅客個資填寫完畢、網頁跳轉至「信用卡結帳與 3D 簡訊驗證碼」時，AI 必須<strong>立刻強制暫停並提示使用者接手</strong>，由人類親自刷卡！
+              </p>
+            </div>
+          </div>
+
+          <div class="code-block" style="margin: 1.25rem 0;">
+            <div class="code-header">
+              <span>黃金指揮官 Prompt：機票自動比價填單與付款安全交棒</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請啟動 Browser MCP 網頁操控特工，以本機可視化模式（headless: false）開啟 Chrome 瀏覽器，協助我完成機票比價與訂位資料填寫任務：
+
+【第一階段：智慧比價與篩選】
+1. 前往機票比價平台（或指定航空公司官網）。
+2. 設定航線條件：
+   - 出發地：台北桃園（TPE）或松山（TSA）
+   - 目的地：東京成田（NRT）或羽田（HND）
+   - 日期：2026/04/01（去程）至 2026/04/05（回程）
+   - 人數：2 位成人
+3. 嚴格篩選條件：
+   - 必須為「直飛（Direct Flight）」
+   - 去程航班時間為 07:00~11:00（早去），回程航班時間為 14:00~20:00（午回或晚回）
+   - 票價方案必須「內含至少 20~23kg 托運行李」
+4. 在對話框中回報比價結果前 3 優選組合（列出航空公司、起降時間、總票價與行李額度），等待我確認選擇哪一班。
+
+【第二階段：自動填單與安全接棒（Human-in-the-Loop）】
+當我確認選擇的航班組合後：
+1. 自動點擊進入旅客資料填寫頁面。
+2. 讀取我本機安全配置的乘機人資訊檔，自動在網頁表格填寫：
+   - 乘客一：WANG / DA-MING（護照號碼：310000001、生日：1990/05/15、性別：男）
+   - 乘客二：CHEN / HSIAO-MEI（護照號碼：310000002、生日：1992/08/20、性別：女）
+   - 聯絡信箱與手機號碼
+3.【⚡ 強制安全剎車點 ⚡】：
+   - 當頁面推進至「信用卡付款資料填寫（Credit Card Details）」或「確認支付金額」頁面時，AI 必須【立即停止一切自動化動作】！
+   - 絕對禁止嘗試輸入任何信用卡卡號、有效月年或 CVV 安全碼！
+   - 保持瀏覽器視窗開啟，並在 Antigravity 對話框發出明確通知：
+     「報告指揮官！航班已選定、兩位旅客的英文姓名與護照資料均已精準填妥。目前畫面已停留在信用卡付款結帳頁，請您親自接手輸入卡號與簡訊 OTP 驗證碼完成刷卡！」</code></pre>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; font-size: 0.88rem; color: #cbd5e1; line-height: 1.7;">
+            💡 <strong>驗收成果與心智模型轉變</strong>：<br>
+            • <strong>機械苦力 0 負擔</strong>：比價、篩選、對照護照號碼填寫等 85% 枯燥易出錯的動作，AI 在 2 分鐘內自動完成且零拼字錯誤。<br>
+            • <strong>決策與金流 100% 在你手中</strong>：最後的 15%（刷卡、核對金額、輸入簡訊驗證碼）由人類親手把關。這就是現代 AI 輔助生活的終極範式——<strong>「AI 衝鋒陷陣填好單，人類掌握大權按付款」</strong>！
+          </div>
+        </div>
+      </section>
+
+      <!-- 14-6 成果驗收與常見 Q&A -->
+      <section id="sec-14-6" class="content-section">
+        <h2>14-6 成果驗收與生態展望：常見疑惑 Q&A</h2>
         <p>在享受 MCP 帶來的跨界威力時，初學者常有以下疑惑：</p>
 
         <div class="step-box">
@@ -335,9 +473,14 @@
         </div>
 
         <div class="step-box">
-          <h4>❓ Q3：除了 Obsidian，MCP 還能外接什麼工具？</h4>
+          <h4>❓ Q3：除了 Obsidian，MCP 還有哪些熱門軟體與生態插槽可以操控？</h4>
           <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
-            <strong>答：生態系無限龐大！</strong> 目前全球開發者已經為 MCP 打造了上百種插槽：包含本機檔案系統（Filesystem）、GitHub 工具、Google Drive / Slack 連接器、PostgreSQL / SQLite 資料庫直連等。學會 MCP，你就擁有了一個全能的 AI 擴充底座！
+            <strong>答：生態系無限龐大，覆蓋工作與生活全場景！</strong><br>
+            • <strong>辦公與通訊協同</strong>：Google Workspace（Gmail、Calendar、Sheets、Docs、Slides、Drive）、Slack、Notion、Discord。<br>
+            • <strong>瀏覽器與真實網頁操控</strong>：Playwright / Puppeteer MCP，支援真實 Chrome 視窗自動比價、填單與人機協同截圖除錯。<br>
+            • <strong>工程與資料庫工具</strong>：GitHub、GitLab、PostgreSQL、MySQL、SQLite、Supabase 直連。<br>
+            • <strong>個人終端與系統級整合</strong>：本機檔案系統（Filesystem）、終端命令列、甚至智慧家居 Home Assistant 聯網設備。<br>
+            只要裝上對應的 MCP 伺服器，你的 AI 就能化身為無所不能的全能管家！
           </p>
         </div>
 
