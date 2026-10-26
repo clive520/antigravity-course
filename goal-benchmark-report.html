@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroPulse Pro 全站夜間無人值守重構驗收報告 — Antigravity /goal 極限實戰</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .benchmark-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin: 2rem 0;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .metric-card:hover {
+      border-color: rgba(251, 191, 36, 0.5);
+      transform: translateY(-2px);
+    }
+    .metric-value {
+      font-size: 2.4rem;
+      font-weight: 900;
+      font-family: var(--font-mono, monospace);
+      margin: 0.5rem 0 0.25rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .metric-change {
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+    .change-up {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+    .timeline-box {
+      border-left: 2px solid rgba(251, 191, 36, 0.4);
+      margin-left: 1rem;
+      padding-left: 1.75rem;
+      position: relative;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -2.35rem;
+      top: 0.25rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0b1120;
+      border: 3px solid #fbbf24;
+    }
+    .timeline-dot.rollback {
+      border-color: #f43f5e;
+      background: rgba(244, 63, 94, 0.2);
+    }
+    .timeline-dot.done {
+      border-color: #10b981;
+      background: #10b981;
+    }
+    .diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.92rem;
+    }
+    .diff-table th, .diff-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .diff-table th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .toggle-group {
+      display: inline-flex;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #060913;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽 -->
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; border-color: rgba(251, 191, 36, 0.4);">/goal 成果報告</span>
+    </a>
+    <nav class="nav-links">
+      <a href="chapters/chapter15.html">📖 返回第 15 章講義</a>
+      <a href="index.html">首頁</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">🌙 深色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="benchmark-container">
+    <!-- 標題區 -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); padding: 0.35rem 1rem; border-radius: 9999px; color: #fbbf24; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem;">
+        <span>🌙 夜間無人值守自主研發 · 完工交付報告</span>
+      </div>
+      <h1 style="font-size: 2.5rem; font-weight: 900; letter-spacing: -0.025em; margin-bottom: 1rem;">
+        AeroPulse Pro 全站極限健檢與現代化重構成果
+      </h1>
+      <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 760px; margin: 0 auto; line-height: 1.7;">
+        任務下達時間：<strong>23:30</strong> ➔ 人類離席關燈睡覺 ➔ AI 自主進行 38 輪調度、7 次自癒修補與 1 次死路回退 ➔ 完工時間：<strong>03:48</strong>。
+      </p>
+    </div>
+
+    <!-- 運行狀態統計看板 -->
+    <div style="background: linear-gradient(135deg, rgba(30, 27, 75, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 16px; padding: 1.75rem; margin-bottom: 2.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+        <div style="font-weight: 700; color: #fbbf24; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+          <span>🤖 /goal 自主狀態機運行摘要 (Autonomous State Summary)</span>
+        </div>
+        <div style="font-size: 0.85rem; color: #34d399; background: rgba(16, 185, 129, 0.15); padding: 4px 12px; border-radius: 9999px; font-weight: 700;">
+          ● 狀態：目標 100% 達成 (Goal Completed)
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; text-align: center;">
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">無人值守總時長</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #f8fafc; font-family: var(--font-mono);">04h 18m</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">人類離席睡眠中</div>
+        </div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">工具自主調用數</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #38bdf8; font-family: var(--font-mono);">38 次</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">shell, read, patch, test</div>
+        </div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">缺陷自主自癒</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #34d399; font-family: var(--font-mono);">7 處</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">未靠人類任何一句提點</div>
+        </div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">死路回退快照</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #fb7185; font-family: var(--font-mono);">1 次</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">git rollback 逃脫死胡同</div>
+        </div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Context 語境壓縮</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #c084fc; font-family: var(--font-mono);">3 次</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">自動 /compact 零溢出</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 大不可妥協指標卡片 -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 800;">🏆 關鍵驗收指標前後對比 (Before vs After)</h2>
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="btnShowAfter" onclick="switchMode('after')">重構後 (After)</button>
+        <button class="toggle-btn" id="btnShowBefore" onclick="switchMode('before')">重構前 (Before)</button>
+      </div>
+    </div>
+
+    <div class="metric-grid">
+      <!-- 指標 1：Lighthouse 效能 -->
+      <div class="metric-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">⚡ 效能評分 (Performance)</span>
+          <span class="metric-change change-up" id="changePerf">+27 分</span>
+        </div>
+        <div class="metric-value" style="color: #34d399;" id="valPerf">
+          98 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;" id="descPerf">
+          WebP 圖片轉換、CSS 關鍵路徑延遲載入、腳本非同步執行。
+        </p>
+      </div>
+
+      <!-- 指標 2：a11y 無障礙 -->
+      <div class="metric-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">♿ 無障礙 (Accessibility)</span>
+          <span class="metric-change change-up" id="changeA11y">+18 分</span>
+        </div>
+        <div class="metric-value" style="color: #38bdf8;" id="valA11y">
+          100 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;" id="descA11y">
+          補齊所有圖片 alt 描述、WCAG 2.1 AA 色彩對比與全鍵盤導航。
+        </p>
+      </div>
+
+      <!-- 指標 3：SEO 搜尋最佳化 -->
+      <div class="metric-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">🔍 搜尋最佳化 (SEO)</span>
+          <span class="metric-change change-up" id="changeSeo">+24 分</span>
+        </div>
+        <div class="metric-value" style="color: #c084fc;" id="valSeo">
+          100 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;" id="descSeo">
+          Open Graph 社群預覽卡片、JSON-LD 結構化資料、Sitemap 建立。
+        </p>
+      </div>
+
+      <!-- 指標 4：全站超連結 -->
+      <div class="metric-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">🔗 全站死連結排查</span>
+          <span class="metric-change change-up" id="changeLinks">0 錯誤</span>
+        </div>
+        <div class="metric-value" style="color: #fbbf24;" id="valLinks">
+          0 <span style="font-size: 1.1rem; color: var(--text-muted);">處失效</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;" id="descLinks">
+          全站 33 個 HTML 頁面所有內部錨點與外部資產連結 100% 暢通。
+        </p>
+      </div>
+    </div>
+
+    <!-- 詳細異動對照表 -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.75rem; margin: 2.5rem 0;">
+      <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #fbbf24;">📋 核心檔案重構前後規格對照</h3>
+      <table class="diff-table">
+        <thead>
+          <tr>
+            <th>檢驗項目</th>
+            <th>原始狀態 (Before)</th>
+            <th>/goal 自主重構成果 (After)</th>
+            <th>工程收益</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>首頁商品高解析圖</strong></td>
+            <td>3 張未壓縮 PNG (共 8.4 MB)</td>
+            <td>轉換為 WebP 格式並建立 <code>loading="lazy"</code> (共 620 KB)</td>
+            <td><span style="color: #34d399; font-weight: 700;">體積縮減 92.6%</span>，首屏秒開</td>
+          </tr>
+          <tr>
+            <td><strong>WCAG 無障礙標籤</strong></td>
+            <td>購物車按鈕無 aria-label、4 處圖片缺 alt</td>
+            <td>全面注入語意化屬性與高對比 Focus 輪廓線</td>
+            <td><span style="color: #38bdf8; font-weight: 700;">通過 100% 讀屏檢測</span></td>
+          </tr>
+          <tr>
+            <td><strong>社群分享與 SEO</strong></td>
+            <td>僅有簡單 title，貼到 LINE/FB 無預覽卡</td>
+            <td>注入完整 og:image, og:description, JSON-LD Product</td>
+            <td><span style="color: #c084fc; font-weight: 700;">精美富媒體卡片預覽</span></td>
+          </tr>
+          <tr>
+            <td><strong>導覽列 CSS 破版自癒</strong></td>
+            <td>過度精簡 CSS 導致手機版選單消失</td>
+            <td>自主觸發 <code>git rollback</code> 回溯，改用安全局部 patch</td>
+            <td><span style="color: #fbbf24; font-weight: 700;">零破版，多螢幕自適應</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 自主迭代時間軸 -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 2rem; margin: 2.5rem 0;">
+      <h3 style="font-size: 1.3rem; margin-bottom: 1.5rem; color: #f8fafc;">
+        ⏱️ 夜間無人值守迭代時序軸 (Autonomous Execution Timeline)
+      </h3>
+      <div class="timeline-box">
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div style="font-size: 0.85rem; color: #fbbf24; font-family: var(--font-mono); font-weight: 700;">23:30 · 指揮官離席</div>
+          <h4 style="margin: 0.35rem 0 0.25rem;">任務啟動：/goal 模式接管</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            人類輸入「/goal 完成 AeroPulse Pro 全站效能 95+ 與無障礙合規」，關閉螢幕離席睡覺。AI 開始深度思考，拆解為 4 大里程碑。
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div style="font-size: 0.85rem; color: #38bdf8; font-family: var(--font-mono); font-weight: 700;">00:15 · 里程碑 1 達成</div>
+          <h4 style="margin: 0.35rem 0 0.25rem;">全站靜態探勘與資源優化</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            自動排查全站 33 頁 HTML，找出 4 處失效錨點並修復；將所有商品大圖無損壓縮為 WebP 格式，並建立第一組 Git 快照。
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot rollback"></div>
+          <div style="font-size: 0.85rem; color: #fb7185; font-family: var(--font-mono); font-weight: 700;">01:40 · 觸發死路回退 (Backtracking)</div>
+          <h4 style="margin: 0.35rem 0 0.25rem;">遭遇 CSS 壓縮破版 ➔ 自主回溯快照</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            AI 嘗試激進合併 CSS 時導致漢堡選單異常。自我批判測試未通過，AI <strong>未向人類求救</strong>，而是自主執行 <code>git reset --hard HEAD~1</code> 回滾到上一安全快照，改採保留關鍵樣式的局部替換策略！
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div style="font-size: 0.85rem; color: #c084fc; font-family: var(--font-mono); font-weight: 700;">02:50 · 里程碑 2 &amp; 3 達成</div>
+          <h4 style="margin: 0.35rem 0 0.25rem;">SEO 標籤全齊備與 WCAG 2.1 AA 合規</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            注入 Open Graph、Twitter Card 與 JSON-LD 結構化資料；修復所有低對比文字與鍵盤 Tab 焦點輪廓線。自動執行 <code>/compact</code> 壓縮上下文記憶。
+          </p>
+        </div>
+
+        <div class="timeline-item" style="margin-bottom: 0;">
+          <div class="timeline-dot done"></div>
+          <div style="font-size: 0.85rem; color: #34d399; font-family: var(--font-mono); font-weight: 700;">03:48 · 終極驗收全綠燈</div>
+          <h4 style="margin: 0.35rem 0 0.25rem;">全套自動化測試通過，生成交付報告</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            運行 Lighthouse 評估引擎與全站超連結驗證，指標全部達到或超越設定門檻！生成獨立驗收網頁，靜候指揮官早晨檢閱。
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 底部操作列 -->
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="chapters/chapter15.html" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.75rem 1.75rem; font-size: 1rem; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #060913; font-weight: 800;">
+        <span>📖 進入第 15 章講義學習完整心法 ➔</span>
+      </a>
+      <div style="margin-top: 1rem;">
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">返回 Antigravity 實戰學院首頁</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    function switchMode(mode) {
+      const btnBefore = document.getElementById('btnShowBefore');
+      const btnAfter = document.getElementById('btnShowAfter');
+
+      const valPerf = document.getElementById('valPerf');
+      const valA11y = document.getElementById('valA11y');
+      const valSeo = document.getElementById('valSeo');
+      const valLinks = document.getElementById('valLinks');
+
+      const changePerf = document.getElementById('changePerf');
+      const changeA11y = document.getElementById('changeA11y');
+      const changeSeo = document.getElementById('changeSeo');
+      const changeLinks = document.getElementById('changeLinks');
+
+      if (mode === 'before') {
+        btnBefore.classList.add('active');
+        btnAfter.classList.remove('active');
+
+        valPerf.innerHTML = '71 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>';
+        valPerf.style.color = '#fbbf24';
+        changePerf.textContent = '未優化';
+        changePerf.className = 'metric-change';
+        changePerf.style.background = 'rgba(251, 191, 36, 0.2)';
+        changePerf.style.color = '#fbbf24';
+
+        valA11y.innerHTML = '82 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>';
+        valA11y.style.color = '#fbbf24';
+        changeA11y.textContent = '缺 alt 屬性';
+        changeA11y.className = 'metric-change';
+        changeA11y.style.background = 'rgba(251, 191, 36, 0.2)';
+        changeA11y.style.color = '#fbbf24';
+
+        valSeo.innerHTML = '76 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>';
+        valSeo.style.color = '#fbbf24';
+        changeSeo.textContent = '缺 OG 標籤';
+        changeSeo.className = 'metric-change';
+        changeSeo.style.background = 'rgba(251, 191, 36, 0.2)';
+        changeSeo.style.color = '#fbbf24';
+
+        valLinks.innerHTML = '4 <span style="font-size: 1.1rem; color: var(--text-muted);">處失效</span>';
+        valLinks.style.color = '#fb7185';
+        changeLinks.textContent = '4 處死連結';
+        changeLinks.className = 'metric-change';
+        changeLinks.style.background = 'rgba(244, 63, 94, 0.2)';
+        changeLinks.style.color = '#fb7185';
+
+      } else {
+        btnAfter.classList.add('active');
+        btnBefore.classList.remove('active');
+
+        valPerf.innerHTML = '98 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>';
+        valPerf.style.color = '#34d399';
+        changePerf.textContent = '+27 分';
+        changePerf.className = 'metric-change change-up';
+        changePerf.style.background = '';
+        changePerf.style.color = '';
+
+        valA11y.innerHTML = '100 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>';
+        valA11y.style.color = '#38bdf8';
+        changeA11y.textContent = '+18 分';
+        changeA11y.className = 'metric-change change-up';
+        changeA11y.style.background = '';
+        changeA11y.style.color = '';
+
+        valSeo.innerHTML = '100 <span style="font-size: 1.1rem; color: var(--text-muted);">/ 100</span>';
+        valSeo.style.color = '#c084fc';
+        changeSeo.textContent = '+24 分';
+        changeSeo.className = 'metric-change change-up';
+        changeSeo.style.background = '';
+        changeSeo.style.color = '';
+
+        valLinks.innerHTML = '0 <span style="font-size: 1.1rem; color: var(--text-muted);">處失效</span>';
+        valLinks.style.color = '#fbbf24';
+        changeLinks.textContent = '0 錯誤';
+        changeLinks.className = 'metric-change change-up';
+        changeLinks.style.background = '';
+        changeLinks.style.color = '';
+      }
+    }
+  </script>
+</body>
+</html>
