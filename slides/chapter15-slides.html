@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 15 章 上課簡報：/goal 無人值守極限挑戰 (Autonomous Goal) — Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0c0f1d;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(251, 191, 36, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-purple: #c084fc;
+      --accent-emerald: #10b981;
+      --accent-emerald-light: #34d399;
+      --accent-gold: #fbbf24;
+      --accent-gold-light: #fde047;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24, #fef08a);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Floating Header Controls */
+    .slide-controls-top {
+      position: fixed;
+      top: 14px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(12, 15, 29, 0.85);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .slide-controls-top a,
+    .slide-controls-top button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .slide-controls-top a:hover,
+    .slide-controls-top button:hover {
+      color: var(--text-main);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+      padding: 0 4px;
+    }
+
+    /* Presenter Timer */
+    .slide-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-emerald);
+      cursor: pointer;
+      border-left: 1px solid var(--border-color);
+      padding-left: 10px;
+    }
+
+    /* Main Slide Stage */
+    .slide-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1320px;
+      height: 86vh;
+      max-height: 840px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px 50px;
+      position: relative;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .slide-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .pill-gold { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .pill-cyan { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .pill-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .pill-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+    .pill-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
+
+    .slide-title {
+      font-size: 2.15rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    /* Highlight Banner */
+    .banner {
+      background: linear-gradient(135deg, rgba(120, 53, 15, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 10px 0;
+    }
+
+    /* Interactive Code/Prompt Box */
+    .code-box {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+      max-height: 380px;
+    }
+
+    /* Image Display with Zoom Modal Trigger */
+    .slide-image-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .slide-image-box img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+
+    .slide-image-box:hover img {
+      transform: scale(1.02);
+    }
+
+    .slide-image-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Zoom Modal */
+    .zoom-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .zoom-modal.active {
+      display: flex;
+    }
+
+    .zoom-modal img {
+      max-width: 94vw;
+      max-height: 94vh;
+      border-radius: 10px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Bottom Navigation Controls */
+    .slide-nav-bottom {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(12, 15, 29, 0.85);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-gold);
+      color: #060913;
+      border-color: var(--accent-gold);
+    }
+
+    .nav-shortcuts {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-left: 8px;
+      padding-left: 12px;
+      border-left: 1px solid var(--border-color);
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #060913;
+      font-weight: 800;
+    }
+    .btn-gold:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-cyan {
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #fff;
+    }
+    .btn-cyan:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-main);
+    }
+
+    /* Copy Button in Code Box */
+    .copy-pill {
+      float: right;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-pill:hover {
+      background: var(--accent-gold);
+      color: #060913;
+    }
+
+    /* Badges & Tags */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .tag-gold { background: rgba(251, 191, 36, 0.2); color: #fde047; }
+    .tag-cyan { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+    .tag-emerald { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .tag-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+    .tag-rose { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Floating Header Controls -->
+  <header class="slide-controls-top">
+    <a href="../chapters/chapter15.html" title="返回第 15 章講義">📖 講義網頁</a>
+    <a href="../goal-benchmark-report.html" target="_blank" title="開啟夜間完工報告">🏆 成果報告</a>
+    <span class="slide-counter" id="slideCounter">01 / 16</span>
+    <button id="fullscreenBtn" title="切換全螢幕 (F)">⛶ 全螢幕</button>
+    <div class="slide-timer" id="timerBtn" title="點擊重設計時器 (R)">⏱️ <span id="timerDisplay">00:00</span></div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main class="slide-container" id="slideContainer">
+
+    <!-- Slide 1: 封面 -->
+    <section class="slide active" data-index="1">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">Chapter 15 · 全書終極壓軸</span>
+        <h1 class="slide-title">/goal 無人值守極限挑戰：一覺醒來，AI 自主深度思考完成全站健檢與交付！</h1>
+        <p class="slide-subtitle">突破對話式 AI 最後枷鎖！掌握長程自主代理人、階梯目標分解、死路快照回溯與隔晨交付</p>
+      </div>
+      <div class="slide-body">
+        <div class="banner" style="margin-bottom: 24px;">
+          <h3 style="font-size: 1.35rem; color: #fbbf24; margin-bottom: 8px;">🚀 本章終極目標：擺脫螢幕束縛，實現「關燈離席，全自動研發」</h3>
+          <p style="font-size: 0.98rem; color: #e2e8f0; line-height: 1.7;">
+            傳統人機協同最累的不是 AI 不聰明，而是人類每隔兩分鐘就要按一次「請繼續」。<br>
+            解鎖 Antigravity 的終極殺手鐧 <strong>`/goal`</strong>，立定不可妥協的驗收標準（DoD），你只需安心關燈睡覺；AI 自主狀態機持續深度推理、自我批判測試，清晨直接驗收全綠燈成果！
+          </p>
+        </div>
+        <div class="grid-4">
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🎯</div>
+            <h4 style="color: #fbbf24; margin-bottom: 4px;">里程碑路徑圖</h4>
+            <p style="font-size: 0.82rem;">深度思考將複雜大目標拆解為 3~5 個階梯 Milestone。</p>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🧠</div>
+            <h4 style="color: #38bdf8; margin-bottom: 4px;">Context 預算管理</h4>
+            <p style="font-size: 0.82rem;">定時自主觸發 /compact，杜絕長對話溢出與失憶。</p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🛡️</div>
+            <h4 style="color: #fb7185; margin-bottom: 4px;">死路快照回溯</h4>
+            <p style="font-size: 0.82rem;">遭遇破版自動 git reset 回滾，探索替代路線不卡死。</p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🏆</div>
+            <h4 style="color: #34d399; margin-bottom: 4px;">清晨無人交付</h4>
+            <p style="font-size: 0.82rem;">產出 Lighthouse 98+ 前後對比報告與乾淨 Commit。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: 痛苦現狀剖析 -->
+    <section class="slide" data-index="2">
+      <div class="slide-header">
+        <span class="slide-pill pill-rose">痛點洞察 · PAIN POINTS</span>
+        <h2 class="slide-title">被困在螢幕前的「點擊工具人」：傳統對話的三大枷鎖</h2>
+        <p class="slide-subtitle">為什麼 AI 再聰明，大型專案還是讓我們筋疲力竭？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 22px;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🖱️😫</div>
+            <h3 style="color: #fb7185;">1. 步步等待審批</h3>
+            <p style="line-height: 1.7;">
+              大型專案有 30 幾個步驟。AI 做完兩步就停下來等人類說「繼續」；只要人類離開去喝水，整個進度立刻停擺。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🧠💥</div>
+            <h3 style="color: #fb7185;">2. Context 溢出失憶</h3>
+            <p style="line-height: 1.7;">
+              對話累積到 50 輪以上，AI 開始遺忘前面的核心規格，甚至把第 1 輪修好的程式碼在第 40 輪又改壞，陷入輪迴。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🕳️🔄</div>
+            <h3 style="color: #fb7185;">3. 死胡同鬼打牆</h3>
+            <p style="line-height: 1.7;">
+              某個套件語法出錯，傳統聊天機器人會在同一個錯誤上反覆鬼打牆 10 次，把寶貴的時間與 Token 預算燒得精光。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: 思維大躍遷 -->
+    <section class="slide" data-index="3">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">思維躍遷 · MINDSET SHIFT</span>
+        <h2 class="slide-title">思維革命：從「步步監工」到「關燈下班」的自主代理人</h2>
+        <p class="slide-subtitle">從即時問答（Chat-driven）躍遷至目標導向（Goal-driven）</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 24px; align-items: stretch;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <h3 style="color: #fb7185; margin-bottom: 12px;">❌ 傳統 Chat 模式（呼喚實習生）</h3>
+            <ul style="line-height: 2;">
+              <li>做一步回報一次，人類必須隨時守在螢幕前</li>
+              <li>缺乏自我質疑機制，遇到死路需要人類提點逃脫</li>
+              <li>長程任務中易受 Context 長度限制而遺忘目標</li>
+              <li>人類是大腦、AI 只是手，心智負擔依然沈重</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.5); background: rgba(251, 191, 36, 0.06);">
+            <h3 style="color: #fbbf24; margin-bottom: 12px;">🟢 /goal 自主模式（委託專案經理）</h3>
+            <ul style="line-height: 2;">
+              <li><strong>人類只負責制定「驗收標準（Definition of Done）」</strong></li>
+              <li>AI 自主分解階梯 Milestone，定時自縮 Context</li>
+              <li>每前進一步自主運行測試，遇破版<strong>自動 git reset</strong></li>
+              <li>整夜深度推理，隔日清晨產出完整前後對比報告！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px; text-align: center;">
+          <span style="font-size: 1.15rem; font-weight: 700; color: #fde047;">
+            💡 核心心法：人類不再當程式碼的苦力，而是擁有自動化研發部隊的「超級個體指揮官」！
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: 管線架構圖解 -->
+    <section class="slide" data-index="4">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">架構圖解 · ARCHITECTURE</span>
+        <h2 class="slide-title">AntiGravity 長程自主代理人管線圖 (Pipeline)</h2>
+        <p class="slide-subtitle">目標分解 ➔ 自主狀態機 ➔ Context 預算控制 ➔ 自我批判驗證 ➔ 死路快照回溯 ➔ 隔日清晨交付</p>
+      </div>
+      <div class="slide-body" style="height: 100%;">
+        <div class="slide-image-box" onclick="openZoomModal('../PIC/ch15_autonomous_goal_pipeline.svg')">
+          <img src="../PIC/ch15_autonomous_goal_pipeline.svg" alt="長程自主代理人管線圖">
+          <div class="slide-image-hint">🔍 點擊圖片放大檢視</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: 五大運作齒輪 -->
+    <section class="slide" data-index="5">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">核心機制 · FIVE GEARS</span>
+        <h2 class="slide-title">支撐無人值守的五大工程齒輪</h2>
+        <p class="slide-subtitle">為什麼 /goal 敢讓人類放心地關掉螢幕去睡覺？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 16px;">
+          <div class="card">
+            <span class="tag tag-gold">齒輪 1</span>
+            <h4 style="color: #fbbf24; margin: 6px 0;">目標階梯分解</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">先深度思考將複雜目標拆解為 3~5 個 Milestone，立定每步驗收標準，絕不盲目動工。</p>
+          </div>
+          <div class="card">
+            <span class="tag tag-cyan">齒輪 2</span>
+            <h4 style="color: #38bdf8; margin: 6px 0;">Context 預算管理</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">定時自主觸發 <code>/compact</code> 壓縮歷史記憶，只保留核心進度，永不發生 Context 溢出失憶。</p>
+          </div>
+          <div class="card">
+            <span class="tag tag-emerald">齒輪 3</span>
+            <h4 style="color: #34d399; margin: 6px 0;">自我批判驗證</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">每改動一行代碼必跑自動化測試與規範檢查，不達 100% 綠燈絕不推進下一步。</p>
+          </div>
+          <div class="card">
+            <span class="tag tag-rose">齒輪 4</span>
+            <h4 style="color: #fb7185; margin: 6px 0;">死路快照回溯</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">遇技術死路自動 <code>git reset</code> 回滾快照，換道超車，絕不在錯誤死胡同鬼打牆。</p>
+          </div>
+          <div class="card" style="grid-column: span 2;">
+            <span class="tag tag-purple">齒輪 5</span>
+            <h4 style="color: #c084fc; margin: 6px 0;">透明工程交付物 (Morning Deliverables)</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">全數完工後自動生成前後對比雷達圖、審計日誌與乾淨 Commit，清晨醒來直接驗收！</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: 核心實戰：耳機專案 -->
+    <section class="slide" data-index="6">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">核心實戰 · REAL PROJECT</span>
+        <h2 class="slide-title">全書壓軸大作：AeroPulse Pro 全站全方位夜間重構</h2>
+        <p class="slide-subtitle">下班前下達 /goal 指令，要求 AI 自主完成企業級全方位健檢與現代化改造</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.04);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="color: #fb7185;">🔴 原始站點現狀 (Before)</h4>
+              <span class="tag tag-rose">待改善</span>
+            </div>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>效能評分 71 分</strong>：3 張未壓縮大圖 (8.4MB)，阻礙首屏渲染。</li>
+              <li><strong>無障礙合規 82%</strong>：購物車按鈕無 aria-label、多處圖片缺 alt。</li>
+              <li><strong>SEO 評分 76 分</strong>：無 Open Graph 社群卡片、無 JSON-LD。</li>
+              <li><strong>死連結隱憂</strong>：全站存在 4 處潛在失效跳轉錨點。</li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.5); background: rgba(251, 191, 36, 0.04);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="color: #fbbf24;">🟢 /goal 重構驗收目標 (After)</h4>
+              <span class="tag tag-gold">不可妥協</span>
+            </div>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>⚡ 效能 95+ 分</strong>：圖片無損轉 WebP (縮減 92%)，延遲載入。</li>
+              <li><strong>♿ WCAG 2.1 AA 滿分</strong>：補齊所有語意標籤與高對比焦點線。</li>
+              <li><strong>🔍 SEO 100 分</strong>：社群卡片預覽 + Schema.org Product 結構化資料。</li>
+              <li><strong>🔗 連結零死角</strong>：35 頁全站內部錨點 100% 暢通，無報錯。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: 不可妥協的四大指標 -->
+    <section class="slide" data-index="7">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">驗收準則 · DEFINITION OF DONE</span>
+        <h2 class="slide-title">制定「不可妥協」的四大量化驗收門檻</h2>
+        <p class="slide-subtitle">約束 AI 自主運轉的核心：沒有模糊空間，指標白紙黑字！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4" style="gap: 16px;">
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <span class="tag tag-emerald">門檻 1</span>
+            <h4 style="color: #34d399; margin: 8px 0 4px;">⚡ 效能 95+ 分</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              Lighthouse Performance 評分達標；消除阻塞渲染資源，首屏秒開。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <span class="tag tag-cyan">門檻 2</span>
+            <h4 style="color: #38bdf8; margin: 8px 0 4px;">♿ WCAG 2.1 AA</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              通過 100% 讀屏檢測；所有圖示按鈕補齊 <code>aria-label</code>。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
+            <span class="tag tag-purple">門檻 3</span>
+            <h4 style="color: #c084fc; margin: 8px 0 4px;">🔍 SEO 結構化</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              注入 Open Graph 社群卡片與 Schema.org JSON-LD 電商商品元數據。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4);">
+            <span class="tag tag-gold">門檻 4</span>
+            <h4 style="color: #fbbf24; margin: 8px 0 4px;">🔗 全站 0 死連結</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              執行自動化超連結檢測腳本，內部錨點與資產 100% 暢通無阻。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: 黃金指揮官指令 -->
+    <section class="slide" data-index="8">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">作戰指令 · GOLDEN PROMPT</span>
+        <h2 class="slide-title">黃金指揮官 Prompt：/goal 夜間全站重構指令</h2>
+        <p class="slide-subtitle">下達目標、立定安全邊界，關燈離席去睡覺！</p>
+      </div>
+      <div class="slide-body">
+        <div class="code-box">
+          <button class="copy-pill" onclick="navigator.clipboard.writeText(this.parentElement.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製 Prompt</button>
+          <pre><code>/goal 請啟動夜間無人值守自主重構模式，針對 AeroPulse Pro 耳機專案全站進行效能、SEO 與無障礙升級：
+
+【不可妥協的四大驗收指標 (DoD)】
+1. 效能極限：大圖轉換為 WebP 並加 loading="lazy"，Lighthouse 效能達到 95 分以上。
+2. 無障礙合規：通過 WCAG 2.1 AA 標準，所有純圖示按鈕補上 aria-label 語意。
+3. 搜尋引擎最佳化：完善 Open Graph 社群卡片，並注入 Schema.org Product JSON-LD。
+4. 全站連結零死角：全站所有內部頁面與靜態資產連結 100% 暢通無死角。
+
+【長程自主安全規範】
+• 自主分解為階梯 Milestone，每達成一階段自動執行測試並打上 Git Commit 快照。
+• 若遇破版錯誤，自主執行 git reset 回滾快照並探索替代路線，絕不停下來等待人類！
+• 定期自主執行 /compact 維護上下文記憶。
+• 任務全數綠燈完工後，產出獨立動態驗收網頁『goal-benchmark-report.html』！</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: 夜間運作實況 -->
+    <section class="slide" data-index="9">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">實況回放 · TIMELINE</span>
+        <h2 class="slide-title">夜間運作實況回放：4 小時 18 分鐘無人值守全紀錄</h2>
+        <p class="slide-subtitle">38 輪調度、7 處自癒修補、1 次死路回溯，無任何人工干預！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #fbbf24; margin-bottom: 8px;">⏱️ 前半夜：探勘、重構與死路回溯</h4>
+            <ul style="font-size: 0.85rem; line-height: 1.8;">
+              <li><strong>23:30</strong> 指揮官離席關燈，AI 啟動狀態機分解目標。</li>
+              <li><strong>00:15</strong> 完成圖片 WebP 壓縮與連結排查，打上第 1 個快照。</li>
+              <li><strong>01:40 ⚡ 觸發回溯</strong>：激進壓縮 CSS 導致選單破版；自我批判未通過，AI <strong>未向人類求救</strong>，自主 <code>git reset</code> 回滾快照，改採局部 patch 策略順利攻克！</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.04);">
+            <h4 style="color: #34d399; margin-bottom: 8px;">🌅 後半夜：SEO、無障礙與完工交付</h4>
+            <ul style="font-size: 0.85rem; line-height: 1.8;">
+              <li><strong>02:50</strong> 補齊 Open Graph 與 JSON-LD，觸發 <code>/compact</code> 壓縮語境。</li>
+              <li><strong>03:48 🎉 終極完工</strong>：全套測試 100% 全綠燈！生成動態驗收儀表板 <code>goal-benchmark-report.html</code>。</li>
+              <li><strong>07:30</strong> 指揮官清晨起床，喝著咖啡直接檢閱 98 分滿分報告！</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: 動態驗收儀表板 -->
+    <section class="slide" data-index="10">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">成果驗收 · LIVE REPORT</span>
+        <h2 class="slide-title">成果驗收：極限重構成果儀表板</h2>
+        <p class="slide-subtitle">直觀動態切換 Before vs After，體驗工業級軟體重構成果</p>
+      </div>
+      <div class="slide-body">
+        <div class="card" style="text-align: center; padding: 36px; border-color: rgba(251, 191, 36, 0.5);">
+          <div style="font-size: 3rem; margin-bottom: 12px;">🏆 📊 ⚡</div>
+          <h3 style="font-size: 1.5rem; color: #fbbf24; margin-bottom: 10px;">AeroPulse Pro 全站極限重構成果報告 (goal-benchmark-report.html)</h3>
+          <p style="max-width: 760px; margin: 0 auto 24px; color: var(--text-muted); line-height: 1.7;">
+            點擊下方按鈕，在瀏覽器中直接開啟驗收儀表板！<br>
+            可自由點擊按鈕切換「重構前」與「重構後」量化數值、檢視圖片體積縮減 92.6% 對照表與夜間時序軸！
+          </p>
+          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="../goal-benchmark-report.html" target="_blank" class="btn-action btn-gold" style="font-size: 1rem; padding: 12px 28px;">
+              <span>🏆 開啟極限重構動態驗收報告 ↗</span>
+            </a>
+            <a href="../chapters/chapter15.html#sec-15-3" class="btn-action btn-outline">
+              <span>📖 查看講義操作步驟</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: 生活實戰 1：相簿整理 -->
+    <section class="slide" data-index="11">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">初學者寶庫 · CASE 1</span>
+        <h2 class="slide-title">【個人數位資產】全硬碟混亂相簿「夜間智慧分類、去重與動態故事牆」</h2>
+        <p class="slide-subtitle">生活痛點：8,000 張照片充斥連拍廢片與截圖，手動整理要花整整一週</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #fbbf24; margin-bottom: 8px;">🎯 /goal 任務目標與安全邊界</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li>比對圖片特徵，95% 相似連拍只留最清晰一張，其餘移至暫存區。</li>
+              <li>讀取 EXIF 時間與 GPS，依 <code>年份/月份_地點/</code> 建立資料夾歸檔。</li>
+              <li>自動撰寫一份炫麗的單頁 HTML 網頁 <code>photo-story-wall.html</code>。</li>
+              <li><strong>安全原則</strong>：嚴禁永久刪除，所有多餘照片移入暫存區。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4); background: rgba(251, 191, 36, 0.04);">
+            <h4 style="color: #fde047; margin-bottom: 8px;">🎁 驗收成果：混亂相簿秒變動態回憶牆</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              睡一覺起來，8,000 張照片井然有序歸檔在年份資料夾中；打開生成的網頁，具備時間軸導航與輪播故事牆，直接享受整理成果！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 12: 職場實戰 2：報表勾稽 -->
+    <section class="slide" data-index="12">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">初學者寶庫 · CASE 2</span>
+        <h2 class="slide-title">【職場摸魚神技】跨部門 50 份混亂報表「夜間自動清洗、異常勾稽與看板」</h2>
+        <p class="slide-subtitle">職場痛點：門市報表格式百百種、日期混雜、算錯金額，月底手動核對加班到半夜</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #38bdf8; margin-bottom: 8px;">🎯 /goal 任務目標與安全邊界</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li>標準化異質欄位名稱，日期統一轉為 ISO 格式（YYYY-MM-DD）。</li>
+              <li>自動勾稽「單價 × 數量 vs 發票金額」，揪出記帳差額異常行。</li>
+              <li>產出清洗後的總表 <code>Cleaned_Revenue.xlsx</code> 與互動儀表板。</li>
+              <li><strong>安全原則</strong>：原始報表一律唯讀，修正結果全數輸出新檔。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.04);">
+            <h4 style="color: #7dd3fc; margin-bottom: 8px;">🎁 驗收成果：準時交卷，徹底告別月底加班</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              下班打卡安心回家，第二天早上準時將完美清洗好的合併報表與異常圖表寄給主管，從繁重的資料苦工中徹底解脫！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 13: 學習實戰 3：影音提煉 -->
+    <section class="slide" data-index="13">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">初學者寶庫 · CASE 3</span>
+        <h2 class="slide-title">【個人知識管理】千集影音課程「夜間批量轉錄、提煉精華與第二大腦知識卡」</h2>
+        <p class="slide-subtitle">學習痛點：存了 30 集高價值 Podcast 與長篇錄音，根本抽不出時間聽完做筆記</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #c084fc; margin-bottom: 8px;">🎯 /goal 任務目標與安全邊界</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li>無人值守批量調用轉錄工具，依序轉換為繁體中文逐字稿。</li>
+              <li>深度萃取：3 分鐘洞察、5 大金句名言、落地行動清單。</li>
+              <li>直連 Obsidian，自動建立帶有 <code>[[雙向反向連結]]</code> 的知識卡片。</li>
+              <li>每完成一集自動釋放記憶體，全夜穩定運行直至完工。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.04);">
+            <h4 style="color: #e9d5ff; margin-bottom: 8px;">🎁 驗收成果：早晨享受 10 倍速學習紅利</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              早晨泡杯咖啡打開 Obsidian，30 篇格式優雅、帶有雙向連結的知識精華卡片已經全部就緒，輕鬆吸收海量知識資產！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 14: 安全防禦心法 -->
+    <section class="slide" data-index="14">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">資深心法 · SECURITY</span>
+        <h2 class="slide-title">自癒兩大防護網：三大保險讓人類放心離席</h2>
+        <p class="slide-subtitle">如何防止 AI 半夜搞壞系統或無窮耗費 Token 燒錢？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #34d399; margin-bottom: 8px;">🛡️ 1. Git 分支沙盒隔離</h4>
+            <p style="font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);">
+              在執行前切出獨立工作分支（如 <code>auto-refactor</code>），所有修改都在沙盒中進行，主分支絲毫不受影響，隨時可一鍵還原。
+            </p>
+          </div>
+          <div class="card">
+            <h4 style="color: #38bdf8; margin-bottom: 8px;">🔄 2. 快照回溯 (Rollback)</h4>
+            <p style="font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);">
+              每完成一個 Milestone 自動打 Commit 快照；一旦自檢未過，AI 會自動 <code>git reset</code> 恢復乾淨狀態，絕不把錯誤代碼硬推上線。
+            </p>
+          </div>
+          <div class="card">
+            <h4 style="color: #fbbf24; margin-bottom: 8px;">🛑 3. 最大步數預算 (Budget)</h4>
+            <p style="font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);">
+              設定 <code>max_steps</code> 與超時心跳機制；若重試 5 次仍無法攻克，AI 會自動安全中斷並生成診斷日誌，絕不無窮空轉燒 Token！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 15: 全書 15 章技能樹總覽 -->
+    <section class="slide" data-index="15">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">全書全景 · CURRICULUM OVERVIEW</span>
+        <h2 class="slide-title">全書 15 大章節技能樹全景復盤</h2>
+        <p class="slide-subtitle">從零基礎入門到掌控次世代無人值守自主研發的英雄之旅</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4" style="gap: 16px;">
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">🌱</div>
+            <h4 style="color: #38bdf8; margin-bottom: 4px;">基礎篇 (Ch 1~4)</h4>
+            <p style="font-size: 0.8rem; line-height: 1.6;">軟體安裝 ➔ 提示詞生網頁 ➔ GitHub 版本控管 ➔ CLI 終端一鍵發布。</p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">⚙️</div>
+            <h4 style="color: #34d399; margin-bottom: 4px;">商務後端 (Ch 5~8)</h4>
+            <p style="font-size: 0.8rem; line-height: 1.6;">GAS 試算表資料庫 ➔ 自動回信 ➔ LINE 即時通知 ➔ 綠界金流串接。</p>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">☁️</div>
+            <h4 style="color: #c084fc; margin-bottom: 4px;">邊緣與 RAG (Ch 9~11)</h4>
+            <p style="font-size: 0.8rem; line-height: 1.6;">Cloudflare 邊緣計算 ➔ Supabase 現代雲端資料庫 ➔ 企業級 RAG 知識庫。</p>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.5); background: rgba(251, 191, 36, 0.05);">
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">🤖</div>
+            <h4 style="color: #fbbf24; margin-bottom: 4px;">自主特工 (Ch 12~15)</h4>
+            <p style="font-size: 0.8rem; line-height: 1.6;">多代理人團隊 ➔ 自我修復迴圈 ➔ MCP 第二大腦 ➔ /goal 夜間自主交付。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 16: 結業榮譽與終極天花板 -->
+    <section class="slide" data-index="16">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">結業榮譽 · GRADUATION</span>
+        <h2 class="slide-title">恭喜結業！你已經是掌控未來的超級個體指揮官！</h2>
+        <p class="slide-subtitle">程式碼不再是門檻，想像力與架構規劃才是你的真正超能力</p>
+      </div>
+      <div class="slide-body">
+        <div class="banner" style="margin-bottom: 24px; text-align: center;">
+          <h3 style="font-size: 1.6rem; color: #fbbf24; margin-bottom: 10px;">🎖️ Antigravity 實戰學院全書最高榮譽勳章</h3>
+          <p style="font-size: 1.05rem; color: #f8fafc; max-width: 800px; margin: 0 auto; line-height: 1.8;">
+            你已經跨越了從「提示詞新手」到「自主代理人指揮官」的全部鴻溝！<br>
+            從今天起，帶著這套 AI 輔助軟體工程體系，去打造你的產品、解決真實生活難題、成為能夠調動整支 AI 兵團的<strong>超級個體</strong>！
+          </p>
+        </div>
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+          <a href="../chapters/chapter15.html" class="btn-action btn-outline">◀ 返回第 15 章講義</a>
+          <a href="../goal-benchmark-report.html" target="_blank" class="btn-action btn-gold">🏆 查看極限重構成果報告 ↗</a>
+          <a href="../index.html" class="btn-action btn-cyan">返回全站首頁 · 瀏覽願望池 ➔</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <img id="zoomImg" src="" alt="放大檢視">
+  </div>
+
+  <!-- Bottom Navigation Controls -->
+  <nav class="slide-nav-bottom">
+    <button class="nav-btn" id="prevBtn" title="上一頁 (PageUp / 鍵盤 ➔)">◀</button>
+    <button class="nav-btn" id="nextBtn" title="下一頁 (PageDown / 鍵盤 ➔ / 空白鍵)">▶</button>
+    <div class="nav-shortcuts">
+      快捷鍵：空白鍵 / ➔ 下一頁 · ⯇ 上一頁 · F 全螢幕 · R 重設計時
+    </div>
+  </nav>
+
+  <!-- Slide Presentation Script -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerBtn = document.getElementById('timerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Progress bar
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      // Counter
+      const padCurrent = String(currentSlide + 1).padStart(2, '0');
+      const padTotal = String(totalSlides).padStart(2, '0');
+      slideCounter.textContent = `${padCurrent} / ${padTotal}`;
+
+      // Disable/Enable Nav buttons
+      prevBtn.style.opacity = currentSlide === 0 ? '0.3' : '1';
+      prevBtn.style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
+      nextBtn.style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+      nextBtn.style.pointerEvents = currentSlide === totalSlides - 1 ? 'none' : 'auto';
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetTimer();
+      }
+    });
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>
