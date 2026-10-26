@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 13 章 上課簡報：自我修復迴圈 (Self-Healing Loop) — Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(16, 185, 129, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-cyan-light: #7dd3fc;
+      --accent-indigo: #818cf8;
+      --accent-purple: #c084fc;
+      --accent-emerald: #10b981;
+      --accent-emerald-light: #34d399;
+      --accent-gold: #fbbf24;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #0284c7, #38bdf8);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Floating Header Controls */
+    .slide-controls-top {
+      position: fixed;
+      top: 14px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(11, 17, 32, 0.85);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .slide-controls-top a,
+    .slide-controls-top button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .slide-controls-top a:hover,
+    .slide-controls-top button:hover {
+      color: var(--text-main);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-emerald-light);
+      font-weight: 700;
+      padding: 0 4px;
+    }
+
+    /* Presenter Timer */
+    .slide-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-emerald);
+      cursor: pointer;
+      border-left: 1px solid var(--border-color);
+      padding-left: 10px;
+    }
+
+    /* Main Slide Stage */
+    .slide-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1320px;
+      height: 86vh;
+      max-height: 840px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px 50px;
+      position: relative;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .slide-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .pill-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .pill-cyan { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .pill-indigo { background: rgba(129, 140, 248, 0.15); color: var(--accent-indigo); border: 1px solid rgba(129, 140, 248, 0.3); }
+    .pill-gold { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .pill-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
+
+    .slide-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    /* Highlight Banner */
+    .banner {
+      background: linear-gradient(135deg, rgba(6, 78, 59, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.5px solid var(--accent-emerald);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 10px 0;
+    }
+
+    /* Interactive Code/Prompt Box */
+    .code-box {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+      max-height: 380px;
+    }
+
+    /* Image Display with Zoom Modal Trigger */
+    .slide-image-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .slide-image-box img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+
+    .slide-image-box:hover img {
+      transform: scale(1.02);
+    }
+
+    .slide-image-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Zoom Modal */
+    .zoom-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .zoom-modal.active {
+      display: flex;
+    }
+
+    .zoom-modal img {
+      max-width: 94vw;
+      max-height: 94vh;
+      border-radius: 10px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Bottom Navigation Controls */
+    .slide-nav-bottom {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(11, 17, 32, 0.85);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-emerald);
+      color: #060913;
+      border-color: var(--accent-emerald);
+    }
+
+    .nav-shortcuts {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-left: 8px;
+      padding-left: 12px;
+      border-left: 1px solid var(--border-color);
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-emerald {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+    }
+    .btn-emerald:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-cyan {
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #fff;
+    }
+    .btn-cyan:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-main);
+    }
+
+    /* Copy Button in Code Box */
+    .copy-pill {
+      float: right;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-pill:hover {
+      background: var(--accent-emerald);
+      color: #060913;
+    }
+
+    /* Badges & Tags */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .tag-emerald { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .tag-rose { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+    .tag-cyan { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+    .tag-gold { background: rgba(251, 191, 36, 0.2); color: #fde047; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Floating Header Controls -->
+  <header class="slide-controls-top">
+    <a href="../chapters/chapter13.html" title="返回第 13 章講義">📖 講義網頁</a>
+    <a href="../cart-test-report.html" target="_blank" title="開啟結帳引擎動態測試報告">🟢 測試報告</a>
+    <span class="slide-counter" id="slideCounter">01 / 15</span>
+    <button id="fullscreenBtn" title="切換全螢幕 (F)">⛶ 全螢幕</button>
+    <div class="slide-timer" id="timerBtn" title="點擊重設計時器 (R)">⏱️ <span id="timerDisplay">00:00</span></div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main class="slide-container" id="slideContainer">
+
+    <!-- Slide 1: 封面 -->
+    <section class="slide active" data-index="1">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">Chapter 13 · 自動化品質工程</span>
+        <h1 class="slide-title">自我修復迴圈：讓 AI 自己寫測試、自己抓蟲，全綠燈才交付！</h1>
+        <p class="slide-subtitle">告別痛苦的「人肉報錯搬運工」！掌握矽谷級 TDD 測試驅動與自動化閉環自癒工程</p>
+      </div>
+      <div class="slide-body">
+        <div class="banner" style="margin-bottom: 24px;">
+          <h3 style="font-size: 1.4rem; color: #34d399; margin-bottom: 8px;">🚀 核心學習目標：打造不當機、零回歸破壞的高防禦系統</h3>
+          <p style="font-size: 1rem; color: #cbd5e1; line-height: 1.7;">
+            初學者寫程式最害怕的不是寫出代碼，而是執行時代碼崩潰噴出一整片紅字（Error Stack Trace）。<br>
+            本章帶你立好「驗收測試的規矩」，讓 AntiGravity 自己在終端機跑測試、自己讀懂報錯、自己手術刀精準修復，全綠燈 PASS 才收工！
+          </p>
+        </div>
+        <div class="grid-4">
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🎯</div>
+            <h4 style="color: #34d399; margin-bottom: 4px;">測試先行 (TDD)</h4>
+            <p style="font-size: 0.82rem;">先寫驗收測試定義期望值，無測試不交付！</p>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">📡</div>
+            <h4 style="color: #38bdf8; margin-bottom: 4px;">終端機自感知</h4>
+            <p style="font-size: 0.82rem;">自主調用 shell 捕獲 Error Stack Trace 報錯堆疊。</p>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🔬</div>
+            <h4 style="color: #fbbf24; margin-bottom: 4px;">最小手術刀修補</h4>
+            <p style="font-size: 0.82rem;">精準局部 patch，杜絕「修好 A 卻改壞 B」。</p>
+          </div>
+          <div class="card" style="border-color: rgba(129, 140, 248, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🔄</div>
+            <h4 style="color: #818cf8; margin-bottom: 4px;">閉環迭代驗證</h4>
+            <p style="font-size: 0.82rem;">反覆自動重測，直到 100% 全綠燈才宣告完成！</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: 為什麼需要自癒？痛苦現狀剖析 -->
+    <section class="slide" data-index="2">
+      <div class="slide-header">
+        <span class="slide-pill pill-rose">痛點洞察 · PAIN POINTS</span>
+        <h2 class="slide-title">你是不是還在當「人肉錯誤搬運工」？</h2>
+        <p class="slide-subtitle">初學者使用 AI 輔助開發最常陷入的 3 大疲憊惡性循環</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 24px;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🏃💨</div>
+            <h3 style="color: #fb7185;">1. 人肉報錯搬運工</h3>
+            <p style="line-height: 1.7;">
+              看到終端機噴紅字 ➔ 複製整段錯誤訊息 ➔ 貼回對話框問 AI ➔ 複製 AI 給的新代碼 ➔ 貼回檔案 ➔ 又噴新錯誤...<br>
+              <strong>人類累得半死，AI 卻只是盲人摸象。</strong>
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">📉💥</div>
+            <h3 style="color: #fb7185;">2. 越修越爛 (Regression)</h3>
+            <p style="line-height: 1.7;">
+              好不容易讓 AI 修好了「商品按鈕點擊」，結果卻把剛才做好的「會員滿額折扣」給改壞了！<br>
+              <strong>拆東牆補西牆，永遠不知道下一個暗坑在哪裡。</strong>
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">😨⚠️</div>
+            <h3 style="color: #fb7185;">3. 不敢上線的恐懼</h3>
+            <p style="line-height: 1.7;">
+              AI 拍胸脯說「已經寫好囉！」，但遇到邊界條件會不會當機？顧客輸入負數會不會倒貼錢？<br>
+              <strong>沒有自動化測試把關，上線宛如裸奔走鋼索。</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: 思維大躍遷：從被動除錯到自主導航 -->
+    <section class="slide" data-index="3">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">思維升級 · MINDSET SHIFT</span>
+        <h2 class="slide-title">紅色報錯不是壞事，是 AI 最精準的自動導航訊號！</h2>
+        <p class="slide-subtitle">只要賦予命令列工具權限，終端機就能成為 AI 的眼睛與雙手</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 24px; align-items: stretch;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <h3 style="color: #fb7185; margin-bottom: 12px;">❌ 傳統手動除錯模式（低效疲憊）</h3>
+            <ul style="line-height: 2;">
+              <li>終端機報錯 ➔ 人工肉眼判讀 ➔ 人工複製貼上</li>
+              <li>AI 缺少執行環境與上下文，只能靠猜測給建議</li>
+              <li>人類承擔了「除錯總指揮」的高壓心智負擔</li>
+              <li>每次修改都沒有回歸測試驗證，風險極高</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.5); background: rgba(16, 185, 129, 0.06);">
+            <h3 style="color: #34d399; margin-bottom: 12px;">🟢 閉環自癒工程模式（優雅高效）</h3>
+            <ul style="line-height: 2;">
+              <li>人類只負責定義「驗收規格（TDD 測試案例）」</li>
+              <li>AI 自己調用 shell 跑測試、自己讀懂 Stack Trace 紅字</li>
+              <li>AI 手術刀精準替換出錯行，保留原結構</li>
+              <li>AI 自動重跑直到全綠燈 PASS 才收工交付</li>
+            </ul>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px; text-align: center;">
+          <span style="font-size: 1.15rem; font-weight: 700; color: #7dd3fc;">
+            💡 核心心法：人類做「驗收標準制定者（Judge）」，AI 做「自我修正執行者（Healer）」！
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: 圖解自我修復迴圈架構 -->
+    <section class="slide" data-index="4">
+      <div class="slide-header">
+        <span class="slide-pill pill-indigo">架構圖解 · ARCHITECTURE</span>
+        <h2 class="slide-title">AntiGravity 自我修復迴圈（Self-Healing Loop）管線圖</h2>
+        <p class="slide-subtitle">從紅字報錯到全綠燈交付的自動化閉環流程</p>
+      </div>
+      <div class="slide-body" style="height: 100%;">
+        <div class="slide-image-box" onclick="openZoomModal('../PIC/ch13_self_healing_loop.svg')">
+          <img src="../PIC/ch13_self_healing_loop.svg" alt="自我修復迴圈工程管線圖">
+          <div class="slide-image-hint">🔍 點擊圖片放大檢視</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: 自癒三大支柱 -->
+    <section class="slide" data-index="5">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">核心原則 · THREE PILLARS</span>
+        <h2 class="slide-title">支撐自我修復的三大工程支柱</h2>
+        <p class="slide-subtitle">絕非憑空亂猜，而是基於嚴格的軟體工程三大基石</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 22px;">
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🎯</div>
+            <h3 style="color: #34d399;">1. 測試驅動 (TDD)</h3>
+            <p style="line-height: 1.7;">
+              <strong>「先立規矩，再動工實作」</strong>。<br>
+              在實作核心邏輯前，先寫好魔鬼驗收測試（包含期望回傳值與極端邊界）。測試未全數通過之前，AI 絕不宣布交付！
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">📡</div>
+            <h3 style="color: #38bdf8;">2. 終端機報錯自感知</h3>
+            <p style="line-height: 1.7;">
+              <strong>「讀懂 Stack Trace 的訊號」</strong>。<br>
+              AI 自動執行命令列，精準解析出錯檔案、出錯行號、期望值與實際值的落差，將紅字轉化為微調代碼的導航圖。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🔬</div>
+            <h3 style="color: #fbbf24;">3. 最小破壞原則 (Patch)</h3>
+            <p style="line-height: 1.7;">
+              <strong>「手術刀局部修補」</strong>。<br>
+              使用精準替換工具（如 <code>edit_file</code>），針對性修改問題行，嚴禁整檔盲目覆寫，徹底杜絕改壞其他已通過的測試！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: 實戰演練：耳機商城結帳引擎 -->
+    <section class="slide" data-index="6">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">核心案例 · REAL PROJECT</span>
+        <h2 class="slide-title">看似簡單的「算錢功能」，藏著 4 個初學者必踩暗坑！</h2>
+        <p class="slide-subtitle">耳機官網計價模組 calculateTotal() 的隱藏邊界陷阱</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4" style="gap: 16px;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.35);">
+            <span class="tag tag-rose">暗坑 1</span>
+            <h4 style="color: #fb7185; margin: 8px 0 6px;">浮點數精度災難</h4>
+            <p style="font-size: 0.86rem; line-height: 1.6;">
+              耳機 3,880 打 9 折，JavaScript 算出 <code>3492.0000000000005</code>！UI 排版破裂，甚至導致金流串接失敗。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.35);">
+            <span class="tag tag-gold">暗坑 2</span>
+            <h4 style="color: #fbbf24; margin: 8px 0 6px;">滿額免運臨界點</h4>
+            <p style="font-size: 0.86rem; line-height: 1.6;">
+              滿 NT$ 5,000 免運費。剛好 5,000 元是免運還是收運費？邊界 <code>&gt;= 5000</code> 若寫成 <code>&gt; 5000</code> 就多收客人 100 元！
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.35);">
+            <span class="tag tag-rose">暗坑 3</span>
+            <h4 style="color: #fb7185; margin: 8px 0 6px;">VIP 券負數倒貼</h4>
+            <p style="font-size: 0.86rem; line-height: 1.6;">
+              購買 500 元配件套用 <code>VIP888</code> 折價券，總金額變成 <code>-388 元</code>！店家反而要付錢給顧客！
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.35);">
+            <span class="tag tag-cyan">暗坑 4</span>
+            <h4 style="color: #38bdf8; margin: 8px 0 6px;">惡意負數數量防呆</h4>
+            <p style="font-size: 0.86rem; line-height: 1.6;">
+              有心人士在數量欄位輸入 <code>-2</code>，若後端未做邊界檢查，直接造成庫存錯亂與系統異常中斷。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: 黃金指揮官指令下達 -->
+    <section class="slide" data-index="7">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">作戰指令 · GOLDEN PROMPT</span>
+        <h2 class="slide-title">啟動自我修復迴圈：結帳引擎自癒指令</h2>
+        <p class="slide-subtitle">立好驗收規矩，看著 AI 自動寫測試、抓出 bug、自主微調至全綠燈</p>
+      </div>
+      <div class="slide-body">
+        <div class="code-box">
+          <button class="copy-pill" onclick="navigator.clipboard.writeText(this.parentElement.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製 Prompt</button>
+          <pre><code>請啟動自我修復迴圈，為我的耳機商城打造一個『高防禦結帳計算模組（checkout.js）』：
+
+1. 測試先行（TDD）：在『checkout.test.js』中設計 5 組魔鬼驗收測試：
+   • 單品計價與浮點數四捨五入（絕不能出現 .00000005 這種精度誤差）。
+   • 批量階梯折扣（買 2 支 9 折、買 3 支 85 折）。
+   • 滿 NT$ 5,000 免運費邊界臨界點。
+   • VIP888 折價券「負數金額防呆」（折抵大於總金額時，底線鎖定 NT$ 0，絕不倒貼）。
+   • 惡意輸入防呆（傳入負數或文字時自動安全矯正，系統零崩潰）。
+2. 自主修復閉環：
+   • 自動運行測試命令（npm test 或 node 測試腳本）。
+   • 讀取終端機報錯，自主定位是浮點數未 round 還是負數未做 Math.max 防呆。
+   • 使用最小補丁精準修復代碼，反覆迭代直到 5 組測試「全數綠燈通過」才交付！
+3. 交付驗收報告：生成視覺化網頁『cart-test-report.html』供我親自驗證！</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: 自癒迭代實錄 -->
+    <section class="slide" data-index="8">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">實況回放 · LIVE ITERATION</span>
+        <h2 class="slide-title">自癒迭代全實錄：2 次自主修復，終端機直奔全綠燈</h2>
+        <p class="slide-subtitle">親眼見證 AI 如何感知 Stack Trace 並進行手術刀式最小修補</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="color: #fb7185;">🔴 Round 1：測試執行失敗 (3 Failed)</h4>
+              <span class="tag tag-rose">Terminal Stack Trace</span>
+            </div>
+            <ul style="font-size: 0.85rem; line-height: 1.8;">
+              <li>❌ <code>AssertionError: expected 3492.0000005 to be 3492</code>（浮點數未處理）</li>
+              <li>❌ <code>AssertionError: expected -388 to be 0</code>（VIP 券折到負數）</li>
+              <li>❌ <code>AssertionError: invalid quantity -2 not handled</code>（未防呆）</li>
+            </ul>
+            <div style="margin-top: 10px; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 6px; font-size: 0.8rem; color: #cbd5e1;">
+              💡 <strong>AI 自主定位</strong>：需要補上 <code>Math.round</code>、<code>Math.max(0, total)</code> 與輸入過濾。
+            </div>
+          </div>
+
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.5); background: rgba(16, 185, 129, 0.06);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="color: #34d399;">🟢 Round 2：最小修補後複測 (5 Passed)</h4>
+              <span class="tag tag-emerald">100% 綠燈閉環</span>
+            </div>
+            <ul style="font-size: 0.85rem; line-height: 1.8; color: #a7f3d0;">
+              <li>✅ <code>PASS: Single item with rounding check (3492 NTD)</code></li>
+              <li>✅ <code>PASS: Tier discount logic (2 items 90%, 3 items 85%)</code></li>
+              <li>✅ <code>PASS: Free shipping threshold at 5,000 NTD boundary</code></li>
+              <li>✅ <code>PASS: VIP888 coupon floor clamped at 0 NTD</code></li>
+              <li>✅ <code>PASS: Malicious negative quantity safely sanitized</code></li>
+            </ul>
+            <div style="margin-top: 10px; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 6px; font-size: 0.8rem; color: #6ee7b7;">
+              🎉 <strong>驗收結果</strong>：耗時 35 秒，完全零人工搬運，全部 5 項驗收全數通過！
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: 成果驗收：結帳引擎動態測試報告 -->
+    <section class="slide" data-index="9">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">成果驗收 · LIVE REPORT</span>
+        <h2 class="slide-title">結帳引擎動態測試報告（綠燈驗收儀表板）</h2>
+        <p class="slide-subtitle">直觀可視化的驗收界面，讓非工程師與業務團隊也能一眼看懂品質保證</p>
+      </div>
+      <div class="slide-body">
+        <div class="card" style="text-align: center; padding: 36px;">
+          <div style="font-size: 3rem; margin-bottom: 12px;">🟢 📊 🧪</div>
+          <h3 style="font-size: 1.5rem; color: #38bdf8; margin-bottom: 10px;">AeroPulse Pro 購物車結算引擎動態測試儀表板</h3>
+          <p style="max-width: 760px; margin: 0 auto 24px; color: var(--text-muted); line-height: 1.7;">
+            AntiGravity 自癒完畢後，為我們自動產出了獨立的視覺化報告網頁 <code>cart-test-report.html</code>。<br>
+            可即時切換購物車數量、套用 VIP888 折價券、檢視 5 組魔鬼測試的即時執行日誌與數值計算細節！
+          </p>
+          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="../cart-test-report.html" target="_blank" class="btn-action btn-emerald" style="font-size: 1rem; padding: 12px 28px;">
+              <span>🟢 點擊開啟動態測試報告（新分頁體驗） ↗</span>
+            </a>
+            <a href="../chapters/chapter13.html#sec-13-3" class="btn-action btn-outline">
+              <span>📖 查看講義程式碼實作細節</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: 生活實戰 1：限時特賣倒數計時器 -->
+    <section class="slide" data-index="10">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">初學者寶庫 · CASE 1</span>
+        <h2 class="slide-title">【日常功能】限時特賣「24 小時倒數計時器」與過期防呆</h2>
+        <p class="slide-subtitle">生活痛點：活動結束後計時器繼續跑，居然倒數出「剩餘 -1 天 -3 小時」！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #38bdf8; margin-bottom: 8px;">🎯 測試先行（TDD 設計 4 組情境）</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>正常倒數</strong>：輸入未來 2 小時 ➔ 輸出「剩餘 02:00:00」（自動補零）。</li>
+              <li><strong>過期防呆</strong>：傳入過去時間 ➔ 顯示「活動已結束」，數值歸零絕不出現負數。</li>
+              <li><strong>邊界臨界點</strong>：剛好剩下 0 秒的瞬間，正確切換結束狀態。</li>
+              <li><strong>輸入防呆</strong>：傳入 null 或無效字串 ➔ 安全回傳預設提示，不當機。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.04);">
+            <h4 style="color: #7dd3fc; margin-bottom: 8px;">🎁 自癒實錄與驗收成果</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              第 1 次運行測試時，因過去時間差計算為 <code>-3600 秒</code> 導致測試失敗；<br>
+              AI 自主分析終端紅字，補上一行 <code>diff = Math.max(0, targetTime - now)</code>，第 2 次重測 4/4 綠燈全數 PASS！
+            </p>
+            <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 0.82rem; background: #090d16; padding: 10px; border-radius: 6px; color: #34d399;">
+              ✓ formatCountdown() returns 00:00:00 when expired<br>
+              ✓ pads leading zero correctly (02:05:09)<br>
+              Tests: 4 passed, 4 total
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: 生活實戰 2：超商手機號碼自動清洗器 -->
+    <section class="slide" data-index="11">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">初學者寶庫 · CASE 2</span>
+        <h2 class="slide-title">【表單防呆】超商宅配「手機號碼與姓名自動清洗器」</h2>
+        <p class="slide-subtitle">生活痛點：長輩按到全形數字、複製帶空格或橫線，傳統表單直接報錯拒收白白丟失訂單</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #34d399; margin-bottom: 8px;">🎯 測試先行（TDD 顧客亂輸入情境）</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>前後空白</strong>：輸入 <code>"  0912345678 "</code> ➔ 自動 trim 清除空格通過。</li>
+              <li><strong>分隔符號</strong>：輸入 <code>"0912-345-678"</code> ➔ 自動去除橫線與括號。</li>
+              <li><strong>全形數字</strong>：長輩輸入 <code>"０９１２３４５６７８"</code> ➔ 自動轉為半形。</li>
+              <li><strong>真實錯碼</strong>：只輸入 9 碼或開頭非 09 ➔ 準確回傳友善錯誤提示。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.04);">
+            <h4 style="color: #a7f3d0; margin-bottom: 8px;">🎁 自癒實錄與驗收成果</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              AI 初版因未處理 Unicode 全形編碼（Char Code 偏移 65248）導致測試不通過；<br>
+              AI 讀取終端失敗項後，精準注入全半形轉換函數，再次執行直接亮出綠燈 <code>4 passed, 0 failed</code>！
+            </p>
+            <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 0.82rem; background: #090d16; padding: 10px; border-radius: 6px; color: #34d399;">
+              ✓ cleanPhone("０９１２３４５６７８") ➔ "0912345678"<br>
+              ✓ cleanPhone(" 0912-345-678 ") ➔ "0912345678"<br>
+              Tests: 4 passed, 4 total
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 12: 生活實戰 3：長文排版截斷器 -->
+    <section class="slide" data-index="12">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">初學者寶庫 · CASE 3</span>
+        <h2 class="slide-title">【視覺排版】商品評價「長文字摘要與『...看更多』安全截斷器」</h2>
+        <p class="slide-subtitle">生活痛點：短文字也被硬加看更多，甚至切斷 HTML 標籤導致全站粗體破版！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #c084fc; margin-bottom: 8px;">🎯 測試先行（TDD 排版邊界情境）</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li><strong>超長文字 (100字)</strong>：截取前 50 字，並在末尾加上「... (閱讀更多)」。</li>
+              <li><strong>短文字 (20字)</strong>：完整保留原文，絕對不能出現「... (閱讀更多)」。</li>
+              <li><strong>長度剛好等於限制</strong>：精準比對邊界，不截斷也不加省略符號。</li>
+              <li><strong>HTML 安全防呆</strong>：若包含 <code>&lt;b&gt;</code> 標籤，先剝離標籤再計算，避免標籤破損造成全站跑版！</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(192, 132, 252, 0.4); background: rgba(192, 132, 252, 0.04);">
+            <h4 style="color: #e9d5ff; margin-bottom: 8px;">🎁 自癒實錄與驗收成果</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              第 1 輪短文字被無條件加上後綴報錯；<br>
+              AI 自主修復為 <code>if (text.length &lt;= limit) return text;</code>，並用正規表達式先剝離標籤，全數 PASS！
+            </p>
+            <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 0.82rem; background: #090d16; padding: 10px; border-radius: 6px; color: #34d399;">
+              ✓ truncateText("短文字", 50) === "短文字"<br>
+              ✓ strips &lt;b&gt; tags before slicing to avoid UI glitch<br>
+              Tests: 4 passed, 4 total
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 13: 工程防呆心法 -->
+    <section class="slide" data-index="13">
+      <div class="slide-header">
+        <span class="slide-pill pill-indigo">資深心法 · BEST PRACTICES</span>
+        <h2 class="slide-title">自癒兩大防護網：防無窮迴圈與防回歸測試</h2>
+        <p class="slide-subtitle">確保 AI 自我修復不失控、歷史功能不倒退的工業級標準</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 24px;">
+          <div class="card" style="border-color: rgba(129, 140, 248, 0.4);">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🔄 🛑</div>
+            <h3 style="color: #818cf8;">1. 防無窮迴圈（重試上限機制）</h3>
+            <p style="line-height: 1.7;">
+              <strong>「設定最大重試次數（Max Retries: 3~5）」</strong>。<br>
+              若 AI 重試 3 次仍未通過，代表可能存在「規格互相矛盾」或「外部依賴缺失」。此時 AI 會誠實停下來向人類指揮官回報，絕不陷入無窮耗費 Token 的死迴圈！
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🛡️ 🔁</div>
+            <h3 style="color: #34d399;">2. 防回歸測試（Regression Testing）</h3>
+            <p style="line-height: 1.7;">
+              <strong>「修改 bug 後，全套歷史測試全部重跑」</strong>。<br>
+              這就是全綠燈的最高價值！不能只測剛才修好的那 1 個測試，必須確認過去做好的 10 個、50 個功能依然 100% 綠燈，杜絕任何隱蔽的倒退與副作用。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 14: 黃金自癒指令公式 -->
+    <section class="slide" data-index="14">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">萬用模版 · CHEAT SHEET</span>
+        <h2 class="slide-title">自我修復迴圈萬用 Prompt 提示詞公式</h2>
+        <p class="slide-subtitle">任何專案都能直接套用的 4 步驟自癒指令結構</p>
+      </div>
+      <div class="slide-body">
+        <div class="code-box">
+          <button class="copy-pill" onclick="navigator.clipboard.writeText(this.parentElement.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製萬用公式</button>
+          <pre><code>請啟動自我修復迴圈（Self-Healing Loop），為我開發【功能模組名稱】：
+
+1.【測試先行 (TDD)】：
+  在【測試檔名】中設計以下情境測試案例：
+  • 正常情境：輸入 A，期望輸出 B
+  • 邊界情境：剛好等於臨界點時的行為
+  • 極端與防呆：傳入負數、空值或非法字串時的安全處置
+
+2.【自主閉環修復】：
+  • 自動運行測試指令（例如 node test.js 或 npm test）
+  • 自行捕獲終端機 Error Stack Trace，定位報錯出處與行號
+  • 遵循「最小修補原則（Patch）」，針對出錯邏輯進行精準微調
+  • 自動重新測試，最多重試 3 次，直到「全數測試通過 (ALL PASSED)」才交付！
+
+3.【成果驗收】：
+  • 列出修復過程中的問題根因分析
+  • 輸出最終測試綠燈驗收報告供我確認！</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 15: 總結與下一站 -->
+    <section class="slide" data-index="15">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">課程總結 · WRAP UP</span>
+        <h2 class="slide-title">恭喜掌握自動化品質工程！下一站：第 14 章 MCP 第二大腦</h2>
+        <p class="slide-subtitle">從此終端機紅字不再是挫折，而是調教 AI 最精準的導航羅盤</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 24px; margin-bottom: 24px;">
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <h4 style="color: #34d399; margin-bottom: 10px;">🏆 本章核心技能清單</h4>
+            <ul style="line-height: 1.8; font-size: 0.9rem;">
+              <li>告別手動搬運，掌握 TDD 測試驅動心法</li>
+              <li>學會閱讀與解析 Error Stack Trace 報錯堆疊</li>
+              <li>運用最小手術刀修補，杜絕回歸破壞（Regression）</li>
+              <li>打造耳機商城結帳防禦引擎與 3 大生活化實戰模組</li>
+              <li>建立自動化綠燈驗收儀表板</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.05);">
+            <h4 style="color: #c084fc; margin-bottom: 10px;">🔮 下一站預告：第 14 章 MCP 協議跨界實戰</h4>
+            <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
+              打破 AI 孤島！連接本機 <strong>Obsidian</strong> 筆記庫打造個人專屬第二大腦知識星系圖，更進一步解鎖 <strong>Google 全家桶</strong>（Gmail/日曆/試算表/Docs/Slides/Drive）與<strong>網頁自動化訂票人機協同（HITL）</strong>跨界超能力！
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+          <a href="../chapters/chapter13.html" class="btn-action btn-outline">◀ 返回第 13 章講義</a>
+          <a href="../cart-test-report.html" target="_blank" class="btn-action btn-cyan">🟢 體驗購物車測試報告 ↗</a>
+          <a href="../chapters/chapter14.html" class="btn-action btn-emerald">進入第 14 章 MCP 實戰 ➔</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <img id="zoomImg" src="" alt="放大檢視">
+  </div>
+
+  <!-- Bottom Navigation Controls -->
+  <nav class="slide-nav-bottom">
+    <button class="nav-btn" id="prevBtn" title="上一頁 (PageUp / 鍵盤 ➔)">◀</button>
+    <button class="nav-btn" id="nextBtn" title="下一頁 (PageDown / 鍵盤 ➔ / 空白鍵)">▶</button>
+    <div class="nav-shortcuts">
+      快捷鍵：空白鍵 / ➔ 下一頁 · ⯇ 上一頁 · F 全螢幕 · R 重設計時
+    </div>
+  </nav>
+
+  <!-- Slide Presentation Script -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerBtn = document.getElementById('timerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Progress bar
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      // Counter
+      const padCurrent = String(currentSlide + 1).padStart(2, '0');
+      const padTotal = String(totalSlides).padStart(2, '0');
+      slideCounter.textContent = `${padCurrent} / ${padTotal}`;
+
+      // Disable/Enable Nav buttons
+      prevBtn.style.opacity = currentSlide === 0 ? '0.3' : '1';
+      prevBtn.style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
+      nextBtn.style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+      nextBtn.style.pointerEvents = currentSlide === totalSlides - 1 ? 'none' : 'auto';
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetTimer();
+      }
+    });
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>
