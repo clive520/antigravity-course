@@ -50,7 +50,7 @@
       <div class="sidebar-title" style="margin-top: 2rem;">本章小節導覽</div>
       <ul class="sidebar-nav">
         <li><a href="#sec-14-1">14-1 觀念破冰：打破孤島！什麼是 MCP？</a></li>
-        <li><a href="#sec-14-2">14-2 工具就緒：連接 Obsidian 與本機工作區</a></li>
+        <li><a href="#sec-14-2">14-2 工具就緒：安裝、雲端整合與基本使用</a></li>
         <li><a href="#sec-14-3">14-3 核心動手做：耳機專案的「第二大腦」</a></li>
         <li><a href="#sec-14-4">14-4 初學者寶庫：三大生活化 MCP 實戰</a></li>
         <li><a href="#sec-14-5">14-5 成果驗收：生態展望與常見 Q&A</a></li>
@@ -107,8 +107,63 @@
 
       <!-- 14-2 工具就緒 -->
       <section id="sec-14-2" class="content-section">
-        <h2>14-2 工具插槽就緒：連接 Obsidian 與本機工作區</h2>
-        <p>Obsidian 是全球最強大的個人知識庫工具之一，它的核心優勢在於<strong>「純文字 Markdown 儲存、零資料綁定、永久可用」</strong>。當 AntiGravity 接入 Obsidian MCP 工具後，AI 便擁有了四大特工級武器：</p>
+        <h2>14-2 工具插槽就緒：Obsidian 安裝、雲端整合與基本使用心法</h2>
+        <p>在讓 AntiGravity 幫你打理筆記之前，我們先花 3 分鐘把這座專屬的「第二大腦基地」搭建起來。Obsidian 是目前全球公認最強大的個人知識管理軟體，核心優勢在於<strong>「純文字 Markdown 儲存、零資料綁定、永久可用」</strong>。</p>
+
+        <!-- Obsidian 安裝與 Google Drive 設定 -->
+        <div class="step-box" style="border-color: rgba(168, 85, 247, 0.4);">
+          <span class="step-number" style="background: #7c3aed;">STEP 1</span>
+          <h4>Obsidian 下載安裝與「Google 雲端硬碟」跨裝置整合心法</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2; margin-top: 0.5rem;">
+            <li><strong>下載軟體（完全免費）</strong>：前往官網 <a href="https://obsidian.md/" target="_blank" style="color: #c084fc; font-weight: 600;">obsidian.md</a> 下載對應版本（Windows / Mac / Linux），安裝過程免註冊帳號，開箱即用。</li>
+            <li><strong>關鍵心法：筆記庫（Vault）首選「Google 雲端硬碟」</strong>：
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem; margin: 0.5rem 0;">
+                💡 <strong>為什麼強烈推薦選 Google Drive？</strong><br>
+                • <strong>跨機器無縫同步</strong>：只要安裝「Google 雲端硬碟電腦版」，公司桌機與家裡筆電就能自動雙向同步筆記，完全不需額外購買昂貴的雲端同步服務！<br>
+                • <strong>純文字極致省空間</strong>：數千篇 Markdown 筆記通常只有幾十 MB，絲毫不佔硬碟。<br>
+                • <strong>雙重備份防呆</strong>：Google Drive 內建歷史版本回溯，加上 Obsidian 內建的「檔案還原（File Recovery）」，筆記永遠不怕手殘誤刪！
+              </div>
+            </li>
+            <li><strong>建立筆記庫</strong>：打開 Obsidian 點擊「建立新筆記庫（Create new vault）」，命名為 <code>MyBrain</code>，路徑直接選擇你的 Google 雲端硬碟資料夾（例如 <code>G:\我的雲端硬碟\MyBrain</code>）。</li>
+          </ol>
+        </div>
+
+        <!-- 基本使用與資料收集方式 -->
+        <div class="step-box" style="border-color: rgba(56, 189, 248, 0.4);">
+          <span class="step-number" style="background: #0284c7;">STEP 2</span>
+          <h4>Obsidian 基本使用方式與高效率「資料收集心法」</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+            <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.35rem;">📝 1. 純文字 Markdown 語法</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                使用 <code># 大標題</code>、<code>## 中標題</code>、<code>- 條列清單</code>、<code>**粗體**</code>，排版清爽優雅，在任何軟體打開都是通用純文字。
+              </p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #c084fc; margin-bottom: 0.35rem;">🔗 2. 靈魂魔法：[[雙向連結]]</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                只要打出兩個中括號 <code>[[筆記名稱]]</code>，Obsidian 就會自動建立超連結！點擊就能跨頁面跳轉，筆記之間互相串聯成網。
+              </p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: #34d399; margin-bottom: 0.35rem;">🌌 3. 關係星系圖 (Graph View)</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                按下快捷鍵 <code>Ctrl + G</code>（Mac 為 <code>Cmd + G</code>），一鍵展開壯觀的 3D 知識網絡圖，親眼看著你的思想神經元發光生長。
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem; padding: 0.85rem; background: rgba(0, 0, 0, 0.25); border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 8px;">
+            <div style="font-weight: 700; color: #f8fafc; font-size: 0.9rem; margin-bottom: 0.35rem;">📥 建立你的「00_Inbox 靈感收納箱」資料流：</div>
+            <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin: 0;">
+              平時看到好文章或有突發靈感，不要給自己「該分類到哪」的心理壓力！統一建立一個 <code>00_Inbox/</code> 資料夾，隨手記成便條草稿丟進去。
+              <strong>人類只管負責收集，而最花時間的「分類整理、打標籤、建立雙向連結」，接下來全部交給 AntiGravity 透過 MCP 來自動完成！</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- 接入 MCP 工具 -->
+        <p style="margin-top: 1.5rem;">當本機 Obsidian 筆記庫準備就緒後，AntiGravity 就能透過 MCP 協議直接「插上擴充插槽」，擁有以下四大特工級武器：</p>
 
         <!-- 圖 14-1 SVG 圖表 -->
         <div style="margin: 1.75rem 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; text-align: center;">
