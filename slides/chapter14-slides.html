@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第 14 章 上課簡報：MCP 協議跨界實戰 (Model Context Protocol) — Antigravity 實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-slide: #0c0d1e;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(51, 65, 85, 0.6);
+      --border-highlight: rgba(168, 85, 247, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-purple: #a855f7;
+      --accent-purple-light: #c084fc;
+      --accent-emerald: #10b981;
+      --accent-gold: #fbbf24;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    .slide-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #a855f7, #6366f1, #38bdf8);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Floating Header Controls */
+    .slide-controls-top {
+      position: fixed;
+      top: 14px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      background: rgba(12, 13, 30, 0.85);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+
+    .slide-controls-top a,
+    .slide-controls-top button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .slide-controls-top a:hover,
+    .slide-controls-top button:hover {
+      color: var(--text-main);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-purple-light);
+      font-weight: 700;
+      padding: 0 4px;
+    }
+
+    /* Presenter Timer */
+    .slide-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-emerald);
+      cursor: pointer;
+      border-left: 1px solid var(--border-color);
+      padding-left: 10px;
+    }
+
+    /* Main Slide Stage */
+    .slide-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1320px;
+      height: 86vh;
+      max-height: 840px;
+      background: var(--bg-slide);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px 50px;
+      position: relative;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .slide-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .pill-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple-light); border: 1px solid rgba(168, 85, 247, 0.3); }
+    .pill-cyan { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .pill-indigo { background: rgba(129, 140, 248, 0.15); color: var(--accent-indigo); border: 1px solid rgba(129, 140, 248, 0.3); }
+    .pill-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .pill-gold { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .pill-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
+
+    .slide-title {
+      font-size: 2.15rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    /* Highlight Banner */
+    .banner {
+      background: linear-gradient(135deg, rgba(88, 28, 135, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.5px solid var(--accent-purple);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 10px 0;
+    }
+
+    /* Interactive Code/Prompt Box */
+    .code-box {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+      max-height: 380px;
+    }
+
+    /* Image Display with Zoom Modal Trigger */
+    .slide-image-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .slide-image-box img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+
+    .slide-image-box:hover img {
+      transform: scale(1.02);
+    }
+
+    .slide-image-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Zoom Modal */
+    .zoom-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .zoom-modal.active {
+      display: flex;
+    }
+
+    .zoom-modal img {
+      max-width: 94vw;
+      max-height: 94vh;
+      border-radius: 10px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Bottom Navigation Controls */
+    .slide-nav-bottom {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(12, 13, 30, 0.85);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-purple);
+      color: #fff;
+      border-color: var(--accent-purple);
+    }
+
+    .nav-shortcuts {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-left: 8px;
+      padding-left: 12px;
+      border-left: 1px solid var(--border-color);
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      color: #fff;
+    }
+    .btn-purple:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-cyan {
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #fff;
+    }
+    .btn-cyan:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-main);
+    }
+
+    /* Copy Button in Code Box */
+    .copy-pill {
+      float: right;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-pill:hover {
+      background: var(--accent-purple);
+      color: #fff;
+    }
+
+    /* Badges & Tags */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .tag-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+    .tag-cyan { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+    .tag-gold { background: rgba(251, 191, 36, 0.2); color: #fde047; }
+    .tag-emerald { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .tag-rose { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="slide-progress-container">
+    <div class="slide-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Floating Header Controls -->
+  <header class="slide-controls-top">
+    <a href="../chapters/chapter14.html" title="返回第 14 章講義">📖 講義網頁</a>
+    <a href="../obsidian-brain-preview.html" target="_blank" title="開啟動態知識星系圖譜">🔮 知識星系圖</a>
+    <span class="slide-counter" id="slideCounter">01 / 16</span>
+    <button id="fullscreenBtn" title="切換全螢幕 (F)">⛶ 全螢幕</button>
+    <div class="slide-timer" id="timerBtn" title="點擊重設計時器 (R)">⏱️ <span id="timerDisplay">00:00</span></div>
+  </header>
+
+  <!-- Slide Stage -->
+  <main class="slide-container" id="slideContainer">
+
+    <!-- Slide 1: 封面 -->
+    <section class="slide active" data-index="1">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">Chapter 14 · 跨界工具生態協議</span>
+        <h1 class="slide-title">MCP 協議跨界實戰：連接 Obsidian 第二大腦、Google 全家桶與真實網頁操控</h1>
+        <p class="slide-subtitle">打破 AI 孤島極限！為 AntiGravity 裝上萬能 USB 擴充槽，解鎖個人知識提煉與生活自動化管家</p>
+      </div>
+      <div class="slide-body">
+        <div class="banner" style="margin-bottom: 24px;">
+          <h3 style="font-size: 1.35rem; color: #c084fc; margin-bottom: 8px;">🚀 本章核心跨界版圖：從本機筆記到雲端協同與網頁操控</h3>
+          <p style="font-size: 0.98rem; color: #e2e8f0; line-height: 1.7;">
+            傳統 AI 就像被關在玻璃房裡的天才，根本碰不到你電腦裡的真實筆記與檔案。<br>
+            掌握次世代國際開放標準 <strong>MCP（Model Context Protocol）</strong>，讓 AI 伸出雙手直連 <strong>Obsidian 知識庫</strong>、掌控 <strong>Google 全家桶</strong>、更以<strong>人機協同（HITL）</strong>在真實網頁上自動比價訂機票！
+          </p>
+        </div>
+        <div class="grid-4">
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🧠</div>
+            <h4 style="color: #c084fc; margin-bottom: 4px;">第二大腦提煉</h4>
+            <p style="font-size: 0.82rem;">直連本機 Obsidian，自動注入雙向連結與點亮星系圖譜。</p>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🌐</div>
+            <h4 style="color: #facc15; margin-bottom: 4px;">Google 全家桶</h4>
+            <p style="font-size: 0.82rem;">Gmail / 日曆 / 試算表 / Docs / Slides / 雲端硬碟全自動串聯。</p>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">✈️</div>
+            <h4 style="color: #38bdf8; margin-bottom: 4px;">網頁操控比價</h4>
+            <p style="font-size: 0.82rem;">真實可視化 Chrome，自動比價、篩選直飛與填寫旅客個資。</p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 1.6rem; margin-bottom: 6px;">🛑</div>
+            <h4 style="color: #34d399; margin-bottom: 4px;">人機協同 (HITL)</h4>
+            <p style="font-size: 0.82rem;">進入信用卡結帳頁立即安全剎車，金流 100% 人類親自掌舵！</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: 為什麼需要 MCP？痛苦現狀剖析 -->
+    <section class="slide" data-index="2">
+      <div class="slide-header">
+        <span class="slide-pill pill-rose">痛點洞察 · PAIN POINTS</span>
+        <h2 class="slide-title">玻璃房裡的天才：你每天經歷的「資訊孤島」之苦</h2>
+        <p class="slide-subtitle">為什麼 AI 再聰明，我們還是覺得每天被機械瑣事淹沒？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 22px;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">📦🔒</div>
+            <h3 style="color: #fb7185;">1. 碰不到真實檔案</h3>
+            <p style="line-height: 1.7;">
+              AI 看不到你電腦裡累積多年的專案筆記、會議記錄與靈感草稿。每次提問都要人工複製貼上，資料一多還會漏掉關鍵細節。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🗑️📁</div>
+            <h3 style="color: #fb7185;">2. 散亂的數位垃圾場</h3>
+            <p style="line-height: 1.7;">
+              隨手記在記事本或雲端文件裡的東西雜亂無章，過兩週就忘光；從來沒有時間好好整理，筆記之間各自孤立從不產生化學反應。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.05);">
+            <div style="font-size: 2rem; margin-bottom: 10px;">📑🔄</div>
+            <h3 style="color: #fb7185;">3. 分頁地獄切換</h3>
+            <p style="line-height: 1.7;">
+              在 Gmail、試算表、行事曆與各大訂位網站間頻繁切換複製，手滑打錯字改機票還要花幾千元，耗盡大腦專注力。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: MCP 核心白話解密 -->
+    <section class="slide" data-index="3">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">概念革命 · CONCEPT</span>
+        <h2 class="slide-title">白話解密：MCP 就是「AI 時代的萬能 USB-C 擴充塢」！</h2>
+        <p class="slide-subtitle">Model Context Protocol（模型上下文協議）如何顛覆工具連接方式？</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 24px; align-items: stretch;">
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <h3 style="color: #fb7185; margin-bottom: 12px;">❌ 過去：點對點封閉整合（繁重脆弱）</h3>
+            <ul style="line-height: 2;">
+              <li>每個軟體都要寫一套客製 API 轉接器</li>
+              <li>軟體改版介面就壞掉，維護成本極高</li>
+              <li>隱私不透明，常常要把敏感筆記上傳給第三方伺服器</li>
+              <li>生態系封閉，無法跨軟體靈活拔插</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.5); background: rgba(168, 85, 247, 0.06);">
+            <h3 style="color: #c084fc; margin-bottom: 12px;">🟢 現在：MCP 通用插槽（即插即用）</h3>
+            <ul style="line-height: 2;">
+              <li>全球統一大開放協議，如同標準 Type-C 接口</li>
+              <li>AI 作為「Client 客戶端」，軟體作為「Server 插槽端」</li>
+              <li><strong>100% 本機隱私保證</strong>：直連本機檔案，資料不出門</li>
+              <li>一次學會，貫通筆記、資料庫、瀏覽器與辦公全生態！</li>
+            </ul>
+          </div>
+        </div>
+        <div class="banner" style="margin-top: 20px; text-align: center;">
+          <span style="font-size: 1.15rem; font-weight: 700; color: #e9d5ff;">
+            💡 核心心法：只要插上 MCP 插槽，AI 就能瞬間長出調閱本機檔案、連動雲端與操作瀏覽器的雙手！
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Obsidian 入門與雲端整合 -->
+    <section class="slide" data-index="4">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">基地搭建 · SETUP</span>
+        <h2 class="slide-title">打造第二大腦基地：Obsidian 安裝與 Google 雲端硬碟整合</h2>
+        <p class="slide-subtitle">全球公認最強個人知識管理軟體：純文字 Markdown、零資料綁定、永久可用</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 20px;">
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">📥</div>
+            <h4 style="color: #38bdf8; margin-bottom: 6px;">1. 官網下載免註冊</h4>
+            <p style="font-size: 0.88rem; line-height: 1.6;">
+              前往 <code>obsidian.md</code> 免費下載，安裝過程零門檻、開箱即用，所有內容全存為標準 <code>.md</code> 文字檔。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.05);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">☁️</div>
+            <h4 style="color: #c084fc; margin-bottom: 6px;">2. 雲端整合黃金心法</h4>
+            <p style="font-size: 0.88rem; line-height: 1.6;">
+              筆記庫（Vault）首選<strong>「Google 雲端硬碟」</strong>（如 <code>G:\我的雲端硬碟\MyBrain</code>），公司桌機與筆電無縫同步，省下昂貴雲端月費！
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">📥</div>
+            <h4 style="color: #34d399; margin-bottom: 6px;">3. 00_Inbox 靈感收納箱</h4>
+            <p style="font-size: 0.88rem; line-height: 1.6;">
+              隨手記隨手丟，不要給自己分類壓力。<strong>人類只管收集靈感，整理與打標籤交給 AntiGravity！</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: Obsidian 核心魔法 -->
+    <section class="slide" data-index="5">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">核心機制 · OBSIDIAN MAGIC</span>
+        <h2 class="slide-title">Obsidian 三大靈魂魔法：讓知識神經元自發生長</h2>
+        <p class="slide-subtitle">從樹狀死板目錄進化為網狀大腦記憶</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 22px;">
+          <div class="card">
+            <span class="tag tag-cyan">格式基石</span>
+            <h3 style="color: #38bdf8; margin: 8px 0 6px;">📝 純文字 Markdown</h3>
+            <p style="font-size: 0.88rem; line-height: 1.7;">
+              使用 <code># 標題</code>、<code>- 清單</code>、<code>**粗體**</code>，排版清爽優雅；30 年後用任何純文字編輯器打開都依然可讀，資料永遠屬於你。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.5); background: rgba(168, 85, 247, 0.05);">
+            <span class="tag tag-purple">靈魂紐帶</span>
+            <h3 style="color: #c084fc; margin: 8px 0 6px;">🔗 [[雙向反向連結]]</h3>
+            <p style="font-size: 0.88rem; line-height: 1.7;">
+              只要打出雙中括號 <code>[[概念名稱]]</code>，頁面之間自動雙向串聯！點擊瞬間跳轉，翻查過去所有提及該概念的脈絡。
+            </p>
+          </div>
+          <div class="card">
+            <span class="tag tag-emerald">視覺震撼</span>
+            <h3 style="color: #34d399; margin: 8px 0 6px;">🌌 關係星系圖 (Graph)</h3>
+            <p style="font-size: 0.88rem; line-height: 1.7;">
+              按下快捷鍵 <code>Ctrl + G</code>，一鍵展開 3D 知識網絡圖！親眼見證零散筆記如同大腦神經突觸一般發光連成一體。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: 架構管線圖解 -->
+    <section class="slide" data-index="6">
+      <div class="slide-header">
+        <span class="slide-pill pill-indigo">架構圖解 · ARCHITECTURE</span>
+        <h2 class="slide-title">AntiGravity MCP 跨界直連生態管線圖</h2>
+        <p class="slide-subtitle">端到端資料流：大腦推理 ➔ MCP 協議 ➔ 本機 Obsidian ➔ 雙向星系圖譜</p>
+      </div>
+      <div class="slide-body" style="height: 100%;">
+        <div class="slide-image-box" onclick="openZoomModal('../PIC/ch14_mcp_obsidian_architecture.svg')">
+          <img src="../PIC/ch14_mcp_obsidian_architecture.svg" alt="MCP 協議直連 Obsidian 生態管線圖">
+          <div class="slide-image-hint">🔍 點擊圖片放大檢視</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: MCP 四大特工武器 -->
+    <section class="slide" data-index="7">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">特工工具 · MCP TOOLS</span>
+        <h2 class="slide-title">MCP 賦予 AI 的 4 大特工級武器</h2>
+        <p class="slide-subtitle">精準安全操作本機 Markdown 檔案，零破壞保證</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4" style="gap: 16px;">
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">📖</div>
+            <h4 style="color: #38bdf8; margin-bottom: 6px;"><code>read_note</code></h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              <strong>直讀筆記</strong>。調閱電腦中任何一份 <code>.md</code> 檔案全文，不必手動複製貼上。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">🩹</div>
+            <h4 style="color: #c084fc; margin-bottom: 6px;"><code>patch_note</code></h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              <strong>局部手術微修</strong>。只替換指定段落或追加連結，絕不破壞原有排版。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">📝</div>
+            <h4 style="color: #34d399; margin-bottom: 6px;"><code>write_note</code></h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              <strong>建立全新篇章</strong>。自動產生主題大綱、總目錄（MOC）或今日日記 Daily Note。
+            </p>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">🔍</div>
+            <h4 style="color: #fbbf24; margin-bottom: 6px;"><code>search_notes</code></h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">
+              <strong>全庫毫秒檢索</strong>。快速搜尋數百篇筆記中的關鍵術語，找出潛在關聯性。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: 核心動手做：耳機第二大腦 -->
+    <section class="slide" data-index="8">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">核心動手做 · HANDS-ON</span>
+        <h2 class="slide-title">核心實戰：耳機專案知識提煉與雙向連結指令</h2>
+        <p class="slide-subtitle">讓 AI 掃描專案檔案，自動萃取概念、織入 WikiLinks 並生成總地圖</p>
+      </div>
+      <div class="slide-body">
+        <div class="code-box">
+          <button class="copy-pill" onclick="navigator.clipboard.writeText(this.parentElement.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製 Prompt</button>
+          <pre><code>請透過 MCP 協議讀取我的 Obsidian 筆記庫中關於『AeroPulse Pro 耳機專案』的相關筆記：
+
+1. 智能概念萃取：分析各篇筆記內文，自動辨識核心術語（如「降噪技術」、「定價策略」、「自癒測試」、「客群畫像」）。
+2. 自動雙向連結：在每篇筆記的適當語句中，自動注入 [[雙向反向連結]] 語法，建立筆記之間的超連結紐帶。
+3. 知識地圖產出：在筆記庫根目錄建立一份全新總目錄『Course_MOC.md（Map of Content）』，以結構化大綱列出整個專案的知識脈絡與各頁面導航連結。
+4. 保持乾淨排版：只使用局部更新（patch），絕不破壞我原有記錄的文字與筆記結構！</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: 動態星系圖驗收 -->
+    <section class="slide" data-index="9">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">成果驗收 · GALAXY PREVIEW</span>
+        <h2 class="slide-title">成果驗收：打開 Graph View 親見知識星系發光</h2>
+        <p class="slide-subtitle">原本各自孤立的散亂小圓點，瞬間生長出無數條連結絲線！</p>
+      </div>
+      <div class="slide-body">
+        <div class="card" style="text-align: center; padding: 36px; border-color: rgba(168, 85, 247, 0.5);">
+          <div style="font-size: 3rem; margin-bottom: 12px;">🌌 🔮 🧠</div>
+          <h3 style="font-size: 1.5rem; color: #c084fc; margin-bottom: 10px;">動態知識星系圖譜模擬器（3D 節點物理模擬）</h3>
+          <p style="max-width: 760px; margin: 0 auto 24px; color: var(--text-muted); line-height: 1.7;">
+            點擊下方按鈕，在瀏覽器中直接體驗動態圖譜！<br>
+            可自由滑鼠拖曳神經節點、縮放視角、觀察耳機規格、降噪技術、定價策略與 MOC 之間的即時引力互動！
+          </p>
+          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="../obsidian-brain-preview.html" target="_blank" class="btn-action btn-purple" style="font-size: 1rem; padding: 12px 28px;">
+              <span>🔮 開啟動態星系圖譜模擬器（新分頁體驗） ↗</span>
+            </a>
+            <a href="../chapters/chapter14.html#sec-14-3" class="btn-action btn-outline">
+              <span>📖 查看講義操作步驟</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: 生活實戰 1：靈感隨筆整理 -->
+    <section class="slide" data-index="10">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">初學者寶庫 · CASE 1</span>
+        <h2 class="slide-title">【日常閱讀】零散隨筆「自動去除贅詞、提取標籤與 WikiLinks」</h2>
+        <p class="slide-subtitle">生活痛點：隨手記的看片筆記東拼西湊，手動整理要花一小時</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #c084fc; margin-bottom: 8px;">🎯 執行心法與指令精要</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li>透過 MCP 自動讀取 <code>每日靈感/</code> 資料夾最新 3 篇筆記。</li>
+              <li>提煉核心洞察，去除口語流水帳贅詞。</li>
+              <li>自動為術語加上 <code>[[雙向連結]]</code>。</li>
+              <li>在開頭注入 YAML 標籤（如 <code>tags: [AI學習, 商業靈感]</code>）。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.04);">
+            <h4 style="color: #e9d5ff; margin-bottom: 8px;">🎁 驗收成果：隨手筆記秒變正規庫</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              不用手動排版，打開 Obsidian 發現三篇筆記已經自動補齊 YAML Frontmatter 標籤與發光的雙向連結，零碎筆記瞬間被納入第二大腦神經網絡！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: 生活實戰 2：桌面檔案歸檔 -->
+    <section class="slide" data-index="11">
+      <div class="slide-header">
+        <span class="slide-pill pill-cyan">初學者寶庫 · CASE 2</span>
+        <h2 class="slide-title">【個人秘書】本機混亂桌面「一鍵智慧歸檔與 Daily Note 備忘錄」</h2>
+        <p class="slide-subtitle">生活痛點：桌面堆滿「未命名截圖.png」與「發票.pdf」，找檔案如大海撈針</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #38bdf8; margin-bottom: 8px;">🎯 執行心法與指令精要</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li>AI 透過檔案系統工具檢查桌面暫存檔案。</li>
+              <li>自動分析檔案主題，分門別類移入歸檔資料夾（發票、會議記錄、教學截圖）。</li>
+              <li>透過 MCP 在 Obsidian 建立今日日記 <code>2026-10-26.md</code>。</li>
+              <li>自動在日記中條列歸檔清單、一句話摘要與明日待辦！</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.04);">
+            <h4 style="color: #7dd3fc; margin-bottom: 8px;">🎁 驗收成果：混亂桌面瞬間清空</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              桌面乾淨溜溜，打開 Obsidian 今日筆記，井然有序記錄著今天處理的所有檔案與明天的追蹤提醒，宛如請了一位專業的本機貼身助理！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 12: 生活實戰 3：Mermaid 圖表繪製 -->
+    <section class="slide" data-index="12">
+      <div class="slide-header">
+        <span class="slide-pill pill-emerald">初學者寶庫 · CASE 3</span>
+        <h2 class="slide-title">【視覺理解】複雜架構筆記「自動繪製 Mermaid 關係流程圖」</h2>
+        <p class="slide-subtitle">生活痛點：看文字容易頭昏，想畫流程圖但 Visio 拖拉方塊既耗時又難看</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #34d399; margin-bottom: 8px;">🎯 執行心法與指令精要</h4>
+            <ul style="font-size: 0.88rem; line-height: 1.8;">
+              <li>讀取全端架構筆記（如 Pages ➔ Workers ➔ Supabase）。</li>
+              <li>梳理元件間的資料流向、觸發條件與相依性。</li>
+              <li>在筆記末尾自動插入語法正確的 Mermaid 代碼（<code>graph TD</code>）。</li>
+              <li>包含清晰中文標註與狀態圖示。</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.04);">
+            <h4 style="color: #a7f3d0; margin-bottom: 8px;">🎁 驗收成果：Obsidian 秒渲染高質感架構圖</h4>
+            <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              打開筆記，Obsidian 直接將純文字代碼渲染成深色科技風動態架構圖，圖文並茂，無論自己複習還是跟團隊報告都一目了然！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 13: 旗艦拓展 1：Google 全家桶實戰 -->
+    <section class="slide" data-index="13">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">旗艦拓展 1 · GOOGLE WORKSPACE</span>
+        <h2 class="slide-title">Google 全家桶 MCP 實戰：一人工作室的「全自動 VIP 商務秘書」</h2>
+        <p class="slide-subtitle">Gmail / 日曆 / 試算表 / Docs / Slides / 雲端硬碟 6 大工具跨界一氣呵成</p>
+      </div>
+      <div class="slide-body">
+        <div class="banner" style="margin-bottom: 16px; border-color: #facc15; background: rgba(234, 179, 8, 0.05);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 700; color: #facc15;">🛡️ Draft First 關鍵防護原則：信件一律存為草稿，嚴禁直接自動外寄！</span>
+            <span class="tag tag-gold">安全首要</span>
+          </div>
+        </div>
+        <div class="grid-3" style="gap: 16px;">
+          <div class="card" style="border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #facc15; margin-bottom: 6px;">📧 1. Gmail 萃取</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">自動讀取未讀詢價合作信，萃取發信人、需求與預算範圍。</p>
+          </div>
+          <div class="card" style="border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #facc15; margin-bottom: 6px;">📊 2. Sheets 登錄與試算</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">在商機表中追加記錄，並依工時公式自動計算建議報價。</p>
+          </div>
+          <div class="card" style="border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #facc15; margin-bottom: 6px;">📅 3. Calendar 找空檔</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">比對下週行程衝突，挑選 3 個 30 分鐘諮詢時段。</p>
+          </div>
+          <div class="card" style="border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #facc15; margin-bottom: 6px;">📝 4. Docs 合作協議</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">調用模板自動產出「合作意向備忘錄」草稿。</p>
+          </div>
+          <div class="card" style="border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #facc15; margin-bottom: 6px;">📽️ 5. Slides 提案簡報</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">自動生成 5 頁極簡 Pitch 簡報並儲存於 Drive。</p>
+          </div>
+          <div class="card" style="border-color: rgba(234, 179, 8, 0.3);">
+            <h4 style="color: #facc15; margin-bottom: 6px;">✉️ 6. Gmail 回信草稿</h4>
+            <p style="font-size: 0.84rem; line-height: 1.6;">附上文件連結與會議建議，等待人類確認後親手發送！</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 14: 旗艦拓展 2：網頁自動操控與 HITL -->
+    <section class="slide" data-index="14">
+      <div class="slide-header">
+        <span class="slide-pill pill-indigo">旗艦拓展 2 · BROWSER AUTOMATION</span>
+        <h2 class="slide-title">網頁自動化操控：東京賞櫻機票比價與安全接棒（HITL）</h2>
+        <p class="slide-subtitle">AI 在螢幕上開真實瀏覽器幫你找機票填資料，一直到信用卡付款前交由人類接手！</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 20px;">
+          <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="color: #38bdf8;">🖥️ 前 85%：AI 承擔機械苦力 (看得見的 Chrome)</h4>
+              <span class="tag tag-cyan">自動執行</span>
+            </div>
+            <ul style="font-size: 0.85rem; line-height: 1.8;">
+              <li>開啟可視化 Chrome（<code>headless: false</code>），前往比價網站。</li>
+              <li>自動輸入台北 ➔ 東京航線、指定出發回程日期。</li>
+              <li>嚴格篩選：<strong>直飛 + 早去午回 + 內含 23kg 托運行李</strong>。</li>
+              <li>選定後點進訂位頁，從本機安全設定檔自動填入 2 位乘客英文姓名、護照號碼、生日與手機。</li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-color: rgba(244, 63, 94, 0.5); background: rgba(244, 63, 94, 0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="color: #fb7185;">🛑 後 15%：人機協同安全剎車點 (HITL)</h4>
+              <span class="tag tag-rose">金流安全</span>
+            </div>
+            <ul style="font-size: 0.85rem; line-height: 1.8;">
+              <li><strong>⚡ 強制剎車原則</strong>：跳轉至信用卡付款輸入頁面時，AI <strong>立即停止一切動作</strong>！</li>
+              <li>絕對禁止 AI 讀取或嘗試填寫信用卡卡號、CVV 安全碼。</li>
+              <li>在終端發出提醒：「報告指揮官！機票與個資已填妥，請親自刷卡完成付款！」</li>
+              <li><strong>心智模型：AI 衝鋒陷陣填好單，人類掌握大權按付款！</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 15: 生態展望與安全邊界 Q&A -->
+    <section class="slide" data-index="15">
+      <div class="slide-header">
+        <span class="slide-pill pill-gold">常見疑惑 · Q&A</span>
+        <h2 class="slide-title">成果驗收與生態展望：常見疑惑解答</h2>
+        <p class="slide-subtitle">釐清安全邊界、雙向連結心法與全球 MCP 龐大軟體生態</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap: 20px;">
+          <div class="card">
+            <h4 style="color: #fbbf24; margin-bottom: 8px;">❓ 會不會誤刪我的本機筆記？</h4>
+            <p style="font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);">
+              <strong>答：完全不用擔心！</strong><br>
+              Obsidian 內建完整「檔案版本歷程（File Recovery）」，隨時一鍵回溯；且 AntiGravity 遵循最小修改原則（patch），只替換段落，不擅自刪檔。
+            </p>
+          </div>
+          <div class="card">
+            <h4 style="color: #fbbf24; margin-bottom: 8px;">❓ 雙向連結核心好處是什麼？</h4>
+            <p style="font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);">
+              <strong>答：網狀思考取代死板資料夾！</strong><br>
+              資料夾是一對一僵化歸檔；雙向連結讓一個概念能在多篇筆記被引述，幾個月後點進去，過去的想法自動串聯、靈感泉湧！
+            </p>
+          </div>
+          <div class="card">
+            <h4 style="color: #fbbf24; margin-bottom: 8px;">❓ MCP 還能外接哪些熱門軟體？</h4>
+            <p style="font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);">
+              <strong>答：生態系無限廣闊！</strong><br>
+              包含 Google 全家桶、Slack、GitHub、PostgreSQL 資料庫、Playwright 網頁操控、甚至 Home Assistant 智慧家電，通通都是你的外掛！
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 16: 全書里程碑總結與壓軸預告 -->
+    <section class="slide" data-index="16">
+      <div class="slide-header">
+        <span class="slide-pill pill-purple">課程總結 · WRAP UP</span>
+        <h2 class="slide-title">恭喜解鎖 MCP 跨界生態！壓軸預告：第 15 章 /goal 極限挑戰</h2>
+        <p class="slide-subtitle">你已經掌握了讓 AI 穿透孤島、操控本機與雲端工具的頂尖本領</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="gap: 24px; margin-bottom: 24px;">
+          <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
+            <h4 style="color: #c084fc; margin-bottom: 10px;">🏆 本章核心技能驗收</h4>
+            <ul style="line-height: 1.8; font-size: 0.9rem;">
+              <li>打破 AI 孤島，理解 MCP 通用協議架構</li>
+              <li>搭建 Obsidian 筆記庫並結合 Google 雲端無縫同步</li>
+              <li>自動提煉專案脈絡、注入 WikiLinks 並點亮知識星系圖</li>
+              <li>Google Workspace 全自動 VIP 秘書（Draft First 安全防呆）</li>
+              <li>網頁可視化操作與信用卡付款前人機協同安全接棒（HITL）</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color: rgba(251, 191, 36, 0.4); background: rgba(251, 191, 36, 0.04);">
+            <h4 style="color: #facc15; margin-bottom: 10px;">🌟 全書終極天花板：第 15 章預告</h4>
+            <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
+              <strong>「/goal 無人值守極限挑戰」</strong>！下班關燈離席，AI 自主長時間深度思考、自動跨多模組除錯、資安滲透掃描並在明早提交完美重構 PR。體驗全自動化軟體工程的終極境界！
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+          <a href="../chapters/chapter14.html" class="btn-action btn-outline">◀ 返回第 14 章講義</a>
+          <a href="../obsidian-brain-preview.html" target="_blank" class="btn-action btn-purple">🔮 體驗動態星系圖譜 ↗</a>
+          <a href="../index.html#future-chapters" class="btn-action btn-cyan">探索第 15 章規劃 ➔</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Zoom Modal -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal()">
+    <img id="zoomImg" src="" alt="放大檢視">
+  </div>
+
+  <!-- Bottom Navigation Controls -->
+  <nav class="slide-nav-bottom">
+    <button class="nav-btn" id="prevBtn" title="上一頁 (PageUp / 鍵盤 ➔)">◀</button>
+    <button class="nav-btn" id="nextBtn" title="下一頁 (PageDown / 鍵盤 ➔ / 空白鍵)">▶</button>
+    <div class="nav-shortcuts">
+      快捷鍵：空白鍵 / ➔ 下一頁 · ⯇ 上一頁 · F 全螢幕 · R 重設計時
+    </div>
+  </nav>
+
+  <!-- Slide Presentation Script -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const timerBtn = document.getElementById('timerBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Progress bar
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      // Counter
+      const padCurrent = String(currentSlide + 1).padStart(2, '0');
+      const padTotal = String(totalSlides).padStart(2, '0');
+      slideCounter.textContent = `${padCurrent} / ${padTotal}`;
+
+      // Disable/Enable Nav buttons
+      prevBtn.style.opacity = currentSlide === 0 ? '0.3' : '1';
+      prevBtn.style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
+      nextBtn.style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+      nextBtn.style.pointerEvents = currentSlide === totalSlides - 1 ? 'none' : 'auto';
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (zoomModal.classList.contains('active')) {
+        if (e.key === 'Escape') closeZoomModal();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetTimer();
+      }
+    });
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Presenter Timer
+    let seconds = 0;
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function resetTimer() {
+      seconds = 0;
+      timerDisplay.textContent = '00:00';
+    }
+
+    timerBtn.addEventListener('click', resetTimer);
+    startTimer();
+
+    // Image Zoom modal
+    function openZoomModal(src) {
+      zoomImg.src = src;
+      zoomModal.classList.add('active');
+    }
+    function closeZoomModal() {
+      zoomModal.classList.remove('active');
+    }
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 45;
+      if (touchEndX < touchStartX - threshold) {
+        nextSlide();
+      } else if (touchEndX > touchStartX + threshold) {
+        prevSlide();
+      }
+    }
+
+    // Initial state
+    updateSlide();
+  </script>
+</body>
+</html>
