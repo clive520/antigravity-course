@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620">
+  <defs>
+    <linearGradient id="bgGrad14" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="cardGrad14" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="mcpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <linearGradient id="obsidianGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4c1d95"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <filter id="shadow14" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="620" rx="16" fill="url(#bgGrad14)" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title Badge & Header -->
+  <g transform="translate(50, 30)">
+    <rect width="210" height="26" rx="6" fill="#a855f7" fill-opacity="0.15" stroke="#a855f7" stroke-width="1"/>
+    <text x="105" y="17" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#c084fc" text-anchor="middle">CHAPTER 14 ARCHITECTURE</text>
+    <text x="0" y="55" font-family="'Inter', sans-serif" font-size="20" font-weight="800" fill="#f8fafc">MCP (Model Context Protocol) 跨界直連生態管線</text>
+    <text x="0" y="75" font-family="'Inter', sans-serif" font-size="12" fill="#94a3b8">打破 AI 孤島！透過萬能通用協議插槽直連本機 Obsidian 筆記庫 ➔ 提煉結構化知識 ➔ 點亮動態關係星系圖譜</text>
+  </g>
+
+  <!-- Left: AntiGravity Core -->
+  <g transform="translate(50, 120)" filter="url(#shadow14)">
+    <rect width="260" height="340" rx="14" fill="url(#cardGrad14)" stroke="#38bdf8" stroke-width="1.5"/>
+    <circle cx="40" cy="40" r="18" fill="#0284c7" fill-opacity="0.3"/>
+    <text x="40" y="46" font-family="'Inter', sans-serif" font-size="18" text-anchor="middle">🧠</text>
+    <text x="70" y="36" font-family="'Inter', sans-serif" font-size="15" font-weight="800" fill="#f8fafc">AntiGravity 核心大腦</text>
+    <text x="70" y="52" font-family="'Inter', sans-serif" font-size="11" fill="#7dd3fc">強大推理與組織中樞</text>
+    <line x1="16" y1="68" x2="244" y2="68" stroke="#334155" stroke-width="1"/>
+
+    <text x="20" y="96" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">1. 理解業務與意圖：</text>
+    <text x="32" y="116" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">• 接收使用者的一句話指令</text>
+    <text x="32" y="134" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">• 拆解任務為「讀/寫/更新」動作</text>
+
+    <text x="20" y="165" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">2. 智慧知識萃取：</text>
+    <text x="32" y="185" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">• 自動辨識關鍵術語與概念</text>
+    <text x="32" y="203" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">• 消除冗贅流水帳、提煉洞察</text>
+
+    <text x="20" y="235" font-family="'Inter', sans-serif" font-size="12" font-weight="700" fill="#f8fafc">3. 語法結構標準化：</text>
+    <text x="32" y="255" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">• 注入 [[雙向反向連結]]</text>
+    <text x="32" y="273" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">• 產生標準 YAML Frontmatter</text>
+    <text x="32" y="291" font-family="'Inter', sans-serif" font-size="11" fill="#94a3b8">• 繪製 Mermaid 關係網絡代碼</text>
+
+    <rect x="16" y="306" width="228" height="20" rx="4" fill="#0c4a6e"/>
+    <text x="130" y="320" font-family="'Inter', sans-serif" font-size="10" font-weight="700" fill="#38bdf8" text-anchor="middle">✔ 本機離線運算 · 隱私 100% 安全</text>
+  </g>
+
+  <!-- Middle: MCP Bridge (Universal USB-C) -->
+  <g transform="translate(340, 180)" filter="url(#shadow14)">
+    <rect width="210" height="220" rx="14" fill="#1e1b4b" stroke="url(#mcpGrad)" stroke-width="2"/>
+    <rect x="65" y="15" width="80" height="24" rx="12" fill="#6b21a8" stroke="#a855f7" stroke-width="1"/>
+    <text x="105" y="31" font-family="'Inter', sans-serif" font-size="11" font-weight="800" fill="#f3e8ff" text-anchor="middle">🔌 MCP 協議</text>
+
+    <text x="105" y="65" font-family="'Inter', sans-serif" font-size="13.5" font-weight="800" fill="#f8fafc" text-anchor="middle">AI 的萬能 USB 擴充塢</text>
+    <text x="105" y="82" font-family="'Inter', sans-serif" font-size="10.5" fill="#c084fc" text-anchor="middle">Model Context Protocol</text>
+    <line x1="20" y1="96" x2="190" y2="96" stroke="#4c1d95" stroke-width="1"/>
+
+    <g transform="translate(25, 110)">
+      <text x="0" y="16" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" fill="#38bdf8">read_note</text>
+      <text x="100" y="16" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">讀取筆記</text>
+
+      <text x="0" y="38" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" fill="#34d399">patch_note</text>
+      <text x="100" y="38" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">局部微調</text>
+
+      <text x="0" y="60" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" fill="#fbbf24">write_note</text>
+      <text x="100" y="60" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">建立新頁</text>
+
+      <text x="0" y="82" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" fill="#e879f9">search_notes</text>
+      <text x="100" y="82" font-family="'Inter', sans-serif" font-size="11" fill="#cbd5e1">全庫檢索</text>
+    </g>
+  </g>
+
+  <!-- Connecting Lines Left to Middle -->
+  <path d="M 310 290 L 340 290" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4 4"/>
+  <polygon points="340,290 332,286 332,294" fill="#38bdf8"/>
+
+  <!-- Connecting Lines Middle to Right -->
+  <path d="M 550 290 L 580 290" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="4 4"/>
+  <polygon points="580,290 572,286 572,294" fill="#a855f7"/>
+
+  <!-- Right: Obsidian Local Vault & Second Brain -->
+  <g transform="translate(580, 120)" filter="url(#shadow14)">
+    <rect width="370" height="340" rx="14" fill="url(#obsidianGrad)" stroke="#8b5cf6" stroke-width="1.5"/>
+    <circle cx="40" cy="40" r="18" fill="#581c87" fill-opacity="0.6"/>
+    <text x="40" y="46" font-family="'Inter', sans-serif" font-size="18" text-anchor="middle">💎</text>
+    <text x="70" y="36" font-family="'Inter', sans-serif" font-size="15" font-weight="800" fill="#f8fafc">本機 Obsidian 筆記庫 (Vault)</text>
+    <text x="70" y="52" font-family="'Inter', sans-serif" font-size="11" fill="#d8b4fe">永久保存的個人第二大腦 (Second Brain)</text>
+    <line x1="16" y1="68" x2="354" y2="68" stroke="#4c1d95" stroke-width="1"/>
+
+    <!-- Simulated Graph Nodes & Links -->
+    <g transform="translate(30, 85)">
+      <!-- Links -->
+      <line x1="80" y1="40" x2="180" y2="30" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <line x1="80" y1="40" x2="120" y2="100" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <line x1="180" y1="30" x2="250" y2="70" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <line x1="120" y1="100" x2="220" y2="110" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <line x1="250" y1="70" x2="220" y2="110" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+      <!-- Node 1: Center -->
+      <circle cx="80" cy="40" r="14" fill="#38bdf8" filter="url(#shadow14)"/>
+      <text x="80" y="66" font-family="'Inter', sans-serif" font-size="10.5" font-weight="700" fill="#38bdf8" text-anchor="middle">[[耳機專案]]</text>
+
+      <!-- Node 2 -->
+      <circle cx="180" cy="30" r="11" fill="#a855f7"/>
+      <text x="180" y="16" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#d8b4fe" text-anchor="middle">[[降噪技術]]</text>
+
+      <!-- Node 3 -->
+      <circle cx="120" cy="100" r="11" fill="#34d399"/>
+      <text x="120" y="124" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#6ee7b7" text-anchor="middle">[[定價策略]]</text>
+
+      <!-- Node 4 -->
+      <circle cx="250" cy="70" r="10" fill="#fbbf24"/>
+      <text x="250" y="93" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#fde68a" text-anchor="middle">[[自癒測試]]</text>
+
+      <!-- Node 5 -->
+      <circle cx="220" cy="110" r="9" fill="#f43f5e"/>
+      <text x="220" y="132" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#fda4af" text-anchor="middle">[[客群畫像]]</text>
+    </g>
+
+    <!-- Bottom Feature Description -->
+    <rect x="16" y="240" width="338" height="85" rx="8" fill="#2e1065" stroke="#7c3aed" stroke-width="1"/>
+    <text x="28" y="260" font-family="'Inter', sans-serif" font-size="11.5" font-weight="700" fill="#f8fafc">🌟 Obsidian 核心成果亮點：</text>
+    <text x="28" y="280" font-family="'Inter', sans-serif" font-size="10.5" fill="#cbd5e1">• 打開 Graph View（關係圖譜），所有節點動態聯網發光</text>
+    <text x="28" y="298" font-family="'Inter', sans-serif" font-size="10.5" fill="#cbd5e1">• 自動產出 Course_MOC.md（知識地圖導航總目錄）</text>
+    <text x="28" y="316" font-family="'Inter', sans-serif" font-size="10.5" fill="#a7f3d0">✔ 純文字 Markdown 檔案，無資料綁定風險，永久可用</text>
+  </g>
+
+  <!-- Bottom Comparison Card -->
+  <g transform="translate(50, 485)" filter="url(#shadow14)">
+    <rect width="900" height="105" rx="12" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <text x="30" y="32" font-family="'Inter', sans-serif" font-size="13" font-weight="800" fill="#38bdf8">🚀 為什麼 MCP 是次世代 AI 的殺手級協議？</text>
+    <text x="30" y="55" font-family="'Inter', sans-serif" font-size="11.5" fill="#cbd5e1">
+      傳統聊天機器人只能在雲端空談，一碰真實世界就寸步難行。透過 MCP 協議，AntiGravity 不僅具備程式碼生成能力，
+    </text>
+    <text x="30" y="75" font-family="'Inter', sans-serif" font-size="11.5" fill="#cbd5e1">
+      更如同長出雙手雙腳——能直接操作你電腦裡的真實筆記庫、本地檔案與資料庫，成為真正的「全能數位數位副駕駛」！
+    </text>
+    <rect x="710" y="25" width="165" height="55" rx="8" fill="#4c1d95" stroke="#a855f7" stroke-width="1"/>
+    <text x="792" y="47" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#f3e8ff" text-anchor="middle">🔮 實戰成果體驗</text>
+    <text x="792" y="66" font-family="'Inter', sans-serif" font-size="10" fill="#c084fc" text-anchor="middle">obsidian-brain-preview.html</text>
+  </g>
+</svg>

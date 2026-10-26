@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian 第二大腦 · 動態知識星系圖譜 (MCP Graph View)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #0f172a;
+      --border: rgba(148, 163, 184, 0.15);
+      --primary: #38bdf8;
+      --accent: #8b5cf6;
+      --accent-glow: rgba(139, 92, 246, 0.4);
+      --success: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      z-index: 10;
+    }
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .badge-mcp {
+      background: rgba(139, 92, 246, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      font-size: 0.78rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+    .stats-bar {
+      display: flex;
+      gap: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      align-items: center;
+    }
+    .stats-bar span.active-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      display: inline-block;
+      box-shadow: 0 0 8px var(--success);
+    }
+    .back-btn {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Main Stage */
+    .main-stage {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+    #graphCanvas {
+      flex: 1;
+      cursor: grab;
+      background: radial-gradient(circle at center, #13122b 0%, #090d16 80%);
+    }
+    #graphCanvas:active { cursor: grabbing; }
+
+    /* Side Preview Drawer */
+    .note-drawer {
+      width: 380px;
+      background: rgba(15, 23, 42, 0.95);
+      border-left: 1px solid var(--border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      z-index: 5;
+      overflow-y: auto;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .note-drawer.collapsed {
+      transform: translateX(100%);
+    }
+    .note-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .note-tag {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-right: 6px;
+      font-weight: 600;
+    }
+    .note-content {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+      font-family: var(--font-mono);
+      white-space: pre-wrap;
+    }
+    .wikilink-pill {
+      color: #c084fc;
+      background: rgba(139, 92, 246, 0.15);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .canvas-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <a href="chapters/chapter14.html" class="back-btn">← 返回第 14 章講義</a>
+      <div class="brand-title">
+        <span>💎 Obsidian 知識圖譜 (Graph View)</span>
+        <span class="badge-mcp">MCP 直連中</span>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <span><span class="active-dot"></span> 本機 Vault 連線正常</span>
+      <span>•</span>
+      <span>節點數：<strong style="color: #fff;" id="nodeCount">7</strong></span>
+      <span>•</span>
+      <span>雙向連結：<strong style="color: #c084fc;">10 條</strong></span>
+    </div>
+  </header>
+
+  <div class="main-stage">
+    <canvas id="graphCanvas"></canvas>
+    
+    <div class="canvas-hint">
+      💡 提示：按住滑鼠左鍵可<strong>拖曳移動節點</strong>，<strong>點擊節點</strong>可在右側檢視 Markdown 筆記內容！
+    </div>
+
+    <!-- Right Drawer -->
+    <div class="note-drawer" id="noteDrawer">
+      <div class="note-title" id="drawerTitle">📄 [[耳機專案]]</div>
+      <div>
+        <span class="note-tag" id="drawerTag">#實戰專案</span>
+        <span class="note-tag">#第二大腦</span>
+      </div>
+      <div style="font-size: 0.8rem; color: var(--text-muted);">
+        最後由 AntiGravity 透過 MCP 更新於：今日
+      </div>
+      <div class="note-content" id="drawerContent">
+載入筆記內容中...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('graphCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = canvas.parentElement.clientWidth - (window.innerWidth > 900 ? 380 : 0);
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resize);
+
+    // Nodes Data
+    const nodes = [
+      {
+        id: 'main',
+        name: '耳機專案',
+        x: 300, y: 260, r: 24, color: '#38bdf8',
+        tag: '#旗艦產品',
+        content: `# AeroPulse Pro 自研耳機專案筆記\n\n- 定位：商務通話與極致續航\n- 核心技術：[[降噪技術]] 與 AI 骨傳導 ENC\n- 商業策略：避開萬元紅海，走 [[定價策略]] 3,880 甜點區\n- 品質保證：採用 [[自癒測試]] 確保 0 漏洞`
+      },
+      {
+        id: 'anc',
+        name: '降噪技術',
+        x: 180, y: 150, r: 18, color: '#a855f7',
+        tag: '#核心硬體',
+        content: `# 降噪技術研發筆記\n\n- 深度：42dB 智慧動態調壓\n- 痛點防禦：針對通勤族消除耳壓感\n- 關聯模組：介接 [[客群畫像]] 與 [[耳機專案]]`
+      },
+      {
+        id: 'pricing',
+        name: '定價策略',
+        x: 460, y: 160, r: 18, color: '#10b981',
+        tag: '#商業模式',
+        content: `# 定價與折扣模型筆記\n\n- 建議發售價：NT$ 3,880\n- 促銷規則：買 2 支 9 折、買 3 支 85 折\n- 結帳驗證：透過 [[自癒測試]] 防止浮點數與負數`
+      },
+      {
+        id: 'test',
+        name: '自癒測試',
+        x: 480, y: 380, r: 18, color: '#fbbf24',
+        tag: '#品質工程',
+        content: `# 自我修復迴圈 (TDD) 筆記\n\n- 測試覆蓋率：100%\n- 邊界防禦：滿額免運、VIP 券負數結算\n- 指標：終端機 5/5 全綠燈通過`
+      },
+      {
+        id: 'agent',
+        name: '多代理人',
+        x: 160, y: 390, r: 18, color: '#f43f5e',
+        tag: '#次世代AI',
+        content: `# 多代理人團隊作戰筆記\n\n- 調度架構：Orchestrator 主從模式\n- 子代理分工：競品官、分析師、趨勢員\n- 最終交付：[[耳機專案]] 與 [[YouTube工廠]]`
+      },
+      {
+        id: 'persona',
+        name: '客群畫像',
+        x: 100, y: 250, r: 15, color: '#34d399',
+        tag: '#市場研究',
+        content: `# 三大買家客群研究\n\n1. 通勤族：痛恨耳壓感\n2. 商務族：需要頂級通話降噪\n3. 運動族：防汗不滑落\n- 關聯：支撐 [[耳機專案]] 產品決策`
+      },
+      {
+        id: 'media',
+        name: 'YouTube工廠',
+        x: 320, y: 440, r: 16, color: '#e879f9',
+        tag: '#無人值守',
+        content: `# 雙軌影音自媒體工廠筆記\n\n- 雙軌產物：NotebookLM 解說影片 + 播客音訊\n- 精準字幕：單行 14~18 字語意斷句\n- CLI 發布：自動發布至 YouTube 雙影片`
+      }
+    ];
+
+    // Links between nodes
+    const links = [
+      { from: 'main', to: 'anc' },
+      { from: 'main', to: 'pricing' },
+      { from: 'main', to: 'test' },
+      { from: 'main', to: 'agent' },
+      { from: 'main', to: 'persona' },
+      { from: 'anc', to: 'persona' },
+      { from: 'pricing', to: 'test' },
+      { from: 'agent', to: 'media' },
+      { from: 'agent', to: 'main' },
+      { from: 'media', to: 'main' }
+    ];
+
+    let draggedNode = null;
+    let selectedNode = nodes[0];
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Links
+      links.forEach(l => {
+        const source = nodes.find(n => n.id === l.from);
+        const target = nodes.find(n => n.id === l.to);
+        if (!source || !target) return;
+
+        ctx.beginPath();
+        ctx.moveTo(source.x, source.y);
+        ctx.lineTo(target.x, target.y);
+        ctx.strokeStyle = 'rgba(139, 92, 246, 0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+
+      // Draw Nodes
+      nodes.forEach(n => {
+        // Outer Glow
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r + 6, 0, Math.PI * 2);
+        ctx.fillStyle = n === selectedNode ? 'rgba(56, 189, 248, 0.3)' : 'rgba(139, 92, 246, 0.15)';
+        ctx.fill();
+
+        // Node Body
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = n.color;
+        ctx.fill();
+        ctx.strokeStyle = n === selectedNode ? '#fff' : 'rgba(255, 255, 255, 0.4)';
+        ctx.lineWidth = n === selectedNode ? 2.5 : 1;
+        ctx.stroke();
+
+        // Node Label
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.fillStyle = '#f8fafc';
+        ctx.textAlign = 'center';
+        ctx.fillText(`[[${n.name}]]`, n.x, n.y + n.r + 16);
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    // Interaction Handlers
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      draggedNode = nodes.find(n => Math.hypot(n.x - mx, n.y - my) < n.r + 6);
+      if (draggedNode) {
+        selectedNode = draggedNode;
+        updateDrawer(selectedNode);
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!draggedNode) return;
+      const rect = canvas.getBoundingClientRect();
+      draggedNode.x = Math.max(30, Math.min(canvas.width - 30, e.clientX - rect.left));
+      draggedNode.y = Math.max(30, Math.min(canvas.height - 30, e.clientY - rect.top));
+    });
+
+    window.addEventListener('mouseup', () => {
+      draggedNode = null;
+    });
+
+    function updateDrawer(node) {
+      document.getElementById('drawerTitle').textContent = `📄 [[${node.name}]]`;
+      document.getElementById('drawerTag').textContent = node.tag;
+      document.getElementById('drawerContent').textContent = node.content;
+    }
+
+    // Init
+    resize();
+    updateDrawer(selectedNode);
+    draw();
+  </script>
+</body>
+</html>
