@@ -312,14 +312,21 @@
 
 
         <!-- 願望 2：多人互動實驗室 -->
-        <div class="wishlist-item">
-          <span class="wishlist-status">規劃中 📝</span>
-          <h4>🧪 多人即時在線物理/化學實驗室</h4>
-          <p>提供一個虛擬互動實驗室環境，讓所有進到網頁的訪客都能同步操作儀器（如天平砝碼、酸鹼試管滴定），並即時看到全體人員的互動結果。</p>
+        <div class="wishlist-item" style="border-color: rgba(56, 189, 248, 0.4); background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.6) 100%);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 8px;">
+            <span class="wishlist-status" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);">已實裝上線 🎉</span>
+            <div style="display: flex; gap: 8px;">
+              <a href="labs/index.html" target="_blank" style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; text-decoration: none; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 10px; border-radius: 6px;">🧪 進入實驗室 ↗</a>
+              <a href="chapters/project-lab.html" style="font-size: 0.8rem; font-weight: 700; color: #fbbf24; text-decoration: none; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); padding: 3px 10px; border-radius: 6px;">📖 教學講義 ➔</a>
+            </div>
+          </div>
+          <h4 style="color: #f8fafc;">🧪 多人即時在線物理/化學實驗室 (OmniLab)</h4>
+          <p>打破單機孤島！提供高流暢 60 FPS 物理化學模擬，所有進入房間的學員都能看見對方的「幽靈游標」、共同控制滴定管旋塞、共同投放星體與黑洞，且具備高可擴充外掛註冊體系！</p>
           <ul class="wishlist-features">
-            <li>HTML5 Canvas 物理運動模擬（重力、力矩、碰撞）</li>
-            <li>WebSockets / Firebase 即時資料庫多人連線同步</li>
-            <li>多人共用游標軌跡與協同實驗狀態廣播</li>
+            <li>零資料庫、零伺服器：原生 BroadcastChannel 記憶體廣播（同機雙分頁毫秒同步）與 Supabase 雲端支援</li>
+            <li>【首發實驗一】酸鹼滴定與多彩指示劑（真實 pH 算式、磁力攪拌漩渦、S 型突躍曲線圖）</li>
+            <li>【首發實驗二】萬有引力天體沙盒（牛頓引力、克卜勒公轉軌跡預覽、三體運動、碰撞星雲爆炸）</li>
+            <li>LabRegistry 外掛註冊架構，10 分鐘輕鬆新增第 3、第 4 個自訂實驗室！</li>
           </ul>
         </div>
 

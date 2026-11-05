@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>專案實戰工坊：多人即時在線物理化學實驗室 — 零資料庫架構、Antigravity 提示詞引導與可擴充外掛體系 - Antigravity 實戰教學</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <a href="../index.html" class="brand">
+      <span>🚀 Antigravity 實戰學院</span>
+      <span class="brand-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">專案實戰工坊</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">首頁</a>
+      <a href="../labs/index.html" target="_blank" style="color: #38bdf8; font-weight: 700;">🧪 進入線上實驗室 ↗</a>
+      <a href="../index.html#wishlist">學員願望池</a>
+      <button id="themeToggle" class="theme-toggle-btn">
+        <span id="themeIcon">🌙 深色模式</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="lesson-layout">
+    <!-- 左側選單 -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-title">課程章節總覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="chapter1.html">第 1 章：下載與安裝 Antigravity</a></li>
+        <li><a href="chapter2.html">第 2 章：製作產品介紹網頁</a></li>
+        <li><a href="chapter3.html">第 3 章：GitHub 註冊與部署流程</a></li>
+        <li><a href="chapter4.html">第 4 章：GitHub CLI 實戰教學</a></li>
+        <li><a href="chapter5.html">第 5 章：認識 Google Apps Script (GAS)</a></li>
+        <li><a href="chapter6.html">第 6 章：GAS 預購資料庫與自動回信</a></li>
+        <li><a href="chapter7.html">第 7 章：LINE 機器人即時推播通知</a></li>
+        <li><a href="chapter8.html">第 8 章：綠界 ECPay 金流測試實戰</a></li>
+        <li><a href="chapter9.html">第 9 章：Cloudflare Pages 邊緣部署</a></li>
+        <li><a href="chapter10.html">第 10 章：Supabase 現代雲端資料庫</a></li>
+        <li><a href="chapter11.html">第 11 章：企業級 AI 知識庫 (RAG)</a></li>
+        <li><a href="chapter12.html">第 12 章：多代理人團隊作戰 (Subagents)</a></li>
+        <li><a href="chapter13.html">第 13 章：自我修復迴圈 (Self-Healing Loop)</a></li>
+        <li><a href="chapter14.html">第 14 章：MCP 協議跨界實戰 (Model Context Protocol)</a></li>
+        <li><a href="chapter15.html">第 15 章：/goal 無人值守極限挑戰 (Autonomous Goal)</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">專案實戰工坊 (Projects)</div>
+      <ul class="sidebar-nav">
+        <li><a href="project-lab.html" class="active">🧪 多人即時物理化學實驗室</a></li>
+      </ul>
+      <div class="sidebar-title" style="margin-top: 2rem;">本單元小節導覽</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-lab-goal">1. 專案目標：打破單機，同屏協同</a></li>
+        <li><a href="#sec-lab-env">2. 軟體環境：零資料庫純前端架構</a></li>
+        <li><a href="#sec-lab-sync">3. 多人即時同步核心：運作秘密解密</a></li>
+        <li><a href="#sec-lab-prompts">4. 如何下提示詞：引導 Antigravity</a></li>
+        <li><a href="#sec-lab-showcase">5. 成果展示與雙實驗室實測</a></li>
+        <li><a href="#sec-lab-extend">6. 10 分鐘無限擴充新實驗室</a></li>
+      </ul>
+    </aside>
+
+    <!-- 右側主要內容 -->
+    <main class="lesson-content">
+      <div class="lesson-header">
+        <span class="meta-pill" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">專案工坊 · 高階互動應用</span>
+        <h1>多人即時在線物理化學實驗室：零資料庫架構、Antigravity 提示詞引導與可擴充外掛體系</h1>
+        <p class="desc">擺脫單機版點擊！本單元帶你建造一個具備<strong>「多人同屏協同、即時幽靈游標（Ghost Cursors）、酸鹼滴定突躍與天體引力模擬」</strong>的現代化線上實驗室。最關鍵的是：<strong>全程完全不需要資料庫、零伺服器成本</strong>，且具備外掛式架構，未來只要新增一個檔案就能無限擴充新實驗室！</p>
+        <div style="margin-top: 1rem; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="../labs/index.html" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.65rem 1.4rem; font-size: 0.95rem; border-radius: 8px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #060913; font-weight: 800;">
+            <span>🧪 立即啟動線上實驗室 (可雙開分頁測試) ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 1. 專案目標 -->
+      <section id="sec-lab-goal" class="content-section">
+        <h2>1. 專案目標：打破單機孤島，打造同屏協同的數位科學樂園</h2>
+        <p>很多學員在求學或教學過程中都接觸過線上模擬實驗（例如知名的 PhET）。但傳統線上實驗室存在一個最大的遺憾：</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+          <div class="step-box" style="margin: 0; border-color: rgba(244, 63, 94, 0.3);">
+            <h4 style="color: #fb7185;">❌ 孤獨的單機操作</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              學生只能各自對著螢幕點擊，缺乏實體實驗室中「一人拿試管、一人讀刻度、大家共同討論」的團隊協同感。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0; border-color: rgba(244, 63, 94, 0.3);">
+            <h4 style="color: #fb7185;">❌ 封閉僵化的架構</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              很多模擬程式把物理公式、按鈕 UI 與畫面全寫在同一個檔案裡。想新增一個新實驗，必須重寫整套系統。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0; border-color: rgba(244, 63, 94, 0.3);">
+            <h4 style="color: #fb7185;">❌ 繁重的後端與維護負擔</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              一提到多人連線，很多人以為要租昂貴的伺服器、架設 WebSocket 伺服器、開 SQL 資料庫，維護門檻極高。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin: 1.5rem 0;">
+          <span>💡</span>
+          <div>
+            <strong>OmniLab 的三大破局目標：</strong><br>
+            1. <strong>多人即時同屏（Real-time Co-Presence）</strong>：在同一房間內，彼此能看見彩色的「幽靈游標」、共同控制滴定旋塞、共同投放星體。<br>
+            2. <strong>外掛註冊機制（LabRegistry）</strong>：所有實驗皆為獨立模組，未來只需新增單一檔案即可自動掛載！<br>
+            3. <strong>零後端、零資料庫部署</strong>：以瀏覽器原生技術實現，直接發布在免費 GitHub Pages 上即可全球暢玩！
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 軟體環境建置 -->
+      <section id="sec-lab-env" class="content-section">
+        <h2>2. 軟體環境建置：純前端、零依賴、零資料庫的高抗壓架構</h2>
+        <p>在設計複雜網頁時，最怕陷入「安裝了幾百個 npm 套件，結果換台電腦就跑不起來」的窘境。本專案採用最優雅的<strong>現代瀏覽器原生技術棧</strong>：</p>
+
+        <div class="step-box">
+          <h4>🧩 核心軟體環境與技術組成：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>原生 ES Module（<code>import / export</code>）</strong>：無需 Webpack 或 Vite 打包工具，不用安裝 Node.js，開箱直接在瀏覽器運行。</li>
+            <li><strong>HTML5 Canvas 2D 高速物理引擎</strong>：利用 <code>requestAnimationFrame</code> 驅動 60 FPS 物理數值積分與粒子流體特效，支援 Retina 螢幕高解析度自適應。</li>
+            <li><strong>雙模式即時傳輸層（RealtimeSync）</strong>：
+              <ul style="padding-left: 1.5rem; margin-top: 0.25rem;">
+                <li><strong>本地零門檻</strong>：使用瀏覽器原生 <code>BroadcastChannel</code> API，同一台電腦開兩個分頁即時互通，延遲小於 1 毫秒！</li>
+                <li><strong>雲端跨網</strong>：預留第 10 章學過的 <code>Supabase Realtime Broadcast</code> 接口，填入 Key 即可跨縣市連線。</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <!-- 為什麼不需要資料庫 -->
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;">
+          <h4 style="color: #38bdf8; margin-bottom: 0.5rem;">🤔 為什麼「即時互動」完全不需要資料庫？</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin: 0;">
+            每秒 60 次的滑鼠移動或水滴落下，屬於<strong>「短暫狀態電報（In-Memory Telemetry）」</strong>。<br>
+            如果把每一毫秒的座標都寫進硬碟資料庫，不但會因為磁碟 I/O 造成延遲卡頓，還會白白浪費幾千萬筆無意義的硬碟空間。因此，我們讓數據<strong>直接在記憶體中像無線電波一樣廣播</strong>，接收端畫出畫面後立即釋放，既省流量又做到極致順暢！
+          </p>
+        </div>
+      </section>
+
+      <!-- 3. 多人即時同步核心 -->
+      <section id="sec-lab-sync" class="content-section">
+        <h2>3. 多人即時同步核心：運作秘密大解密</h2>
+        <p>很多學員好奇：「為什麼兩台電腦之間的游標能像面對面一樣同步飛舞？」其核心運作包含三大步驟：</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+          <div class="step-box" style="margin: 0;">
+            <div style="font-size: 1.5rem; margin-bottom: 6px;">📐</div>
+            <h4 style="color: #38bdf8; margin-bottom: 4px;">1. 座標歸一化 (0~1)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+              不同學員的螢幕大小不同（桌機 vs 筆電）。我們將滑鼠點位轉換為比例 <code>x = mouseX / width</code>，確保在任何解析度下位置分毫不差。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0;">
+            <div style="font-size: 1.5rem; margin-bottom: 6px;">⚡</div>
+            <h4 style="color: #fbbf24; margin-bottom: 4px;">2. 極小操作電報</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+              絕不傳輸畫面錄影！只廣播動作指引（例如 <code>{ action: "DROP", volume: 0.05 }</code>，僅 40 Bytes），各端電腦各自計算化學反應。
+            </p>
+          </div>
+          <div class="step-box" style="margin: 0;">
+            <div style="font-size: 1.5rem; margin-bottom: 6px;">〰️</div>
+            <h4 style="color: #34d399; margin-bottom: 4px;">3. 平滑插值 (LERP)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+              遠端游標透過數學線性插值計算：<code>x += (targetX - x) * 0.25</code>，即使網路稍有波動，夥伴的游標依然絲滑柔順、絕不閃爍跳動。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 如何下提示詞 -->
+      <section id="sec-lab-prompts" class="content-section">
+        <h2>4. 如何下提示詞：引導 Antigravity 打造複雜架構的指揮術</h2>
+        <p>在面對「60 FPS 動態渲染 + 即時同步 + 多模組外掛」這樣龐大的專案時，如果只下單純的一句話「幫我寫一個物理化學實驗室」，AI 很容易生成出塞在單一檔案裡的巨大代碼。<strong>身為指揮官，我們要引導 Antigravity 依循「四階段漸進式提示詞」完成建造：</strong></p>
+
+        <!-- Prompt 1 -->
+        <div class="step-box" style="border-color: rgba(56, 189, 248, 0.4);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h4 style="color: #38bdf8; margin: 0;">第一階段 Prompt：規劃外掛註冊架構與目錄規範</h4>
+            <span style="font-size: 0.75rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 2px 8px; border-radius: 4px;">系統底座</span>
+          </div>
+          <p style="font-size: 0.86rem; color: var(--text-muted);">
+            <strong>指令目的</strong>：要求 AI 採用模組化設計，先建立「實驗室註冊中心（LabRegistry）」與「核心渲染循環（LabEngine）」。
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>引導指令：架構與外掛中心</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>我想製作一個純前端的「多人即時在線物理化學實驗室（OmniLab）」，請幫我規劃可無限擴充的外掛式架構：
+1. 採用原生 ES Module，不要使用任何打包工具。
+2. 設計一個「LabRegistry」模組註冊表，所有實驗室都必須符合統一介面（id, name, init, update, render, onRemoteAction, destroy）。
+3. 建立「LabEngine.js」處理 60 FPS 物理循環、高清 Canvas 適應，以及在上層繪製遠端夥伴的幽靈游標。
+4. 請先建立核心目錄結構與基礎檔案骨架。</code></pre>
+          </div>
+        </div>
+
+        <!-- Prompt 2 -->
+        <div class="step-box" style="border-color: rgba(16, 185, 129, 0.4); margin-top: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h4 style="color: #34d399; margin: 0;">第二階段 Prompt：實現零伺服器多人同步層 (RealtimeSync)</h4>
+            <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 2px 8px; border-radius: 4px;">即時通訊</span>
+          </div>
+          <p style="font-size: 0.86rem; color: var(--text-muted);">
+            <strong>指令目的</strong>：引導 AI 使用原生 `BroadcastChannel` 實現本地雙分頁連線，並定義游標與動作廣播規格。
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>引導指令：多人同步層實作</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請為我們的實驗室撰寫「RealtimeSync.js」多人即時同步類別：
+1. 使用瀏覽器原生 BroadcastChannel 建立房間通訊，使用者可隨機分配科學家暱稱（如愛因斯坦、居禮夫人）與發光游標顏色。
+2. 提供 broadcastCursor(normX, normY) 方法，節流 33ms 發送游標比例座標。
+3. 提供 broadcastAction(actionType, payload) 方法，廣播實驗操作。
+4. 定期維護 Presence 心跳，動態回傳當前在線人數與成員列表。</code></pre>
+          </div>
+        </div>
+
+        <!-- Prompt 3 -->
+        <div class="step-box" style="border-color: rgba(251, 191, 36, 0.4); margin-top: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h4 style="color: #fbbf24; margin: 0;">第三階段 Prompt：開發首發雙實驗室（化學滴定與萬有引力）</h4>
+            <span style="font-size: 0.75rem; background: rgba(251, 191, 36, 0.15); color: #fbbf24; padding: 2px 8px; border-radius: 4px;">科學演算法</span>
+          </div>
+          <p style="font-size: 0.86rem; color: var(--text-muted);">
+            <strong>指令目的</strong>：明確告知 AI 化學平衡式、指示劑變色規則，以及牛頓萬有引力與克卜勒軌道預覽演算法。
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>引導指令：雙實驗室演算法</span>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText); this.innerText='已複製！'; setTimeout(()=>this.innerText='複製', 2000);">複製</button>
+            </div>
+            <pre><code>請依據 LabRegistry 規範實現兩個外掛實驗室：
+1.『exp1-titration.js』酸鹼滴定實驗：
+  • 包含滴定管、旋塞、反應燒杯與磁力攪拌器漩渦動畫。
+  • 依據已加 NaOH 毫升數真實計算 pH 值；支援酚酞（無色突變粉紅）與廣用指示劑。
+  • 右側即時繪製 pH 滴定突躍 S 型曲線圖表；旋塞動作透過 sync.broadcastAction 同步給夥伴。
+2.『exp2-gravity.js』萬有引力天體沙盒：
+  • 牛頓萬有引力多體運動；支援投放行星、恆星與黑洞。
+  • 滑鼠拖曳時，即時虛線計算並預覽未來 120 步的克卜勒公轉軌跡，且廣播給房間內其他夥伴看見！</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. 成果展示 -->
+      <section id="sec-lab-showcase" class="content-section">
+        <h2>5. 成果展示與雙分頁實測驗收</h2>
+        <p>跟著上述步驟完成後，我們獲得了一套功能完整的現代化虛擬實驗室：</p>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.75rem; text-align: center; margin: 1.5rem 0;">
+          <div style="font-size: 3rem; margin-bottom: 10px;">🧪 🌌 👥</div>
+          <h3 style="font-size: 1.4rem; color: #38bdf8; margin-bottom: 8px;">OmniLab 線上實驗室實機運行已就緒！</h3>
+          <p style="max-width: 680px; margin: 0 auto 20px; color: var(--text-muted); font-size: 0.92rem; line-height: 1.7;">
+            點擊下方按鈕啟動實驗室。進入後，點擊右上角<strong>「⚡ 雙分頁同步測試」</strong>按鈕，瀏覽器將自動在右半邊螢幕彈出另一個視窗！親自體驗移動左邊滑鼠，右邊螢幕的幽靈游標跟著移動；左邊滴定一滴試劑，右邊燒杯液體同步變色！
+          </p>
+          <a href="../labs/index.html" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 0.75rem 2rem; font-size: 1rem; border-radius: 8px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #060913; font-weight: 800;">
+            <span>🚀 開啟線上實驗室 (支援多視窗同屏連線) ↗</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 6. 無限擴充新實驗室 -->
+      <section id="sec-lab-extend" class="content-section">
+        <h2>6. 10 分鐘無限擴充新實驗室：複製外掛模板即可啟用！</h2>
+        <p>因為我們在一開始就設計了 `LabRegistry` 外掛機制，未來無論你想做什麼新實驗（例如「串並聯電路實驗室」或「光學透鏡折射實驗室」），只要照著以下 3 步即可無痛擴充：</p>
+
+        <div class="step-box">
+          <h4>🛠️ 擴充新實驗室三步驟：</h4>
+          <ol style="padding-left: 1.5rem; color: var(--text-muted); line-height: 2;">
+            <li><strong>複製模板檔案</strong>：打開專案中的 <code>labs/js/experiments/exp-template.js</code>，另存為你的新檔案（例如 <code>exp3-circuit.js</code>）。</li>
+            <li><strong>填入生命週期代碼</strong>：在 <code>update(dt)</code> 寫物理運算、在 <code>render(ctx)</code> 畫電路儀表、在 <code>onRemoteAction</code> 同步開關狀態。</li>
+            <li><strong>在 index.html 引入</strong>：只需在 <code>labs/index.html</code> 開頭加上一行 <code>import "./js/experiments/exp3-circuit.js";</code>，頂部選單便會<strong>自動長出按鈕</strong>，開箱即用！</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 章節導覽 -->
+      <div class="lesson-nav">
+        <a href="chapter15.html" class="btn-secondary">◀ 返回第 15 章：/goal 無人值守極限挑戰</a>
+        <a href="../labs/index.html" target="_blank" class="btn-primary">進入線上實驗室操作 ➔</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

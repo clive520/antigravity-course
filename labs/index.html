@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniLab 多人即時在線物理化學實驗室 — Antigravity 實戰學院</title>
+  <link rel="stylesheet" href="css/lab-style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 頂部導覽控制條 -->
+  <header class="lab-header">
+    <a href="../index.html" class="lab-brand">
+      <div class="lab-logo-icon">🧪</div>
+      <div class="lab-title-text">
+        <h1>OmniLab 多人即時科學實驗室</h1>
+        <span>REAL-TIME MULTIPLAYER PLAYGROUND</span>
+      </div>
+    </a>
+
+    <!-- 實驗室模組切換選單 -->
+    <div class="lab-tabs" id="labTabsContainer">
+      <!-- 由 JS 動態注入 -->
+    </div>
+
+    <!-- 房間與在線人員 -->
+    <div class="lab-room-controls">
+      <div class="room-badge">
+        <span style="color: #34d399;">●</span>
+        <span id="roomNameDisplay">ROOM: ALPHA</span>
+      </div>
+
+      <div class="online-avatars" id="onlineAvatars">
+        <!-- 在線成員頭像氣泡 -->
+      </div>
+
+      <button class="btn-dual-window" id="btnDualWindow" title="在新視窗開啟第二個分頁，體驗雙人同屏操作">
+        <span>⚡ 雙分頁同步測試</span>
+      </button>
+
+      <a href="../chapters/project-lab.html" class="btn-guide-link">
+        <span>📖 製作教學講義</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- 中央 60 FPS 物理畫布容器 -->
+  <main class="canvas-container">
+    <canvas id="labCanvas"></canvas>
+  </main>
+
+  <!-- 底部懸浮動態控制列 -->
+  <div class="lab-bottom-bar" id="bottomControlBar">
+    <!-- 依當前實驗室動態更新控制按鈕 -->
+  </div>
+
+  <!-- 原生 ES Module 核心驅動 -->
+  <script type="module">
+    import { LabRegistry } from "./js/core/LabRegistry.js";
+    import { RealtimeSync } from "./js/core/RealtimeSync.js";
+    import { LabEngine } from "./js/core/LabEngine.js";
+
+    // 載入首發兩個實驗模組 (自動向 LabRegistry 註冊)
+    import TitrationLab from "./js/experiments/exp1-titration.js";
+    import GravityLab from "./js/experiments/exp2-gravity.js";
+
+    // 1. 建立房間即時同步器
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("room") || "room-alpha";
+    document.getElementById("roomNameDisplay").textContent = `ROOM: ${roomId.toUpperCase()}`;
+
+    const realtimeSync = new RealtimeSync(roomId);
+
+    // 2. 初始化核心渲染引擎
+    const canvas = document.getElementById("labCanvas");
+    const engine = new LabEngine(canvas, realtimeSync, LabRegistry);
+
+    // 3. 在線人員名單更新
+    const avatarsContainer = document.getElementById("onlineAvatars");
+    realtimeSync.onPresence((users) => {
+      avatarsContainer.innerHTML = "";
+      users.forEach(u => {
+        const dot = document.createElement("div");
+        dot.className = "user-avatar-dot";
+        dot.style.background = u.color;
+        dot.title = `${u.userName} ${u.isMe ? '(你)' : ''}`;
+        dot.textContent = u.userName.charAt(0);
+        avatarsContainer.appendChild(dot);
+      });
+    });
+
+    // 4. 動態建立頂部實驗室切換 Tab
+    const tabsContainer = document.getElementById("labTabsContainer");
+    const bottomBar = document.getElementById("bottomControlBar");
+
+    function updateTabsUI(activeId) {
+      tabsContainer.innerHTML = "";
+      LabRegistry.getAll().forEach(lab => {
+        const btn = document.createElement("button");
+        btn.className = `lab-tab-btn ${lab.id === activeId ? 'active' : ''}`;
+        btn.innerHTML = `<span>${lab.icon}</span> <span>${lab.name}</span>`;
+        btn.onclick = () => switchExperiment(lab.id);
+        tabsContainer.appendChild(btn);
+      });
+    }
+
+    function switchExperiment(labId) {
+      engine.loadExperiment(labId);
+      updateTabsUI(labId);
+      updateBottomBarUI(labId);
+    }
+
+    // 5. 動態產生底部專屬工具列
+    function updateBottomBarUI(labId) {
+      bottomBar.innerHTML = "";
+      const exp = LabRegistry.get(labId);
+      if (!exp) return;
+
+      if (labId === "titration") {
+        // --- 酸鹼滴定專屬控制工具 ---
+        const btnDrop = document.createElement("button");
+        btnDrop.className = "ctrl-btn ctrl-btn-gold";
+        btnDrop.innerHTML = "💧 單滴 (0.05 mL)";
+        btnDrop.onclick = () => exp.singleDrop();
+
+        const btnSlow = document.createElement("button");
+        btnSlow.className = `ctrl-btn ${exp.flowMode === 1 ? 'active' : ''}`;
+        btnSlow.innerHTML = "⏳ 慢速連滴";
+        btnSlow.onclick = () => {
+          exp.setFlowMode(exp.flowMode === 1 ? 0 : 1);
+          updateBottomBarUI(labId);
+        };
+
+        const btnFast = document.createElement("button");
+        btnFast.className = `ctrl-btn ${exp.flowMode === 2 ? 'active' : ''}`;
+        btnFast.innerHTML = "🌊 快速連滴";
+        btnFast.onclick = () => {
+          exp.setFlowMode(exp.flowMode === 2 ? 0 : 2);
+          updateBottomBarUI(labId);
+        };
+
+        const btnStop = document.createElement("button");
+        btnStop.className = `ctrl-btn ${exp.flowMode === 0 ? 'active' : ''}`;
+        btnStop.innerHTML = "🛑 關閉旋塞";
+        btnStop.onclick = () => {
+          exp.setFlowMode(0);
+          updateBottomBarUI(labId);
+        };
+
+        const divider = document.createElement("div");
+        divider.className = "ctrl-divider";
+
+        // 指示劑切換按鈕
+        const btnInd = document.createElement("button");
+        btnInd.className = "ctrl-btn";
+        btnInd.innerHTML = `🎨 切換指示劑 (${exp.indicator === 'phenolphthalein' ? '酚酞' : exp.indicator === 'universal' ? '廣用' : '甲基橙'})`;
+        btnInd.onclick = () => {
+          const list = ["phenolphthalein", "universal", "methylOrange"];
+          const nextIdx = (list.indexOf(exp.indicator) + 1) % list.length;
+          exp.setIndicator(list[nextIdx]);
+          updateBottomBarUI(labId);
+        };
+
+        const btnReset = document.createElement("button");
+        btnReset.className = "ctrl-btn ctrl-btn-danger";
+        btnReset.innerHTML = "🔄 重新滴定";
+        btnReset.onclick = () => {
+          exp.resetAll();
+          updateBottomBarUI(labId);
+        };
+
+        bottomBar.append(btnDrop, btnSlow, btnFast, btnStop, divider, btnInd, btnReset);
+
+      } else if (labId === "gravity") {
+        // --- 萬有引力天體沙盒專屬工具 ---
+        const types = [
+          { key: "planet", label: "🌍 藍色行星" },
+          { key: "star", label: "☀️ 金色恆星" },
+          { key: "moon", label: "🌕 衛星" },
+          { key: "blackhole", label: "🕳️ 黑洞" }
+        ];
+
+        types.forEach(t => {
+          const btn = document.createElement("button");
+          btn.className = `ctrl-btn ${exp.spawnType === t.key ? 'active' : ''}`;
+          btn.textContent = t.label;
+          btn.onclick = () => {
+            exp.spawnType = t.key;
+            updateBottomBarUI(labId);
+          };
+          bottomBar.appendChild(btn);
+        });
+
+        const divider = document.createElement("div");
+        divider.className = "ctrl-divider";
+        bottomBar.appendChild(divider);
+
+        // 預設場景
+        const btnSolar = document.createElement("button");
+        btnSolar.className = "ctrl-btn ctrl-btn-gold";
+        btnSolar.textContent = "🪐 太陽系";
+        btnSolar.onclick = () => {
+          exp.loadPreset("solar");
+          realtimeSync.broadcastAction("SET_PRESET", { presetName: "solar" });
+        };
+
+        const btnBinary = document.createElement("button");
+        btnBinary.className = "ctrl-btn ctrl-btn-gold";
+        btnBinary.textContent = "💫 雙星互繞";
+        btnBinary.onclick = () => {
+          exp.loadPreset("binary");
+          realtimeSync.broadcastAction("SET_PRESET", { presetName: "binary" });
+        };
+
+        const btnThree = document.createElement("button");
+        btnThree.className = "ctrl-btn ctrl-btn-gold";
+        btnThree.textContent = "🌀 三體運動";
+        btnThree.onclick = () => {
+          exp.loadPreset("threeBody");
+          realtimeSync.broadcastAction("SET_PRESET", { presetName: "threeBody" });
+        };
+
+        const btnClear = document.createElement("button");
+        btnClear.className = "ctrl-btn ctrl-btn-danger";
+        btnClear.textContent = "🗑️ 清空宇宙";
+        btnClear.onclick = () => {
+          exp.bodies = [];
+          exp.particles = [];
+          realtimeSync.broadcastAction("CLEAR_ALL");
+        };
+
+        bottomBar.append(btnSolar, btnBinary, btnThree, btnClear);
+      }
+    }
+
+    // 6. 雙分頁同步測試快捷按鈕
+    document.getElementById("btnDualWindow").addEventListener("click", () => {
+      const w = Math.floor(window.screen.availWidth / 2);
+      const h = window.screen.availHeight;
+      window.open(window.location.href, "_blank", `width=${w},height=${h},left=${w},top=0`);
+    });
+
+    // 7. 預設載入第一個實驗室 (酸鹼滴定)
+    switchExperiment("titration");
+  </script>
+</body>
+</html>
