@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- 公網即時 WebSocket MQTT 客戶端 (支援跨帳號、跨瀏覽器、跨設備連線) -->
+  <script src="https://unpkg.com/mqtt@5.3.5/dist/mqtt.min.js"></script>
 </head>
 <body>
 
@@ -21,31 +23,52 @@
       </div>
     </a>
 
-    <!-- 實驗室模組切換選單 -->
-    <div class="lab-tabs" id="labTabsContainer">
-      <!-- 由 JS 動態注入 -->
-    </div>
+    <!-- 實驗室模組切換選單 (由 JS 動態注入) -->
+    <div class="lab-tabs" id="labTabsContainer"></div>
 
-    <!-- 房間與在線人員 -->
+    <!-- 房間、網路狀態與在線人員控制列 -->
     <div class="lab-room-controls">
-      <div class="room-badge">
-        <span style="color: #34d399;">●</span>
+      <!-- 網路狀態燈 (雲端/本機/連線中) -->
+      <div class="status-badge connecting" id="netStatusBadge" title="網路連線狀態">
+        <span class="status-dot"></span>
+        <span id="netStatusText">連線中...</span>
+      </div>
+
+      <!-- 房間標籤 (點擊可切換房間) -->
+      <button class="room-badge" id="btnSwitchRoom" title="點擊更換或自訂房間號">
+        <span style="color: #38bdf8;">🏷️</span>
         <span id="roomNameDisplay">ROOM: ALPHA</span>
-      </div>
-
-      <div class="online-avatars" id="onlineAvatars">
-        <!-- 在線成員頭像氣泡 -->
-      </div>
-
-      <button class="btn-dual-window" id="btnDualWindow" title="在新視窗開啟第二個分頁，體驗雙人同屏操作">
-        <span>⚡ 雙分頁同步測試</span>
       </button>
 
+      <!-- 在線成員頭像氣泡 -->
+      <div class="online-avatars" id="onlineAvatars"></div>
+
+      <!-- 自訂暱稱按鈕 -->
+      <button class="btn-lab-tool" id="btnChangeName" title="點擊自訂你的顯示名稱">
+        <span id="userNameDisplay">👤 科學家</span>
+      </button>
+
+      <!-- 複製同房邀請連結按鈕 (支援跨帳號/跨設備同頻) -->
+      <button class="btn-lab-tool" id="btnCopyInvite" title="複製房間邀請網址，發給其他帳號或在無痕視窗開啟">
+        <span>🔗 複製邀請</span>
+      </button>
+
+      <!-- 雙分頁同步測試按鈕 -->
+      <button class="btn-dual-window" id="btnDualWindow" title="在新視窗開啟第二個分頁，體驗雙人同屏操作">
+        <span>⚡ 雙分頁測試</span>
+      </button>
+
+      <!-- 返回製作講義 -->
       <a href="../chapters/project-lab.html" class="btn-guide-link">
-        <span>📖 製作教學講義</span>
+        <span>📖 教學講義</span>
       </a>
     </div>
   </header>
+
+  <!-- 浮動通知吐司 -->
+  <div class="lab-toast" id="labToast">
+    <span id="toastMsg">通知內容</span>
+  </div>
 
   <!-- 中央 60 FPS 物理畫布容器 -->
   <main class="canvas-container">
@@ -67,18 +90,102 @@
     import TitrationLab from "./js/experiments/exp1-titration.js";
     import GravityLab from "./js/experiments/exp2-gravity.js";
 
-    // 1. 建立房間即時同步器
+    // 1. Toast 浮動提示功能
+    const toastEl = document.getElementById("labToast");
+    const toastMsg = document.getElementById("toastMsg");
+    let toastTimer = null;
+    function showToast(msg) {
+      if (toastTimer) clearTimeout(toastTimer);
+      toastMsg.textContent = msg;
+      toastEl.classList.add("show");
+      toastTimer = setTimeout(() => {
+        toastEl.classList.remove("show");
+      }, 3200);
+    }
+
+    // 2. 房間初始化與 URL 參數解析
     const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get("room") || "room-alpha";
-    document.getElementById("roomNameDisplay").textContent = `ROOM: ${roomId.toUpperCase()}`;
+    const initialRoomId = urlParams.get("room") || "alpha";
+    const roomNameDisplay = document.getElementById("roomNameDisplay");
+    roomNameDisplay.textContent = `ROOM: ${initialRoomId.toUpperCase()}`;
 
-    const realtimeSync = new RealtimeSync(roomId);
+    // 3. 建立雙層多人即時同步器
+    const realtimeSync = new RealtimeSync(initialRoomId);
 
-    // 2. 初始化核心渲染引擎
+    // 4. 更新自訂暱稱 UI
+    const userNameDisplay = document.getElementById("userNameDisplay");
+    function updateUserNameUI() {
+      userNameDisplay.textContent = `👤 ${realtimeSync.userName}`;
+      userNameDisplay.style.color = realtimeSync.userColor;
+    }
+    updateUserNameUI();
+
+    document.getElementById("btnChangeName").addEventListener("click", () => {
+      const current = realtimeSync.userName;
+      const input = prompt("請輸入您的實驗室稱號或暱稱：", current);
+      if (input && input.trim() && input.trim() !== current) {
+        realtimeSync.setUserName(input.trim());
+        updateUserNameUI();
+        showToast(`✨ 暱稱已變更為「${realtimeSync.userName}」！`);
+      }
+    });
+
+    // 5. 連線狀態指示燈監聽
+    const netStatusBadge = document.getElementById("netStatusBadge");
+    const netStatusText = document.getElementById("netStatusText");
+
+    realtimeSync.onStatusChange((mode) => {
+      netStatusBadge.className = "status-badge " + mode;
+      if (mode === "cloud") {
+        netStatusText.textContent = "🟢 雲端跨網 (Cloud)";
+        netStatusBadge.title = "已連線至全球公共 MQTT Broker，支援跨帳號、跨瀏覽器、跨手機/電腦多人即時連線！";
+      } else if (mode === "local") {
+        netStatusText.textContent = "🟡 本機同源 (Local)";
+        netStatusBadge.title = "正在使用本機 BroadcastChannel 模式 (僅限同瀏覽器同帳號分頁)";
+      } else {
+        netStatusText.textContent = "⚪ 連線中...";
+        netStatusBadge.title = "正在嘗試連接雲端 MQTT 廣播伺服器...";
+      }
+    });
+
+    // 6. 切換房間互動
+    document.getElementById("btnSwitchRoom").addEventListener("click", () => {
+      const current = realtimeSync.roomId;
+      const nextRoom = prompt("請輸入要加入的實驗室房間代號（例如：alpha, beta, physics-101）：", current);
+      if (nextRoom && nextRoom.trim() && nextRoom.trim().toLowerCase() !== current) {
+        const cleanRoom = nextRoom.trim().toLowerCase();
+        realtimeSync.joinRoom(cleanRoom);
+        roomNameDisplay.textContent = `ROOM: ${cleanRoom.toUpperCase()}`;
+        
+        // 更新網址 Query 參數而不重新整理頁面
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set("room", cleanRoom);
+        window.history.replaceState({}, "", newUrl.toString());
+
+        showToast(`🚀 已切換至房間【${cleanRoom.toUpperCase()}】！`);
+      }
+    });
+
+    // 7. 複製邀請連結按鈕
+    document.getElementById("btnCopyInvite").addEventListener("click", async () => {
+      const inviteUrl = new URL(window.location.href);
+      inviteUrl.searchParams.set("room", realtimeSync.roomId);
+      const fullUrl = inviteUrl.toString();
+
+      try {
+        await navigator.clipboard.writeText(fullUrl);
+        showToast("📋 房間邀請連結已複製！發給其他帳號或不同電腦即可同屏連線。");
+      } catch (err) {
+        // Fallback for older browsers
+        prompt("請手動複製此邀請連結：", fullUrl);
+      }
+    });
+
+    // 8. 初始化核心物理渲染引擎
     const canvas = document.getElementById("labCanvas");
     const engine = new LabEngine(canvas, realtimeSync, LabRegistry);
 
-    // 3. 在線人員名單更新
+    // 9. 在線成員氣泡名單動態更新
     const avatarsContainer = document.getElementById("onlineAvatars");
     realtimeSync.onPresence((users) => {
       avatarsContainer.innerHTML = "";
@@ -92,7 +199,7 @@
       });
     });
 
-    // 4. 動態建立頂部實驗室切換 Tab
+    // 10. 動態建立頂部實驗室切換 Tab
     const tabsContainer = document.getElementById("labTabsContainer");
     const bottomBar = document.getElementById("bottomControlBar");
 
@@ -113,7 +220,7 @@
       updateBottomBarUI(labId);
     }
 
-    // 5. 動態產生底部專屬工具列
+    // 11. 動態產生底部專屬工具列
     function updateBottomBarUI(labId) {
       bottomBar.innerHTML = "";
       const exp = LabRegistry.get(labId);
@@ -236,14 +343,16 @@
       }
     }
 
-    // 6. 雙分頁同步測試快捷按鈕
+    // 12. 雙分頁同步測試快捷按鈕
     document.getElementById("btnDualWindow").addEventListener("click", () => {
       const w = Math.floor(window.screen.availWidth / 2);
       const h = window.screen.availHeight;
-      window.open(window.location.href, "_blank", `width=${w},height=${h},left=${w},top=0`);
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("room", realtimeSync.roomId);
+      window.open(currentUrl.toString(), "_blank", `width=${w},height=${h},left=${w},top=0`);
     });
 
-    // 7. 預設載入第一個實驗室 (酸鹼滴定)
+    // 13. 預設載入第一個實驗室 (酸鹼滴定)
     switchExperiment("titration");
   </script>
 </body>
